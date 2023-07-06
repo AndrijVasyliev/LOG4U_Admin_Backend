@@ -1,0 +1,123 @@
+{
+	"info": {
+		"_postman_id": "bd156bc1-c5dc-414d-8ffb-b92895f5dbbd",
+		"name": "Orders (Admin BE)",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "19519023",
+		"_collection_link": "https://gold-trinity-573225.postman.co/workspace/API-Collections~c6f6860b-9b45-4dd9-9df8-8acc84dec6b2/collection/19519023-bd156bc1-c5dc-414d-8ffb-b92895f5dbbd?action=share&creator=19519023&source=collection_link"
+	},
+	"item": [
+		{
+			"name": "Get Status",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{origin}}/status",
+					"host": [
+						"{{origin}}"
+					],
+					"path": [
+						"status"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Health",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{origin}}/health",
+					"host": [
+						"{{origin}}"
+					],
+					"path": [
+						"health"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Readiness",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{origin}}/readiness",
+					"host": [
+						"{{origin}}"
+					],
+					"path": [
+						"readiness"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Liveness",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{origin}}/liveness",
+					"host": [
+						"{{origin}}"
+					],
+					"path": [
+						"liveness"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Metrics",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{origin}}/metrics",
+					"host": [
+						"{{origin}}"
+					],
+					"path": [
+						"metrics"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "origin",
+			"value": "http://localhost:8181",
+			"type": "string"
+		}
+	]
+}

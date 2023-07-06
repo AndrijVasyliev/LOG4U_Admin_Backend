@@ -1,0 +1,14 @@
+{
+  "extends": "./tsconfig.base.json",
+  "compilerOptions": {
+    "module": "commonjs",
+    "declaration": true,
+    "sourceMap": true,
+    "strict": true,
+    "resolveJsonModule": true,
+    "outDir": "./build",
+    "rootDir": ".",
+    "baseUrl": "./",
+    "incremental": true
+  }
+}
