@@ -1,12 +1,5 @@
 import * as Joi from 'joi';
-import {
-    MAX_OPERATOR_ID_LENGTH,
-    MIN_OPERATOR_ID_LENGTH,
-    OPERATOR_ID_REGEXP,
-    MIN_OPERATOR_NAME_LENGTH,
-    MAX_OPERATOR_NAME_LENGTH, LangPriorities,
-} from '../utils/constants';
-import {LangPriority} from "./owner.dto";
+import { LangPriorities } from '../utils/constants';
 
 export const CreateOwnerValidation = Joi.object({
     fullName: Joi.string().required(),

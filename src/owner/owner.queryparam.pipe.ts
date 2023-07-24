@@ -5,47 +5,27 @@ import {
     PipeTransform,
 } from '@nestjs/common';
 import * as Joi from 'joi';
-import { AuditQuery } from './audit.dto';
-import { AUDIT_DEFAULT_LIMIT, AUDIT_DEFAULT_OFFSET } from '../utils/constants';
+import { OwnerQuery } from './owner.dto';
+import { OWNER_DEFAULT_LIMIT, OWNER_DEFAULT_OFFSET } from '../utils/constants';
+
 
 const queryParamsSchema = Joi.object({
     offset: Joi.number().integer().min(0),
     limit: Joi.number().integer().min(1),
-    dateTo: Joi.date()
-        .iso()
-        .when('dateFrom', {
-            not: Joi.exist(),
-            then: Joi.any(),
-            otherwise: Joi.date().iso().min(Joi.ref('dateFrom')),
-        }),
-    dateFrom: Joi.date().iso(),
-    eventName: Joi.string(),
-    eventType: Joi.string(),
-    memberId: Joi.string(),
-    itemType: Joi.string(),
-    brand: Joi.string(),
-    itemId: Joi.string().when('itemType', {
-        is: Joi.exist(),
-        then: Joi.any(),
-        otherwise: Joi.forbidden(),
-    }),
+    fullName: Joi.string(),
+    hiredBy: Joi.string(),
 })
     .keys({
         orderby: Joi.string().valid(
-            'date',
-            'eventName',
-            'eventType',
-            'member.id',
-            'member.name',
-            'itemType',
-            'brand',
+            'fullName',
+            'hiredBy',
         ),
         direction: Joi.string().valid('asc', 'desc'),
     })
     .and('orderby', 'direction');
 
 @Injectable()
-export class OwnerQueryParamsPipe implements PipeTransform<any, AuditQuery> {
+export class OwnerQueryParamsPipe implements PipeTransform<any, OwnerQuery> {
     transform(inputValue: any, metadata: ArgumentMetadata) {
         if (metadata.type !== 'query') {
             return inputValue;
@@ -59,8 +39,8 @@ export class OwnerQueryParamsPipe implements PipeTransform<any, AuditQuery> {
             );
         }
         return {
-            offset: AUDIT_DEFAULT_OFFSET,
-            limit: AUDIT_DEFAULT_LIMIT,
+            offset: OWNER_DEFAULT_OFFSET,
+            limit: OWNER_DEFAULT_LIMIT,
             ...value,
         };
     }

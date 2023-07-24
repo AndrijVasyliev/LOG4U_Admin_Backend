@@ -26,17 +26,7 @@ export const MIN_USER_TEAM_ID_LENGTH = 1;
 export const MAX_USER_TEAM_ID_LENGTH = 64;
 export const USER_TEAM_ID_REGEXP = '^[a-z0-9_-]*$';
 
-export const USER_TEAM_DEFAULT_OFFSET = 0;
-export const USER_TEAM_DEFAULT_LIMIT = 25;
-
-export const MIN_REALM_ID_LENGTH = 3;
-export const MAX_REALM_ID_LENGTH = 64;
-export const REALM_ID_REGEXP = '^[A-Z0-9\\-]*$';
-
-export const KEYCLOAK_MAX_USER_LIMIT = 25;
-export const KEYCLOACK_REFRESH_TOKEN_TIME = 60 * 1000;
-export const KEYCLOACK_MAX_AUTH_ATTEMPTS = 5;
-
-export const KEYCLOAK_PLATFORM_OPERATOR_ID = 'platform';
+export const OWNER_DEFAULT_LIMIT = 0;
+export const OWNER_DEFAULT_OFFSET = 25;
 
 export const LangPriorities = ['EN', 'UA', 'ES', 'RU'] as const;

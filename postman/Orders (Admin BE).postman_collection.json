@@ -1,12 +1,145 @@
 {
 	"info": {
-		"_postman_id": "bd156bc1-c5dc-414d-8ffb-b92895f5dbbd",
-		"name": "Orders (Admin BE)",
+		"_postman_id": "f34e8807-244d-4dd1-a9eb-0156c42c6df7",
+		"name": "LOG4U",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "19519023",
-		"_collection_link": "https://gold-trinity-573225.postman.co/workspace/API-Collections~c6f6860b-9b45-4dd9-9df8-8acc84dec6b2/collection/19519023-bd156bc1-c5dc-414d-8ffb-b92895f5dbbd?action=share&creator=19519023&source=collection_link"
+		"_collection_link": "https://gold-trinity-573225.postman.co/workspace/API-Collections~c6f6860b-9b45-4dd9-9df8-8acc84dec6b2/collection/19519023-f34e8807-244d-4dd1-a9eb-0156c42c6df7?action=share&creator=19519023&source=collection_link"
 	},
 	"item": [
+		{
+			"name": "Owner",
+			"item": [
+				{
+					"name": "Get Owner",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{origin}}/owner/:ownerId",
+							"host": [
+								"{{origin}}"
+							],
+							"path": [
+								"owner",
+								":ownerId"
+							],
+							"variable": [
+								{
+									"key": "ownerId",
+									"value": "64bee343e50d281f7d7a4596"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Owner",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"fullName\":\"Ivo Bobul\",\r\n    \"birthDate\":\"2001-07-24T20:33:52.147Z\",\r\n    \"citizenship\":\"USA\",\r\n    \"languagePriority\":\"EN\",\r\n    \"hiredBy\":\"Pavlo Zibrov\",\r\n    \"hireDate\":\"2020-07-24T20:33:52.147Z\",\r\n    \"snn\":\"6661313\",\r\n    \"company\":\"Horns&Hufs\",\r\n    \"insurancePolicy\":\"SomeData\",\r\n    \"insurancePolicyEFF\":\"SomeEFF\",\r\n    \"insurancePolicyExp\":\"2024-07-24T20:33:52.147Z\",\r\n    \"address\":\"Pupkina, 25-a, 6\",\r\n    \"phone\":\"0989809898\",\r\n    \"email\":\"ivo.bobul@gmail.com\",\r\n    \"emergencyContactName\":\"Maryna\",\r\n    \"emergencyContactPhone\":\"0666606666\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{origin}}/owner",
+							"host": [
+								"{{origin}}"
+							],
+							"path": [
+								"owner"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Owner",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"fullName\":\"Ivo Bobul\",\r\n    \"birthDate\":\"2001-07-24T20:33:52.147Z\",\r\n    \"citizenship\":\"USA\",\r\n    \"languagePriority\":\"EN\",\r\n    \"hiredBy\":\"Pavlo Zibrov\",\r\n    \"hireDate\":\"2020-07-24T20:33:52.147Z\",\r\n    \"snn\":\"6661313\",\r\n    \"company\":\"Horns&Hufs\",\r\n    \"insurancePolicy\":\"SomeData\",\r\n    \"insurancePolicyEFF\":\"SomeEFF\",\r\n    \"insurancePolicyExp\":\"2024-07-24T20:33:52.147Z\",\r\n    \"address\":\"Pupkina, 25-a, 6\",\r\n    \"phone\":\"0989809898\",\r\n    \"email\":\"ivo.bobul@gmail.com\",\r\n    \"emergencyContactName\":\"Maryna\",\r\n    \"emergencyContactPhone\":\"0666606666\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{origin}}/owner/:ownerId",
+							"host": [
+								"{{origin}}"
+							],
+							"path": [
+								"owner",
+								":ownerId"
+							],
+							"variable": [
+								{
+									"key": "ownerId",
+									"value": "64bee343e50d281f7d7a4596"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Owner",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{origin}}/owner/:ownerId",
+							"host": [
+								"{{origin}}"
+							],
+							"path": [
+								"owner",
+								":ownerId"
+							],
+							"variable": [
+								{
+									"key": "ownerId",
+									"value": "64bee343e50d281f7d7a4596"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
 		{
 			"name": "Get Status",
 			"request": {

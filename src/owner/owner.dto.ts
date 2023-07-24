@@ -1,7 +1,7 @@
 import { Owner } from './owner.schema';
 import { LangPriorities } from '../utils/constants';
 
-export const LangPriority = (typeof LangPriorities)[number];
+export type LangPriority = (typeof LangPriorities)[number];
 
 export class CreateOwnerDto {
     readonly fullName: string;
