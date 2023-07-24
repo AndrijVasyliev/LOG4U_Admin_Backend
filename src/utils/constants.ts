@@ -2,11 +2,6 @@ export const HEALTH_MEMORY_HEAP_LIMIT = 150 * 1024 * 1024;
 export const HEALTH_MEMORY_RSS_LIMIT = 150 * 1024 * 1024;
 export const MONGO_UNIQUE_INDEX_CONFLICT = 11000;
 
-export const KETO_SUCCESS_GET_STATUS_CODE = 200;
-export const KETO_SUCCESS_PATCH_STATUS_CODE = 204;
-
-export const OPERATOR_HEADER = 'X-Operator-Id';
-
 export const MIN_USER_ID_LENGTH = 3;
 export const MAX_USER_ID_LENGTH = 64;
 export const MIN_USER_FIRSTNAME_LENGTH = 2;
@@ -44,12 +39,4 @@ export const KEYCLOACK_MAX_AUTH_ATTEMPTS = 5;
 
 export const KEYCLOAK_PLATFORM_OPERATOR_ID = 'platform';
 
-export const ProductTypes = [
-  'CASINO',
-  'SPORTSBOOK',
-  'APM',
-  'CRM',
-  'PLATFORM',
-  'BILLING',
-  'FRONTEND',
-] as const;
+export const LangPriorities = ['EN', 'UA', 'ES', 'RU'] as const;
