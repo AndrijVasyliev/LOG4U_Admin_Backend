@@ -9,7 +9,7 @@ export type OwnerDocument = Owner & Document;
 @Schema({
     timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' },
     optimisticConcurrency: true,
-    collection: 'roles',
+    collection: 'owners',
 })
 export class Owner {
     constructor(role: Owner) {
