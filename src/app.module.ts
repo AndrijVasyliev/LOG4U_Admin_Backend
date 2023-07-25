@@ -3,7 +3,7 @@ import { Module, NestModule, MiddlewareConsumer } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { PrometheusModule } from '@willsoto/nestjs-prometheus';
 import { PromConfigService } from './prometheus/prometheus.config.service';
-// import { MongooseModule } from '@nestjs/mongoose';
+import { MongooseModule } from '@nestjs/mongoose';
 
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -17,6 +17,9 @@ import { LoggerMiddleware } from './logger/logger.middleware';
 import { ResponseTimeMiddleware } from './utils/responseTime.middleware';
 import { RequestIdMiddleware } from './utils/requestId.middleware';
 
+import { OwnerController } from './owner/owner.controller';
+import { OwnerModule } from './owner/owner.module';
+
 @Module({
   imports: [
     LoggerModule,
@@ -26,7 +29,7 @@ import { RequestIdMiddleware } from './utils/requestId.middleware';
       load: [configuration],
     }),
     HealthModule,
-    /*MongooseModule.forRootAsync({
+    MongooseModule.forRootAsync({
       imports: [ConfigModule],
       useFactory: async (configService: ConfigService) => {
         return {
@@ -34,12 +37,13 @@ import { RequestIdMiddleware } from './utils/requestId.middleware';
         };
       },
       inject: [ConfigService],
-    }),*/
+    }),
     PrometheusModule.registerAsync({
       imports: [ConfigModule],
       useClass: PromConfigService,
       inject: [ConfigService],
     }),
+    OwnerModule,
   ],
   controllers: [AppController],
   providers: [AppService],
@@ -51,18 +55,21 @@ export class AppModule implements NestModule {
       .forRoutes(
         AppController,
         HealthController,
+        OwnerController,
       );
     consumer
       .apply(LoggerMiddleware)
       .forRoutes(
         AppController,
         HealthController,
+        OwnerController,
       );
     consumer
       .apply(ResponseTimeMiddleware)
       .forRoutes(
         AppController,
         HealthController,
+        OwnerController,
       );
   }
 }

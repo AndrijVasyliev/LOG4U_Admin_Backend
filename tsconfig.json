@@ -5,6 +5,7 @@
     "declaration": true,
     "sourceMap": true,
     "strict": true,
+    "strictPropertyInitialization": false,
     "resolveJsonModule": true,
     "outDir": "./build",
     "rootDir": ".",

@@ -8,7 +8,7 @@ export default () => ({
     format: process.env.NODE_ENV === 'development' ? 'string' : 'json',
   },
   db: {
-    uri: process.env.MONGO_DSN || 'mongodb://localhost:27017/amt',
+    uri: process.env.MONGO_DSN || 'mongodb://localhost:27017/log4u',
     options: {
       autoIndex: false,
       useNewUrlParser: true,
