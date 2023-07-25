@@ -165,7 +165,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"fullName\":\"Ivo Bobul\",\r\n    \"birthDate\":\"2001-07-24T20:33:52.147Z\",\r\n    \"citizenship\":\"USA\",\r\n    \"languagePriority\":\"EN\",\r\n    \"hiredBy\":\"Pavlo Zibrov\",\r\n    \"hireDate\":\"2020-07-24T20:33:52.147Z\",\r\n    \"snn\":\"6661313\",\r\n    \"company\":\"Horns&Hufs\",\r\n    \"insurancePolicy\":\"SomeData\",\r\n    \"insurancePolicyEFF\":\"SomeEFF\",\r\n    \"insurancePolicyExp\":\"2024-07-24T20:33:52.147Z\",\r\n    \"address\":\"Pupkina, 25-a, 6\",\r\n    \"phone\":\"0989809898\",\r\n    \"email\":\"ivo.bobul@gmail.com\",\r\n    \"emergencyContactName\":\"Maryna\",\r\n    \"emergencyContactPhone\":\"0666606666\"\r\n}",
+							"raw": "{\r\n    \"fullName\":\"Ivo Bobul\",\r\n    \"birthDate\":\"2001-07-24T20:33:52.147Z\",\r\n    \"citizenship\":\"USA\",\r\n    \"languagePriority\":\"EN\",\r\n    \"hiredBy\":\"Pavlo Zibrov\",\r\n    \"hireDate\":\"2020-07-24T20:33:52.147Z\",\r\n    \"snn\":\"6661313\",\r\n    \"company\":\"Horns&Hufs\",\r\n    \"insurancePolicy\":\"SomeData\",\r\n    \"insurancePolicyEFF\":\"SomeEFF\",\r\n    \"insurancePolicyExp\":\"2024-07-24T20:33:52.147Z\",\r\n    \"address\":\"Pupkina, 25-a, 6\",\r\n    \"phone\":\"0989809898\",\r\n    \"phone2\":\"0565605656\",\r\n    \"email\":\"ivo.bobul@gmail.com\",\r\n    \"emergencyContactName\":\"Maryna\",\r\n    \"emergencyContactRel\": \"Lubov moja edyna\",\r\n    \"emergencyContactPhone\":\"0666606666\",\r\n    \"notes\":\"Bla bla bla\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -362,13 +362,13 @@
 		{
 			"key": "origin",
 			"value": "http://localhost:8181",
-			"type": "string",
-			"disabled": true
+			"type": "string"
 		},
 		{
 			"key": "origin",
 			"value": "https://admin-test-lt5d.onrender.com",
-			"type": "string"
+			"type": "string",
+			"disabled": true
 		}
 	]
 }
