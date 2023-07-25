@@ -1,8 +1,6 @@
-import { Model, mongo } from 'mongoose';
+import { mongo, PaginateModel } from 'mongoose';
 import {
     ConflictException,
-    forwardRef,
-    Inject,
     Injectable,
     InternalServerErrorException,
     NotFoundException,
@@ -11,7 +9,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { LoggerService } from '../logger/logger.service';
 import { MONGO_UNIQUE_INDEX_CONFLICT } from '../utils/constants';
 import { Owner, OwnerDocument } from './owner.schema';
-import { CreateOwnerDto, OwnerResultDto, UpdateOwnerDto } from './owner.dto';
+import { CreateOwnerDto, OwnerQuery, OwnerResultDto, PaginatedOwnerResultDto, UpdateOwnerDto } from './owner.dto';
 
 const { MongoError } = mongo;
 
@@ -19,7 +17,7 @@ const { MongoError } = mongo;
 export class OwnerService {
     constructor(
         @InjectModel(Owner.name)
-        private readonly ownerModel: Model<OwnerDocument>,
+        private readonly ownerModel: PaginateModel<OwnerDocument>,
         private readonly log: LoggerService,
     ) {}
 
@@ -37,6 +35,30 @@ export class OwnerService {
     async findOwner(id: string): Promise<OwnerResultDto> {
         const owner = await this.findOwnerById(id);
         return OwnerResultDto.fromOwnerModel(owner);
+    }
+
+    async getOwners(query: OwnerQuery): Promise<PaginatedOwnerResultDto> {
+        this.log.debug(`Searching for Owners: ${JSON.stringify(query)}`);
+
+        const documentQuery: Parameters<typeof this.ownerModel.paginate>[0] = {};
+        if (query.search) {
+            const searchParams = Object.entries(query.search);
+            searchParams.forEach((entry) => {
+                documentQuery[entry[0]] = { $regex: new RegExp(entry[1], 'i') };
+            });
+        }
+
+        const options: {limit: number, offset: number, sort?: Record<string, string>} = {
+            limit: query.limit,
+            offset: query.offset,
+        };
+        if (query.direction && query.orderby) {
+          options.sort = { [query.orderby]: query.direction };
+        }
+
+        const res = await this.ownerModel.paginate(documentQuery, options);
+
+      return PaginatedOwnerResultDto.from(res);
     }
 
     async createOwner(

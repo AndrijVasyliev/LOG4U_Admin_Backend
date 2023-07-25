@@ -1,5 +1,6 @@
 import { Owner } from './owner.schema';
 import { LangPriorities } from '../utils/constants';
+import { PaginateResult } from 'mongoose';
 
 export type LangPriority = (typeof LangPriorities)[number];
 
@@ -47,12 +48,32 @@ export class UpdateOwnerDto {
     readonly notes?: string;
 }
 
+export class OwnerQuerySearch {
+    readonly fullName?: string;
+    readonly citizenship?: string;
+    readonly languagePriority?: LangPriority;
+    readonly hiredBy?: string;
+    readonly snn?: string;
+    readonly company?: string;
+    readonly insurancePolicy?: string;
+    readonly insurancePolicyEFF?: string;
+    readonly address?: string;
+    readonly phone?: string;
+    readonly phone2?: string;
+    readonly email?: string;
+    readonly emergencyContactName?: string;
+    readonly emergencyContactRel?: string;
+    readonly emergencyContactPhone?: string
+}
+
 export class OwnerQuery {
     readonly offset: number;
     readonly limit: number;
 
-    readonly fullName?: string;
-    readonly hiredBy?: string;
+    readonly orderby?: string;
+    readonly direction?: string;
+
+    readonly search?: OwnerQuerySearch;
 }
 
 export class OwnerResultDto extends CreateOwnerDto{
@@ -92,17 +113,12 @@ export class PaginatedResultDto<T> {
 }
 
 export class PaginatedOwnerResultDto extends PaginatedResultDto<OwnerResultDto> {
-    static from(
-        items: OwnerResultDto[],
-        offset: number,
-        limit: number,
-        total: number,
-    ): PaginatedOwnerResultDto {
+    static from(paginatedOwners: PaginateResult<Owner>): PaginatedOwnerResultDto {
         return {
-            items: items,
-            offset,
-            limit,
-            total,
+            items: paginatedOwners.docs.map((owner) => (OwnerResultDto.fromOwnerModel(owner))),
+            offset: paginatedOwners.offset,
+            limit: paginatedOwners.limit,
+            total: paginatedOwners.totalDocs,
         };
     }
 }

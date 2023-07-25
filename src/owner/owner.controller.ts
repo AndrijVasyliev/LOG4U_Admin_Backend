@@ -3,12 +3,10 @@ import {
     Get,
     Param,
     Query,
-    Headers,
     Body,
     Post,
     Patch,
     Delete,
-    BadRequestException,
 } from '@nestjs/common';
 import { OwnerOwnerIdPipe } from './owner.ownerId.pipe';
 import { CreateOwnerDto, OwnerQuery, OwnerResultDto, PaginatedOwnerResultDto, UpdateOwnerDto } from './owner.dto';
@@ -16,6 +14,7 @@ import { BodyValidationPipe } from '../utils/bodyValidate.pipe';
 import { OwnerService } from './owner.service';
 import { LoggerService } from '../logger/logger.service';
 import { CreateOwnerValidation, UpdateOwnerValidation } from './owner.validation';
+import { OwnerQueryParamsPipe } from './owner.queryparam.pipe';
 
 @Controller('owner')
 export class OwnerController {
@@ -24,12 +23,12 @@ export class OwnerController {
         private readonly ownerService: OwnerService,
     ) {}
 
-    /*@Get()
+    @Get()
     async getOwners(
         @Query(OwnerQueryParamsPipe) ownerQuery: OwnerQuery,
     ): Promise<PaginatedOwnerResultDto> {
         return this.ownerService.getOwners(ownerQuery);
-    }*/
+    }
 
     @Get(':ownerId')
     async getOwner(

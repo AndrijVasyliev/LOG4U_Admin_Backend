@@ -1,5 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, ObjectId } from 'mongoose';
+import * as mongoosePaginate from 'mongoose-paginate-v2';
 import { LangPriorities } from '../utils/constants';
 import { LangPriority } from './owner.dto';
 
@@ -100,3 +101,7 @@ export class Owner {
 }
 
 export const OwnerSchema = SchemaFactory.createForClass(Owner);
+
+// OwnerSchema.index({ fullName: 1, hiredBy: 1 }, { unique: true });
+
+OwnerSchema.plugin(mongoosePaginate);
