@@ -1,5 +1,5 @@
 {
-    "name": "@unified-backoffice/access-management-tool",
+    "name": "@log4u/admin_backend",
     "version": "0.0.1",
     "description": "",
     "author": "",
@@ -10,8 +10,8 @@
     ],
     "repository": {
         "type": "git",
-        "url": "https://git.betlab.com/backoffice/unified-backoffice",
-        "directory": "apps/amt"
+        "url": "https://github.com/AndrijVasyliev/LOG4U_Admin_Backend",
+        "directory": "."
     },
     "scripts": {
         "build": "nest build",
