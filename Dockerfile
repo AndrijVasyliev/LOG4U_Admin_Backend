@@ -37,8 +37,8 @@ RUN npm ci
 # allow node to listen on low ports
 RUN setcap 'cap_net_bind_service=+ep' /usr/local/bin/node
 
-RUN chown -R node:node /app/
-USER node
+# RUN chown -R node:node /app/
+# USER node
 
 EXPOSE ${PORT}
 
