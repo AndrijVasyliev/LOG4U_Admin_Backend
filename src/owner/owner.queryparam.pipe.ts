@@ -59,7 +59,7 @@ export class OwnerQueryParamsPipe implements PipeTransform<any, OwnerQuery> {
         if (metadata.type !== 'query') {
             return inputValue;
         }
-        const { error, value } = queryParamsSchema.validate(inputValue);
+        const { error, value } = queryParamsSchema.validate(inputValue, { abortEarly: false });
         if (error) {
             throw new BadRequestException(
                 `Query parameters validation failed: ${error.message}, ${JSON.stringify(
