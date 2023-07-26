@@ -23,6 +23,10 @@ import { CoordinatorController } from './coordinator/coordinator.controller';
 import { CoordinatorModule } from './coordinator/coordinator.module';
 import { DriverController } from './driver/driver.controller';
 import { DriverModule } from './driver/driver.module';
+import { UserController } from './user/user.controller';
+import { UserModule } from './user/user.module';
+import { LocationController } from './location/location.controller';
+import { LocationModule } from './location/location.module';
 
 @Module({
   imports: [
@@ -50,6 +54,8 @@ import { DriverModule } from './driver/driver.module';
     OwnerModule,
     CoordinatorModule,
     DriverModule,
+    UserModule,
+    LocationModule,
   ],
   controllers: [AppController],
   providers: [AppService],
@@ -64,6 +70,8 @@ export class AppModule implements NestModule {
         OwnerController,
         CoordinatorController,
         DriverController,
+        UserController,
+        LocationController,
       );
     consumer
       .apply(LoggerMiddleware)
@@ -73,6 +81,8 @@ export class AppModule implements NestModule {
         OwnerController,
         CoordinatorController,
         DriverController,
+        UserController,
+        LocationController,
       );
     consumer
       .apply(ResponseTimeMiddleware)
@@ -82,6 +92,8 @@ export class AppModule implements NestModule {
         OwnerController,
         CoordinatorController,
         DriverController,
+        UserController,
+        LocationController,
       );
   }
 }

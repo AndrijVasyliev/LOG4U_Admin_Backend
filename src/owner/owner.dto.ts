@@ -1,7 +1,6 @@
 import { PaginateResult } from 'mongoose';
 import { Owner } from './owner.schema';
-import { LangPriority } from '../utils/constants';
-import { Query, PaginatedResultDto } from '../utils/general.dto';
+import { LangPriority, Query, PaginatedResultDto } from '../utils/general.dto';
 
 export class CreateOwnerDto {
     readonly fullName: string;

@@ -7,4 +7,4 @@ export const DEFAULT_OFFSET = 50;
 
 export const LangPriorities = ['EN', 'UA', 'ES', 'RU'] as const;
 
-export type LangPriority = (typeof LangPriorities)[number];
+export const UserRoles = ['Admin', 'Super Admin'] as const;

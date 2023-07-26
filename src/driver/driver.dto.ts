@@ -1,7 +1,6 @@
 import { PaginateResult } from 'mongoose';
 import { Driver } from './driver.schema';
-import { LangPriority } from '../utils/constants';
-import { PaginatedResultDto, Query } from '../utils/general.dto';
+import { LangPriority, PaginatedResultDto, Query } from '../utils/general.dto';
 
 export class CreateDriverDto {
     readonly fullName: string;

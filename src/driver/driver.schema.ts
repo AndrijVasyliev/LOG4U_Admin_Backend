@@ -1,7 +1,8 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, ObjectId } from 'mongoose';
 import * as mongoosePaginate from 'mongoose-paginate-v2';
-import { LangPriorities, LangPriority } from '../utils/constants';
+import { LangPriorities } from '../utils/constants';
+import { LangPriority } from '../utils/general.dto';
 
 export type DriverDocument = Driver & Document;
 

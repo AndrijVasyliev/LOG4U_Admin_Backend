@@ -1,7 +1,6 @@
 import { PaginateResult } from 'mongoose';
 import { Coordinator } from './coordinator.schema';
-import { LangPriority } from '../utils/constants';
-import { PaginatedResultDto, Query } from '../utils/general.dto';
+import { LangPriority, PaginatedResultDto, Query } from '../utils/general.dto';
 
 export class CreateCoordinatorDto {
     readonly fullName: string;

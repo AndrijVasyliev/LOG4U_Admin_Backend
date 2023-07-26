@@ -535,7 +535,7 @@
 								{
 									"key": "orderby",
 									"value": "fullName",
-									"description": "'fullName', 'birthDate', 'birthPlace', 'citizenship', 'languagePriority', 'languagePriority', 'driverLicenceType', 'driverLicenceNumber', 'driverLicenceState', 'driverLicenceClass', 'driverLicenceExp', 'idDocId', 'idDocType', 'idDocExp', 'hiredBy', 'hireDate', 'address', 'phone', 'phone2', 'email', 'emergencyContactName', 'emergencyContactRel', 'emergencyContactPhone', 'appLogin',"
+									"description": "'fullName', 'birthDate', 'birthPlace', 'citizenship', 'languagePriority', 'languagePriority', 'driverLicenceType', 'driverLicenceNumber', 'driverLicenceState', 'driverLicenceClass', 'driverLicenceExp', 'idDocId', 'idDocType', 'idDocExp', 'hiredBy', 'hireDate', 'address', 'phone', 'phone2', 'email', 'emergencyContactName', 'emergencyContactRel', 'emergencyContactPhone', 'appLogin'"
 								},
 								{
 									"key": "direction",
@@ -564,32 +564,32 @@
 								},
 								{
 									"key": "driverLicenceType",
-									"value": null,
+									"value": "",
 									"disabled": true
 								},
 								{
 									"key": "driverLicenceNumber",
-									"value": null,
+									"value": "",
 									"disabled": true
 								},
 								{
 									"key": "driverLicenceState",
-									"value": null,
+									"value": "",
 									"disabled": true
 								},
 								{
 									"key": "driverLicenceClass",
-									"value": null,
+									"value": "",
 									"disabled": true
 								},
 								{
 									"key": "idDocId",
-									"value": null,
+									"value": "",
 									"disabled": true
 								},
 								{
 									"key": "idDocType",
-									"value": null,
+									"value": "",
 									"disabled": true
 								},
 								{
@@ -764,6 +764,391 @@
 								{
 									"key": "driverId",
 									"value": "64c11421cb3a58b0872f6547"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "User",
+			"item": [
+				{
+					"name": "List Users",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{origin}}/user?limit=30&offset=0&orderby=fullName&direction=asc",
+							"host": [
+								"{{origin}}"
+							],
+							"path": [
+								"user"
+							],
+							"query": [
+								{
+									"key": "limit",
+									"value": "30"
+								},
+								{
+									"key": "offset",
+									"value": "0"
+								},
+								{
+									"key": "orderby",
+									"value": "fullName",
+									"description": "'fullName', 'phone', 'userRole', 'jobTitle', 'email'"
+								},
+								{
+									"key": "direction",
+									"value": "asc",
+									"description": "asc or desc"
+								},
+								{
+									"key": "fullName",
+									"value": "Ivo",
+									"disabled": true
+								},
+								{
+									"key": "phone",
+									"value": "",
+									"disabled": true
+								},
+								{
+									"key": "userRole",
+									"value": null,
+									"disabled": true
+								},
+								{
+									"key": "jobTitle",
+									"value": null,
+									"disabled": true
+								},
+								{
+									"key": "email",
+									"value": "",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get User",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{origin}}/user/:userId",
+							"host": [
+								"{{origin}}"
+							],
+							"path": [
+								"user",
+								":userId"
+							],
+							"variable": [
+								{
+									"key": "userId",
+									"value": "64c134d3abbd4c97d2a391d6"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create User",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"fullName\":\"Ivo Bobul\",\r\n    \"phone\":\"0989809898\",\r\n    \"userRole\":\"Super Admin\",\r\n    \"jobTitle\":\"Director\",\r\n    \"email\":\"ivo.bobul@gmail.com\",\r\n    \"password\":\"f87365a987c89\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{origin}}/user",
+							"host": [
+								"{{origin}}"
+							],
+							"path": [
+								"user"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update User",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"fullName\":\"Ivo Bobul\",\r\n    \"phone\":\"0989809898\",\r\n    \"userRole\":\"Super Admin\",\r\n    \"jobTitle\":\"Director\",\r\n    \"email\":\"ivo.bobul@gmail.com\",\r\n    \"password\":\"f87365a987c89\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{origin}}/user/:userId",
+							"host": [
+								"{{origin}}"
+							],
+							"path": [
+								"user",
+								":userId"
+							],
+							"variable": [
+								{
+									"key": "userId",
+									"value": "64c1343eabbd4c97d2a391d0"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete User",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{origin}}/user/:userId",
+							"host": [
+								"{{origin}}"
+							],
+							"path": [
+								"user",
+								":userId"
+							],
+							"variable": [
+								{
+									"key": "userId",
+									"value": "64c1343eabbd4c97d2a391d0"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Location",
+			"item": [
+				{
+					"name": "List Location",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{origin}}/location?limit=30&offset=0&orderby=name&direction=asc",
+							"host": [
+								"{{origin}}"
+							],
+							"path": [
+								"location"
+							],
+							"query": [
+								{
+									"key": "limit",
+									"value": "30"
+								},
+								{
+									"key": "offset",
+									"value": "0"
+								},
+								{
+									"key": "orderby",
+									"value": "name",
+									"description": "'zipCode',  'name',  'stateCode',  'stateName'"
+								},
+								{
+									"key": "direction",
+									"value": "asc",
+									"description": "asc or desc"
+								},
+								{
+									"key": "zipCode",
+									"value": null,
+									"disabled": true
+								},
+								{
+									"key": "name",
+									"value": "Kyiv",
+									"disabled": true
+								},
+								{
+									"key": "stateCode",
+									"value": null,
+									"disabled": true
+								},
+								{
+									"key": "stateName",
+									"value": null,
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Location",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{origin}}/location/:locationId",
+							"host": [
+								"{{origin}}"
+							],
+							"path": [
+								"location",
+								":locationId"
+							],
+							"variable": [
+								{
+									"key": "locationId",
+									"value": "64c1380eabbd4c97d2a391eb"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Location",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"zipCode\":\"03142\",\r\n    \"name\":\"Kyiv\",\r\n    \"stateCode\":\"380\",\r\n    \"stateName\":\"Ukraine\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{origin}}/location",
+							"host": [
+								"{{origin}}"
+							],
+							"path": [
+								"location"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Location",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"zipCode\":\"03142\",\r\n    \"name\":\"Kyiv\",\r\n    \"stateCode\":\"380\",\r\n    \"stateName\":\"Ukraine\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{origin}}/location/:locationId",
+							"host": [
+								"{{origin}}"
+							],
+							"path": [
+								"location",
+								":locationId"
+							],
+							"variable": [
+								{
+									"key": "locationId",
+									"value": "64c1380eabbd4c97d2a391eb"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Location",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{origin}}/location/:locationId",
+							"host": [
+								"{{origin}}"
+							],
+							"path": [
+								"location",
+								":locationId"
+							],
+							"variable": [
+								{
+									"key": "locationId",
+									"value": "64c1380eabbd4c97d2a391eb"
 								}
 							]
 						}

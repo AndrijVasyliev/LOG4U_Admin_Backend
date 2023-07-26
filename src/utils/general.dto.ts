@@ -1,3 +1,8 @@
+import { LangPriorities, UserRoles } from './constants';
+
+export type LangPriority = (typeof LangPriorities)[number];
+export type UserRole = (typeof UserRoles)[number];
+
 export class Query<T> {
   readonly offset: number;
   readonly limit: number;
