@@ -13,6 +13,7 @@ const queryParamsSchema = Joi.object({
     offset: Joi.number().integer().min(0).optional(),
     limit: Joi.number().integer().min(1).optional(),
     fullName: Joi.string().optional(),
+    birthPlace: Joi.string().optional(),
     citizenship: Joi.string().optional(),
     languagePriority: Joi.string().valid(...LangPriorities).optional(),
     hiredBy: Joi.string().optional(),
@@ -32,6 +33,7 @@ const queryParamsSchema = Joi.object({
         orderby: Joi.string().valid(
           'fullName',
           'birthDate',
+          'birthPlace',
           'citizenship',
           'languagePriority',
           'hiredBy',

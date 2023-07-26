@@ -7,6 +7,7 @@ export type LangPriority = (typeof LangPriorities)[number];
 export class CreateOwnerDto {
     readonly fullName: string;
     readonly birthDate: Date;
+    readonly birthPlace: string;
     readonly citizenship: string;
     readonly languagePriority: LangPriority;
     readonly hiredBy: string;
@@ -29,6 +30,7 @@ export class CreateOwnerDto {
 export class UpdateOwnerDto {
     readonly fullName?: string;
     readonly birthDate?: Date;
+    readonly birthPlace?: string;
     readonly citizenship?: string;
     readonly languagePriority?: LangPriority;
     readonly hiredBy?: string;
@@ -50,6 +52,7 @@ export class UpdateOwnerDto {
 
 export class OwnerQuerySearch {
     readonly fullName?: string;
+    readonly birthPlace?: string;
     readonly citizenship?: string;
     readonly languagePriority?: LangPriority;
     readonly hiredBy?: string;
@@ -82,6 +85,7 @@ export class OwnerResultDto extends CreateOwnerDto{
             id: owner._id.toString(),
             fullName: owner.fullName,
             birthDate: owner.birthDate,
+            birthPlace: owner.birthPlace,
             citizenship: owner.citizenship,
             languagePriority: owner.languagePriority,
             hiredBy: owner.hiredBy,

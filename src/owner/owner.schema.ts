@@ -15,6 +15,7 @@ export class Owner {
     constructor(role: Owner) {
         this.fullName = role.fullName;
         this.birthDate = role.birthDate;
+        this.birthPlace = role.birthPlace;
         this.citizenship = role.citizenship;
         this.languagePriority = role.languagePriority;
         this.hiredBy = role.hiredBy;
@@ -41,6 +42,9 @@ export class Owner {
 
     @Prop({ required: true })
     birthDate: Date;
+
+    @Prop({ required: true })
+    birthPlace: string;
 
     @Prop({ required: true })
     citizenship: string;

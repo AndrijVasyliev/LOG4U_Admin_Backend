@@ -4,6 +4,7 @@ import { LangPriorities } from '../utils/constants';
 export const CreateOwnerValidation = Joi.object({
     fullName: Joi.string().required(),
     birthDate: Joi.date().iso().required(),
+    birthPlace: Joi.string().required(),
     citizenship: Joi.string().required(),
     languagePriority: Joi.string().valid(...LangPriorities).required(),
     hiredBy: Joi.string().required(),
@@ -26,6 +27,7 @@ export const CreateOwnerValidation = Joi.object({
 export const UpdateOwnerValidation = Joi.object({
     fullName: Joi.string().optional(),
     birthDate: Joi.date().iso().optional(),
+    birthPlace: Joi.string().optional(),
     citizenship: Joi.string().optional(),
     languagePriority: Joi.string().valid(...LangPriorities).optional(),
     hiredBy: Joi.string().optional(),
