@@ -1,9 +1,9 @@
 import { PaginateResult } from 'mongoose';
-import { Owner } from './owner.schema';
+import { Coordinator } from './coordinator.schema';
 import { LangPriority } from '../utils/constants';
-import { Query, PaginatedResultDto } from '../utils/general.dto';
+import { PaginatedResultDto, Query } from '../utils/general.dto';
 
-export class CreateOwnerDto {
+export class CreateCoordinatorDto {
     readonly fullName: string;
     readonly birthDate: Date;
     readonly birthPlace: string;
@@ -26,7 +26,7 @@ export class CreateOwnerDto {
     readonly notes?: string;
 }
 
-export class UpdateOwnerDto {
+export class UpdateCoordinatorDto {
     readonly fullName?: string;
     readonly birthDate?: Date;
     readonly birthPlace?: string;
@@ -49,7 +49,7 @@ export class UpdateOwnerDto {
     readonly notes?: string;
 }
 
-export class OwnerQuerySearch {
+export class CoordinatorQuerySearch {
     readonly fullName?: string;
     readonly birthPlace?: string;
     readonly citizenship?: string;
@@ -68,46 +68,46 @@ export class OwnerQuerySearch {
     readonly emergencyContactPhone?: string
 }
 
-export class OwnerQuery extends Query<OwnerQuerySearch>{
+export class CoordinatorQuery extends Query<CoordinatorQuerySearch>{
 }
 
-export class OwnerResultDto extends CreateOwnerDto{
-    static fromOwnerModel(owner: Owner): OwnerResultDto {
+export class CoordinatorResultDto extends CreateCoordinatorDto {
+    static fromCoordinatorModel(coordinator: Coordinator): CoordinatorResultDto {
         return {
-            id: owner._id.toString(),
-            fullName: owner.fullName,
-            birthDate: owner.birthDate,
-            birthPlace: owner.birthPlace,
-            citizenship: owner.citizenship,
-            languagePriority: owner.languagePriority,
-            hiredBy: owner.hiredBy,
-            hireDate: owner.hireDate,
-            snn: owner.snn,
-            company: owner.company,
-            insurancePolicy: owner.insurancePolicy,
-            insurancePolicyEFF: owner.insurancePolicyEFF,
-            insurancePolicyExp: owner.insurancePolicyExp,
-            address: owner.address,
-            phone: owner.phone,
-            phone2: owner.phone2,
-            email: owner.email,
-            emergencyContactName: owner.emergencyContactName,
-            emergencyContactRel: owner.emergencyContactRel,
-            emergencyContactPhone: owner.emergencyContactPhone,
-            notes: owner.notes,
+            id: coordinator._id.toString(),
+            fullName: coordinator.fullName,
+            birthDate: coordinator.birthDate,
+            birthPlace: coordinator.birthPlace,
+            citizenship: coordinator.citizenship,
+            languagePriority: coordinator.languagePriority,
+            hiredBy: coordinator.hiredBy,
+            hireDate: coordinator.hireDate,
+            snn: coordinator.snn,
+            company: coordinator.company,
+            insurancePolicy: coordinator.insurancePolicy,
+            insurancePolicyEFF: coordinator.insurancePolicyEFF,
+            insurancePolicyExp: coordinator.insurancePolicyExp,
+            address: coordinator.address,
+            phone: coordinator.phone,
+            phone2: coordinator.phone2,
+            email: coordinator.email,
+            emergencyContactName: coordinator.emergencyContactName,
+            emergencyContactRel: coordinator.emergencyContactRel,
+            emergencyContactPhone: coordinator.emergencyContactPhone,
+            notes: coordinator.notes,
         };
     }
 
     readonly id: string;
 }
 
-export class PaginatedOwnerResultDto extends PaginatedResultDto<OwnerResultDto> {
-    static from(paginatedOwners: PaginateResult<Owner>): PaginatedOwnerResultDto {
+export class PaginatedCoordinatorResultDto extends PaginatedResultDto<CoordinatorResultDto> {
+    static from(paginatedCoordinators: PaginateResult<Coordinator>): PaginatedCoordinatorResultDto {
         return {
-            items: paginatedOwners.docs.map((owner) => (OwnerResultDto.fromOwnerModel(owner))),
-            offset: paginatedOwners.offset,
-            limit: paginatedOwners.limit,
-            total: paginatedOwners.totalDocs,
+            items: paginatedCoordinators.docs.map((coordinator) => (CoordinatorResultDto.fromCoordinatorModel(coordinator))),
+            offset: paginatedCoordinators.offset,
+            limit: paginatedCoordinators.limit,
+            total: paginatedCoordinators.totalDocs,
         };
     }
 }

@@ -1,7 +1,7 @@
 import * as Joi from 'joi';
 import { LangPriorities } from '../utils/constants';
 
-export const CreateOwnerValidation = Joi.object({
+export const CreateCoordinatorValidation = Joi.object({
     fullName: Joi.string().required(),
     birthDate: Joi.date().iso().required(),
     birthPlace: Joi.string().required(),
@@ -24,7 +24,7 @@ export const CreateOwnerValidation = Joi.object({
     notes: Joi.string().optional(),
 });
 
-export const UpdateOwnerValidation = Joi.object({
+export const UpdateCoordinatorValidation = Joi.object({
     fullName: Joi.string().optional(),
     birthDate: Joi.date().iso().optional(),
     birthPlace: Joi.string().optional(),
@@ -47,7 +47,7 @@ export const UpdateOwnerValidation = Joi.object({
     notes: Joi.string().optional(),
 });
 
-export const ownerQueryParamsSchema = Joi.object({
+export const coordinatorQueryParamsSchema = Joi.object({
     offset: Joi.number().integer().min(0).optional(),
     limit: Joi.number().integer().min(1).optional(),
     fullName: Joi.string().optional(),

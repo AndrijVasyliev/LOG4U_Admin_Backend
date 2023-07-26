@@ -19,6 +19,10 @@ import { RequestIdMiddleware } from './utils/requestId.middleware';
 
 import { OwnerController } from './owner/owner.controller';
 import { OwnerModule } from './owner/owner.module';
+import { CoordinatorController } from './coordinator/coordinator.controller';
+import { CoordinatorModule } from './coordinator/coordinator.module';
+import { DriverController } from './driver/driver.controller';
+import { DriverModule } from './driver/driver.module';
 
 @Module({
   imports: [
@@ -44,6 +48,8 @@ import { OwnerModule } from './owner/owner.module';
       inject: [ConfigService],
     }),
     OwnerModule,
+    CoordinatorModule,
+    DriverModule,
   ],
   controllers: [AppController],
   providers: [AppService],
@@ -56,6 +62,8 @@ export class AppModule implements NestModule {
         AppController,
         HealthController,
         OwnerController,
+        CoordinatorController,
+        DriverController,
       );
     consumer
       .apply(LoggerMiddleware)
@@ -63,6 +71,8 @@ export class AppModule implements NestModule {
         AppController,
         HealthController,
         OwnerController,
+        CoordinatorController,
+        DriverController,
       );
     consumer
       .apply(ResponseTimeMiddleware)
@@ -70,6 +80,8 @@ export class AppModule implements NestModule {
         AppController,
         HealthController,
         OwnerController,
+        CoordinatorController,
+        DriverController,
       );
   }
 }

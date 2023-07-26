@@ -3,14 +3,14 @@ import { Document, ObjectId } from 'mongoose';
 import * as mongoosePaginate from 'mongoose-paginate-v2';
 import { LangPriorities, LangPriority } from '../utils/constants';
 
-export type OwnerDocument = Owner & Document;
+export type CoordinatorDocument = Coordinator & Document;
 
 @Schema({
     timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' },
     optimisticConcurrency: true,
-    collection: 'owners',
+    collection: 'coordinators',
 })
-export class Owner {
+export class Coordinator {
     @Prop({ required: true })
     fullName: string;
 
@@ -78,8 +78,8 @@ export class Owner {
     _id: ObjectId;
 }
 
-export const OwnerSchema = SchemaFactory.createForClass(Owner);
+export const CoordinatorSchema = SchemaFactory.createForClass(Coordinator);
 
-// OwnerSchema.index({ fullName: 1, hiredBy: 1 }, { unique: true });
+// CoordinatorSchema.index({ fullName: 1, hiredBy: 1 }, { unique: true });
 
-OwnerSchema.plugin(mongoosePaginate);
+CoordinatorSchema.plugin(mongoosePaginate);
