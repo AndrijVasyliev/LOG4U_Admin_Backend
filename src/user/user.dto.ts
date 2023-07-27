@@ -4,7 +4,7 @@ import { Query, PaginatedResultDto, UserRole } from '../utils/general.dto';
 
 export class CreateUserDto {
     readonly fullName: string;
-    readonly phone: string;
+    readonly phone?: string;
     readonly userRole: UserRole;
     readonly jobTitle: string;
     readonly email: string;

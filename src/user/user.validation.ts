@@ -3,7 +3,7 @@ import { LangPriorities, UserRoles } from '../utils/constants';
 
 export const CreateUserValidation = Joi.object({
     fullName: Joi.string().required(),
-    phone: Joi.string().required(),
+    phone: Joi.string().optional(),
     userRole: Joi.string().valid(...UserRoles).required(),
     jobTitle: Joi.string().required(),
     email: Joi.string().required(),
