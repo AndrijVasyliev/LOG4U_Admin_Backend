@@ -1,10 +1,15 @@
 import * as Joi from 'joi';
+import { EARTH_RADIUS_MILES } from '../utils/constants';
 
 export const CreateLocationValidation = Joi.object({
     zipCode: Joi.string().required(),
     name: Joi.string().required(),
     stateCode: Joi.string().required(),
     stateName: Joi.string().required(),
+    location: Joi.array().min(2).max(2).items(
+      Joi.number().min(-180).max(180).required(),
+      Joi.number().min(-90).max(90).required()
+    ).required(),
 });
 
 export const UpdateLocationValidation = Joi.object({
@@ -12,6 +17,10 @@ export const UpdateLocationValidation = Joi.object({
     name: Joi.string().optional(),
     stateCode: Joi.string().optional(),
     stateName: Joi.string().optional(),
+    location: Joi.array().min(2).max(2).items(
+      Joi.number().min(-180).max(180).required(),
+      Joi.number().min(-90).max(90).required()
+    ),
 });
 
 export const locationQueryParamsSchema = Joi.object({
@@ -31,4 +40,24 @@ export const locationQueryParamsSchema = Joi.object({
       ),
       direction: Joi.string().valid('asc', 'desc'),
   })
-  .and('orderby', 'direction');
+  .and('orderby', 'direction')
+  .keys({
+    location: Joi.string().regex(/^\d+\.?\d*,\d+\.?\d*$/)
+      .messages({
+        'custom.long':'Longitude must be between -180 and 180',
+        'custom.lat':'Latitude must be between -90 and 90',
+      })
+      .custom((value: string, helper) => {
+      const parsed = value.split(',');
+      const long = +parsed[0];
+      const lat = +parsed[1];
+      if (-180 > long || 180 < long) {
+        return helper.error('custom.long');
+      }
+      if (-90 > lat || 90 < lat) {
+        return helper.error('custom.lat');
+      }
+      return [long, lat];
+    }),
+    distance: Joi.number().min(0).max(EARTH_RADIUS_MILES),
+  }).and('location', 'distance');

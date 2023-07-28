@@ -7,7 +7,7 @@ import {
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { LoggerService } from '../logger/logger.service';
-import { MONGO_UNIQUE_INDEX_CONFLICT } from '../utils/constants';
+import { EARTH_RADIUS_MILES, MONGO_UNIQUE_INDEX_CONFLICT } from '../utils/constants';
 import { Location, LocationDocument } from './location.schema';
 import { CreateLocationDto, LocationQuery, LocationResultDto, PaginatedLocationResultDto, UpdateLocationDto } from './location.dto';
 
@@ -46,6 +46,11 @@ export class LocationService {
             searchParams.forEach((entry) => {
                 documentQuery[entry[0]] = { $regex: new RegExp(entry[1], 'i') };
             });
+        }
+        if (query?.search?.location && query?.search?.distance) {
+            documentQuery.location = {
+                $geoWithin: { $centerSphere: [ query.search.location, query.search.distance / EARTH_RADIUS_MILES ] },
+            };
         }
 
         const options: {limit: number, offset: number, sort?: Record<string, string>} = {

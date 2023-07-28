@@ -7,6 +7,7 @@ export class CreateLocationDto {
     readonly name: string;
     readonly stateCode: string;
     readonly stateName: string;
+    readonly location: [number, number];
 }
 
 export class UpdateLocationDto {
@@ -14,6 +15,7 @@ export class UpdateLocationDto {
     readonly name?: string;
     readonly stateCode?: string;
     readonly stateName?: string;
+    readonly location?: [number, number];
 }
 
 export class LocationQuerySearch {
@@ -21,6 +23,8 @@ export class LocationQuerySearch {
     readonly name?: string;
     readonly stateCode?: string;
     readonly stateName?: string;
+    readonly location?: [number, number];
+    readonly distance?: number;
 }
 
 export class LocationQuery extends Query<LocationQuerySearch>{
@@ -34,6 +38,7 @@ export class LocationResultDto extends CreateLocationDto{
             name: location.name,
             stateCode: location.stateCode,
             stateName: location.stateName,
+            location: location.location,
         };
     }
 

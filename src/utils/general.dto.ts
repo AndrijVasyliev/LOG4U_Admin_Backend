@@ -1,5 +1,7 @@
 import { LangPriorities, UserRoles } from './constants';
 
+export type GeoPointType = { type: 'Point', coordinates: [number, number] };
+
 export type LangPriority = (typeof LangPriorities)[number];
 export type UserRole = (typeof UserRoles)[number];
 

@@ -1004,7 +1004,7 @@
 								},
 								{
 									"key": "zipCode",
-									"value": null,
+									"value": "03142",
 									"disabled": true
 								},
 								{
@@ -1014,12 +1014,24 @@
 								},
 								{
 									"key": "stateCode",
-									"value": null,
+									"value": "380",
 									"disabled": true
 								},
 								{
 									"key": "stateName",
-									"value": null,
+									"value": "Ukraine",
+									"disabled": true
+								},
+								{
+									"key": "location",
+									"value": "50.4501,130.5234",
+									"description": "Longitude,Latitude",
+									"disabled": true
+								},
+								{
+									"key": "distance",
+									"value": "100",
+									"description": "miles",
 									"disabled": true
 								}
 							]
@@ -1070,7 +1082,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"zipCode\":\"03142\",\r\n    \"name\":\"Kyiv\",\r\n    \"stateCode\":\"380\",\r\n    \"stateName\":\"Ukraine\"\r\n}",
+							"raw": "{\r\n    \"zipCode\":\"03142\",\r\n    \"name\":\"Kyiv\",\r\n    \"stateCode\":\"380\",\r\n    \"stateName\":\"Ukraine\",\r\n    \"location\":[50.4501,30.5234]\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1096,7 +1108,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"zipCode\":\"03142\",\r\n    \"name\":\"Kyiv\",\r\n    \"stateCode\":\"380\",\r\n    \"stateName\":\"Ukraine\"\r\n}",
+							"raw": "{\r\n    \"zipCode\":\"03142\",\r\n    \"name\":\"Kyiv\",\r\n    \"stateCode\":\"380\",\r\n    \"stateName\":\"Ukraine\",\r\n    \"location\": [57, 76]\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1115,7 +1127,7 @@
 							"variable": [
 								{
 									"key": "locationId",
-									"value": "64c1380eabbd4c97d2a391eb"
+									"value": "64c38c91de5fbc877c5428ea"
 								}
 							]
 						}
