@@ -42,7 +42,7 @@ export const locationQueryParamsSchema = Joi.object({
   })
   .and('orderby', 'direction')
   .keys({
-    location: Joi.string().regex(/^\d+\.?\d*,\d+\.?\d*$/)
+    location: Joi.string().regex(/^-?\d+\.?\d*,-?\d+\.?\d*$/)
       .messages({
         'custom.long':'Longitude must be between -180 and 180',
         'custom.lat':'Latitude must be between -90 and 90',
