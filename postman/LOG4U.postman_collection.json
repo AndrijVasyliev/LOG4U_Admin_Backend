@@ -671,7 +671,7 @@
 							"variable": [
 								{
 									"key": "driverId",
-									"value": "64c113edcb3a58b0872f6541"
+									"value": "64c92cec160c692399a5f78c"
 								}
 							]
 						}
@@ -730,7 +730,7 @@
 							"variable": [
 								{
 									"key": "driverId",
-									"value": "64c11421cb3a58b0872f6547"
+									"value": "64c92cec160c692399a5f78c"
 								}
 							]
 						}
@@ -763,7 +763,212 @@
 							"variable": [
 								{
 									"key": "driverId",
-									"value": "64c11421cb3a58b0872f6547"
+									"value": "64c92cec160c692399a5f78c"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Load",
+			"item": [
+				{
+					"name": "List Loads",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{origin}}/load?limit=30&offset=0&orderby=pickDate&direction=asc",
+							"host": [
+								"{{origin}}"
+							],
+							"path": [
+								"load"
+							],
+							"query": [
+								{
+									"key": "limit",
+									"value": "30"
+								},
+								{
+									"key": "offset",
+									"value": "0"
+								},
+								{
+									"key": "orderby",
+									"value": "pickDate",
+									"description": "'pick','pickDate','deliver','deliverDate','weight','rate','bookedByCompany','checkInAs'"
+								},
+								{
+									"key": "direction",
+									"value": "asc",
+									"description": "asc or desc"
+								},
+								{
+									"key": "pick",
+									"value": "New",
+									"disabled": true
+								},
+								{
+									"key": "deliver",
+									"value": "",
+									"disabled": true
+								},
+								{
+									"key": "weight",
+									"value": "100",
+									"disabled": true
+								},
+								{
+									"key": "truckType",
+									"value": "Hotshot",
+									"disabled": true
+								},
+								{
+									"key": "rate",
+									"value": "",
+									"disabled": true
+								},
+								{
+									"key": "bookedByCompany",
+									"value": "",
+									"disabled": true
+								},
+								{
+									"key": "checkInAs",
+									"value": "MegoCorp",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Load",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{origin}}/load/:loadId",
+							"host": [
+								"{{origin}}"
+							],
+							"path": [
+								"load",
+								":loadId"
+							],
+							"variable": [
+								{
+									"key": "loadId",
+									"value": "64c92b64160c692399a5f785"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Load",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"pick\":\"New York\",\r\n    \"pickDate\":\"2001-07-24T20:33:52.147Z\",\r\n    \"deliver\":\"Puerto-Rico\",\r\n    \"deliverDate\":\"2001-07-25T20:33:52.147Z\",\r\n    \"weight\":\"100 ton\",\r\n    \"truckType\":[\r\n        \"Cargo van\",\r\n        \"Reefer van\",\r\n        \"Box truck\",\r\n        \"Box truck Reefer\",\r\n        \"Straight truck\",\r\n        \"Hotshot\",\r\n        \"Tented box\"\r\n    ],\r\n    \"rate\":3.56,\r\n    \"bookedByCompany\":\"Horns & Hoofs\",\r\n    \"checkInAs\":\"MegoCorp\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{origin}}/load",
+							"host": [
+								"{{origin}}"
+							],
+							"path": [
+								"load"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Load",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"pick\":\"New York\",\r\n    \"pickDate\":\"2001-07-24T20:33:52.147Z\",\r\n    \"deliver\":\"Puerto-Rico\",\r\n    \"deliverDate\":\"2001-07-25T20:33:52.147Z\",\r\n    \"weight\":\"100 ton\",\r\n    \"truckType\":[\r\n        \"Cargo van\",\r\n        \"Reefer van\",\r\n        \"Box truck\",\r\n        \"Box truck Reefer\",\r\n        \"Straight truck\",\r\n        \"Hotshot\",\r\n        \"Tented box\"\r\n    ],\r\n    \"rate\":3.56,\r\n    \"bookedByCompany\":\"Horns & Hoofs\",\r\n    \"checkInAs\":\"MegoCorp\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{origin}}/load/:loadId",
+							"host": [
+								"{{origin}}"
+							],
+							"path": [
+								"load",
+								":loadId"
+							],
+							"variable": [
+								{
+									"key": "loadId",
+									"value": "64c9493c4e3d36780efdeb0b"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Load",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{origin}}/load/:loadId",
+							"host": [
+								"{{origin}}"
+							],
+							"path": [
+								"load",
+								":loadId"
+							],
+							"variable": [
+								{
+									"key": "loadId",
+									"value": "64c92b64160c692399a5f785"
 								}
 							]
 						}
