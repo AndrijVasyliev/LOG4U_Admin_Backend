@@ -44,7 +44,8 @@ export class LocationService {
         if (query.search) {
             const searchParams = Object.entries(query.search);
             searchParams.forEach((entry) => {
-                documentQuery[entry[0]] = { $regex: new RegExp(entry[1], 'i') };
+                entry[0] !== 'location' && entry[0] !== 'distance' &&
+                (documentQuery[entry[0]] = { $regex: new RegExp(entry[1], 'i') });
             });
         }
         if (query?.search?.location && query?.search?.distance) {

@@ -29,6 +29,8 @@ import { LocationController } from './location/location.controller';
 import { LocationModule } from './location/location.module';
 import { LoadController } from './load/load.controller';
 import { LoadModule } from './load/load.module';
+import { TruckController } from './truck/truck.controller';
+import { TruckModule } from './truck/truck.module';
 
 @Module({
   imports: [
@@ -59,6 +61,7 @@ import { LoadModule } from './load/load.module';
     UserModule,
     LocationModule,
     LoadModule,
+    TruckModule,
   ],
   controllers: [AppController],
   providers: [AppService],
@@ -75,6 +78,8 @@ export class AppModule implements NestModule {
         DriverController,
         UserController,
         LocationController,
+        LoadController,
+        TruckController,
       );
     consumer
       .apply(LoggerMiddleware)
@@ -87,6 +92,7 @@ export class AppModule implements NestModule {
         UserController,
         LocationController,
         LoadController,
+        TruckController,
       );
     consumer
       .apply(ResponseTimeMiddleware)
@@ -99,6 +105,7 @@ export class AppModule implements NestModule {
         UserController,
         LocationController,
         LoadController,
+        TruckController
       );
   }
 }
