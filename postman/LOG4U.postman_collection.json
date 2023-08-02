@@ -773,6 +773,253 @@
 			]
 		},
 		{
+			"name": "Truck",
+			"item": [
+				{
+					"name": "List Trucks",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{origin}}/truck?limit=30&offset=0&orderby=truckNumber&direction=asc",
+							"host": [
+								"{{origin}}"
+							],
+							"path": [
+								"truck"
+							],
+							"query": [
+								{
+									"key": "limit",
+									"value": "30"
+								},
+								{
+									"key": "offset",
+									"value": "0"
+								},
+								{
+									"key": "orderby",
+									"value": "truckNumber",
+									"description": "'truckNumber','status','crossborder','certificate','type','payload','grossWeight','make','model','year','color','vinCode','licencePlate','licenceState','plateExpires','insideDims','doorDims','validDims'"
+								},
+								{
+									"key": "direction",
+									"value": "asc",
+									"description": "asc or desc"
+								},
+								{
+									"key": "truckNumber",
+									"value": "6661313",
+									"disabled": true
+								},
+								{
+									"key": "status",
+									"value": "Available",
+									"disabled": true
+								},
+								{
+									"key": "crossborder",
+									"value": "Yes",
+									"disabled": true
+								},
+								{
+									"key": "certificate",
+									"value": "Hazmat",
+									"disabled": true
+								},
+								{
+									"key": "type",
+									"value": "Box truck",
+									"disabled": true
+								},
+								{
+									"key": "equipment",
+									"value": "Lift gate",
+									"disabled": true
+								},
+								{
+									"key": "payload",
+									"value": "100500",
+									"disabled": true
+								},
+								{
+									"key": "make",
+									"value": "des",
+									"disabled": true
+								},
+								{
+									"key": "model",
+									"value": "inter",
+									"disabled": true
+								},
+								{
+									"key": "color",
+									"value": "Ye",
+									"disabled": true
+								},
+								{
+									"key": "vinCode",
+									"value": "vf",
+									"disabled": true
+								},
+								{
+									"key": "licencePlate",
+									"value": "76",
+									"disabled": true
+								},
+								{
+									"key": "licenceState",
+									"value": "Active",
+									"disabled": true
+								},
+								{
+									"key": "lastLocation",
+									"value": "50.4501,30.5234",
+									"description": "Longitude,Latitude",
+									"disabled": true
+								},
+								{
+									"key": "distance",
+									"value": "100",
+									"description": "miles",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Truck",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{origin}}/truck/:truckId",
+							"host": [
+								"{{origin}}"
+							],
+							"path": [
+								"truck",
+								":truckId"
+							],
+							"variable": [
+								{
+									"key": "truckId",
+									"value": "64c977a2c068c72a3d5b4240"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Truck",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"truckNumber\":\"6661313\",\r\n    \"status\":\"Available\",\r\n    \"lastLocation\":[50.4501,30.5234],\r\n    \"crossborder\":\"Yes\",\r\n    \"certificate\":\"Hazmat\",\r\n    \"type\":\"Box truck\",\r\n    \"equipment\":[\r\n        \"Dock height risers\",\r\n        \"Air ride\",\r\n        \"Lift gate\",\r\n        \"Keep from freezing\",\r\n        \"ICC bar\",\r\n        \"Vertical E-track\",\r\n        \"Horizontal E-track\",\r\n        \"Pallet jack\",\r\n        \"PPE\",\r\n        \"Ramps\",\r\n        \"Straps\",\r\n        \"Loads bars\",\r\n        \"Blankets\",\r\n        \"Pads\",\r\n        \"Fire extinguisher\"\r\n    ],\r\n    \"payload\":100500,\r\n    \"grossWeight\":\"150 ton\",\r\n    \"make\":\"Mercedes\",\r\n    \"model\":\"Sprinter\",\r\n    \"year\":1967,\r\n    \"color\":\"Yello\",\r\n    \"vinCode\":\"vf938749843\",\r\n    \"licencePlate\":\"AA7676BK\",\r\n    \"licenceState\":\"Active\",\r\n    \"plateExpires\":\"2001-07-24T20:33:52.147Z\",\r\n    \"insideDims\":\"100 x 200\",\r\n    \"doorDims\":\"20 x 20\",\r\n    \"validDims\":\"98 x 198\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{origin}}/truck",
+							"host": [
+								"{{origin}}"
+							],
+							"path": [
+								"truck"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Truck",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"truckNumber\":\"6661313\",\r\n    \"status\":\"Available\",\r\n    \"lastLocation\":[50.4501,30.5234],\r\n    \"crossborder\":\"Yes\",\r\n    \"certificate\":\"Hazmat\",\r\n    \"type\":\"Box truck\",\r\n    \"equipment\":[\r\n        \"Dock height risers\",\r\n        \"Air ride\",\r\n        \"Lift gate\",\r\n        \"Keep from freezing\",\r\n        \"ICC bar\",\r\n        \"Vertical E-track\",\r\n        \"Horizontal E-track\",\r\n        \"Pallet jack\",\r\n        \"PPE\",\r\n        \"Ramps\",\r\n        \"Straps\",\r\n        \"Loads bars\",\r\n        \"Blankets\",\r\n        \"Pads\",\r\n        \"Fire extinguisher\"\r\n    ],\r\n    \"payload\":100500,\r\n    \"grossWeight\":\"150 ton\",\r\n    \"make\":\"Mercedes\",\r\n    \"model\":\"Sprinter\",\r\n    \"year\":1967,\r\n    \"color\":\"Yello\",\r\n    \"vinCode\":\"vf938749843\",\r\n    \"licencePlate\":\"AA7676BK\",\r\n    \"licenceState\":\"Active\",\r\n    \"plateExpires\":\"2001-07-24T20:33:52.147Z\",\r\n    \"insideDims\":\"100 x 200\",\r\n    \"doorDims\":\"20 x 20\",\r\n    \"validDims\":\"98 x 198\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{origin}}/truck/:truckId",
+							"host": [
+								"{{origin}}"
+							],
+							"path": [
+								"truck",
+								":truckId"
+							],
+							"variable": [
+								{
+									"key": "truckId",
+									"value": "64c977a2c068c72a3d5b4240"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Truck",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{origin}}/truck/:truckId",
+							"host": [
+								"{{origin}}"
+							],
+							"path": [
+								"truck",
+								":truckId"
+							],
+							"variable": [
+								{
+									"key": "truckId",
+									"value": "64c977a2c068c72a3d5b4240"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
 			"name": "Load",
 			"item": [
 				{
@@ -1181,7 +1428,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{origin}}/location?limit=30&offset=0&orderby=name&direction=asc",
+							"raw": "{{origin}}/location?limit=30&offset=0&orderby=name&direction=asc&location=50.4501,30.5234&distance=100",
 							"host": [
 								"{{origin}}"
 							],
@@ -1229,15 +1476,13 @@
 								},
 								{
 									"key": "location",
-									"value": "50.4501,130.5234",
-									"description": "Longitude,Latitude",
-									"disabled": true
+									"value": "50.4501,30.5234",
+									"description": "Longitude,Latitude"
 								},
 								{
 									"key": "distance",
 									"value": "100",
-									"description": "miles",
-									"disabled": true
+									"description": "miles"
 								}
 							]
 						}
