@@ -34,13 +34,19 @@ export class Truck {
     @Prop({
         required: false,
         type: GeoPointSchema,
-        set: (point: [number, number]): GeoPointType => {
+        set: (point?: [number, number]): GeoPointType | void => {
+            if (!point) {
+                return;
+            }
             return {
                 type: 'Point',
                 coordinates: point,
             }
         },
-        get: (point: GeoPointType): [number, number] => {
+        get: (point?: GeoPointType): [number, number] | void => {
+            if (!point) {
+                return;
+            }
             return point.coordinates;
         }
     })
