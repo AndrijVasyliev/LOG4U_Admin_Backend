@@ -39,8 +39,8 @@ export class Driver {
     @Prop({ required: true })
     driverLicenceClass: string;
 
-    @Prop({ required: false })
-    driverLicenceExp?: Date;
+    @Prop({ required: true })
+    driverLicenceExp: Date;
 
     @Prop({ required: false })
     idDocId?: string;

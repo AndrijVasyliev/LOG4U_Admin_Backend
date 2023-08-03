@@ -12,7 +12,7 @@ export class CreateDriverDto {
     readonly driverLicenceNumber: string;
     readonly driverLicenceState: string;
     readonly driverLicenceClass: string;
-    readonly driverLicenceExp?: Date;
+    readonly driverLicenceExp: Date;
     readonly idDocId?: string;
     readonly idDocType?: string;
     readonly idDocExp?: Date;

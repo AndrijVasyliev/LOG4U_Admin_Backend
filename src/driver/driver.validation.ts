@@ -11,7 +11,7 @@ export const CreateDriverValidation = Joi.object({
     driverLicenceNumber: Joi.string().required(),
     driverLicenceState: Joi.string().required(),
     driverLicenceClass: Joi.string().required(),
-    driverLicenceExp: Joi.date().iso().optional(),
+    driverLicenceExp: Joi.date().iso().required(),
     idDocId: Joi.string().optional(),
     idDocType: Joi.string().optional(),
     idDocExp: Joi.date().iso().optional(),
