@@ -63,6 +63,7 @@ export class Location {
 
 export const LocationSchema = SchemaFactory.createForClass(Location);
 
+LocationSchema.index({ zipCode: 1 }, { unique: true });
 LocationSchema.index({  location: '2dsphere' });
 
 LocationSchema.plugin(mongoosePaginate);
