@@ -7,34 +7,34 @@ import { UserRole } from '../utils/general.dto';
 export type UserDocument = User & Document;
 
 @Schema({
-    timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' },
-    optimisticConcurrency: true,
-    collection: 'users',
+  timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' },
+  optimisticConcurrency: true,
+  collection: 'users',
 })
 export class User {
-    @Prop({ required: true })
-    fullName: string;
+  @Prop({ required: true })
+  fullName: string;
 
-    @Prop({ required: false })
-    phone?: string;
+  @Prop({ required: false })
+  phone?: string;
 
-    @Prop({ required: true, enum: UserRoles })
-    userRole: UserRole;
+  @Prop({ required: true, enum: UserRoles })
+  userRole: UserRole;
 
-    @Prop({ required: true })
-    jobTitle: string;
+  @Prop({ required: true })
+  jobTitle: string;
 
-    @Prop({ required: true })
-    email: string;
+  @Prop({ required: true })
+  email: string;
 
-    @Prop({ required: true })
-    password: string;
+  @Prop({ required: true })
+  password: string;
 
-    created_at: Date;
+  created_at: Date;
 
-    updated_at: Date;
+  updated_at: Date;
 
-    _id: ObjectId;
+  _id: ObjectId;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

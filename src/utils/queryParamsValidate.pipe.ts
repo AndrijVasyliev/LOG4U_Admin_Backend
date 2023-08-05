@@ -16,7 +16,9 @@ export class QueryParamsPipe<T> implements PipeTransform<any, Query<T>> {
     if (metadata.type !== 'query') {
       return inputValue;
     }
-    const { error, value } = this.schema.validate(inputValue, { abortEarly: false });
+    const { error, value } = this.schema.validate(inputValue, {
+      abortEarly: false,
+    });
     if (error) {
       throw new BadRequestException(
         `Query parameters validation failed: ${error.message}, ${JSON.stringify(
@@ -24,7 +26,13 @@ export class QueryParamsPipe<T> implements PipeTransform<any, Query<T>> {
         )}`,
       );
     }
-    const { offset = DEFAULT_OFFSET, limit = DEFAULT_LIMIT, orderby, direction, ...search } = value;
+    const {
+      offset = DEFAULT_OFFSET,
+      limit = DEFAULT_LIMIT,
+      orderby,
+      direction,
+      ...search
+    } = value;
     let result: Query<T>;
     if (Object.keys(search).length) {
       result = {

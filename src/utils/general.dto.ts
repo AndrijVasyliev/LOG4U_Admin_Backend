@@ -1,13 +1,14 @@
 import {
   LangPriorities,
   TruckCertificates,
-  TruckCrossborders, TruckEquipments,
+  TruckCrossborders,
+  TruckEquipments,
   TruckStatuses,
   TruckTypes,
   UserRoles,
 } from './constants';
 
-export type GeoPointType = { type: 'Point', coordinates: [number, number] };
+export type GeoPointType = { type: 'Point'; coordinates: [number, number] };
 
 export type LangPriority = (typeof LangPriorities)[number];
 export type UserRole = (typeof UserRoles)[number];

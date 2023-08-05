@@ -26,7 +26,12 @@ export const TruckStatuses = ['Available', 'Not Available'] as const;
 
 export const TruckCrossborders = ['Yes', 'No'] as const;
 
-export const TruckCertificates = ['Hazmat', 'Tsa', 'TWIC', 'Tanker Endorsement'] as const;
+export const TruckCertificates = [
+  'Hazmat',
+  'Tsa',
+  'TWIC',
+  'Tanker Endorsement',
+] as const;
 
 export const TruckEquipments = [
   'Dock height risers',

@@ -6,7 +6,9 @@ import { CoordinatorService } from './coordinator.service';
 
 @Module({
   imports: [
-    MongooseModule.forFeature([{ name: Coordinator.name, schema: CoordinatorSchema }]),
+    MongooseModule.forFeature([
+      { name: Coordinator.name, schema: CoordinatorSchema },
+    ]),
   ],
   exports: [CoordinatorService],
   controllers: [CoordinatorController],

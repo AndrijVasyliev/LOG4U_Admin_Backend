@@ -14,7 +14,9 @@ export class BodyValidationPipe implements PipeTransform {
     if (metadata.type !== 'body') {
       return value;
     }
-    const { error, value: transformedValue } = this.schema.validate(value, { abortEarly: false });
+    const { error, value: transformedValue } = this.schema.validate(value, {
+      abortEarly: false,
+    });
     if (error) {
       throw new BadRequestException(
         `Body validation failed: ${error.message}, ${JSON.stringify(

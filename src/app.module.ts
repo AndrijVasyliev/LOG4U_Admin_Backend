@@ -105,7 +105,7 @@ export class AppModule implements NestModule {
         UserController,
         LocationController,
         LoadController,
-        TruckController
+        TruckController,
       );
   }
 }

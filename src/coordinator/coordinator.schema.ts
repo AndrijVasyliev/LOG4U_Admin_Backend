@@ -7,76 +7,76 @@ import { LangPriority } from '../utils/general.dto';
 export type CoordinatorDocument = Coordinator & Document;
 
 @Schema({
-    timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' },
-    optimisticConcurrency: true,
-    collection: 'coordinators',
+  timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' },
+  optimisticConcurrency: true,
+  collection: 'coordinators',
 })
 export class Coordinator {
-    @Prop({ required: true })
-    fullName: string;
+  @Prop({ required: true })
+  fullName: string;
 
-    @Prop({ required: true })
-    birthDate: Date;
+  @Prop({ required: true })
+  birthDate: Date;
 
-    @Prop({ required: true })
-    birthPlace: string;
+  @Prop({ required: true })
+  birthPlace: string;
 
-    @Prop({ required: true })
-    citizenship: string;
+  @Prop({ required: true })
+  citizenship: string;
 
-    @Prop({ required: true, enum: LangPriorities })
-    languagePriority: LangPriority;
+  @Prop({ required: true, enum: LangPriorities })
+  languagePriority: LangPriority;
 
-    @Prop({ required: true })
-    hiredBy: string;
+  @Prop({ required: true })
+  hiredBy: string;
 
-    @Prop({ required: true })
-    hireDate: Date;
+  @Prop({ required: true })
+  hireDate: Date;
 
-    @Prop({ required: true })
-    snn: string;
+  @Prop({ required: true })
+  snn: string;
 
-    @Prop({ required: false })
-    company?: string;
+  @Prop({ required: false })
+  company?: string;
 
-    @Prop({ required: true })
-    insurancePolicy: string;
+  @Prop({ required: true })
+  insurancePolicy: string;
 
-    @Prop({ required: true })
-    insurancePolicyEFF: string;
+  @Prop({ required: true })
+  insurancePolicyEFF: string;
 
-    @Prop({ required: true })
-    insurancePolicyExp: Date;
+  @Prop({ required: true })
+  insurancePolicyExp: Date;
 
-    @Prop({ required: true })
-    address: string;
+  @Prop({ required: true })
+  address: string;
 
-    @Prop({ required: true })
-    phone: string;
+  @Prop({ required: true })
+  phone: string;
 
-    @Prop({ required: false })
-    phone2?: string;
+  @Prop({ required: false })
+  phone2?: string;
 
-    @Prop({ required: true })
-    email: string;
+  @Prop({ required: true })
+  email: string;
 
-    @Prop({ required: true })
-    emergencyContactName: string;
+  @Prop({ required: true })
+  emergencyContactName: string;
 
-    @Prop({ required: false })
-    emergencyContactRel?: string;
+  @Prop({ required: false })
+  emergencyContactRel?: string;
 
-    @Prop({ required: true })
-    emergencyContactPhone: string;
+  @Prop({ required: true })
+  emergencyContactPhone: string;
 
-    @Prop({ required: false })
-    notes?: string;
+  @Prop({ required: false })
+  notes?: string;
 
-    created_at: Date;
+  created_at: Date;
 
-    updated_at: Date;
+  updated_at: Date;
 
-    _id: ObjectId;
+  _id: ObjectId;
 }
 
 export const CoordinatorSchema = SchemaFactory.createForClass(Coordinator);
