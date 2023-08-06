@@ -44,6 +44,7 @@
         "joi": "^17.6.0",
         "mime-types": "^2.1.35",
         "mongoose": "^6.5.3",
+        "mongoose-autopopulate": "^1.0.1",
         "mongoose-paginate-v2": "^1.7.1",
         "prom-client": "^14.1.0",
         "ramda": "^0.28.0",

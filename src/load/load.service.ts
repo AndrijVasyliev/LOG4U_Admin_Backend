@@ -6,8 +6,6 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { LoggerService } from '../logger/logger.service';
-import { MONGO_UNIQUE_INDEX_CONFLICT } from '../utils/constants';
 import { Load, LoadDocument } from './load.schema';
 import {
   CreateLoadDto,
@@ -16,6 +14,8 @@ import {
   PaginatedLoadResultDto,
   UpdateLoadDto,
 } from './load.dto';
+import { LoggerService } from '../logger/logger.service';
+import { MONGO_UNIQUE_INDEX_CONFLICT } from '../utils/constants';
 
 const { MongoError } = mongo;
 
@@ -40,9 +40,7 @@ export class LoadService {
 
   async findLoad(id: string): Promise<LoadResultDto> {
     const load = await this.findLoadById(id);
-    return LoadResultDto.fromLoadModel(
-      await load.populate(['pick', 'deliver', 'bookedByUser', 'dispatchers']),
-    );
+    return LoadResultDto.fromLoadModel(load);
   }
 
   async getLoads(query: LoadQuery): Promise<PaginatedLoadResultDto> {
@@ -63,7 +61,6 @@ export class LoadService {
     if (query.direction && query.orderby) {
       options.sort = { [query.orderby]: query.direction };
     }
-    options.populate = ['pick', 'deliver', 'bookedByUser', 'dispatchers'];
     const res = await this.loadModel.paginate(documentQuery, options);
 
     return PaginatedLoadResultDto.from(res);
@@ -76,9 +73,7 @@ export class LoadService {
     try {
       this.log.debug('Saving Load');
       const load = await createdLoad.save();
-      return LoadResultDto.fromLoadModel(
-        await load.populate(['pick', 'deliver', 'bookedByUser', 'dispatchers']),
-      );
+      return LoadResultDto.fromLoadModel(load);
     } catch (e) {
       if (!(e instanceof Error)) {
         throw new InternalServerErrorException(JSON.stringify(e));
@@ -101,9 +96,7 @@ export class LoadService {
       this.log.debug('Saving Load');
       const savedLoad = await load.save();
       this.log.debug(`Operator ${savedLoad._id} saved`);
-      return LoadResultDto.fromLoadModel(
-        await load.populate(['pick', 'deliver', 'bookedByUser', 'dispatchers']),
-      );
+      return LoadResultDto.fromLoadModel(load);
     } catch (e) {
       if (!(e instanceof Error)) {
         throw new InternalServerErrorException(JSON.stringify(e));
@@ -126,8 +119,6 @@ export class LoadService {
       }
       throw new InternalServerErrorException(e.message);
     }
-    return LoadResultDto.fromLoadModel(
-      await load.populate(['pick', 'deliver', 'bookedByUser', 'dispatchers']),
-    );
+    return LoadResultDto.fromLoadModel(load);
   }
 }
