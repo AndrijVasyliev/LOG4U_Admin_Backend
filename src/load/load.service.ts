@@ -1,4 +1,4 @@
-import { mongo, PaginateModel } from 'mongoose';
+import { mongo, PaginateModel, PaginateOptions } from 'mongoose';
 import {
   ConflictException,
   Injectable,
@@ -40,7 +40,9 @@ export class LoadService {
 
   async findLoad(id: string): Promise<LoadResultDto> {
     const load = await this.findLoadById(id);
-    return LoadResultDto.fromLoadModel(load);
+    return LoadResultDto.fromLoadModel(
+      await load.populate(['pick', 'deliver', 'bookedByUser', 'dispatchers']),
+    );
   }
 
   async getLoads(query: LoadQuery): Promise<PaginatedLoadResultDto> {
@@ -54,18 +56,14 @@ export class LoadService {
       });
     }
 
-    const options: {
-      limit: number;
-      offset: number;
-      sort?: Record<string, string>;
-    } = {
+    const options: PaginateOptions = {
       limit: query.limit,
       offset: query.offset,
     };
     if (query.direction && query.orderby) {
       options.sort = { [query.orderby]: query.direction };
     }
-
+    options.populate = ['pick', 'deliver', 'bookedByUser', 'dispatchers'];
     const res = await this.loadModel.paginate(documentQuery, options);
 
     return PaginatedLoadResultDto.from(res);
@@ -78,7 +76,9 @@ export class LoadService {
     try {
       this.log.debug('Saving Load');
       const load = await createdLoad.save();
-      return LoadResultDto.fromLoadModel(load);
+      return LoadResultDto.fromLoadModel(
+        await load.populate(['pick', 'deliver', 'bookedByUser', 'dispatchers']),
+      );
     } catch (e) {
       if (!(e instanceof Error)) {
         throw new InternalServerErrorException(JSON.stringify(e));
@@ -101,7 +101,9 @@ export class LoadService {
       this.log.debug('Saving Load');
       const savedLoad = await load.save();
       this.log.debug(`Operator ${savedLoad._id} saved`);
-      return LoadResultDto.fromLoadModel(load);
+      return LoadResultDto.fromLoadModel(
+        await load.populate(['pick', 'deliver', 'bookedByUser', 'dispatchers']),
+      );
     } catch (e) {
       if (!(e instanceof Error)) {
         throw new InternalServerErrorException(JSON.stringify(e));
@@ -124,6 +126,8 @@ export class LoadService {
       }
       throw new InternalServerErrorException(e.message);
     }
-    return LoadResultDto.fromLoadModel(load);
+    return LoadResultDto.fromLoadModel(
+      await load.populate(['pick', 'deliver', 'bookedByUser', 'dispatchers']),
+    );
   }
 }

@@ -1047,22 +1047,12 @@
 								{
 									"key": "orderby",
 									"value": "pickDate",
-									"description": "'pick','pickDate','deliver','deliverDate','weight','rate','bookedByCompany','checkInAs'"
+									"description": "'pickDate','deliverDate','weight','rate','bookedByCompany','checkInAs'"
 								},
 								{
 									"key": "direction",
 									"value": "asc",
 									"description": "asc or desc"
-								},
-								{
-									"key": "pick",
-									"value": "New",
-									"disabled": true
-								},
-								{
-									"key": "deliver",
-									"value": "",
-									"disabled": true
 								},
 								{
 									"key": "weight",
@@ -1123,7 +1113,7 @@
 							"variable": [
 								{
 									"key": "loadId",
-									"value": "64c92b64160c692399a5f785"
+									"value": "64ce4f73435c46a84afde542"
 								}
 							]
 						}
@@ -1137,7 +1127,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"pick\":\"New York\",\r\n    \"pickDate\":\"2001-07-24T20:33:52.147Z\",\r\n    \"deliver\":\"Puerto-Rico\",\r\n    \"deliverDate\":\"2001-07-25T20:33:52.147Z\",\r\n    \"weight\":\"100 ton\",\r\n    \"truckType\":[\r\n        \"Cargo van\",\r\n        \"Reefer van\",\r\n        \"Box truck\",\r\n        \"Box truck Reefer\",\r\n        \"Straight truck\",\r\n        \"Hotshot\",\r\n        \"Tented box\"\r\n    ],\r\n    \"rate\":3.56,\r\n    \"bookedByCompany\":\"Horns & Hoofs\",\r\n    \"checkInAs\":\"MegoCorp\"\r\n}",
+							"raw": "{\r\n    \"pick\":\"64cd7015ea802af57a7e339c\",\r\n    \"pickDate\":\"2001-07-24T20:33:52.147Z\",\r\n    \"deliver\":\"64cd7016ea802af57a7e33aa\",\r\n    \"deliverDate\":\"2001-07-25T20:33:52.147Z\",\r\n    \"weight\":\"100 ton\",\r\n    \"truckType\":[\r\n        \"Cargo van\",\r\n        \"Reefer van\",\r\n        \"Box truck\",\r\n        \"Box truck Reefer\",\r\n        \"Straight truck\",\r\n        \"Hotshot\",\r\n        \"Tented box\"\r\n    ],\r\n    \"rate\":3.56,\r\n    \"bookedByUser\":\"64ccc832ede7c23ef9577259\",\r\n    \"bookedByCompany\":\"Horns & Hoofs\",\r\n    \"dispatchers\":[\"64cfdb212d6771ef7981f2de\",\"64cfdb492d6771ef7981f2e0\"],\r\n    \"checkInAs\":\"MegoCorp\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1163,7 +1153,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"pick\":\"New York\",\r\n    \"pickDate\":\"2001-07-24T20:33:52.147Z\",\r\n    \"deliver\":\"Puerto-Rico\",\r\n    \"deliverDate\":\"2001-07-25T20:33:52.147Z\",\r\n    \"weight\":\"100 ton\",\r\n    \"truckType\":[\r\n        \"Cargo van\",\r\n        \"Reefer van\",\r\n        \"Box truck\",\r\n        \"Box truck Reefer\",\r\n        \"Straight truck\",\r\n        \"Hotshot\",\r\n        \"Tented box\"\r\n    ],\r\n    \"rate\":3.56,\r\n    \"bookedByCompany\":\"Horns & Hoofs\",\r\n    \"checkInAs\":\"MegoCorp\"\r\n}",
+							"raw": "{\r\n    \"pick\":\"64cd7015ea802af57a7e339c\",\r\n    \"pickDate\":\"2001-07-24T20:33:52.147Z\",\r\n    \"deliver\":\"64cd7016ea802af57a7e33aa\",\r\n    \"deliverDate\":\"2001-07-25T20:33:52.147Z\",\r\n    \"weight\":\"100 ton\",\r\n    \"truckType\":[\r\n        \"Cargo van\",\r\n        \"Reefer van\",\r\n        \"Box truck\",\r\n        \"Box truck Reefer\",\r\n        \"Straight truck\",\r\n        \"Hotshot\",\r\n        \"Tented box\"\r\n    ],\r\n    \"rate\":3.56,\r\n    \"bookedByUser\":\"64ccc832ede7c23ef9577259\",\r\n    \"bookedByCompany\":\"Horns & Hoofs\",\r\n    \"dispatchers\":[\"64cfdb212d6771ef7981f2de\",\"64cfdb492d6771ef7981f2e0\"],\r\n    \"checkInAs\":\"MegoCorp\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1182,7 +1172,7 @@
 							"variable": [
 								{
 									"key": "loadId",
-									"value": "64c9493c4e3d36780efdeb0b"
+									"value": "64ceb43f929c70e12a9dd712"
 								}
 							]
 						}
@@ -1215,7 +1205,7 @@
 							"variable": [
 								{
 									"key": "loadId",
-									"value": "64c92b64160c692399a5f785"
+									"value": "64ce4f73435c46a84afde542"
 								}
 							]
 						}
@@ -1428,7 +1418,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{origin}}/location?limit=30&offset=0&orderby=name&direction=asc&location=50.4501,30.5234&distance=100",
+							"raw": "{{origin}}/location?limit=30&offset=0&orderby=name&direction=asc&name=New York",
 							"host": [
 								"{{origin}}"
 							],
@@ -1461,8 +1451,7 @@
 								},
 								{
 									"key": "name",
-									"value": "Kyiv",
-									"disabled": true
+									"value": "New York"
 								},
 								{
 									"key": "stateCode",
@@ -1477,12 +1466,14 @@
 								{
 									"key": "location",
 									"value": "50.4501,30.5234",
-									"description": "Longitude,Latitude"
+									"description": "Longitude,Latitude",
+									"disabled": true
 								},
 								{
 									"key": "distance",
 									"value": "100",
-									"description": "miles"
+									"description": "miles",
+									"disabled": true
 								}
 							]
 						}
@@ -1612,6 +1603,34 @@
 									"key": "locationId",
 									"value": "64c1380eabbd4c97d2a391eb"
 								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Import from file",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "locations",
+									"type": "file",
+									"src": "/C:/Users/andrii.vasyliev/Downloads/georef-united-states-of-america-zc-point@public.csv"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{origin}}/location/fromCsv",
+							"host": [
+								"{{origin}}"
+							],
+							"path": [
+								"location",
+								"fromCsv"
 							]
 						}
 					},

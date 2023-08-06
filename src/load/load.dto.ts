@@ -1,6 +1,9 @@
 import { PaginateResult } from 'mongoose';
 import { Load } from './load.schema';
 import { PaginatedResultDto, Query, TruckType } from '../utils/general.dto';
+import { LocationResultDto } from '../location/location.dto';
+import { calcDistance } from '../utils/haversine.distance';
+import { UserResultDto } from '../user/user.dto';
 
 export class CreateLoadDto {
   readonly pick: string;
@@ -10,9 +13,9 @@ export class CreateLoadDto {
   readonly weight: string;
   readonly truckType: TruckType[];
   readonly rate?: number;
-  // readonly bookedByUser?: User;
+  readonly bookedByUser?: string;
   readonly bookedByCompany?: string;
-  // readonly dispatchers?: User[];
+  readonly dispatchers?: string[];
   readonly checkInAs?: string;
 }
 
@@ -24,44 +27,68 @@ export class UpdateLoadDto {
   readonly weight?: string;
   readonly truckType?: TruckType[];
   readonly rate?: number;
-  // readonly bookedByUser?: User;
+  readonly bookedByUser?: string;
   readonly bookedByCompany?: string;
-  // readonly dispatchers?: User[];
+  readonly dispatchers?: string[];
   readonly checkInAs?: string;
 }
 
 export class LoadQuerySearch {
-  readonly pick?: string;
-  readonly deliver?: string;
   readonly weight?: string;
   readonly truckType?: TruckType;
-  // readonly bookedByUser?: User;
   readonly bookedByCompany?: string;
-  // readonly dispatchers?: User[];
   readonly checkInAs?: string;
 }
 
 export class LoadQuery extends Query<LoadQuerySearch> {}
 
-export class LoadResultDto extends CreateLoadDto {
+export class LoadResultDto {
   static fromLoadModel(load: Load): LoadResultDto {
-    return {
+    const pick = LocationResultDto.fromLocationModel(load.pick);
+    const deliver = LocationResultDto.fromLocationModel(load.deliver);
+    const bookedByUser =
+      load.bookedByUser && UserResultDto.fromUserModel(load.bookedByUser);
+    const dispatchers =
+      load.dispatchers &&
+      load.dispatchers.map((dispatcher) =>
+        UserResultDto.fromUserModel(dispatcher),
+      );
+
+    let result: LoadResultDto = {
       id: load._id.toString(),
-      pick: load.pick,
+      pick,
       pickDate: load.pickDate,
-      deliver: load.deliver,
+      deliver,
       deliverDate: load.deliverDate,
+      miles: calcDistance(pick.location, deliver.location),
       weight: load.weight,
       truckType: load.truckType,
       rate: load.rate,
-      // bookedByUser: load.bookedByUser,
       bookedByCompany: load.bookedByCompany,
-      // dispatchers: load.dispatchers,
       checkInAs: load.checkInAs,
     };
+    if (bookedByUser) {
+      result = { ...result, bookedByUser };
+    }
+    if (dispatchers && dispatchers.length > 0) {
+      result = { ...result, dispatchers };
+    }
+    return result;
   }
 
   readonly id: string;
+  readonly pick: LocationResultDto;
+  readonly pickDate: Date;
+  readonly deliver: LocationResultDto;
+  readonly deliverDate?: Date;
+  readonly miles: number;
+  readonly weight: string;
+  readonly truckType: TruckType[];
+  readonly rate?: number;
+  readonly bookedByUser?: UserResultDto;
+  readonly bookedByCompany?: string;
+  readonly dispatchers?: UserResultDto[];
+  readonly checkInAs?: string;
 }
 
 export class PaginatedLoadResultDto extends PaginatedResultDto<LoadResultDto> {

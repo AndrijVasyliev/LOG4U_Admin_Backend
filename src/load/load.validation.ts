@@ -1,10 +1,11 @@
 import * as Joi from 'joi';
 import { TruckTypes } from '../utils/constants';
+import { MongoObjectIdValidation } from '../utils/idValidate.pipe';
 
 export const CreateLoadValidation = Joi.object({
-  pick: Joi.string().required(),
+  pick: MongoObjectIdValidation.required(),
   pickDate: Joi.date().iso().required(),
-  deliver: Joi.string().required(),
+  deliver: MongoObjectIdValidation.required(),
   deliverDate: Joi.date().iso().min(Joi.ref('pickDate')).optional(),
   weight: Joi.string().required(),
   truckType: Joi.array()
@@ -16,16 +17,16 @@ export const CreateLoadValidation = Joi.object({
     )
     .required(),
   rate: Joi.number().min(0).optional(),
-  // bookedByUser:,
+  bookedByUser: MongoObjectIdValidation.required(),
   bookedByCompany: Joi.string().optional(),
-  // dispatchers:,
+  dispatchers: Joi.array().items(MongoObjectIdValidation.required()).optional(),
   checkInAs: Joi.string().optional(),
 });
 
 export const UpdateLoadValidation = Joi.object({
-  pick: Joi.string().optional(),
+  pick: MongoObjectIdValidation.optional(),
   pickDate: Joi.date().iso().optional(),
-  deliver: Joi.string().optional(),
+  deliver: MongoObjectIdValidation.optional(),
   deliverDate: Joi.when('pickDate', {
     is: Joi.exist(),
     then: Joi.date().iso().min(Joi.ref('pickDate')),
@@ -41,32 +42,26 @@ export const UpdateLoadValidation = Joi.object({
     )
     .optional(),
   rate: Joi.number().min(0).optional(),
-  // bookedByUser:,
+  bookedByUser: MongoObjectIdValidation.optional(),
   bookedByCompany: Joi.string().optional(),
-  // dispatchers:,
+  dispatchers: Joi.array().items(MongoObjectIdValidation.required()).optional(),
   checkInAs: Joi.string().optional(),
 });
 
 export const loadQueryParamsSchema = Joi.object({
   offset: Joi.number().integer().min(0).optional(),
   limit: Joi.number().integer().min(1).optional(),
-  pick: Joi.string().optional(),
-  deliver: Joi.string().optional(),
   weight: Joi.string().optional(),
   truckType: Joi.string()
     .valid(...TruckTypes)
     .optional(),
   rate: Joi.number().min(0).optional(),
-  // bookedByUser:,
   bookedByCompany: Joi.string().optional(),
-  // dispatchers:,
   checkInAs: Joi.string().optional(),
 })
   .keys({
     orderby: Joi.string().valid(
-      'pick',
       'pickDate',
-      'deliver',
       'deliverDate',
       'weight',
       'rate',
