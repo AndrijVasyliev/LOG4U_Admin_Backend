@@ -1,6 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, ObjectId } from 'mongoose';
-import * as mongoosePaginate from 'mongoose-paginate-v2';
 import { LangPriorities } from '../utils/constants';
 import { LangPriority } from '../utils/general.dto';
 
@@ -80,7 +79,3 @@ export class Coordinator {
 }
 
 export const CoordinatorSchema = SchemaFactory.createForClass(Coordinator);
-
-// CoordinatorSchema.index({ fullName: 1, hiredBy: 1 }, { unique: true });
-
-CoordinatorSchema.plugin(mongoosePaginate);

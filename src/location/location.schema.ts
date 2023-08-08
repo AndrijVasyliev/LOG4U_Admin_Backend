@@ -1,6 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, ObjectId } from 'mongoose';
-import * as mongoosePaginate from 'mongoose-paginate-v2';
 import { GeoPointType } from '../utils/general.dto';
 
 export type LocationDocument = Location & Document;
@@ -63,5 +62,3 @@ export const LocationSchema = SchemaFactory.createForClass(Location);
 
 LocationSchema.index({ zipCode: 1 }, { unique: true });
 LocationSchema.index({ location: '2dsphere' });
-
-LocationSchema.plugin(mongoosePaginate);

@@ -1,6 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import * as crypto from 'node:crypto';
 import { Document, ObjectId } from 'mongoose';
-import * as mongoosePaginate from 'mongoose-paginate-v2';
 import { LangPriorities } from '../utils/constants';
 import { LangPriority } from '../utils/general.dto';
 
@@ -84,7 +84,14 @@ export class Driver {
   @Prop({ required: false })
   appLogin?: string;
 
-  @Prop({ required: false })
+  @Prop({
+    required: false,
+    set: (password: string): string => {
+      const hash = crypto.createHash('sha256');
+      hash.update(password);
+      return hash.digest('hex');
+    },
+  })
   appPass?: string;
 
   created_at: Date;
@@ -95,7 +102,3 @@ export class Driver {
 }
 
 export const DriverSchema = SchemaFactory.createForClass(Driver);
-
-// DriverSchema.index({ fullName: 1, hiredBy: 1 }, { unique: true });
-
-DriverSchema.plugin(mongoosePaginate);

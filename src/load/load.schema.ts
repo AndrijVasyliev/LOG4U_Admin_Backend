@@ -1,7 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, ObjectId, Schema as MongooseSchema } from 'mongoose';
-import * as mongoosePaginate from 'mongoose-paginate-v2';
-import * as mongooseAutopopulate from 'mongoose-autopopulate';
 import { DEFAULT_CHECK_IN_AS, TruckTypes } from '../utils/constants';
 import { TruckType } from '../utils/general.dto';
 import { Location } from '../location/location.schema';
@@ -100,8 +98,3 @@ export class Load {
 export const LoadSchema = SchemaFactory.createForClass(Load);
 
 LoadSchema.index({ loadNumber: 1 }, { unique: true });
-
-LoadSchema.plugin(mongoosePaginate);
-LoadSchema.plugin(
-  mongooseAutopopulate as unknown as (schema: MongooseSchema) => void,
-);

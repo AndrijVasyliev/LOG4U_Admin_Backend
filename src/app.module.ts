@@ -4,6 +4,9 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { PrometheusModule } from '@willsoto/nestjs-prometheus';
 import { PromConfigService } from './prometheus/prometheus.config.service';
 import { MongooseModule } from '@nestjs/mongoose';
+import { Connection, Schema as MongooseSchema } from 'mongoose';
+import * as mongoosePaginate from 'mongoose-paginate-v2';
+import * as mongooseAutopopulate from 'mongoose-autopopulate';
 
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -46,6 +49,15 @@ import { TruckModule } from './truck/truck.module';
       useFactory: async (configService: ConfigService) => {
         return {
           uri: configService.get<string>('db.uri'),
+          connectionFactory: (connection: Connection): Connection => {
+            connection.plugin(mongoosePaginate);
+            connection.plugin(
+              mongooseAutopopulate as unknown as (
+                schema: MongooseSchema,
+              ) => void,
+            );
+            return connection;
+          },
         };
       },
       inject: [ConfigService],

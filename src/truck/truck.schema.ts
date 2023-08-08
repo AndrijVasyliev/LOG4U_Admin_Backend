@@ -1,6 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, ObjectId } from 'mongoose';
-import * as mongoosePaginate from 'mongoose-paginate-v2';
 import {
   TruckCertificates,
   TruckCrossborders,
@@ -118,5 +117,3 @@ export const TruckSchema = SchemaFactory.createForClass(Truck);
 
 TruckSchema.index({ truckNumber: 1 }, { unique: true });
 TruckSchema.index({ lastLocation: '2dsphere' });
-
-TruckSchema.plugin(mongoosePaginate);

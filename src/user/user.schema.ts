@@ -1,6 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import * as crypto from 'node:crypto';
 import { Document, ObjectId } from 'mongoose';
-import * as mongoosePaginate from 'mongoose-paginate-v2';
 import { UserRoles } from '../utils/constants';
 import { UserRole } from '../utils/general.dto';
 
@@ -27,7 +27,14 @@ export class User {
   @Prop({ required: true })
   email: string;
 
-  @Prop({ required: true })
+  @Prop({
+    required: true,
+    set: (password: string): string => {
+      const hash = crypto.createHash('sha256');
+      hash.update(password);
+      return hash.digest('hex');
+    },
+  })
   password: string;
 
   created_at: Date;
@@ -38,7 +45,3 @@ export class User {
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);
-
-// UserSchema.index({ fullName: 1, hiredBy: 1 }, { unique: true });
-
-UserSchema.plugin(mongoosePaginate);
