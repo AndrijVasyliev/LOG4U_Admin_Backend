@@ -11,7 +11,7 @@ import {
 } from '../utils/general.dto';
 
 export class CreateTruckDto {
-  readonly truckNumber: string;
+  readonly truckNumber: number;
   readonly status: TruckStatus;
   readonly lastLocation?: [number, number];
   readonly crossborder: TruckCrossborder;
@@ -34,7 +34,7 @@ export class CreateTruckDto {
 }
 
 export class UpdateTruckDto {
-  readonly truckNumber?: string;
+  readonly truckNumber?: number;
   readonly status?: TruckStatus;
   readonly lastLocation?: [number, number];
   readonly crossborder?: TruckCrossborder;
@@ -57,7 +57,7 @@ export class UpdateTruckDto {
 }
 
 export class TruckQuerySearch {
-  readonly truckNumber?: string;
+  readonly truckNumber?: number;
   readonly status?: TruckStatus;
   readonly lastLocation?: [number, number];
   readonly distance?: number;

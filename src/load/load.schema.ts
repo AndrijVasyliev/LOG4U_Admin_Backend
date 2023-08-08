@@ -17,6 +17,13 @@ export type LoadDocument = Load & Document;
 export class Load {
   @Prop({
     required: true,
+    immutable: true,
+    type: Number,
+  })
+  loadNumber: number;
+
+  @Prop({
+    required: true,
     type: MongooseSchema.Types.ObjectId,
     ref: 'Location',
     autopopulate: true,
@@ -83,7 +90,7 @@ export class Load {
 
 export const LoadSchema = SchemaFactory.createForClass(Load);
 
-// LoadSchema.index({ fullName: 1, hiredBy: 1 }, { unique: true });
+LoadSchema.index({ loadNumber: 1 }, { unique: true });
 
 LoadSchema.plugin(mongoosePaginate);
 LoadSchema.plugin(

@@ -17,6 +17,7 @@ import {
   TruckType,
 } from '../utils/general.dto';
 import { GeoPointSchema } from '../location/location.schema';
+import { LoadSchema } from '../load/load.schema';
 
 export type TruckDocument = Truck & Document;
 
@@ -27,7 +28,7 @@ export type TruckDocument = Truck & Document;
 })
 export class Truck {
   @Prop({ required: true })
-  truckNumber: string;
+  truckNumber: number;
 
   @Prop({ required: true, enum: TruckStatuses })
   status: TruckStatus;
@@ -116,6 +117,7 @@ export class Truck {
 
 export const TruckSchema = SchemaFactory.createForClass(Truck);
 
+TruckSchema.index({ truckNumber: 1 }, { unique: true });
 TruckSchema.index({ lastLocation: '2dsphere' });
 
 TruckSchema.plugin(mongoosePaginate);

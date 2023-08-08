@@ -15,7 +15,7 @@ import {
   UpdateLoadDto,
 } from './load.dto';
 import { LoggerService } from '../logger/logger.service';
-import { MONGO_UNIQUE_INDEX_CONFLICT } from '../utils/constants';
+import { EARTH_RADIUS_MILES, MONGO_UNIQUE_INDEX_CONFLICT } from '../utils/constants';
 
 const { MongoError } = mongo;
 
@@ -50,8 +50,14 @@ export class LoadService {
     if (query.search) {
       const searchParams = Object.entries(query.search);
       searchParams.forEach((entry) => {
-        documentQuery[entry[0]] = { $regex: new RegExp(entry[1], 'i') };
+        entry[0] !== 'loadNumber' &&
+          (documentQuery[entry[0]] = { $regex: new RegExp(entry[1], 'i') });
       });
+    }
+    if (query?.search?.loadNumber) {
+      documentQuery.loadNumber = {
+        $eq: query.search.loadNumber,
+      };
     }
 
     const options: PaginateOptions = {
@@ -68,7 +74,15 @@ export class LoadService {
 
   async createLoad(createLoadDto: CreateLoadDto): Promise<LoadResultDto> {
     this.log.debug(`Creating new Load: ${JSON.stringify(createLoadDto)}`);
-    const createdLoad = new this.loadModel(createLoadDto);
+    const lastLoadNumber = await this.loadModel
+      .findOne({}, { loadNumber: 1 }, { sort: { loadNumber: -1 } })
+      .lean();
+    const createdLoad = new this.loadModel({
+      ...createLoadDto,
+      loadNumber: lastLoadNumber?.loadNumber
+        ? lastLoadNumber.loadNumber + 1
+        : 1,
+    });
 
     try {
       this.log.debug('Saving Load');

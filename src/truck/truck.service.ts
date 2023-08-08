@@ -55,6 +55,7 @@ export class TruckService {
       searchParams.forEach((entry) => {
         entry[0] !== 'lastLocation' &&
           entry[0] !== 'distance' &&
+          entry[0] !== 'truckNumber' &&
           (documentQuery[entry[0]] = { $regex: new RegExp(entry[1], 'i') });
       });
     }
@@ -66,6 +67,11 @@ export class TruckService {
             query.search.distance / EARTH_RADIUS_MILES,
           ],
         },
+      };
+    }
+    if (query?.search?.truckNumber) {
+      documentQuery.truckNumber = {
+        $eq: query.search.truckNumber,
       };
     }
 

@@ -51,6 +51,7 @@ export const UpdateLoadValidation = Joi.object({
 export const loadQueryParamsSchema = Joi.object({
   offset: Joi.number().integer().min(0).optional(),
   limit: Joi.number().integer().min(1).optional(),
+  loadNumber: Joi.number().min(0).optional(),
   weight: Joi.string().optional(),
   truckType: Joi.string()
     .valid(...TruckTypes)
@@ -61,6 +62,7 @@ export const loadQueryParamsSchema = Joi.object({
 })
   .keys({
     orderby: Joi.string().valid(
+      'loadNumber',
       'pickDate',
       'deliverDate',
       'weight',

@@ -9,7 +9,7 @@ import {
 } from '../utils/constants';
 
 export const CreateTruckValidation = Joi.object({
-  truckNumber: Joi.string().required(),
+  truckNumber: Joi.number().min(0).required(),
   status: Joi.string()
     .valid(...TruckStatuses)
     .required(),
@@ -53,7 +53,7 @@ export const CreateTruckValidation = Joi.object({
 });
 
 export const UpdateTruckValidation = Joi.object({
-  truckNumber: Joi.string().optional(),
+  truckNumber: Joi.number().min(0).optional(),
   status: Joi.string()
     .valid(...TruckStatuses)
     .optional(),
@@ -99,7 +99,7 @@ export const UpdateTruckValidation = Joi.object({
 export const truckQueryParamsSchema = Joi.object({
   offset: Joi.number().integer().min(0).optional(),
   limit: Joi.number().integer().min(1).optional(),
-  truckNumber: Joi.string().optional(),
+  truckNumber: Joi.number().min(0).optional(),
   status: Joi.string()
     .valid(...TruckStatuses)
     .optional(),

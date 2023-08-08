@@ -6,6 +6,7 @@ import { calcDistance } from '../utils/haversine.distance';
 import { UserResultDto } from '../user/user.dto';
 
 export class CreateLoadDto {
+  readonly loadNumber: number;
   readonly pick: string;
   readonly pickDate: Date;
   readonly deliver: string;
@@ -34,6 +35,7 @@ export class UpdateLoadDto {
 }
 
 export class LoadQuerySearch {
+  readonly loadNumber?: string;
   readonly weight?: string;
   readonly truckType?: TruckType;
   readonly bookedByCompany?: string;
@@ -56,11 +58,12 @@ export class LoadResultDto {
 
     let result: LoadResultDto = {
       id: load._id.toString(),
+      loadNumber: load.loadNumber,
       pick,
       pickDate: load.pickDate,
       deliver,
       deliverDate: load.deliverDate,
-      miles: calcDistance(pick.location, deliver.location),
+      milesHaversine: calcDistance(pick.location, deliver.location),
       weight: load.weight,
       truckType: load.truckType,
       rate: load.rate,
@@ -77,11 +80,12 @@ export class LoadResultDto {
   }
 
   readonly id: string;
+  readonly loadNumber: number;
   readonly pick: LocationResultDto;
   readonly pickDate: Date;
   readonly deliver: LocationResultDto;
   readonly deliverDate?: Date;
-  readonly miles: number;
+  readonly milesHaversine: number;
   readonly weight: string;
   readonly truckType: TruckType[];
   readonly rate?: number;
