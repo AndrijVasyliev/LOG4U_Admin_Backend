@@ -152,7 +152,7 @@ export class LocationController {
         const [latString, longString] = locationPart.split(',');
         const long = Number(longString);
         const lat = Number(latString);
-        const location: [number, number] = [long, lat];
+        const location: [number, number] = [lat, long];
 
         result.push(
           await this.locationService.createLocation({

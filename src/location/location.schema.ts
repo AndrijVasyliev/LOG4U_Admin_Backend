@@ -42,11 +42,11 @@ export class Location {
     set: (point: [number, number]): GeoPointType => {
       return {
         type: 'Point',
-        coordinates: point,
+        coordinates: [point[1], point[0]],
       };
     },
     get: (point: GeoPointType): [number, number] => {
-      return point.coordinates;
+      return [point.coordinates[1], point.coordinates[0]];
     },
   })
   location: [number, number];

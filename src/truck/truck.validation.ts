@@ -17,8 +17,8 @@ export const CreateTruckValidation = Joi.object({
     .min(2)
     .max(2)
     .items(
-      Joi.number().min(-180).max(180).required(),
       Joi.number().min(-90).max(90).required(),
+      Joi.number().min(-180).max(180).required(),
     )
     .optional(),
   crossborder: Joi.string()
@@ -61,8 +61,8 @@ export const UpdateTruckValidation = Joi.object({
     .min(2)
     .max(2)
     .items(
-      Joi.number().min(-180).max(180).required(),
       Joi.number().min(-90).max(90).required(),
+      Joi.number().min(-180).max(180).required(),
     )
     .optional(),
   crossborder: Joi.string()
@@ -156,8 +156,8 @@ export const truckQueryParamsSchema = Joi.object({
       })
       .custom((value: string, helper) => {
         const parsed = value.split(',');
-        const long = +parsed[0];
-        const lat = +parsed[1];
+        const lat = +parsed[0];
+        const long = +parsed[1];
         if (-180 > long || 180 < long) {
           return helper.error('custom.long');
         }
