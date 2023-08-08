@@ -17,7 +17,6 @@ import {
   TruckType,
 } from '../utils/general.dto';
 import { GeoPointSchema } from '../location/location.schema';
-import { LoadSchema } from '../load/load.schema';
 
 export type TruckDocument = Truck & Document;
 

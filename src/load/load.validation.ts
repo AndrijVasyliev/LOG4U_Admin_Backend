@@ -21,6 +21,7 @@ export const CreateLoadValidation = Joi.object({
   bookedByCompany: Joi.string().optional(),
   dispatchers: Joi.array().items(MongoObjectIdValidation.required()).optional(),
   checkInAs: Joi.string().optional(),
+  truck: MongoObjectIdValidation.optional(),
 });
 
 export const UpdateLoadValidation = Joi.object({
@@ -46,6 +47,7 @@ export const UpdateLoadValidation = Joi.object({
   bookedByCompany: Joi.string().optional(),
   dispatchers: Joi.array().items(MongoObjectIdValidation.required()).optional(),
   checkInAs: Joi.string().optional(),
+  truck: Joi.alternatives(null, MongoObjectIdValidation).optional(),
 });
 
 export const loadQueryParamsSchema = Joi.object({

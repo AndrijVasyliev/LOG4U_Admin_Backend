@@ -6,6 +6,7 @@ import { DEFAULT_CHECK_IN_AS, TruckTypes } from '../utils/constants';
 import { TruckType } from '../utils/general.dto';
 import { Location } from '../location/location.schema';
 import { User } from '../user/user.schema';
+import { Truck } from '../truck/truck.schema';
 
 export type LoadDocument = Load & Document;
 
@@ -80,6 +81,14 @@ export class Load {
 
   @Prop({ required: false, default: DEFAULT_CHECK_IN_AS })
   checkInAs?: string;
+
+  @Prop({
+    required: false,
+    type: MongooseSchema.Types.ObjectId,
+    ref: 'Truck',
+    autopopulate: true,
+  })
+  truck?: Truck;
 
   created_at: Date;
 

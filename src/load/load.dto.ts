@@ -4,6 +4,7 @@ import { PaginatedResultDto, Query, TruckType } from '../utils/general.dto';
 import { LocationResultDto } from '../location/location.dto';
 import { calcDistance } from '../utils/haversine.distance';
 import { UserResultDto } from '../user/user.dto';
+import { TruckResultDto } from '../truck/truck.dto';
 
 export class CreateLoadDto {
   readonly loadNumber: number;
@@ -18,6 +19,7 @@ export class CreateLoadDto {
   readonly bookedByCompany?: string;
   readonly dispatchers?: string[];
   readonly checkInAs?: string;
+  readonly truck?: string;
 }
 
 export class UpdateLoadDto {
@@ -32,6 +34,7 @@ export class UpdateLoadDto {
   readonly bookedByCompany?: string;
   readonly dispatchers?: string[];
   readonly checkInAs?: string;
+  readonly truck?: string;
 }
 
 export class LoadQuerySearch {
@@ -55,6 +58,7 @@ export class LoadResultDto {
       load.dispatchers.map((dispatcher) =>
         UserResultDto.fromUserModel(dispatcher),
       );
+    const truck = load.truck && TruckResultDto.fromTruckModel(load.truck);
 
     let result: LoadResultDto = {
       id: load._id.toString(),
@@ -76,6 +80,9 @@ export class LoadResultDto {
     if (dispatchers && dispatchers.length > 0) {
       result = { ...result, dispatchers };
     }
+    if (truck) {
+      result = { ...result, truck };
+    }
     return result;
   }
 
@@ -93,6 +100,7 @@ export class LoadResultDto {
   readonly bookedByCompany?: string;
   readonly dispatchers?: UserResultDto[];
   readonly checkInAs?: string;
+  readonly truck?: TruckResultDto;
 }
 
 export class PaginatedLoadResultDto extends PaginatedResultDto<LoadResultDto> {

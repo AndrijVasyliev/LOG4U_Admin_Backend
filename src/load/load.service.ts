@@ -15,7 +15,7 @@ import {
   UpdateLoadDto,
 } from './load.dto';
 import { LoggerService } from '../logger/logger.service';
-import { EARTH_RADIUS_MILES, MONGO_UNIQUE_INDEX_CONFLICT } from '../utils/constants';
+import { MONGO_UNIQUE_INDEX_CONFLICT } from '../utils/constants';
 
 const { MongoError } = mongo;
 
