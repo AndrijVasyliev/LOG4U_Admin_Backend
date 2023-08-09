@@ -49,12 +49,14 @@ export class LoadQuery extends Query<LoadQuerySearch> {}
 
 export class LoadResultDto {
   static fromLoadModel(load: Load): LoadResultDto {
-    const pick = LocationResultDto.fromLocationModel(load.pick);
-    const deliver = LocationResultDto.fromLocationModel(load.deliver);
+    const pick = load.pick && LocationResultDto.fromLocationModel(load.pick);
+    const deliver =
+      load.deliver && LocationResultDto.fromLocationModel(load.deliver);
     const bookedByUser =
       load.bookedByUser && UserResultDto.fromUserModel(load.bookedByUser);
     const dispatchers =
       load.dispatchers &&
+      load.dispatchers.length > 0 &&
       load.dispatchers.map((dispatcher) =>
         UserResultDto.fromUserModel(dispatcher),
       );
@@ -67,7 +69,10 @@ export class LoadResultDto {
       pickDate: load.pickDate,
       deliver,
       deliverDate: load.deliverDate,
-      milesHaversine: calcDistance(pick.location, deliver.location),
+      milesHaversine:
+        pick?.location &&
+        deliver?.location &&
+        calcDistance(pick?.location, deliver?.location),
       weight: load.weight,
       truckType: load.truckType,
       rate: load.rate,
