@@ -69,6 +69,7 @@ export class LoadResultDto {
       pickDate: load.pickDate,
       deliver,
       deliverDate: load.deliverDate,
+      milesByRoads: load.miles,
       milesHaversine:
         pick?.location &&
         deliver?.location &&
@@ -97,7 +98,8 @@ export class LoadResultDto {
   readonly pickDate: Date;
   readonly deliver: LocationResultDto;
   readonly deliverDate?: Date;
-  readonly milesHaversine: number;
+  readonly milesByRoads?: number;
+  readonly milesHaversine?: number;
   readonly weight: string;
   readonly truckType: TruckType[];
   readonly rate?: number;

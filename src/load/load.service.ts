@@ -6,6 +6,8 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
+import { ConfigService } from '@nestjs/config';
+import { HttpService } from '@nestjs/axios';
 import { Load, LoadDocument } from './load.schema';
 import {
   CreateLoadDto,
@@ -15,17 +17,26 @@ import {
   UpdateLoadDto,
 } from './load.dto';
 import { LoggerService } from '../logger/logger.service';
-import { MONGO_UNIQUE_INDEX_CONFLICT } from '../utils/constants';
+import { MILES_IN_KM, MONGO_UNIQUE_INDEX_CONFLICT } from '../utils/constants';
 
 const { MongoError } = mongo;
 
 @Injectable()
 export class LoadService {
+  private readonly matrixUri?: string;
+  private readonly apiKey?: string;
   constructor(
     @InjectModel(Load.name)
     private readonly loadModel: PaginateModel<LoadDocument>,
+    private readonly httpService: HttpService,
+    private configService: ConfigService,
     private readonly log: LoggerService,
-  ) {}
+  ) {
+    this.matrixUri = this.configService.get<string>(
+      'google.distanceMatrixBaseUri',
+    );
+    this.apiKey = this.configService.get<string>('google.key');
+  }
 
   private async findLoadById(id: string): Promise<LoadDocument> {
     this.log.debug(`Searching for Load ${id}`);
@@ -36,6 +47,39 @@ export class LoadService {
     this.log.debug(`Load ${load._id}`);
 
     return load;
+  }
+
+  private async getDistance(
+    source?: [number, number],
+    dest?: [number, number],
+  ): Promise<number | undefined> {
+    if (!source || !dest || !this.matrixUri || !this.apiKey) {
+      return undefined;
+    }
+    const url = new URL(this.matrixUri);
+    url.searchParams.append('origins', `${source.join(',')}`);
+    url.searchParams.append('destinations', `${dest.join(',')}`);
+    url.searchParams.append('key', this.apiKey);
+    url.searchParams.append('mode', 'driving');
+    url.searchParams.append('units', 'imperial');
+    this.log.silly(`Request: ${url.toString()}`);
+    try {
+      const res = await this.httpService.axiosRef.get(url.toString());
+      this.log.silly(`Response [${res.status}]: ${JSON.stringify(res.data)}`);
+
+      if (
+        res.status === 200 &&
+        res.data.status === 'OK' &&
+        res.data.rows[0].elements[0].status === 'OK'
+      ) {
+        return (
+          (res.data.rows[0].elements[0].distance.value * MILES_IN_KM) / 1000
+        );
+      }
+      return undefined;
+    } catch {
+      return undefined;
+    }
   }
 
   async findLoad(id: string): Promise<LoadResultDto> {
@@ -86,7 +130,15 @@ export class LoadService {
 
     try {
       this.log.debug('Saving Load');
-      const load = await createdLoad.save();
+      let load = await createdLoad.save();
+      this.log.debug('Calculatind distance');
+      const miles = await this.getDistance(
+        load?.pick?.location,
+        load?.deliver?.location,
+      );
+      this.log.debug(`Updating Load: miles ${miles}`);
+      load = await createdLoad.set('miles', miles).save();
+      this.log.debug('Load updated');
       return LoadResultDto.fromLoadModel(load);
     } catch (e) {
       if (!(e instanceof Error)) {
@@ -103,13 +155,20 @@ export class LoadService {
     id: string,
     updateLoadDto: UpdateLoadDto,
   ): Promise<LoadResultDto> {
-    const load = await this.findLoadById(id);
+    let load = await this.findLoadById(id);
     this.log.debug(`Setting new values: ${JSON.stringify(updateLoadDto)}`);
     Object.assign(load, updateLoadDto);
     try {
       this.log.debug('Saving Load');
-      const savedLoad = await load.save();
-      this.log.debug(`Operator ${savedLoad._id} saved`);
+      load = await load.save();
+      this.log.debug('Calculatind distance');
+      const miles = await this.getDistance(
+        load?.pick?.location,
+        load?.deliver?.location,
+      );
+      this.log.debug(`Updating Load: miles ${miles}`);
+      load = await load.set('miles', miles).save();
+      this.log.debug(`Operator ${load._id} saved`);
       return LoadResultDto.fromLoadModel(load);
     } catch (e) {
       if (!(e instanceof Error)) {

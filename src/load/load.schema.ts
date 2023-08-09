@@ -43,6 +43,12 @@ export class Load {
   @Prop({ required: false })
   deliverDate?: Date;
 
+  @Prop({
+    required: false,
+    type: Number,
+  })
+  miles?: number;
+
   @Prop({ required: true })
   weight: string;
 

@@ -18,4 +18,10 @@ export default () => ({
       socketTimeoutMS: +(process.env.DBSOCKETTIMEOUT || 300000),
     },
   },
+  google: {
+    key: process.env.GOOGLE_MAPS_API_KEY,
+    distanceMatrixBaseUri:
+      process.env.GOOGLE_MAPS_DISTANCE_MATRIX_URI ||
+      'https://maps.googleapis.com/maps/api/distancematrix/json',
+  },
 });
