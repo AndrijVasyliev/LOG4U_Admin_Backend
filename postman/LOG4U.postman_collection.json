@@ -1450,6 +1450,12 @@
 									"description": "asc or desc"
 								},
 								{
+									"key": "search",
+									"value": "New York",
+									"description": "Searches over name, zipCode and stateName fields",
+									"disabled": true
+								},
+								{
 									"key": "zipCode",
 									"value": "03142",
 									"disabled": true

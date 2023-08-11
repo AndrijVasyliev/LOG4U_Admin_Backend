@@ -57,6 +57,7 @@ export class LocationService {
       searchParams.forEach((entry) => {
         entry[0] !== 'location' &&
           entry[0] !== 'distance' &&
+          entry[0] !== 'search' &&
           (documentQuery[entry[0]] = { $regex: new RegExp(entry[1], 'i') });
       });
     }
@@ -69,6 +70,14 @@ export class LocationService {
           ],
         },
       };
+    }
+    if (query?.search?.search) {
+      const search = query?.search?.search;
+      documentQuery.$or = [
+        { zipCode: { $regex: new RegExp(search, 'i') } },
+        { name: { $regex: new RegExp(search, 'i') }},
+        { stateName: { $regex: new RegExp(search, 'i') }},
+      ];
     }
 
     const options: {

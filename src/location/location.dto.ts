@@ -19,6 +19,7 @@ export class UpdateLocationDto {
 }
 
 export class LocationQuerySearch {
+  readonly search?: string;
   readonly zipCode?: string;
   readonly name?: string;
   readonly stateCode?: string;

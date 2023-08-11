@@ -33,6 +33,7 @@ export const UpdateLocationValidation = Joi.object({
 export const locationQueryParamsSchema = Joi.object({
   offset: Joi.number().integer().min(0).optional(),
   limit: Joi.number().integer().min(1).optional(),
+  search: Joi.string().optional(),
   zipCode: Joi.string().optional(),
   name: Joi.string().optional(),
   stateCode: Joi.string().optional(),
