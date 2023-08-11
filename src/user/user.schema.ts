@@ -1,8 +1,8 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import * as crypto from 'node:crypto';
 import { Document, ObjectId } from 'mongoose';
 import { UserRoles } from '../utils/constants';
 import { UserRole } from '../utils/general.dto';
+import { hash } from '../utils/hash';
 
 export type UserDocument = User & Document;
 
@@ -29,11 +29,7 @@ export class User {
 
   @Prop({
     required: true,
-    set: (password: string): string => {
-      const hash = crypto.createHash('sha256');
-      hash.update(password);
-      return hash.digest('hex');
-    },
+    set: hash,
   })
   password: string;
 
@@ -45,3 +41,5 @@ export class User {
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);
+
+UserSchema.index({ email: 1 }, { unique: true });

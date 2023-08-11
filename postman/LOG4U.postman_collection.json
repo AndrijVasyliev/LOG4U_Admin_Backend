@@ -685,7 +685,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"fullName\":\"Oleksandr Pipa\",\r\n    \"birthDate\":\"2001-07-24T20:33:52.147Z\",\r\n    \"birthPlace\":\"Puerto-Rico\",\r\n    \"citizenship\":\"USA\",\r\n    \"languagePriority\":\"ES\",\r\n    \"driverLicenceType\":\"tractor\",\r\n    \"driverLicenceNumber\":\"1313666\",\r\n    \"driverLicenceState\":\"Active\",\r\n    \"driverLicenceClass\":\"Super\",\r\n    \"driverLicenceExp\":\"2014-06-24T20:34:02.047Z\",\r\n    \"idDocId\":\"O3459876\",\r\n    \"idDocType\":\"Passport\",\r\n    \"idDocExp\":\"2201-01-14T10:23:52.147Z\",\r\n    \"hiredBy\":\"Pavlo Zibrov\",\r\n    \"hireDate\":\"2020-07-24T20:33:52.147Z\",    \r\n    \"address\":\"Dupkina, 25-a, 6\",\r\n    \"phone\":\"0989809898\",\r\n    \"phone2\":\"0565605656\",\r\n    \"email\":\"a.pipa@gmail.com\",\r\n    \"emergencyContactName\":\"Maryna\",\r\n    \"emergencyContactRel\": \"Lubov moja edyna\",\r\n    \"emergencyContactPhone\":\"0666606666\",\r\n    \"notes\":\"Bla bla bla\",\r\n    \"appLogin\":\"MegoMan\",\r\n    \"appPass\":\"f87365a987c89\"\r\n}",
+							"raw": "{\r\n    \"fullName\":\"Oleksandr Pipa\",\r\n    \"birthDate\":\"2001-07-24T20:33:52.147Z\",\r\n    \"birthPlace\":\"Puerto-Rico\",\r\n    \"citizenship\":\"USA\",\r\n    \"languagePriority\":\"ES\",\r\n    \"driverLicenceType\":\"tractor\",\r\n    \"driverLicenceNumber\":\"1313666\",\r\n    \"driverLicenceState\":\"Active\",\r\n    \"driverLicenceClass\":\"Super\",\r\n    \"driverLicenceExp\":\"2014-06-24T20:34:02.047Z\",\r\n    \"idDocId\":\"O3459876\",\r\n    \"idDocType\":\"Passport\",\r\n    \"idDocExp\":\"2201-01-14T10:23:52.147Z\",\r\n    \"hiredBy\":\"Pavlo Zibrov\",\r\n    \"hireDate\":\"2020-07-24T20:33:52.147Z\",    \r\n    \"address\":\"Dupkina, 25-a, 6\",\r\n    \"phone\":\"0989809898\",\r\n    \"phone2\":\"0565605656\",\r\n    \"email\":\"a.pipa@gmail.com\",\r\n    \"emergencyContactName\":\"Maryna\",\r\n    \"emergencyContactRel\": \"Lubov moja edyna\",\r\n    \"emergencyContactPhone\":\"0666606666\",\r\n    \"notes\":\"Bla bla bla\",\r\n    \"appLogin\":\"MegoMan\",\r\n    \"appPass\":\"SecretPass\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -875,7 +875,7 @@
 								{
 									"key": "lastLocation",
 									"value": "50.4501,30.5234",
-									"description": "Longitude,Latitude",
+									"description": "Latitude, Longitude",
 									"disabled": true
 								},
 								{
@@ -932,7 +932,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"truckNumber\":\"36661313\",\r\n    \"status\":\"Available\",\r\n    \"lastLocation\":[50.4501,30.5234],\r\n    \"crossborder\":\"Yes\",\r\n    \"certificate\":\"Hazmat\",\r\n    \"type\":\"Box truck\",\r\n    \"equipment\":[\r\n        \"Dock height risers\",\r\n        \"Air ride\",\r\n        \"Lift gate\",\r\n        \"Keep from freezing\",\r\n        \"ICC bar\",\r\n        \"Vertical E-track\",\r\n        \"Horizontal E-track\",\r\n        \"Pallet jack\",\r\n        \"PPE\",\r\n        \"Ramps\",\r\n        \"Straps\",\r\n        \"Loads bars\",\r\n        \"Blankets\",\r\n        \"Pads\",\r\n        \"Fire extinguisher\"\r\n    ],\r\n    \"payload\":100500,\r\n    \"grossWeight\":\"150 ton\",\r\n    \"make\":\"Mercedes\",\r\n    \"model\":\"Sprinter\",\r\n    \"year\":1967,\r\n    \"color\":\"Yello\",\r\n    \"vinCode\":\"vf938749843\",\r\n    \"licencePlate\":\"AA7676BK\",\r\n    \"licenceState\":\"Active\",\r\n    \"plateExpires\":\"2001-07-24T20:33:52.147Z\",\r\n    \"insideDims\":\"100 x 200\",\r\n    \"doorDims\":\"20 x 20\",\r\n    \"validDims\":\"98 x 198\"\r\n}",
+							"raw": "{\r\n    \"truckNumber\":\"46661313\",\r\n    \"status\":\"Available\",\r\n    \"lastLocation\":[50.4501,30.5234],\r\n    \"crossborder\":\"Yes\",\r\n    \"certificate\":\"Hazmat\",\r\n    \"type\":\"Box truck\",\r\n    \"equipment\":[\r\n        \"Dock height risers\",\r\n        \"Air ride\",\r\n        \"Lift gate\",\r\n        \"Keep from freezing\",\r\n        \"ICC bar\",\r\n        \"Vertical E-track\",\r\n        \"Horizontal E-track\",\r\n        \"Pallet jack\",\r\n        \"PPE\",\r\n        \"Ramps\",\r\n        \"Straps\",\r\n        \"Loads bars\",\r\n        \"Blankets\",\r\n        \"Pads\",\r\n        \"Fire extinguisher\"\r\n    ],\r\n    \"payload\":100500,\r\n    \"grossWeight\":\"150 ton\",\r\n    \"make\":\"Mercedes\",\r\n    \"model\":\"Sprinter\",\r\n    \"year\":1967,\r\n    \"color\":\"Yello\",\r\n    \"vinCode\":\"vf938749843\",\r\n    \"licencePlate\":\"AA7676BK\",\r\n    \"licenceState\":\"Active\",\r\n    \"plateExpires\":\"2001-07-24T20:33:52.147Z\",\r\n    \"insideDims\":\"100 x 200\",\r\n    \"doorDims\":\"20 x 20\",\r\n    \"validDims\":\"98 x 198\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1118,7 +1118,7 @@
 							"variable": [
 								{
 									"key": "loadId",
-									"value": "64d0067e4cce3fc793e8fb28"
+									"value": "64d29ebaee4434372a0a8784"
 								}
 							]
 						}
@@ -1132,7 +1132,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"pick\":\"64cd7015ea802af57a7e339c\",\r\n    \"pickDate\":\"2001-07-24T20:33:52.147Z\",\r\n    \"deliver\":\"64cd7016ea802af57a7e33aa\",\r\n    \"deliverDate\":\"2001-07-25T20:33:52.147Z\",\r\n    \"weight\":\"100 ton\",\r\n    \"truckType\":[\r\n        \"Cargo van\",\r\n        \"Reefer van\",\r\n        \"Box truck\",\r\n        \"Box truck Reefer\",\r\n        \"Straight truck\",\r\n        \"Hotshot\",\r\n        \"Tented box\"\r\n    ],\r\n    \"rate\":3.56,\r\n    \"bookedByUser\":\"64ccc832ede7c23ef9577259\",\r\n    \"bookedByCompany\":\"Horns & Hoofs\",\r\n    \"dispatchers\":[\"64cfdb212d6771ef7981f2de\",\"64cfdb492d6771ef7981f2e0\"],\r\n    \"checkInAs\":\"MegoCorp\",\r\n    \"truck\":\"64d21bd13b8f02de8a318dfb\"\r\n}",
+							"raw": "{\r\n    \"pick\":\"64d25b40887dce512691acc7\",\r\n    \"pickDate\":\"2001-07-24T20:33:52.147Z\",\r\n    \"deliver\":\"64d25c2f887dce512691d353\",\r\n    \"deliverDate\":\"2001-07-25T20:33:52.147Z\",\r\n    \"weight\":\"100 ton\",\r\n    \"truckType\":[\r\n        \"Cargo van\",\r\n        \"Reefer van\",\r\n        \"Box truck\",\r\n        \"Box truck Reefer\",\r\n        \"Straight truck\",\r\n        \"Hotshot\",\r\n        \"Tented box\"\r\n    ],\r\n    \"rate\":3.56,\r\n    \"bookedByUser\":\"64d254f5139acc9c42bf63bb\",\r\n    \"bookedByCompany\":\"Horns & Hoofs\",\r\n    \"dispatchers\":[\"64d254fc139acc9c42bf63bf\",\"64d254fd139acc9c42bf63c1\"],\r\n    \"checkInAs\":\"MegoCorp\",\r\n    \"truck\":\"64d28a394be7ed067d17b845\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1177,7 +1177,7 @@
 							"variable": [
 								{
 									"key": "loadId",
-									"value": "64d221887fba4e30d77ba97d"
+									"value": "64d29de3ee4434372a0a8768"
 								}
 							]
 						}
@@ -1327,7 +1327,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"fullName\":\"Ivo Bobul\",\r\n    \"phone\":\"0989809898\",\r\n    \"userRole\":\"Super Admin\",\r\n    \"jobTitle\":\"Director\",\r\n    \"email\":\"ivo.bobul@gmail.com\",\r\n    \"password\":\"f87365a987c89\"\r\n}",
+							"raw": "{\r\n    \"fullName\":\"Ivo Bobul\",\r\n    \"phone\":\"0989809898\",\r\n    \"userRole\":\"Super Admin\",\r\n    \"jobTitle\":\"Director\",\r\n    \"email\":\"ivo.bobul@gmail.com\",\r\n    \"password\":\"SuperPass\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1471,8 +1471,8 @@
 								},
 								{
 									"key": "location",
-									"value": "50.4501,30.5234",
-									"description": "Longitude,Latitude",
+									"value": "50.45466,30.5238",
+									"description": "Latitude, Longitude",
 									"disabled": true
 								},
 								{
@@ -1529,7 +1529,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"zipCode\":\"03142\",\r\n    \"name\":\"Kyiv\",\r\n    \"stateCode\":\"380\",\r\n    \"stateName\":\"Ukraine\",\r\n    \"location\":[50.4501,30.5234]\r\n}",
+							"raw": "{\r\n    \"zipCode\":\"03142\",\r\n    \"name\":\"Kyiv\",\r\n    \"stateCode\":\"380\",\r\n    \"stateName\":\"Ukraine\",\r\n    \"location\":[50.45466,30.5238]\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1730,6 +1730,21 @@
 			"response": []
 		}
 	],
+	"auth": {
+		"type": "basic",
+		"basic": [
+			{
+				"key": "password",
+				"value": "SuperPass",
+				"type": "string"
+			},
+			{
+				"key": "username",
+				"value": "ivo.bobul@gmail.com",
+				"type": "string"
+			}
+		]
+	},
 	"event": [
 		{
 			"listen": "prerequest",

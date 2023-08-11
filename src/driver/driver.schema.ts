@@ -1,8 +1,8 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import * as crypto from 'node:crypto';
 import { Document, ObjectId } from 'mongoose';
 import { LangPriorities } from '../utils/constants';
 import { LangPriority } from '../utils/general.dto';
+import { hash } from '../utils/hash';
 
 export type DriverDocument = Driver & Document;
 
@@ -86,11 +86,7 @@ export class Driver {
 
   @Prop({
     required: false,
-    set: (password: string): string => {
-      const hash = crypto.createHash('sha256');
-      hash.update(password);
-      return hash.digest('hex');
-    },
+    set: hash,
   })
   appPass?: string;
 

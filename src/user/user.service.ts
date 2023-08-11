@@ -16,6 +16,7 @@ import {
   PaginatedUserResultDto,
   UpdateUserDto,
 } from './user.dto';
+import { UserRole } from '../utils/general.dto';
 
 const { MongoError } = mongo;
 
@@ -36,6 +37,23 @@ export class UserService {
     this.log.debug(`User ${user._id}`);
 
     return user;
+  }
+
+  async getUserByCredentials(
+    email: string,
+    password: string,
+  ): Promise<UserResultDto | null> {
+    this.log.debug(`Searching for User by email ${email}`);
+    const user = await this.userModel.findOne({
+      email,
+      password,
+    });
+    if (!user) {
+      this.log.debug(`User with email ${email} was not found`);
+      return null;
+    }
+    this.log.debug(`User ${user._id}`);
+    return UserResultDto.fromUserModel(user);
   }
 
   async findUser(id: string): Promise<UserResultDto> {

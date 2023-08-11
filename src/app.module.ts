@@ -4,9 +4,11 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { PrometheusModule } from '@willsoto/nestjs-prometheus';
 import { PromConfigService } from './prometheus/prometheus.config.service';
 import { MongooseModule } from '@nestjs/mongoose';
+import { ServeStaticModule } from '@nestjs/serve-static';
 import { Connection, Schema as MongooseSchema } from 'mongoose';
 import * as mongoosePaginate from 'mongoose-paginate-v2';
 import * as mongooseAutopopulate from 'mongoose-autopopulate';
+import { join } from 'path';
 
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -34,14 +36,19 @@ import { LoadController } from './load/load.controller';
 import { LoadModule } from './load/load.module';
 import { TruckController } from './truck/truck.controller';
 import { TruckModule } from './truck/truck.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
+    AuthModule,
     LoggerModule,
     ConfigModule.forRoot({
       isGlobal: true,
       cache: true,
       load: [configuration],
+    }),
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '..', '..', 'static'),
     }),
     HealthModule,
     MongooseModule.forRootAsync({
@@ -62,6 +69,7 @@ import { TruckModule } from './truck/truck.module';
       },
       inject: [ConfigService],
     }),
+    // ToDo pass auth
     PrometheusModule.registerAsync({
       imports: [ConfigModule],
       useClass: PromConfigService,

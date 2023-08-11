@@ -26,8 +26,10 @@ import {
 } from './coordinator.validation';
 import { MongoObjectIdPipe } from '../utils/idValidate.pipe';
 import { QueryParamsPipe } from '../utils/queryParamsValidate.pipe';
+import { Roles } from '../auth/auth.decorator';
 
 @Controller('coordinator')
+@Roles('Admin', 'Super Admin')
 export class CoordinatorController {
   constructor(
     private readonly log: LoggerService,

@@ -26,8 +26,10 @@ import {
 } from './user.validation';
 import { MongoObjectIdPipe } from '../utils/idValidate.pipe';
 import { QueryParamsPipe } from '../utils/queryParamsValidate.pipe';
+import { Roles } from '../auth/auth.decorator';
 
 @Controller('user')
+@Roles('Admin', 'Super Admin')
 export class UserController {
   constructor(
     private readonly log: LoggerService,
@@ -50,6 +52,7 @@ export class UserController {
   }
 
   @Post()
+  @Roles('Super Admin')
   async createUser(
     @Body(new BodyValidationPipe(CreateUserValidation))
     createUserBodyDto: CreateUserDto,
@@ -58,6 +61,7 @@ export class UserController {
   }
 
   @Patch(':userId')
+  @Roles('Super Admin')
   async updateUser(
     @Param('userId', MongoObjectIdPipe) userId: string,
     @Body(new BodyValidationPipe(UpdateUserValidation))
@@ -67,6 +71,7 @@ export class UserController {
   }
 
   @Delete(':userId')
+  @Roles('Super Admin')
   async deleteUser(@Param('userId', MongoObjectIdPipe) userId: string) {
     return this.userService.deleteUser(userId);
   }

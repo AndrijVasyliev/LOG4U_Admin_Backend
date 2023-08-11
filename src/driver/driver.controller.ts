@@ -26,8 +26,10 @@ import {
 } from './driver.validation';
 import { MongoObjectIdPipe } from '../utils/idValidate.pipe';
 import { QueryParamsPipe } from '../utils/queryParamsValidate.pipe';
+import { Roles } from '../auth/auth.decorator';
 
 @Controller('driver')
+@Roles('Admin', 'Super Admin')
 export class DriverController {
   constructor(
     private readonly log: LoggerService,

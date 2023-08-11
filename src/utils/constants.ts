@@ -1,6 +1,9 @@
 export const HEALTH_MEMORY_HEAP_LIMIT = 150 * 1024 * 1024;
 export const HEALTH_MEMORY_RSS_LIMIT = 150 * 1024 * 1024;
 export const MONGO_UNIQUE_INDEX_CONFLICT = 11000;
+export const IS_PUBLIC_KEY = 'isPublic';
+export const USER_ROLES_KEY = 'userRoles';
+
 export const EARTH_RADIUS_MILES = 3963.2;
 export const MILES_IN_KM = 0.6213711922;
 

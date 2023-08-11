@@ -26,8 +26,10 @@ import {
 } from './load.validation';
 import { MongoObjectIdPipe } from '../utils/idValidate.pipe';
 import { QueryParamsPipe } from '../utils/queryParamsValidate.pipe';
+import { Roles } from '../auth/auth.decorator';
 
 @Controller('load')
+@Roles('Admin', 'Super Admin')
 export class LoadController {
   constructor(
     private readonly log: LoggerService,

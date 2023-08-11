@@ -26,8 +26,10 @@ import {
 } from './truck.validation';
 import { MongoObjectIdPipe } from '../utils/idValidate.pipe';
 import { QueryParamsPipe } from '../utils/queryParamsValidate.pipe';
+import { Roles } from '../auth/auth.decorator';
 
 @Controller('truck')
+@Roles('Admin', 'Super Admin')
 export class TruckController {
   constructor(
     private readonly log: LoggerService,

@@ -32,8 +32,10 @@ import {
 import { MongoObjectIdPipe } from '../utils/idValidate.pipe';
 import { QueryParamsPipe } from '../utils/queryParamsValidate.pipe';
 import { Readable } from 'node:stream';
+import { Roles } from '../auth/auth.decorator';
 
 @Controller('location')
+@Roles('Admin', 'Super Admin')
 export class LocationController {
   constructor(
     private readonly log: LoggerService,

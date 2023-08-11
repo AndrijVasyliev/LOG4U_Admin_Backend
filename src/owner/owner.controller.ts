@@ -26,8 +26,10 @@ import {
 } from './owner.validation';
 import { MongoObjectIdPipe } from '../utils/idValidate.pipe';
 import { QueryParamsPipe } from '../utils/queryParamsValidate.pipe';
+import { Roles } from '../auth/auth.decorator';
 
 @Controller('owner')
+@Roles('Admin', 'Super Admin')
 export class OwnerController {
   constructor(
     private readonly log: LoggerService,

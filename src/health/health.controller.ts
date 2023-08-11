@@ -12,6 +12,7 @@ import {
 } from '../utils/constants';
 
 import { LoggerService } from '../logger/logger.service';
+import { Public } from '../auth/auth.decorator';
 
 function getVersionFromStatusFile() {
   try {
@@ -31,6 +32,7 @@ const fileVersion = getVersionFromStatusFile();
 const defaultVersion = getVersionFromPackageJson();
 
 @Controller()
+@Public()
 export class HealthController {
   constructor(
     private readonly health: HealthCheckService,
