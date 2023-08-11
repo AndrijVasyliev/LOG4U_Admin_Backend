@@ -19,7 +19,6 @@ export class AuthBasicStrategy extends PassportStrategy(Strategy, 'basic') {
     password: string,
   ): Promise<UserResultDto | null> => {
     this.log.debug('In Basic Auth strategy');
-    const user = await this.userService.getUserByCredentials(username, password);
-    return user;
+    return this.userService.getUserByCredentials(username, password);
   };
 }

@@ -1,17 +1,19 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, ObjectId } from 'mongoose';
-import { LangPriorities } from '../utils/constants';
+import { LangPriorities, PersonTypes } from '../utils/constants';
 import { LangPriority, PersonType } from '../utils/general.dto';
-import { hash } from '../utils/hash';
 
-export type DriverDocument = Driver & Document;
+export type PersonDocument = Person & Document;
 
-@Schema({ optimisticConcurrency: true })
-export class Driver {
+@Schema({
+  discriminatorKey: 'type',
+  timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' },
+  optimisticConcurrency: true,
+  collection: 'persons',
+})
+export class Person {
+  @Prop({ required: true, immutable: true, enum: PersonTypes })
   type: PersonType;
-
-  @Prop({ required: true })
-  fullName: string;
 
   @Prop({ required: false })
   birthDate?: Date;
@@ -25,35 +27,26 @@ export class Driver {
   @Prop({ required: false, enum: LangPriorities })
   languagePriority?: LangPriority;
 
-  @Prop({ required: true })
-  driverLicenceType: string;
-
-  @Prop({ required: true })
-  driverLicenceNumber: string;
-
-  @Prop({ required: true })
-  driverLicenceState: string;
-
-  @Prop({ required: true })
-  driverLicenceClass: string;
-
-  @Prop({ required: true })
-  driverLicenceExp: Date;
-
-  @Prop({ required: false })
-  idDocId?: string;
-
-  @Prop({ required: false })
-  idDocType?: string;
-
-  @Prop({ required: false })
-  idDocExp?: Date;
-
   @Prop({ required: false })
   hiredBy?: string;
 
-  @Prop({ required: false })
-  hireDate?: Date;
+  @Prop({ required: true })
+  hireDate: Date;
+
+  // @Prop({ required: true })
+  // snn: string;
+
+  // @Prop({ required: false })
+  // company?: string;
+  //
+  // @Prop({ required: true })
+  // insurancePolicy: string;
+  //
+  // @Prop({ required: true })
+  // insurancePolicyEFF: string;
+  //
+  // @Prop({ required: true })
+  // insurancePolicyExp: Date;
 
   @Prop({ required: false })
   address?: string;
@@ -79,15 +72,6 @@ export class Driver {
   @Prop({ required: false })
   notes?: string;
 
-  @Prop({ required: false })
-  appLogin?: string;
-
-  @Prop({
-    required: false,
-    set: hash,
-  })
-  appPass?: string;
-
   created_at: Date;
 
   updated_at: Date;
@@ -95,4 +79,4 @@ export class Driver {
   _id: ObjectId;
 }
 
-export const DriverSchema = SchemaFactory.createForClass(Driver);
+export const PersonSchema = SchemaFactory.createForClass(Person);

@@ -1,16 +1,14 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, ObjectId } from 'mongoose';
 import { LangPriorities } from '../utils/constants';
-import { LangPriority } from '../utils/general.dto';
+import { LangPriority, PersonType } from '../utils/general.dto';
 
 export type CoordinatorDocument = Coordinator & Document;
 
-@Schema({
-  timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' },
-  optimisticConcurrency: true,
-  collection: 'coordinators',
-})
+@Schema({ optimisticConcurrency: true })
 export class Coordinator {
+  type: PersonType;
+
   @Prop({ required: true })
   fullName: string;
 

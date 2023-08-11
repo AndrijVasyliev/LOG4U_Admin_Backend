@@ -3,11 +3,16 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { CoordinatorController } from './coordinator.controller';
 import { Coordinator, CoordinatorSchema } from './coordinator.schema';
 import { CoordinatorService } from './coordinator.service';
+import { Person, PersonSchema } from '../person/person.schema';
 
 @Module({
   imports: [
     MongooseModule.forFeature([
-      { name: Coordinator.name, schema: CoordinatorSchema },
+      {
+        name: Person.name,
+        schema: PersonSchema,
+        discriminators: [{ name: Coordinator.name, schema: CoordinatorSchema }],
+      },
     ]),
   ],
   exports: [CoordinatorService],

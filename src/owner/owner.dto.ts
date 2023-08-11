@@ -1,6 +1,11 @@
 import { PaginateResult } from 'mongoose';
 import { Owner } from './owner.schema';
-import { LangPriority, Query, PaginatedResultDto } from '../utils/general.dto';
+import {
+  LangPriority,
+  Query,
+  PaginatedResultDto,
+  PersonType,
+} from '../utils/general.dto';
 
 export class CreateOwnerDto {
   readonly fullName: string;
@@ -73,6 +78,7 @@ export class OwnerResultDto extends CreateOwnerDto {
   static fromOwnerModel(owner: Owner): OwnerResultDto {
     return {
       id: owner._id.toString(),
+      type: owner.type,
       fullName: owner.fullName,
       birthDate: owner.birthDate,
       birthPlace: owner.birthPlace,
@@ -97,6 +103,7 @@ export class OwnerResultDto extends CreateOwnerDto {
   }
 
   readonly id: string;
+  readonly type: PersonType;
 }
 
 export class PaginatedOwnerResultDto extends PaginatedResultDto<OwnerResultDto> {

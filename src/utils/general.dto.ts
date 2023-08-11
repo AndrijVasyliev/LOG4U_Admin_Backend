@@ -1,5 +1,6 @@
 import {
   LangPriorities,
+  PersonTypes,
   TruckCertificates,
   TruckCrossborders,
   TruckEquipments,
@@ -10,6 +11,7 @@ import {
 
 export type GeoPointType = { type: 'Point'; coordinates: [number, number] };
 
+export type PersonType = (typeof PersonTypes)[number];
 export type LangPriority = (typeof LangPriorities)[number];
 export type UserRole = (typeof UserRoles)[number];
 export type TruckType = (typeof TruckTypes)[number];

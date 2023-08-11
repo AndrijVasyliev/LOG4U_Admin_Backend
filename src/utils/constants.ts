@@ -1,3 +1,7 @@
+import { Owner } from '../owner/owner.schema';
+import { Coordinator } from '../coordinator/coordinator.schema';
+import { Driver } from '../driver/driver.schema';
+
 export const HEALTH_MEMORY_HEAP_LIMIT = 150 * 1024 * 1024;
 export const HEALTH_MEMORY_RSS_LIMIT = 150 * 1024 * 1024;
 export const MONGO_UNIQUE_INDEX_CONFLICT = 11000;
@@ -13,6 +17,8 @@ export const DEFAULT_OFFSET = 0;
 export const DEFAULT_CHECK_IN_AS = '4ULogistics';
 
 export const LangPriorities = ['EN', 'UA', 'ES', 'RU'] as const;
+
+export const PersonTypes = [Owner.name, Coordinator.name, Driver.name] as const;
 
 export const UserRoles = ['Admin', 'Super Admin'] as const;
 
