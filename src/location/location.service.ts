@@ -75,8 +75,7 @@ export class LocationService {
       const search = query?.search?.search;
       documentQuery.$or = [
         { zipCode: { $regex: new RegExp(search, 'i') } },
-        { name: { $regex: new RegExp(search, 'i') }},
-        { stateName: { $regex: new RegExp(search, 'i') }},
+        { name: { $regex: new RegExp(search, 'i') } },
       ];
     }
 

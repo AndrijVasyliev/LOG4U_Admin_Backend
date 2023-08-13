@@ -1,5 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document, ObjectId } from 'mongoose';
+import { Document, ObjectId, Schema as MongooseSchema } from 'mongoose';
 import {
   TruckCertificates,
   TruckCrossborders,
@@ -16,6 +16,9 @@ import {
   TruckType,
 } from '../utils/general.dto';
 import { GeoPointSchema } from '../location/location.schema';
+import { Owner } from '../owner/owner.schema';
+import { Coordinator } from '../coordinator/coordinator.schema';
+import { Driver } from '../driver/driver.schema';
 
 export type TruckDocument = Truck & Document;
 
@@ -105,6 +108,30 @@ export class Truck {
 
   @Prop({ required: true })
   validDims: string;
+
+  @Prop({
+    required: true,
+    type: MongooseSchema.Types.ObjectId,
+    ref: 'Owner',
+    autopopulate: true,
+  })
+  owner: Owner;
+
+  @Prop({
+    required: false,
+    type: MongooseSchema.Types.ObjectId,
+    ref: 'Coordinator',
+    autopopulate: true,
+  })
+  coordinator?: Coordinator;
+
+  @Prop({
+    required: false,
+    type: MongooseSchema.Types.ObjectId,
+    ref: 'Driver',
+    autopopulate: true,
+  })
+  driver?: Driver;
 
   created_at: Date;
 

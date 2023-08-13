@@ -94,9 +94,9 @@ export class LoadResultDto {
 
   readonly id: string;
   readonly loadNumber: number;
-  readonly pick: LocationResultDto;
+  readonly pick?: LocationResultDto;
   readonly pickDate: Date;
-  readonly deliver: LocationResultDto;
+  readonly deliver?: LocationResultDto;
   readonly deliverDate?: Date;
   readonly milesByRoads?: number;
   readonly milesHaversine?: number;

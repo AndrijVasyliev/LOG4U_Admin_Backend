@@ -4,7 +4,7 @@
 		"name": "LOG4U",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "19519023",
-		"_collection_link": "https://gold-trinity-573225.postman.co/workspace/API-Collections~c6f6860b-9b45-4dd9-9df8-8acc84dec6b2/collection/19519023-f34e8807-244d-4dd1-a9eb-0156c42c6df7?action=share&creator=19519023&source=collection_link"
+		"_collection_link": "https://gold-trinity-573225.postman.co/workspace/API-Collections~c6f6860b-9b45-4dd9-9df8-8acc84dec6b2/collection/19519023-f34e8807-244d-4dd1-a9eb-0156c42c6df7?action=share&source=collection_link&creator=19519023"
 	},
 	"item": [
 		{
@@ -932,7 +932,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"truckNumber\":\"46661313\",\r\n    \"status\":\"Available\",\r\n    \"lastLocation\":[50.4501,30.5234],\r\n    \"crossborder\":\"Yes\",\r\n    \"certificate\":\"Hazmat\",\r\n    \"type\":\"Box truck\",\r\n    \"equipment\":[\r\n        \"Dock height risers\",\r\n        \"Air ride\",\r\n        \"Lift gate\",\r\n        \"Keep from freezing\",\r\n        \"ICC bar\",\r\n        \"Vertical E-track\",\r\n        \"Horizontal E-track\",\r\n        \"Pallet jack\",\r\n        \"PPE\",\r\n        \"Ramps\",\r\n        \"Straps\",\r\n        \"Loads bars\",\r\n        \"Blankets\",\r\n        \"Pads\",\r\n        \"Fire extinguisher\"\r\n    ],\r\n    \"payload\":100500,\r\n    \"grossWeight\":\"150 ton\",\r\n    \"make\":\"Mercedes\",\r\n    \"model\":\"Sprinter\",\r\n    \"year\":1967,\r\n    \"color\":\"Yello\",\r\n    \"vinCode\":\"vf938749843\",\r\n    \"licencePlate\":\"AA7676BK\",\r\n    \"licenceState\":\"Active\",\r\n    \"plateExpires\":\"2001-07-24T20:33:52.147Z\",\r\n    \"insideDims\":\"100 x 200\",\r\n    \"doorDims\":\"20 x 20\",\r\n    \"validDims\":\"98 x 198\"\r\n}",
+							"raw": "{\r\n    \"truckNumber\":\"136661313\",\r\n    \"status\":\"Available\",\r\n    \"lastLocation\":[50.4501,30.5234],\r\n    \"crossborder\":\"Yes\",\r\n    \"certificate\":\"Hazmat\",\r\n    \"type\":\"Box truck\",\r\n    \"equipment\":[\r\n        \"Dock height risers\",\r\n        \"Air ride\",\r\n        \"Lift gate\",\r\n        \"Keep from freezing\",\r\n        \"ICC bar\",\r\n        \"Vertical E-track\",\r\n        \"Horizontal E-track\",\r\n        \"Pallet jack\",\r\n        \"PPE\",\r\n        \"Ramps\",\r\n        \"Straps\",\r\n        \"Loads bars\",\r\n        \"Blankets\",\r\n        \"Pads\",\r\n        \"Fire extinguisher\"\r\n    ],\r\n    \"payload\":100500,\r\n    \"grossWeight\":\"150 ton\",\r\n    \"make\":\"Mercedes\",\r\n    \"model\":\"Sprinter\",\r\n    \"year\":1967,\r\n    \"color\":\"Yello\",\r\n    \"vinCode\":\"vf938749843\",\r\n    \"licencePlate\":\"AA7676BK\",\r\n    \"licenceState\":\"Active\",\r\n    \"plateExpires\":\"2001-07-24T20:33:52.147Z\",\r\n    \"insideDims\":\"100 x 200\",\r\n    \"doorDims\":\"20 x 20\",\r\n    \"validDims\":\"98 x 198\",\r\n    \"owner\":\"64d69a409e4807b416b85556\",\r\n    \"coordinator\":\"64d69a479e4807b416b85559\",\r\n    \"driver\":\"64d69a4d9e4807b416b8555c\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1118,7 +1118,7 @@
 							"variable": [
 								{
 									"key": "loadId",
-									"value": "64d29ebaee4434372a0a8784"
+									"value": "64d920416ed68dcb405fe1b3"
 								}
 							]
 						}
@@ -1327,7 +1327,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"fullName\":\"Ivo Bobul\",\r\n    \"phone\":\"0989809898\",\r\n    \"userRole\":\"Super Admin\",\r\n    \"jobTitle\":\"Director\",\r\n    \"email\":\"ivo.bobul@gmail.com\",\r\n    \"password\":\"SuperPass\"\r\n}",
+							"raw": "{\r\n    \"fullName\":\"Ivo Bobul\",\r\n    \"phone\":\"0989809898\",\r\n    \"userRole\":\"Super Admin\",\r\n    \"jobTitle\":\"Director\",\r\n    \"email\":\"ivo.bobul11@gmail.com\",\r\n    \"password\":\"SuperPass\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1405,7 +1405,7 @@
 							"variable": [
 								{
 									"key": "userId",
-									"value": "64c1343eabbd4c97d2a391d0"
+									"value": "64d76fec1adf9d4fd287ae0e"
 								}
 							]
 						}

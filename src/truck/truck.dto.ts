@@ -9,6 +9,12 @@ import {
   TruckStatus,
   TruckType,
 } from '../utils/general.dto';
+import { Owner } from '../owner/owner.schema';
+import { Coordinator } from '../coordinator/coordinator.schema';
+import { Driver } from '../driver/driver.schema';
+import { OwnerResultDto } from '../owner/owner.dto';
+import { CoordinatorResultDto } from '../coordinator/coordinator.dto';
+import { DriverResultDto } from '../driver/driver.dto';
 
 export class CreateTruckDto {
   readonly truckNumber: number;
@@ -31,6 +37,9 @@ export class CreateTruckDto {
   readonly insideDims: string;
   readonly doorDims: string;
   readonly validDims: string;
+  readonly owner: string;
+  readonly coordinator?: string;
+  readonly driver?: string;
 }
 
 export class UpdateTruckDto {
@@ -54,6 +63,9 @@ export class UpdateTruckDto {
   readonly insideDims?: string;
   readonly doorDims?: string;
   readonly validDims?: string;
+  readonly owner?: string;
+  readonly coordinator?: string;
+  readonly driver?: string;
 }
 
 export class TruckQuerySearch {
@@ -76,9 +88,15 @@ export class TruckQuerySearch {
 
 export class TruckQuery extends Query<TruckQuerySearch> {}
 
-export class TruckResultDto extends CreateTruckDto {
+export class TruckResultDto {
   static fromTruckModel(truck: Truck): TruckResultDto {
-    return {
+    const owner = truck.owner && OwnerResultDto.fromOwnerModel(truck.owner);
+    const coordinator =
+      truck.coordinator &&
+      CoordinatorResultDto.fromCoordinatorModel(truck.coordinator);
+    const driver =
+      truck.driver && DriverResultDto.fromDriverModel(truck.driver);
+    let result: TruckResultDto = {
       id: truck._id.toString(),
       truckNumber: truck.truckNumber,
       status: truck.status,
@@ -101,9 +119,42 @@ export class TruckResultDto extends CreateTruckDto {
       doorDims: truck.doorDims,
       validDims: truck.validDims,
     };
+    if (owner) {
+      result = { ...result, owner };
+    }
+    if (coordinator) {
+      result = { ...result, coordinator };
+    }
+    if (driver) {
+      result = { ...result, driver };
+    }
+    return result;
   }
 
   readonly id: string;
+  readonly truckNumber?: number;
+  readonly status?: TruckStatus;
+  readonly lastLocation?: [number, number];
+  readonly crossborder?: TruckCrossborder;
+  readonly certificate?: TruckCertificate;
+  readonly type?: TruckType;
+  readonly equipment?: TruckEquipment[];
+  readonly payload?: number;
+  readonly grossWeight?: string;
+  readonly make?: string;
+  readonly model?: string;
+  readonly year?: number;
+  readonly color?: string;
+  readonly vinCode?: string;
+  readonly licencePlate?: string;
+  readonly licenceState?: string;
+  readonly plateExpires?: Date;
+  readonly insideDims?: string;
+  readonly doorDims?: string;
+  readonly validDims?: string;
+  readonly owner?: OwnerResultDto;
+  readonly coordinator?: CoordinatorResultDto;
+  readonly driver?: DriverResultDto;
 }
 
 export class PaginatedTruckResultDto extends PaginatedResultDto<TruckResultDto> {

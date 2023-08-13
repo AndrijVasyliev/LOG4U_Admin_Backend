@@ -7,6 +7,7 @@ import {
   TruckStatuses,
   TruckTypes,
 } from '../utils/constants';
+import { MongoObjectIdValidation } from '../utils/idValidate.pipe';
 
 export const CreateTruckValidation = Joi.object({
   truckNumber: Joi.number().min(0).required(),
@@ -50,6 +51,9 @@ export const CreateTruckValidation = Joi.object({
   insideDims: Joi.string().required(),
   doorDims: Joi.string().required(),
   validDims: Joi.string().required(),
+  owner: MongoObjectIdValidation.required(),
+  coordinator: MongoObjectIdValidation.optional(),
+  driver: MongoObjectIdValidation.optional(),
 });
 
 export const UpdateTruckValidation = Joi.object({
@@ -94,6 +98,9 @@ export const UpdateTruckValidation = Joi.object({
   insideDims: Joi.string().optional(),
   doorDims: Joi.string().optional(),
   validDims: Joi.string().optional(),
+  owner: MongoObjectIdValidation.optional(),
+  coordinator: Joi.alternatives(null, MongoObjectIdValidation).optional(),
+  driver: Joi.alternatives(null, MongoObjectIdValidation).optional(),
 });
 
 export const truckQueryParamsSchema = Joi.object({

@@ -1,6 +1,11 @@
 import { PaginateResult } from 'mongoose';
 import { Coordinator } from './coordinator.schema';
-import { LangPriority, PaginatedResultDto, Query } from '../utils/general.dto';
+import {
+  LangPriority,
+  PaginatedResultDto,
+  PersonType,
+  Query,
+} from '../utils/general.dto';
 
 export class CreateCoordinatorDto {
   readonly fullName: string;
@@ -73,6 +78,7 @@ export class CoordinatorResultDto extends CreateCoordinatorDto {
   static fromCoordinatorModel(coordinator: Coordinator): CoordinatorResultDto {
     return {
       id: coordinator._id.toString(),
+      type: coordinator.type,
       fullName: coordinator.fullName,
       birthDate: coordinator.birthDate,
       birthPlace: coordinator.birthPlace,
@@ -97,6 +103,7 @@ export class CoordinatorResultDto extends CreateCoordinatorDto {
   }
 
   readonly id: string;
+  readonly type: PersonType;
 }
 
 export class PaginatedCoordinatorResultDto extends PaginatedResultDto<CoordinatorResultDto> {
