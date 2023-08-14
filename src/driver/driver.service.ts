@@ -80,6 +80,7 @@ export class DriverService {
     try {
       this.log.debug('Saving Driver');
       const driver = await createdDriver.save();
+      await driver.populate('owner');
       return DriverResultDto.fromDriverModel(driver);
     } catch (e) {
       if (!(e instanceof Error)) {
@@ -103,6 +104,7 @@ export class DriverService {
       this.log.debug('Saving Driver');
       const savedDriver = await driver.save();
       this.log.debug(`Operator ${savedDriver._id} saved`);
+      await savedDriver.populate('owner');
       return DriverResultDto.fromDriverModel(driver);
     } catch (e) {
       if (!(e instanceof Error)) {

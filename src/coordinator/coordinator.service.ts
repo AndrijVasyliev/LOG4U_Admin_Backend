@@ -85,6 +85,7 @@ export class CoordinatorService {
     try {
       this.log.debug('Saving Coordinator');
       const coordinator = await createdCoordinator.save();
+      await coordinator.populate('owner');
       return CoordinatorResultDto.fromCoordinatorModel(coordinator);
     } catch (e) {
       if (!(e instanceof Error)) {
@@ -110,6 +111,7 @@ export class CoordinatorService {
       this.log.debug('Saving Coordinator');
       const savedCoordinator = await coordinator.save();
       this.log.debug(`Operator ${savedCoordinator._id} saved`);
+      await savedCoordinator.populate('owner');
       return CoordinatorResultDto.fromCoordinatorModel(coordinator);
     } catch (e) {
       if (!(e instanceof Error)) {

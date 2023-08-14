@@ -72,10 +72,25 @@ export class LocationService {
       };
     }
     if (query?.search?.search) {
-      const search = query?.search?.search;
+      let search = query?.search?.search;
+      const matches = search?.match(/([A-Z]{2})/);
+      if (matches && matches[1]) {
+        const stateCode = matches[1];
+        documentQuery.stateCode = { $eq: stateCode };
+        search = search?.replace(stateCode, '').trim();
+      }
+      if (search) {
+        documentQuery.$or = [
+          { zipCode: { $regex: new RegExp(search, 'i') } },
+          { name: { $regex: new RegExp(search, 'i') } },
+        ];
+      }
+    }
+    if (query?.search?.searchState) {
+      const searchState = query?.search?.searchState;
       documentQuery.$or = [
-        { zipCode: { $regex: new RegExp(search, 'i') } },
-        { name: { $regex: new RegExp(search, 'i') } },
+        { stateCode: { $regex: new RegExp(searchState, 'i') } },
+        { stateName: { $regex: new RegExp(searchState, 'i') } },
       ];
     }
 

@@ -22,7 +22,7 @@ import { LoggerService } from '../logger/logger.service';
 import {
   CreateLoadValidation,
   UpdateLoadValidation,
-  loadQueryParamsSchema,
+  LoadQueryParamsSchema,
 } from './load.validation';
 import { MongoObjectIdPipe } from '../utils/idValidate.pipe';
 import { QueryParamsPipe } from '../utils/queryParamsValidate.pipe';
@@ -38,7 +38,7 @@ export class LoadController {
 
   @Get()
   async getLoads(
-    @Query(new QueryParamsPipe<LoadQuerySearch>(loadQueryParamsSchema))
+    @Query(new QueryParamsPipe<LoadQuerySearch>(LoadQueryParamsSchema))
     loadQuery: LoadQuery,
   ): Promise<PaginatedLoadResultDto> {
     return this.loadService.getLoads(loadQuery);

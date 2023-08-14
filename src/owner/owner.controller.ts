@@ -22,7 +22,7 @@ import { LoggerService } from '../logger/logger.service';
 import {
   CreateOwnerValidation,
   UpdateOwnerValidation,
-  ownerQueryParamsSchema,
+  OwnerQueryParamsSchema,
 } from './owner.validation';
 import { MongoObjectIdPipe } from '../utils/idValidate.pipe';
 import { QueryParamsPipe } from '../utils/queryParamsValidate.pipe';
@@ -38,7 +38,7 @@ export class OwnerController {
 
   @Get()
   async getOwners(
-    @Query(new QueryParamsPipe<OwnerQuerySearch>(ownerQueryParamsSchema))
+    @Query(new QueryParamsPipe<OwnerQuerySearch>(OwnerQueryParamsSchema))
     ownerQuery: OwnerQuery,
   ): Promise<PaginatedOwnerResultDto> {
     return this.ownerService.getOwners(ownerQuery);

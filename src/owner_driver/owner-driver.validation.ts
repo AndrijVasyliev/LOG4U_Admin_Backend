@@ -1,15 +1,14 @@
 import * as Joi from 'joi';
 import { LangPriorities } from '../utils/constants';
-import { MongoObjectIdValidation } from '../utils/idValidate.pipe';
 
-export const CreateDriverValidation = Joi.object({
+export const CreateOwnerDriverValidation = Joi.object({
   fullName: Joi.string().required(),
-  birthDate: Joi.date().iso().optional(),
-  birthPlace: Joi.string().optional(),
-  citizenship: Joi.string().optional(),
+  birthDate: Joi.date().iso().required(),
+  birthPlace: Joi.string().required(),
+  citizenship: Joi.string().required(),
   languagePriority: Joi.string()
     .valid(...LangPriorities)
-    .optional(),
+    .required(),
   driverLicenceType: Joi.string().required(),
   driverLicenceNumber: Joi.string().required(),
   driverLicenceState: Joi.string().required(),
@@ -18,22 +17,26 @@ export const CreateDriverValidation = Joi.object({
   idDocId: Joi.string().optional(),
   idDocType: Joi.string().optional(),
   idDocExp: Joi.date().iso().optional(),
-  hiredBy: Joi.string().optional(),
-  hireDate: Joi.date().iso().optional(),
-  address: Joi.string().optional(),
+  hiredBy: Joi.string().required(),
+  hireDate: Joi.date().iso().required(),
+  snn: Joi.string().required(),
+  company: Joi.string().optional(),
+  insurancePolicy: Joi.string().required(),
+  insurancePolicyEFF: Joi.string().required(),
+  insurancePolicyExp: Joi.date().iso().required(),
+  address: Joi.string().required(),
   phone: Joi.string().required(),
   phone2: Joi.string().optional(),
-  email: Joi.string().optional(),
-  emergencyContactName: Joi.string().optional(),
+  email: Joi.string().required(),
+  emergencyContactName: Joi.string().required(),
   emergencyContactRel: Joi.string().optional(),
-  emergencyContactPhone: Joi.string().optional(),
+  emergencyContactPhone: Joi.string().required(),
   notes: Joi.string().optional(),
   appLogin: Joi.string().optional(),
   appPass: Joi.string().optional(),
-  owner: MongoObjectIdValidation.required(),
 });
 
-export const UpdateDriverValidation = Joi.object({
+export const UpdateOwnerDriverValidation = Joi.object({
   fullName: Joi.string().optional(),
   birthDate: Joi.date().iso().optional(),
   birthPlace: Joi.string().optional(),
@@ -51,6 +54,11 @@ export const UpdateDriverValidation = Joi.object({
   idDocExp: Joi.date().iso().optional(),
   hiredBy: Joi.string().optional(),
   hireDate: Joi.date().iso().optional(),
+  snn: Joi.string().optional(),
+  company: Joi.string().optional(),
+  insurancePolicy: Joi.string().optional(),
+  insurancePolicyEFF: Joi.string().optional(),
+  insurancePolicyExp: Joi.date().iso().optional(),
   address: Joi.string().optional(),
   phone: Joi.string().optional(),
   phone2: Joi.string().optional(),
@@ -61,10 +69,9 @@ export const UpdateDriverValidation = Joi.object({
   notes: Joi.string().optional(),
   appLogin: Joi.string().optional(),
   appPass: Joi.string().optional(),
-  owner: MongoObjectIdValidation.optional(),
 });
 
-export const DriverQueryParamsSchema = Joi.object({
+export const OwnerDriverQueryParamsSchema = Joi.object({
   offset: Joi.number().integer().min(0).optional(),
   limit: Joi.number().integer().min(1).optional(),
   fullName: Joi.string().optional(),
@@ -80,6 +87,10 @@ export const DriverQueryParamsSchema = Joi.object({
   idDocId: Joi.string().optional(),
   idDocType: Joi.string().optional(),
   hiredBy: Joi.string().optional(),
+  snn: Joi.string().optional(),
+  company: Joi.string().optional(),
+  insurancePolicy: Joi.string().optional(),
+  insurancePolicyEFF: Joi.string().optional(),
   address: Joi.string().optional(),
   phone: Joi.string().optional(),
   phone2: Joi.string().optional(),
@@ -106,6 +117,11 @@ export const DriverQueryParamsSchema = Joi.object({
       'idDocExp',
       'hiredBy',
       'hireDate',
+      'snn',
+      'company',
+      'insurancePolicy',
+      'insurancePolicyEFF',
+      'insurancePolicyExp',
       'address',
       'phone',
       'phone2',

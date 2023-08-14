@@ -51,7 +51,7 @@ export const UpdateOwnerValidation = Joi.object({
   notes: Joi.string().optional(),
 });
 
-export const ownerQueryParamsSchema = Joi.object({
+export const OwnerQueryParamsSchema = Joi.object({
   offset: Joi.number().integer().min(0).optional(),
   limit: Joi.number().integer().min(1).optional(),
   fullName: Joi.string().optional(),

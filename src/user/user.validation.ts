@@ -23,7 +23,7 @@ export const UpdateUserValidation = Joi.object({
   password: Joi.string().optional(),
 });
 
-export const userQueryParamsSchema = Joi.object({
+export const UserQueryParamsSchema = Joi.object({
   offset: Joi.number().integer().min(0).optional(),
   limit: Joi.number().integer().min(1).optional(),
   fullName: Joi.string().optional(),

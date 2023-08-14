@@ -1,7 +1,8 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document, ObjectId } from 'mongoose';
+import { Document, ObjectId, Schema as MongooseSchema } from 'mongoose';
 import { LangPriorities } from '../utils/constants';
 import { LangPriority, PersonType } from '../utils/general.dto';
+import { Owner } from '../owner/owner.schema';
 
 export type CoordinatorDocument = Coordinator & Document;
 
@@ -68,6 +69,14 @@ export class Coordinator {
 
   @Prop({ required: false })
   notes?: string;
+
+  @Prop({
+    required: true,
+    type: MongooseSchema.Types.ObjectId,
+    ref: 'Owner',
+    autopopulate: true,
+  })
+  owner: Owner;
 
   created_at: Date;
 

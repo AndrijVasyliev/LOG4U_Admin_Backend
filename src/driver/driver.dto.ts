@@ -1,6 +1,7 @@
 import { PaginateResult } from 'mongoose';
 import { Driver } from './driver.schema';
 import { LangPriority, PaginatedResultDto, Query } from '../utils/general.dto';
+import { OwnerResultDto } from '../owner/owner.dto';
 
 export class CreateDriverDto {
   readonly fullName: string;
@@ -28,6 +29,7 @@ export class CreateDriverDto {
   readonly notes?: string;
   readonly appLogin?: string;
   readonly appPass?: string;
+  readonly owner: string;
 }
 
 export class UpdateDriverDto {
@@ -56,6 +58,7 @@ export class UpdateDriverDto {
   readonly notes?: string;
   readonly appLogin?: string;
   readonly appPass?: string;
+  readonly owner?: string;
 }
 
 export class DriverQuerySearch {
@@ -82,9 +85,10 @@ export class DriverQuerySearch {
 
 export class DriverQuery extends Query<DriverQuerySearch> {}
 
-export class DriverResultDto extends CreateDriverDto {
+export class DriverResultDto {
   static fromDriverModel(driver: Driver): DriverResultDto {
-    return {
+    const owner = driver.owner && OwnerResultDto.fromOwnerModel(driver.owner);
+    let result: DriverResultDto = {
       id: driver._id.toString(),
       fullName: driver.fullName,
       birthDate: driver.birthDate,
@@ -112,9 +116,39 @@ export class DriverResultDto extends CreateDriverDto {
       appLogin: driver.appLogin,
       appPass: driver.appPass,
     };
+    if (owner) {
+      result = { ...result, owner };
+    }
+    return result;
   }
 
   readonly id: string;
+  readonly fullName: string;
+  readonly birthDate?: Date;
+  readonly birthPlace?: string;
+  readonly citizenship?: string;
+  readonly languagePriority?: LangPriority;
+  readonly driverLicenceType: string;
+  readonly driverLicenceNumber: string;
+  readonly driverLicenceState: string;
+  readonly driverLicenceClass: string;
+  readonly driverLicenceExp: Date;
+  readonly idDocId?: string;
+  readonly idDocType?: string;
+  readonly idDocExp?: Date;
+  readonly hiredBy?: string;
+  readonly hireDate?: Date;
+  readonly address?: string;
+  readonly phone: string;
+  readonly phone2?: string;
+  readonly email?: string;
+  readonly emergencyContactName?: string;
+  readonly emergencyContactRel?: string;
+  readonly emergencyContactPhone?: string;
+  readonly notes?: string;
+  readonly appLogin?: string;
+  readonly appPass?: string;
+  readonly owner?: OwnerResultDto;
 }
 
 export class PaginatedDriverResultDto extends PaginatedResultDto<DriverResultDto> {

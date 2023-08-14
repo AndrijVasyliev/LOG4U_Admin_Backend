@@ -1,5 +1,6 @@
 import * as Joi from 'joi';
 import { LangPriorities } from '../utils/constants';
+import { MongoObjectIdValidation } from '../utils/idValidate.pipe';
 
 export const CreateCoordinatorValidation = Joi.object({
   fullName: Joi.string().required(),
@@ -24,6 +25,7 @@ export const CreateCoordinatorValidation = Joi.object({
   emergencyContactRel: Joi.string().optional(),
   emergencyContactPhone: Joi.string().required(),
   notes: Joi.string().optional(),
+  owner: MongoObjectIdValidation.required(),
 });
 
 export const UpdateCoordinatorValidation = Joi.object({
@@ -49,9 +51,10 @@ export const UpdateCoordinatorValidation = Joi.object({
   emergencyContactRel: Joi.string().optional(),
   emergencyContactPhone: Joi.string().optional(),
   notes: Joi.string().optional(),
+  owner: MongoObjectIdValidation.optional(),
 });
 
-export const coordinatorQueryParamsSchema = Joi.object({
+export const CoordinatorQueryParamsSchema = Joi.object({
   offset: Joi.number().integer().min(0).optional(),
   limit: Joi.number().integer().min(1).optional(),
   fullName: Joi.string().optional(),

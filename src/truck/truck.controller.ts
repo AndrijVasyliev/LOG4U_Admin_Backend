@@ -22,7 +22,7 @@ import { LoggerService } from '../logger/logger.service';
 import {
   CreateTruckValidation,
   UpdateTruckValidation,
-  truckQueryParamsSchema,
+  TruckQueryParamsSchema,
 } from './truck.validation';
 import { MongoObjectIdPipe } from '../utils/idValidate.pipe';
 import { QueryParamsPipe } from '../utils/queryParamsValidate.pipe';
@@ -38,7 +38,7 @@ export class TruckController {
 
   @Get()
   async getTrucks(
-    @Query(new QueryParamsPipe<TruckQuerySearch>(truckQueryParamsSchema))
+    @Query(new QueryParamsPipe<TruckQuerySearch>(TruckQueryParamsSchema))
     truckQuery: TruckQuery,
   ): Promise<PaginatedTruckResultDto> {
     return this.truckService.getTrucks(truckQuery);

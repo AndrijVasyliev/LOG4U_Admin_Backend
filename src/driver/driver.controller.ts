@@ -22,7 +22,7 @@ import { LoggerService } from '../logger/logger.service';
 import {
   CreateDriverValidation,
   UpdateDriverValidation,
-  driverQueryParamsSchema,
+  DriverQueryParamsSchema,
 } from './driver.validation';
 import { MongoObjectIdPipe } from '../utils/idValidate.pipe';
 import { QueryParamsPipe } from '../utils/queryParamsValidate.pipe';
@@ -38,7 +38,7 @@ export class DriverController {
 
   @Get()
   async getDrivers(
-    @Query(new QueryParamsPipe<DriverQuerySearch>(driverQueryParamsSchema))
+    @Query(new QueryParamsPipe<DriverQuerySearch>(DriverQueryParamsSchema))
     driverQuery: DriverQuery,
   ): Promise<PaginatedDriverResultDto> {
     return this.driverService.getDrivers(driverQuery);

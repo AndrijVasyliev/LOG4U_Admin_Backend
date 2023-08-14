@@ -6,6 +6,7 @@ import {
   PersonType,
   Query,
 } from '../utils/general.dto';
+import { OwnerResultDto } from '../owner/owner.dto';
 
 export class CreateCoordinatorDto {
   readonly fullName: string;
@@ -28,6 +29,7 @@ export class CreateCoordinatorDto {
   readonly emergencyContactRel?: string;
   readonly emergencyContactPhone: string;
   readonly notes?: string;
+  readonly owner: string;
 }
 
 export class UpdateCoordinatorDto {
@@ -51,6 +53,7 @@ export class UpdateCoordinatorDto {
   readonly emergencyContactRel?: string;
   readonly emergencyContactPhone?: string;
   readonly notes?: string;
+  readonly owner?: string;
 }
 
 export class CoordinatorQuerySearch {
@@ -74,9 +77,11 @@ export class CoordinatorQuerySearch {
 
 export class CoordinatorQuery extends Query<CoordinatorQuerySearch> {}
 
-export class CoordinatorResultDto extends CreateCoordinatorDto {
+export class CoordinatorResultDto {
   static fromCoordinatorModel(coordinator: Coordinator): CoordinatorResultDto {
-    return {
+    const owner =
+      coordinator.owner && OwnerResultDto.fromOwnerModel(coordinator.owner);
+    let result: CoordinatorResultDto = {
       id: coordinator._id.toString(),
       type: coordinator.type,
       fullName: coordinator.fullName,
@@ -100,10 +105,35 @@ export class CoordinatorResultDto extends CreateCoordinatorDto {
       emergencyContactPhone: coordinator.emergencyContactPhone,
       notes: coordinator.notes,
     };
+    if (owner) {
+      result = { ...result, owner };
+    }
+    return result;
   }
 
   readonly id: string;
   readonly type: PersonType;
+  readonly fullName: string;
+  readonly birthDate: Date;
+  readonly birthPlace: string;
+  readonly citizenship: string;
+  readonly languagePriority: LangPriority;
+  readonly hiredBy: string;
+  readonly hireDate: Date;
+  readonly snn: string;
+  readonly company?: string;
+  readonly insurancePolicy: string;
+  readonly insurancePolicyEFF: string;
+  readonly insurancePolicyExp: Date;
+  readonly address: string;
+  readonly phone: string;
+  readonly phone2?: string;
+  readonly email: string;
+  readonly emergencyContactName: string;
+  readonly emergencyContactRel?: string;
+  readonly emergencyContactPhone: string;
+  readonly notes?: string;
+  readonly owner?: OwnerResultDto;
 }
 
 export class PaginatedCoordinatorResultDto extends PaginatedResultDto<CoordinatorResultDto> {

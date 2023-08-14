@@ -22,7 +22,7 @@ import { LoggerService } from '../logger/logger.service';
 import {
   CreateCoordinatorValidation,
   UpdateCoordinatorValidation,
-  coordinatorQueryParamsSchema,
+  CoordinatorQueryParamsSchema,
 } from './coordinator.validation';
 import { MongoObjectIdPipe } from '../utils/idValidate.pipe';
 import { QueryParamsPipe } from '../utils/queryParamsValidate.pipe';
@@ -39,7 +39,7 @@ export class CoordinatorController {
   @Get()
   async getCoordinators(
     @Query(
-      new QueryParamsPipe<CoordinatorQuerySearch>(coordinatorQueryParamsSchema),
+      new QueryParamsPipe<CoordinatorQuerySearch>(CoordinatorQueryParamsSchema),
     )
     coordinatorQuery: CoordinatorQuery,
   ): Promise<PaginatedCoordinatorResultDto> {

@@ -1,30 +1,29 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document, ObjectId, Schema as MongooseSchema } from 'mongoose';
+import { Document, ObjectId } from 'mongoose';
 import { LangPriorities } from '../utils/constants';
 import { LangPriority, PersonType } from '../utils/general.dto';
 import { hash } from '../utils/hash';
-import { Owner } from '../owner/owner.schema';
 
-export type DriverDocument = Driver & Document;
+export type OwnerDriverDocument = OwnerDriver & Document;
 
 @Schema({ optimisticConcurrency: true })
-export class Driver {
+export class OwnerDriver {
   type: PersonType;
 
   @Prop({ required: true })
   fullName: string;
 
-  @Prop({ required: false })
-  birthDate?: Date;
+  @Prop({ required: true })
+  birthDate: Date;
 
-  @Prop({ required: false })
-  birthPlace?: string;
+  @Prop({ required: true })
+  birthPlace: string;
 
-  @Prop({ required: false })
-  citizenship?: string;
+  @Prop({ required: true })
+  citizenship: string;
 
-  @Prop({ required: false, enum: LangPriorities })
-  languagePriority?: LangPriority;
+  @Prop({ required: true, enum: LangPriorities })
+  languagePriority: LangPriority;
 
   @Prop({ required: true })
   driverLicenceType: string;
@@ -50,14 +49,29 @@ export class Driver {
   @Prop({ required: false })
   idDocExp?: Date;
 
-  @Prop({ required: false })
-  hiredBy?: string;
+  @Prop({ required: true })
+  hiredBy: string;
+
+  @Prop({ required: true })
+  hireDate: Date;
+
+  @Prop({ required: true })
+  snn: string;
 
   @Prop({ required: false })
-  hireDate?: Date;
+  company?: string;
 
-  @Prop({ required: false })
-  address?: string;
+  @Prop({ required: true })
+  insurancePolicy: string;
+
+  @Prop({ required: true })
+  insurancePolicyEFF: string;
+
+  @Prop({ required: true })
+  insurancePolicyExp: Date;
+
+  @Prop({ required: true })
+  address: string;
 
   @Prop({ required: true })
   phone: string;
@@ -65,17 +79,17 @@ export class Driver {
   @Prop({ required: false })
   phone2?: string;
 
-  @Prop({ required: false })
-  email?: string;
+  @Prop({ required: true })
+  email: string;
 
-  @Prop({ required: false })
-  emergencyContactName?: string;
+  @Prop({ required: true })
+  emergencyContactName: string;
 
   @Prop({ required: false })
   emergencyContactRel?: string;
 
-  @Prop({ required: false })
-  emergencyContactPhone?: string;
+  @Prop({ required: true })
+  emergencyContactPhone: string;
 
   @Prop({ required: false })
   notes?: string;
@@ -89,14 +103,6 @@ export class Driver {
   })
   appPass?: string;
 
-  @Prop({
-    required: true,
-    type: MongooseSchema.Types.ObjectId,
-    ref: 'Owner',
-    autopopulate: true,
-  })
-  owner: Owner;
-
   created_at: Date;
 
   updated_at: Date;
@@ -104,4 +110,4 @@ export class Driver {
   _id: ObjectId;
 }
 
-export const DriverSchema = SchemaFactory.createForClass(Driver);
+export const OwnerDriverSchema = SchemaFactory.createForClass(OwnerDriver);

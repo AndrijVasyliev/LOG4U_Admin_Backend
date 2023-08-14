@@ -27,7 +27,7 @@ import { LoggerService } from '../logger/logger.service';
 import {
   CreateLocationValidation,
   UpdateLocationValidation,
-  locationQueryParamsSchema,
+  LocationQueryParamsSchema,
 } from './location.validation';
 import { MongoObjectIdPipe } from '../utils/idValidate.pipe';
 import { QueryParamsPipe } from '../utils/queryParamsValidate.pipe';
@@ -44,7 +44,7 @@ export class LocationController {
 
   @Get()
   async getLocations(
-    @Query(new QueryParamsPipe<LocationQuerySearch>(locationQueryParamsSchema))
+    @Query(new QueryParamsPipe<LocationQuerySearch>(LocationQueryParamsSchema))
     locationQuery: LocationQuery,
   ): Promise<PaginatedLocationResultDto> {
     return this.locationService.getLocations(locationQuery);

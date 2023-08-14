@@ -50,7 +50,7 @@ export const UpdateLoadValidation = Joi.object({
   truck: Joi.alternatives(null, MongoObjectIdValidation).optional(),
 });
 
-export const loadQueryParamsSchema = Joi.object({
+export const LoadQueryParamsSchema = Joi.object({
   offset: Joi.number().integer().min(0).optional(),
   limit: Joi.number().integer().min(1).optional(),
   loadNumber: Joi.number().min(0).optional(),

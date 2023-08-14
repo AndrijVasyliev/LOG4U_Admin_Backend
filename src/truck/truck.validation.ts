@@ -103,7 +103,7 @@ export const UpdateTruckValidation = Joi.object({
   driver: Joi.alternatives(null, MongoObjectIdValidation).optional(),
 });
 
-export const truckQueryParamsSchema = Joi.object({
+export const TruckQueryParamsSchema = Joi.object({
   offset: Joi.number().integer().min(0).optional(),
   limit: Joi.number().integer().min(1).optional(),
   truckNumber: Joi.number().min(0).optional(),

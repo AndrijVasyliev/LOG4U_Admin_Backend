@@ -22,7 +22,7 @@ import { LoggerService } from '../logger/logger.service';
 import {
   CreateUserValidation,
   UpdateUserValidation,
-  userQueryParamsSchema,
+  UserQueryParamsSchema,
 } from './user.validation';
 import { MongoObjectIdPipe } from '../utils/idValidate.pipe';
 import { QueryParamsPipe } from '../utils/queryParamsValidate.pipe';
@@ -38,7 +38,7 @@ export class UserController {
 
   @Get()
   async getUsers(
-    @Query(new QueryParamsPipe<UserQuerySearch>(userQueryParamsSchema))
+    @Query(new QueryParamsPipe<UserQuerySearch>(UserQueryParamsSchema))
     userQuery: UserQuery,
   ): Promise<PaginatedUserResultDto> {
     return this.userService.getUsers(userQuery);
