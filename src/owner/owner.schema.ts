@@ -2,6 +2,7 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, ObjectId } from 'mongoose';
 import { LangPriorities } from '../utils/constants';
 import { LangPriority, PersonType } from '../utils/general.dto';
+import { Truck } from '../truck/truck.schema';
 
 export type OwnerDocument = Owner & Document;
 
@@ -69,6 +70,8 @@ export class Owner {
   @Prop({ required: false })
   notes?: string;
 
+  readonly ownTrucks?: Truck[];
+
   created_at: Date;
 
   updated_at: Date;
@@ -77,3 +80,9 @@ export class Owner {
 }
 
 export const OwnerSchema = SchemaFactory.createForClass(Owner);
+
+OwnerSchema.virtual('ownTrucks', {
+  ref: 'Truck',
+  localField: '_id',
+  foreignField: 'owner',
+});

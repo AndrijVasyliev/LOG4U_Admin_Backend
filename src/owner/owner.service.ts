@@ -1,4 +1,4 @@
-import { mongo, PaginateModel } from 'mongoose';
+import { mongo, PaginateModel, PaginateOptions } from 'mongoose';
 import {
   ConflictException,
   Injectable,
@@ -54,18 +54,14 @@ export class OwnerService {
       });
     }
 
-    const options: {
-      limit: number;
-      offset: number;
-      sort?: Record<string, string>;
-    } = {
+    const options: PaginateOptions = {
       limit: query.limit,
       offset: query.offset,
     };
     if (query.direction && query.orderby) {
       options.sort = { [query.orderby]: query.direction };
     }
-
+    options.populate = ['ownTrucks'];
     const res = await this.ownerModel.paginate(documentQuery, options);
 
     return PaginatedOwnerResultDto.from(res);

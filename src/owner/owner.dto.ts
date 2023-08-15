@@ -6,6 +6,7 @@ import {
   PaginatedResultDto,
   PersonType,
 } from '../utils/general.dto';
+import { TruckResultDto } from '../truck/truck.dto';
 
 export class CreateOwnerDto {
   readonly fullName: string;
@@ -74,9 +75,13 @@ export class OwnerQuerySearch {
 
 export class OwnerQuery extends Query<OwnerQuerySearch> {}
 
-export class OwnerResultDto extends CreateOwnerDto {
+export class OwnerResultDto {
   static fromOwnerModel(owner: Owner): OwnerResultDto {
-    return {
+    const ownTrucks =
+      owner.ownTrucks &&
+      owner.ownTrucks.length > 0 &&
+      owner.ownTrucks.map((truck) => TruckResultDto.fromTruckModel(truck));
+    let result: OwnerResultDto = {
       id: owner._id.toString(),
       type: owner.type,
       fullName: owner.fullName,
@@ -100,10 +105,35 @@ export class OwnerResultDto extends CreateOwnerDto {
       emergencyContactPhone: owner.emergencyContactPhone,
       notes: owner.notes,
     };
+    if (ownTrucks) {
+      result = { ...result, ownTrucks };
+    }
+    return result;
   }
 
   readonly id: string;
   readonly type: PersonType;
+  readonly fullName: string;
+  readonly birthDate: Date;
+  readonly birthPlace: string;
+  readonly citizenship: string;
+  readonly languagePriority: LangPriority;
+  readonly hiredBy: string;
+  readonly hireDate: Date;
+  readonly snn: string;
+  readonly company?: string;
+  readonly insurancePolicy: string;
+  readonly insurancePolicyEFF: string;
+  readonly insurancePolicyExp: Date;
+  readonly address: string;
+  readonly phone: string;
+  readonly phone2?: string;
+  readonly email: string;
+  readonly emergencyContactName: string;
+  readonly emergencyContactRel?: string;
+  readonly emergencyContactPhone: string;
+  readonly notes?: string;
+  readonly ownTrucks?: TruckResultDto[];
 }
 
 export class PaginatedOwnerResultDto extends PaginatedResultDto<OwnerResultDto> {
