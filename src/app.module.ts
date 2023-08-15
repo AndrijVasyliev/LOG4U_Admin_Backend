@@ -24,6 +24,8 @@ import { RequestIdMiddleware } from './utils/requestId.middleware';
 
 import { OwnerController } from './owner/owner.controller';
 import { OwnerModule } from './owner/owner.module';
+import { OwnerDriverController } from './ownerDriver/ownerDriver.controller';
+import { OwnerDriverModule } from './ownerDriver/ownerDriver.module';
 import { CoordinatorController } from './coordinator/coordinator.controller';
 import { CoordinatorModule } from './coordinator/coordinator.module';
 import { DriverController } from './driver/driver.controller';
@@ -76,6 +78,7 @@ import { AuthModule } from './auth/auth.module';
       inject: [ConfigService],
     }),
     OwnerModule,
+    OwnerDriverModule,
     CoordinatorModule,
     DriverModule,
     UserModule,
