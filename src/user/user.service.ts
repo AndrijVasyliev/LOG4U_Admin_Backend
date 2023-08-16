@@ -16,7 +16,6 @@ import {
   PaginatedUserResultDto,
   UpdateUserDto,
 } from './user.dto';
-import { UserRole } from '../utils/general.dto';
 
 const { MongoError } = mongo;
 

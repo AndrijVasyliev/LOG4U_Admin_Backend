@@ -16,9 +16,9 @@ import {
   TruckType,
 } from '../utils/general.dto';
 import { GeoPointSchema } from '../location/location.schema';
-import { Owner } from '../owner/owner.schema';
+import { Owner, OWNER_TYPES } from '../owner/owner.schema';
 import { Coordinator } from '../coordinator/coordinator.schema';
-import { Driver } from '../driver/driver.schema';
+import { Driver, DRIVER_TYPES } from '../driver/driver.schema';
 
 export type TruckDocument = Truck & Document;
 
@@ -113,7 +113,7 @@ export class Truck {
     required: true,
     type: MongooseSchema.Types.ObjectId,
     ref: 'Owner',
-    autopopulate: true,
+    autopopulate: { match: { type: { $in: OWNER_TYPES } } },
   })
   owner: Owner;
 
@@ -129,7 +129,7 @@ export class Truck {
     required: false,
     type: MongooseSchema.Types.ObjectId,
     ref: 'Driver',
-    autopopulate: true,
+    autopopulate: { match: { type: { $in: DRIVER_TYPES } } },
   })
   driver?: Driver;
 

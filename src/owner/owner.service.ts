@@ -8,7 +8,7 @@ import {
 import { InjectModel } from '@nestjs/mongoose';
 import { LoggerService } from '../logger/logger.service';
 import { MONGO_UNIQUE_INDEX_CONFLICT } from '../utils/constants';
-import { Owner, OwnerDocument } from './owner.schema';
+import { Owner, OWNER_TYPES, OwnerDocument } from './owner.schema';
 import {
   CreateOwnerDto,
   OwnerQuery,
@@ -29,7 +29,10 @@ export class OwnerService {
 
   private async findOwnerById(id: string): Promise<OwnerDocument> {
     this.log.debug(`Searching for Owner ${id}`);
-    const owner = await this.ownerModel.findOne({ _id: id });
+    const owner = await this.ownerModel.findOne({
+      _id: id,
+      type: { $in: OWNER_TYPES },
+    });
     if (!owner) {
       throw new NotFoundException(`Owner ${id} was not found`);
     }
@@ -62,6 +65,7 @@ export class OwnerService {
       options.sort = { [query.orderby]: query.direction };
     }
     options.populate = ['ownTrucks'];
+    documentQuery.type = { $in: OWNER_TYPES };
     const res = await this.ownerModel.paginate(documentQuery, options);
 
     return PaginatedOwnerResultDto.from(res);

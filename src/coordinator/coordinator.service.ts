@@ -16,6 +16,7 @@ import {
   PaginatedCoordinatorResultDto,
   UpdateCoordinatorDto,
 } from './coordinator.dto';
+import { OWNER_TYPES } from '../owner/owner.schema';
 
 const { MongoError } = mongo;
 
@@ -85,7 +86,10 @@ export class CoordinatorService {
     try {
       this.log.debug('Saving Coordinator');
       const coordinator = await createdCoordinator.save();
-      await coordinator.populate('owner');
+      await coordinator.populate({
+        path: 'owner',
+        match: { type: { $in: OWNER_TYPES } },
+      });
       return CoordinatorResultDto.fromCoordinatorModel(coordinator);
     } catch (e) {
       if (!(e instanceof Error)) {
@@ -111,7 +115,10 @@ export class CoordinatorService {
       this.log.debug('Saving Coordinator');
       const savedCoordinator = await coordinator.save();
       this.log.debug(`Operator ${savedCoordinator._id} saved`);
-      await savedCoordinator.populate('owner');
+      await coordinator.populate({
+        path: 'owner',
+        match: { type: { $in: OWNER_TYPES } },
+      });
       return CoordinatorResultDto.fromCoordinatorModel(coordinator);
     } catch (e) {
       if (!(e instanceof Error)) {

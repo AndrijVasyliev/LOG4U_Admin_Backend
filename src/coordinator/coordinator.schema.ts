@@ -2,7 +2,7 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, ObjectId, Schema as MongooseSchema } from 'mongoose';
 import { LangPriorities } from '../utils/constants';
 import { LangPriority, PersonType } from '../utils/general.dto';
-import { Owner } from '../owner/owner.schema';
+import { Owner, OWNER_TYPES } from '../owner/owner.schema';
 
 export type CoordinatorDocument = Coordinator & Document;
 
@@ -10,7 +10,6 @@ export type CoordinatorDocument = Coordinator & Document;
 export class Coordinator {
   type: PersonType;
 
-  @Prop({ required: true })
   fullName: string;
 
   @Prop({ required: true })
@@ -67,14 +66,13 @@ export class Coordinator {
   @Prop({ required: true })
   emergencyContactPhone: string;
 
-  @Prop({ required: false })
   notes?: string;
 
   @Prop({
     required: true,
     type: MongooseSchema.Types.ObjectId,
     ref: 'Owner',
-    autopopulate: true,
+    autopopulate: { match: { type: { $in: OWNER_TYPES } } },
   })
   owner: Owner;
 

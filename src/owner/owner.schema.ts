@@ -1,13 +1,25 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, ObjectId } from 'mongoose';
-import { LangPriorities } from '../utils/constants';
+import { LangPriorities, PersonTypes } from '../utils/constants';
 import { LangPriority, PersonType } from '../utils/general.dto';
 import { Truck } from '../truck/truck.schema';
 
+export const OWNER_TYPES: PersonType[] = ['Owner', 'OwnerDriver'];
 export type OwnerDocument = Owner & Document;
 
-@Schema({ optimisticConcurrency: true })
+@Schema({
+  discriminatorKey: 'type',
+  timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' },
+  optimisticConcurrency: true,
+  collection: 'persons',
+})
 export class Owner {
+  @Prop({
+    required: true,
+    immutable: true,
+    enum: PersonTypes,
+    default: 'Owner',
+  })
   type: PersonType;
 
   @Prop({ required: true })

@@ -8,7 +8,7 @@ import {
 import { InjectModel } from '@nestjs/mongoose';
 import { LoggerService } from '../logger/logger.service';
 import { MONGO_UNIQUE_INDEX_CONFLICT } from '../utils/constants';
-import { Driver, DriverDocument } from './driver.schema';
+import { Driver, DRIVER_TYPES, DriverDocument } from './driver.schema';
 import {
   CreateDriverDto,
   DriverQuery,
@@ -29,7 +29,10 @@ export class DriverService {
 
   private async findDriverById(id: string): Promise<DriverDocument> {
     this.log.debug(`Searching for Driver ${id}`);
-    const driver = await this.driverModel.findOne({ _id: id });
+    const driver = await this.driverModel.findOne({
+      _id: id,
+      type: { $in: DRIVER_TYPES },
+    });
     if (!driver) {
       throw new NotFoundException(`Driver ${id} was not found`);
     }
@@ -65,7 +68,7 @@ export class DriverService {
     if (query.direction && query.orderby) {
       options.sort = { [query.orderby]: query.direction };
     }
-
+    documentQuery.type = { $in: DRIVER_TYPES };
     const res = await this.driverModel.paginate(documentQuery, options);
 
     return PaginatedDriverResultDto.from(res);
@@ -80,7 +83,6 @@ export class DriverService {
     try {
       this.log.debug('Saving Driver');
       const driver = await createdDriver.save();
-      await driver.populate('owner');
       return DriverResultDto.fromDriverModel(driver);
     } catch (e) {
       if (!(e instanceof Error)) {
@@ -104,7 +106,6 @@ export class DriverService {
       this.log.debug('Saving Driver');
       const savedDriver = await driver.save();
       this.log.debug(`Operator ${savedDriver._id} saved`);
-      await savedDriver.populate('owner');
       return DriverResultDto.fromDriverModel(driver);
     } catch (e) {
       if (!(e instanceof Error)) {

@@ -1,14 +1,26 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, ObjectId, Schema as MongooseSchema } from 'mongoose';
-import { LangPriorities } from '../utils/constants';
+import { LangPriorities, PersonTypes } from '../utils/constants';
 import { LangPriority, PersonType } from '../utils/general.dto';
 import { hash } from '../utils/hash';
-import { Owner } from '../owner/owner.schema';
+import { Owner, OWNER_TYPES } from '../owner/owner.schema';
 
+export const DRIVER_TYPES: PersonType[] = ['Driver', 'OwnerDriver'];
 export type DriverDocument = Driver & Document;
 
-@Schema({ optimisticConcurrency: true })
+@Schema({
+  discriminatorKey: 'type',
+  timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' },
+  optimisticConcurrency: true,
+  collection: 'persons',
+})
 export class Driver {
+  @Prop({
+    required: true,
+    immutable: true,
+    enum: PersonTypes,
+    default: 'Driver',
+  })
   type: PersonType;
 
   @Prop({ required: true })
@@ -93,7 +105,7 @@ export class Driver {
     required: true,
     type: MongooseSchema.Types.ObjectId,
     ref: 'Owner',
-    autopopulate: true,
+    autopopulate: { match: { type: { $in: OWNER_TYPES } } },
   })
   owner: Owner;
 

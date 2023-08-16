@@ -9,9 +9,6 @@ import {
   TruckStatus,
   TruckType,
 } from '../utils/general.dto';
-import { Owner } from '../owner/owner.schema';
-import { Coordinator } from '../coordinator/coordinator.schema';
-import { Driver } from '../driver/driver.schema';
 import { OwnerResultDto } from '../owner/owner.dto';
 import { CoordinatorResultDto } from '../coordinator/coordinator.dto';
 import { DriverResultDto } from '../driver/driver.dto';

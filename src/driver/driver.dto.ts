@@ -1,6 +1,11 @@
 import { PaginateResult } from 'mongoose';
 import { Driver } from './driver.schema';
-import { LangPriority, PaginatedResultDto, Query } from '../utils/general.dto';
+import {
+  LangPriority,
+  PaginatedResultDto,
+  PersonType,
+  Query,
+} from '../utils/general.dto';
 import { OwnerResultDto } from '../owner/owner.dto';
 
 export class CreateDriverDto {
@@ -90,6 +95,7 @@ export class DriverResultDto {
     const owner = driver.owner && OwnerResultDto.fromOwnerModel(driver.owner);
     let result: DriverResultDto = {
       id: driver._id.toString(),
+      type: driver.type,
       fullName: driver.fullName,
       birthDate: driver.birthDate,
       birthPlace: driver.birthPlace,
@@ -123,6 +129,7 @@ export class DriverResultDto {
   }
 
   readonly id: string;
+  readonly type: PersonType;
   readonly fullName: string;
   readonly birthDate?: Date;
   readonly birthPlace?: string;

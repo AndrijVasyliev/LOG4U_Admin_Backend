@@ -1,7 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, ObjectId } from 'mongoose';
-import { LangPriorities, PersonTypes } from '../utils/constants';
-import { LangPriority, PersonType } from '../utils/general.dto';
+import { PersonTypes } from '../utils/constants';
+import { PersonType } from '../utils/general.dto';
 
 export type PersonDocument = Person & Document;
 
@@ -15,59 +15,8 @@ export class Person {
   @Prop({ required: true, immutable: true, enum: PersonTypes })
   type: PersonType;
 
-  @Prop({ required: false })
-  birthDate?: Date;
-
-  @Prop({ required: false })
-  birthPlace?: string;
-
-  @Prop({ required: false })
-  citizenship?: string;
-
-  @Prop({ required: false, enum: LangPriorities })
-  languagePriority?: LangPriority;
-
-  @Prop({ required: false })
-  hiredBy?: string;
-
   @Prop({ required: true })
-  hireDate: Date;
-
-  // @Prop({ required: true })
-  // snn: string;
-
-  // @Prop({ required: false })
-  // company?: string;
-  //
-  // @Prop({ required: true })
-  // insurancePolicy: string;
-  //
-  // @Prop({ required: true })
-  // insurancePolicyEFF: string;
-  //
-  // @Prop({ required: true })
-  // insurancePolicyExp: Date;
-
-  @Prop({ required: false })
-  address?: string;
-
-  @Prop({ required: true })
-  phone: string;
-
-  @Prop({ required: false })
-  phone2?: string;
-
-  @Prop({ required: false })
-  email?: string;
-
-  @Prop({ required: false })
-  emergencyContactName?: string;
-
-  @Prop({ required: false })
-  emergencyContactRel?: string;
-
-  @Prop({ required: false })
-  emergencyContactPhone?: string;
+  fullName: string;
 
   @Prop({ required: false })
   notes?: string;
