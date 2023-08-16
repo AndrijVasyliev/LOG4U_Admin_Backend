@@ -38,7 +38,7 @@ export class OwnerService {
     }
     this.log.debug(`Owner ${owner._id}`);
 
-    return owner;
+    return owner.populate('ownTrucks');
   }
 
   async findOwner(id: string): Promise<OwnerResultDto> {
