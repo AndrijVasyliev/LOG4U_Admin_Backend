@@ -15,6 +15,7 @@ import { AppService } from './app.service';
 
 import configuration from '../config/configuration';
 
+import { MetricsController } from './metrics/metrics.controller';
 import { HealthModule } from './health/health.module';
 import { HealthController } from './health/health.controller';
 import { LoggerModule } from './logger/logger.module';
@@ -73,6 +74,7 @@ import { AuthModule } from './auth/auth.module';
     }),
     // ToDo pass auth
     PrometheusModule.registerAsync({
+      controller: MetricsController,
       imports: [ConfigModule],
       useClass: PromConfigService,
       inject: [ConfigService],
@@ -97,6 +99,7 @@ export class AppModule implements NestModule {
         AppController,
         HealthController,
         OwnerController,
+        OwnerDriverController,
         CoordinatorController,
         DriverController,
         UserController,
@@ -110,6 +113,7 @@ export class AppModule implements NestModule {
         AppController,
         HealthController,
         OwnerController,
+        OwnerDriverController,
         CoordinatorController,
         DriverController,
         UserController,
@@ -123,6 +127,7 @@ export class AppModule implements NestModule {
         AppController,
         HealthController,
         OwnerController,
+        OwnerDriverController,
         CoordinatorController,
         DriverController,
         UserController,
