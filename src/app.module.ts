@@ -72,7 +72,6 @@ import { AuthModule } from './auth/auth.module';
       },
       inject: [ConfigService],
     }),
-    // ToDo pass auth
     PrometheusModule.registerAsync({
       controller: MetricsController,
       imports: [ConfigModule],
