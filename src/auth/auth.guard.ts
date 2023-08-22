@@ -34,7 +34,10 @@ export class AuthBasicGuard extends AuthGuard('basic') {
       user: UserResultDto;
     };
     this.log.debug(`User ${JSON.stringify(user)}`);
-    if (requiredRoles.some((requiredRole) => requiredRole === user.userRole)) {
+    if (
+      !requiredRoles ||
+      requiredRoles.some((requiredRole) => requiredRole === user.userRole)
+    ) {
       return true;
     }
     return false;
