@@ -39,6 +39,7 @@ import { LoadController } from './load/load.controller';
 import { LoadModule } from './load/load.module';
 import { TruckController } from './truck/truck.controller';
 import { TruckModule } from './truck/truck.module';
+import { GoogleGeoApiModule } from './googleGeoApi/googleGeoApi.module';
 import { AuthModule } from './auth/auth.module';
 
 @Module({
@@ -54,6 +55,7 @@ import { AuthModule } from './auth/auth.module';
       rootPath: join(__dirname, '..', '..', 'static'),
     }),
     HealthModule,
+    GoogleGeoApiModule,
     MongooseModule.forRootAsync({
       imports: [ConfigModule],
       useFactory: async (configService: ConfigService) => {

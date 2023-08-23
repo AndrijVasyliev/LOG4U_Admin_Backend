@@ -65,7 +65,7 @@ export class LocationService {
       documentQuery.location = {
         $geoWithin: {
           $centerSphere: [
-            query.search.location,
+            [query.search.location[1], query.search.location[0]],
             query.search.distance / EARTH_RADIUS_MILES,
           ],
         },

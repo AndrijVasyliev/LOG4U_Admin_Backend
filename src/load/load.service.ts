@@ -7,7 +7,6 @@ import {
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { ConfigService } from '@nestjs/config';
-import { HttpService } from '@nestjs/axios';
 import { Load, LoadDocument } from './load.schema';
 import {
   CreateLoadDto,
@@ -17,7 +16,8 @@ import {
   UpdateLoadDto,
 } from './load.dto';
 import { LoggerService } from '../logger/logger.service';
-import { MILES_IN_KM, MONGO_UNIQUE_INDEX_CONFLICT } from '../utils/constants';
+import { MONGO_UNIQUE_INDEX_CONFLICT } from '../utils/constants';
+import { GoogleGeoApiService } from '../googleGeoApi/googleGeoApi.service';
 
 const { MongoError } = mongo;
 
@@ -28,7 +28,7 @@ export class LoadService {
   constructor(
     @InjectModel(Load.name)
     private readonly loadModel: PaginateModel<LoadDocument>,
-    private readonly httpService: HttpService,
+    private readonly geoApiService: GoogleGeoApiService,
     private configService: ConfigService,
     private readonly log: LoggerService,
   ) {
@@ -47,39 +47,6 @@ export class LoadService {
     this.log.debug(`Load ${load._id}`);
 
     return load;
-  }
-
-  private async getDistance(
-    source?: [number, number],
-    dest?: [number, number],
-  ): Promise<number | undefined> {
-    if (!source || !dest || !this.matrixUri || !this.apiKey) {
-      return undefined;
-    }
-    const url = new URL(this.matrixUri);
-    url.searchParams.append('origins', `${source.join(',')}`);
-    url.searchParams.append('destinations', `${dest.join(',')}`);
-    url.searchParams.append('key', this.apiKey);
-    url.searchParams.append('mode', 'driving');
-    url.searchParams.append('units', 'imperial');
-    this.log.silly(`Request: ${url.toString()}`);
-    try {
-      const res = await this.httpService.axiosRef.get(url.toString());
-      this.log.silly(`Response [${res.status}]: ${JSON.stringify(res.data)}`);
-
-      if (
-        res.status === 200 &&
-        res.data.status === 'OK' &&
-        res.data.rows[0].elements[0].status === 'OK'
-      ) {
-        return (
-          (res.data.rows[0].elements[0].distance.value * MILES_IN_KM) / 1000
-        );
-      }
-      return undefined;
-    } catch {
-      return undefined;
-    }
   }
 
   async findLoad(id: string): Promise<LoadResultDto> {
@@ -132,7 +99,7 @@ export class LoadService {
       this.log.debug('Saving Load');
       let load = await createdLoad.save();
       this.log.debug('Calculatind distance');
-      const miles = await this.getDistance(
+      const miles = await this.geoApiService.getDistance(
         load?.pick?.location,
         load?.deliver?.location,
       );
@@ -162,7 +129,7 @@ export class LoadService {
       this.log.debug('Saving Load');
       load = await load.save();
       this.log.debug('Calculatind distance');
-      const miles = await this.getDistance(
+      const miles = await this.geoApiService.getDistance(
         load?.pick?.location,
         load?.deliver?.location,
       );

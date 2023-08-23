@@ -86,7 +86,11 @@ export class TruckQuerySearch {
 export class TruckQuery extends Query<TruckQuerySearch> {}
 
 export class TruckResultDto {
-  static fromTruckModel(truck: Truck): TruckResultDto {
+  static fromTruckModel(
+    truck: Truck,
+    milesHaversine?: number,
+    milesByRoads?: number,
+  ): TruckResultDto {
     const owner = truck.owner && OwnerResultDto.fromOwnerModel(truck.owner);
     const coordinator =
       truck.coordinator &&
@@ -125,12 +129,20 @@ export class TruckResultDto {
     if (driver) {
       result = { ...result, driver };
     }
+    if (Number.isFinite(milesHaversine)) {
+      result = { ...result, milesHaversine };
+    }
+    if (Number.isFinite(milesByRoads)) {
+      result = { ...result, milesByRoads };
+    }
     return result;
   }
 
   readonly id: string;
   readonly truckNumber?: number;
   readonly status?: TruckStatus;
+  readonly milesByRoads?: number;
+  readonly milesHaversine?: number;
   readonly lastLocation?: [number, number];
   readonly crossborder?: TruckCrossborder;
   readonly certificate?: TruckCertificate;
@@ -154,11 +166,30 @@ export class TruckResultDto {
   readonly driver?: DriverResultDto;
 }
 
+export type CalculatedDistances = Array<number | undefined> | undefined;
+
 export class PaginatedTruckResultDto extends PaginatedResultDto<TruckResultDto> {
-  static from(paginatedTrucks: PaginateResult<Truck>): PaginatedTruckResultDto {
+  static from(paginatedTrucks: PaginateResult<Truck>): PaginatedTruckResultDto;
+  static from(
+    paginatedTrucks: PaginateResult<Truck>,
+    haversineDistances: CalculatedDistances,
+    roadsDistance: CalculatedDistances,
+  ): PaginatedTruckResultDto;
+
+  static from(
+    paginatedTrucks: PaginateResult<Truck>,
+    haversineDistances?: CalculatedDistances,
+    roadsDistance?: CalculatedDistances,
+  ): PaginatedTruckResultDto {
     return {
-      items: paginatedTrucks.docs.map((truck) =>
-        TruckResultDto.fromTruckModel(truck),
+      items: paginatedTrucks.docs.map((truck, index) =>
+        haversineDistances && roadsDistance
+          ? TruckResultDto.fromTruckModel(
+              truck,
+              haversineDistances[index],
+              roadsDistance[index],
+            )
+          : TruckResultDto.fromTruckModel(truck),
       ),
       offset: paginatedTrucks.offset,
       limit: paginatedTrucks.limit,

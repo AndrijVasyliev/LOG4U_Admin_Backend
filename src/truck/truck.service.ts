@@ -11,14 +11,16 @@ import {
   EARTH_RADIUS_MILES,
   MONGO_UNIQUE_INDEX_CONFLICT,
 } from '../utils/constants';
+import { calcDistance } from '../utils/haversine.distance';
 import { Truck, TruckDocument } from './truck.schema';
 import {
   CreateTruckDto,
   TruckQuery,
   TruckResultDto,
   PaginatedTruckResultDto,
-  UpdateTruckDto,
+  UpdateTruckDto, CalculatedDistances,
 } from './truck.dto';
+import { GoogleGeoApiService } from '../googleGeoApi/googleGeoApi.service';
 
 const { MongoError } = mongo;
 
@@ -27,6 +29,7 @@ export class TruckService {
   constructor(
     @InjectModel(Truck.name)
     private readonly truckModel: PaginateModel<TruckDocument>,
+    private readonly geoApiService: GoogleGeoApiService,
     private readonly log: LoggerService,
   ) {}
 
@@ -63,11 +66,15 @@ export class TruckService {
       documentQuery.lastLocation = {
         $geoWithin: {
           $centerSphere: [
-            query.search.lastLocation,
+            [query.search.lastLocation[1], query.search.lastLocation[0]],
             query.search.distance / EARTH_RADIUS_MILES,
           ],
         },
       };
+      // documentQuery.lastLocation = {
+      //   $nearSphere: [-73.9667, 40.78],
+      //   $minDistance: 0.0004,
+      // };
     }
     if (query?.search?.truckNumber) {
       documentQuery.truckNumber = {
@@ -89,7 +96,32 @@ export class TruckService {
 
     const res = await this.truckModel.paginate(documentQuery, options);
 
-    return PaginatedTruckResultDto.from(res);
+    let haversineDistances: CalculatedDistances;
+    let roadsDistances: CalculatedDistances;
+    if (query?.search?.lastLocation) {
+      haversineDistances = res.docs.map(
+        (truck) =>
+          truck.lastLocation &&
+          query?.search?.lastLocation &&
+          calcDistance(truck.lastLocation, query.search.lastLocation),
+      );
+      roadsDistances = await Promise.all(
+        res.docs.map(
+          (truck) =>
+            truck.lastLocation &&
+            query?.search?.lastLocation &&
+            this.geoApiService.getDistance(
+              truck.lastLocation,
+              query.search.lastLocation,
+            ),
+        ),
+      );
+    }
+    return PaginatedTruckResultDto.from(
+      res,
+      haversineDistances,
+      roadsDistances,
+    );
   }
 
   async createTruck(createTruckDto: CreateTruckDto): Promise<TruckResultDto> {

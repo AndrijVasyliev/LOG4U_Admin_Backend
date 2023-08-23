@@ -62,7 +62,7 @@ export const LocationQueryParamsSchema = Joi.object({
         if (-90 > lat || 90 < lat) {
           return helper.error('custom.lat');
         }
-        return [long, lat];
+        return [lat, long];
       }),
     distance: Joi.number().min(0).max(EARTH_RADIUS_MILES),
   })
