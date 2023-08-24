@@ -1,4 +1,4 @@
-import { mongo, PaginateModel } from 'mongoose';
+import { mongo, PaginateModel, PaginateOptions } from 'mongoose';
 import {
   ConflictException,
   Injectable,
@@ -63,12 +63,8 @@ export class LocationService {
     }
     if (query?.search?.location && query?.search?.distance) {
       documentQuery.location = {
-        $geoWithin: {
-          $centerSphere: [
-            [query.search.location[1], query.search.location[0]],
-            query.search.distance / EARTH_RADIUS_MILES,
-          ],
-        },
+        $nearSphere: [query.search.location[1], query.search.location[0]],
+        $maxDistance: query.search.distance / EARTH_RADIUS_MILES,
       };
     }
     if (query?.search?.search) {
@@ -94,13 +90,10 @@ export class LocationService {
       ];
     }
 
-    const options: {
-      limit: number;
-      offset: number;
-      sort?: Record<string, string>;
-    } = {
+    const options: PaginateOptions = {
       limit: query.limit,
       offset: query.offset,
+      forceCountFn: true,
     };
     if (query.direction && query.orderby) {
       options.sort = { [query.orderby]: query.direction };

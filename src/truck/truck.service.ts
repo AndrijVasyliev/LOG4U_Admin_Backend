@@ -1,4 +1,4 @@
-import { mongo, PaginateModel } from 'mongoose';
+import { mongo, PaginateModel, PaginateOptions } from 'mongoose';
 import {
   ConflictException,
   Injectable,
@@ -64,17 +64,12 @@ export class TruckService {
     }
     if (query?.search?.lastLocation && query?.search?.distance) {
       documentQuery.lastLocation = {
-        $geoWithin: {
-          $centerSphere: [
-            [query.search.lastLocation[1], query.search.lastLocation[0]],
-            query.search.distance / EARTH_RADIUS_MILES,
-          ],
-        },
+        $nearSphere: [
+          query.search.lastLocation[1],
+          query.search.lastLocation[0],
+        ],
+        $maxDistance: query.search.distance / EARTH_RADIUS_MILES,
       };
-      // documentQuery.lastLocation = {
-      //   $nearSphere: [-73.9667, 40.78],
-      //   $minDistance: 0.0004,
-      // };
     }
     if (query?.search?.truckNumber) {
       documentQuery.truckNumber = {
@@ -82,13 +77,10 @@ export class TruckService {
       };
     }
 
-    const options: {
-      limit: number;
-      offset: number;
-      sort?: Record<string, string>;
-    } = {
+    const options: PaginateOptions = {
       limit: query.limit,
       offset: query.offset,
+      forceCountFn: true,
     };
     if (query.direction && query.orderby) {
       options.sort = { [query.orderby]: query.direction };

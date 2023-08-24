@@ -1,4 +1,4 @@
-import { mongo, PaginateModel } from 'mongoose';
+import { mongo, PaginateModel, PaginateOptions } from 'mongoose';
 import {
   ConflictException,
   Injectable,
@@ -58,11 +58,7 @@ export class CoordinatorService {
       });
     }
 
-    const options: {
-      limit: number;
-      offset: number;
-      sort?: Record<string, string>;
-    } = {
+    const options: PaginateOptions = {
       limit: query.limit,
       offset: query.offset,
     };
