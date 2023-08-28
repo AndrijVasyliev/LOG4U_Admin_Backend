@@ -8,14 +8,19 @@
       "type": "image/x-icon"
     },
     {
-      "src": "4U Red.png",
+      "src": "4U_Red.png",
       "type": "image/png",
       "sizes": "388x248"
     },
     {
-      "src": "4U White.png",
+      "src": "4U_White.png",
       "type": "image/png",
       "sizes": "388x248"
+    },
+    {
+      "src": "4U_Logistics.png",
+      "type": "image/png",
+      "sizes": "128x128"
     }
   ],
   "start_url": ".",
