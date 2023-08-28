@@ -12,11 +12,13 @@ import {
 import { OwnerResultDto } from '../owner/owner.dto';
 import { CoordinatorResultDto } from '../coordinator/coordinator.dto';
 import { DriverResultDto } from '../driver/driver.dto';
+import { LocationResultDto } from '../location/location.dto';
 
 export class CreateTruckDto {
   readonly truckNumber: number;
   readonly status: TruckStatus;
   readonly lastLocation?: [number, number];
+  readonly lastCity?: string;
   readonly crossborder: TruckCrossborder;
   readonly certificate?: TruckCertificate;
   readonly type: TruckType;
@@ -43,6 +45,7 @@ export class UpdateTruckDto {
   readonly truckNumber?: number;
   readonly status?: TruckStatus;
   readonly lastLocation?: [number, number];
+  readonly lastCity?: string;
   readonly crossborder?: TruckCrossborder;
   readonly certificate?: TruckCertificate;
   readonly type?: TruckType;
@@ -91,6 +94,8 @@ export class TruckResultDto {
     milesHaversine?: number,
     milesByRoads?: number,
   ): TruckResultDto {
+    const lastCity =
+      truck.lastCity && LocationResultDto.fromLocationModel(truck.lastCity);
     const owner = truck.owner && OwnerResultDto.fromOwnerModel(truck.owner);
     const coordinator =
       truck.coordinator &&
@@ -120,6 +125,9 @@ export class TruckResultDto {
       doorDims: truck.doorDims,
       validDims: truck.validDims,
     };
+    if (lastCity) {
+      result = { ...result, lastCity };
+    }
     if (owner) {
       result = { ...result, owner };
     }
@@ -144,6 +152,7 @@ export class TruckResultDto {
   readonly milesByRoads?: number;
   readonly milesHaversine?: number;
   readonly lastLocation?: [number, number];
+  readonly lastCity?: LocationResultDto;
   readonly crossborder?: TruckCrossborder;
   readonly certificate?: TruckCertificate;
   readonly type?: TruckType;

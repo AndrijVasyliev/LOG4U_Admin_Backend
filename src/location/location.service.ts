@@ -46,6 +46,24 @@ export class LocationService {
     return LocationResultDto.fromLocationModel(location);
   }
 
+  async findNearestLocation(
+    location: [number, number],
+  ): Promise<LocationResultDto> {
+    this.log.debug(
+      `Searching for Location, nearest to [${location.join(',')}]`,
+    );
+    const locationRes = await this.locationModel.findOne({
+      location: { $nearSphere: [location[1], location[0]] },
+    });
+    if (!locationRes) {
+      throw new NotFoundException(
+        `Location, nearest to [${location.join(',')}], was not found`,
+      );
+    }
+    this.log.debug(`Location ${locationRes._id}`);
+    return LocationResultDto.fromLocationModel(locationRes);
+  }
+
   async getLocations(
     query: LocationQuery,
   ): Promise<PaginatedLocationResultDto> {

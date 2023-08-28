@@ -15,7 +15,7 @@ import {
   TruckStatus,
   TruckType,
 } from '../utils/general.dto';
-import { GeoPointSchema } from '../location/location.schema';
+import { GeoPointSchema, Location } from '../location/location.schema';
 import { Owner, OWNER_TYPES } from '../owner/owner.schema';
 import { Coordinator } from '../coordinator/coordinator.schema';
 import { Driver, DRIVER_TYPES } from '../driver/driver.schema';
@@ -54,6 +54,14 @@ export class Truck {
     },
   })
   lastLocation?: [number, number];
+
+  @Prop({
+    required: false,
+    type: MongooseSchema.Types.ObjectId,
+    ref: 'Location',
+    autopopulate: true,
+  })
+  lastCity?: Location;
 
   @Prop({ required: true, enum: TruckCrossborders })
   crossborder: TruckCrossborder;

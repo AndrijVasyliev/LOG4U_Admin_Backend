@@ -4,10 +4,12 @@ import { TruckController } from './truck.controller';
 import { Truck, TruckSchema } from './truck.schema';
 import { TruckService } from './truck.service';
 import { GoogleGeoApiModule } from '../googleGeoApi/googleGeoApi.module';
+import { LocationModule } from '../location/location.module';
 
 @Module({
   imports: [
     MongooseModule.forFeature([{ name: Truck.name, schema: TruckSchema }]),
+    LocationModule,
     GoogleGeoApiModule,
   ],
   exports: [TruckService],

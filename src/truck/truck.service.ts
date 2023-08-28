@@ -1,4 +1,4 @@
-import { mongo, PaginateModel, PaginateOptions } from 'mongoose';
+import { mongo, ObjectId, PaginateModel, PaginateOptions } from 'mongoose';
 import {
   ConflictException,
   Injectable,
@@ -18,9 +18,11 @@ import {
   TruckQuery,
   TruckResultDto,
   PaginatedTruckResultDto,
-  UpdateTruckDto, CalculatedDistances,
+  UpdateTruckDto,
+  CalculatedDistances,
 } from './truck.dto';
 import { GoogleGeoApiService } from '../googleGeoApi/googleGeoApi.service';
+import { LocationService } from '../location/location.service';
 
 const { MongoError } = mongo;
 
@@ -29,6 +31,7 @@ export class TruckService {
   constructor(
     @InjectModel(Truck.name)
     private readonly truckModel: PaginateModel<TruckDocument>,
+    private readonly locationService: LocationService,
     private readonly geoApiService: GoogleGeoApiService,
     private readonly log: LoggerService,
   ) {}
@@ -118,7 +121,18 @@ export class TruckService {
 
   async createTruck(createTruckDto: CreateTruckDto): Promise<TruckResultDto> {
     this.log.debug(`Creating new Truck: ${JSON.stringify(createTruckDto)}`);
-    const createdTruck = new this.truckModel(createTruckDto);
+    let lastCity = '';
+    if (createTruckDto.lastLocation) {
+      try {
+        const nearestCity = await this.locationService.findNearestLocation(
+          createTruckDto.lastLocation,
+        );
+        lastCity = nearestCity.id;
+      } catch {}
+    }
+    const createdTruck = new this.truckModel(
+      lastCity ? { ...createTruckDto, lastCity } : createTruckDto,
+    );
 
     try {
       this.log.debug('Saving Truck');
@@ -140,8 +154,20 @@ export class TruckService {
     updateTruckDto: UpdateTruckDto,
   ): Promise<TruckResultDto> {
     const truck = await this.findTruckById(id);
+    let lastCity = '';
+    if (updateTruckDto.lastLocation) {
+      try {
+        const nearestCity = await this.locationService.findNearestLocation(
+          updateTruckDto.lastLocation,
+        );
+        lastCity = nearestCity.id;
+      } catch {}
+    }
     this.log.debug(`Setting new values: ${JSON.stringify(updateTruckDto)}`);
-    Object.assign(truck, updateTruckDto);
+    Object.assign(
+      truck,
+      lastCity ? { ...updateTruckDto, lastCity } : updateTruckDto,
+    );
     try {
       this.log.debug('Saving Truck');
       const savedTruck = await truck.save();
