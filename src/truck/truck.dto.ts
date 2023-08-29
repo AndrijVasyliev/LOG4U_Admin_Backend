@@ -19,6 +19,7 @@ export class CreateTruckDto {
   readonly status: TruckStatus;
   readonly lastLocation?: [number, number];
   readonly lastCity?: string;
+  readonly locationUpdatedAt?: Date;
   readonly crossborder: TruckCrossborder;
   readonly certificate?: TruckCertificate;
   readonly type: TruckType;
@@ -46,6 +47,7 @@ export class UpdateTruckDto {
   readonly status?: TruckStatus;
   readonly lastLocation?: [number, number];
   readonly lastCity?: string;
+  readonly locationUpdatedAt?: Date;
   readonly crossborder?: TruckCrossborder;
   readonly certificate?: TruckCertificate;
   readonly type?: TruckType;
@@ -107,6 +109,7 @@ export class TruckResultDto {
       truckNumber: truck.truckNumber,
       status: truck.status,
       lastLocation: truck.lastLocation,
+      locationUpdatedAt: truck.locationUpdatedAt,
       crossborder: truck.crossborder,
       certificate: truck.certificate,
       type: truck.type,
@@ -153,6 +156,7 @@ export class TruckResultDto {
   readonly milesHaversine?: number;
   readonly lastLocation?: [number, number];
   readonly lastCity?: LocationResultDto;
+  readonly locationUpdatedAt?: Date;
   readonly crossborder?: TruckCrossborder;
   readonly certificate?: TruckCertificate;
   readonly type?: TruckType;

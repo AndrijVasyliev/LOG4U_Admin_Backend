@@ -63,6 +63,9 @@ export class Truck {
   })
   lastCity?: Location;
 
+  @Prop({ required: false })
+  locationUpdatedAt: Date;
+
   @Prop({ required: true, enum: TruckCrossborders })
   crossborder: TruckCrossborder;
 

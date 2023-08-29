@@ -131,7 +131,9 @@ export class TruckService {
       } catch {}
     }
     const createdTruck = new this.truckModel(
-      lastCity ? { ...createTruckDto, lastCity } : createTruckDto,
+      lastCity
+        ? { ...createTruckDto, lastCity, locationUpdatedAt: new Date() }
+        : createTruckDto,
     );
 
     try {
@@ -166,7 +168,9 @@ export class TruckService {
     this.log.debug(`Setting new values: ${JSON.stringify(updateTruckDto)}`);
     Object.assign(
       truck,
-      lastCity ? { ...updateTruckDto, lastCity } : updateTruckDto,
+      lastCity
+        ? { ...updateTruckDto, lastCity, locationUpdatedAt: new Date() }
+        : updateTruckDto,
     );
     try {
       this.log.debug('Saving Truck');
