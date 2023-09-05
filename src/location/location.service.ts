@@ -100,9 +100,7 @@ export class LocationService {
         search = search?.replace(zipCode, '').trim();
       }
       if (search) {
-        documentQuery.$or = [
-          { name: { $regex: new RegExp(search, 'i') } },
-        ];
+        documentQuery.$or = [{ name: { $regex: new RegExp(search, 'i') } }];
       }
     }
     if (query?.search?.searchState) {
