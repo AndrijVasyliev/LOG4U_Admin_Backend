@@ -87,15 +87,21 @@ export class LocationService {
     }
     if (query?.search?.search) {
       let search = query?.search?.search;
-      const matches = search?.match(/([A-Z]{2})/);
-      if (matches && matches[1]) {
-        const stateCode = matches[1];
+      const stateCodeMatches = search?.match(/([A-Z]{2})/);
+      if (stateCodeMatches && stateCodeMatches[1]) {
+        const stateCode = stateCodeMatches[1];
         documentQuery.stateCode = { $eq: stateCode };
         search = search?.replace(stateCode, '').trim();
       }
+      const zipCodeMatches = search?.match(/([0-9]{5})/);
+      if (zipCodeMatches && zipCodeMatches[1]) {
+        const zipCode = zipCodeMatches[1];
+        documentQuery.zipCode = { $eq: zipCode };
+        search = search?.replace(zipCode, '').trim();
+      }
       if (search) {
         documentQuery.$or = [
-          { zipCode: { $regex: new RegExp(search, 'i') } },
+          // { zipCode: { $regex: new RegExp(search, 'i') } },
           { name: { $regex: new RegExp(search, 'i') } },
         ];
       }
