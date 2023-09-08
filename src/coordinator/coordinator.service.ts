@@ -40,7 +40,7 @@ export class CoordinatorService {
     }
     this.log.debug(`Coordinator ${coordinator._id}`);
 
-    return coordinator;
+    return coordinator.populate('coordinateTrucks');
   }
 
   async findCoordinatorById(id: string): Promise<CoordinatorResultDto> {

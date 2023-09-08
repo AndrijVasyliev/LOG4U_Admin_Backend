@@ -40,7 +40,7 @@ export class DriverService {
     }
     this.log.debug(`Driver ${driver._id}`);
 
-    return driver;
+    return driver.populate('driveTrucks');
   }
 
   async findDriverById(id: string): Promise<DriverResultDto> {
