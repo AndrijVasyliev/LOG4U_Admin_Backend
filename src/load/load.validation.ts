@@ -61,6 +61,7 @@ export const LoadQueryParamsSchema = Joi.object({
   rate: Joi.number().min(0).optional(),
   bookedByCompany: Joi.string().optional(),
   checkInAs: Joi.string().optional(),
+  truckNumber: Joi.number().optional(),
 })
   .keys({
     orderby: Joi.string().valid(

@@ -27,7 +27,7 @@ export class OwnerService {
     private readonly log: LoggerService,
   ) {}
 
-  private async findOwnerById(id: string): Promise<OwnerDocument> {
+  private async findOwnerDocumentById(id: string): Promise<OwnerDocument> {
     this.log.debug(`Searching for Owner ${id}`);
     const owner = await this.ownerModel.findOne({
       _id: id,
@@ -41,8 +41,8 @@ export class OwnerService {
     return owner.populate('ownTrucks');
   }
 
-  async findOwner(id: string): Promise<OwnerResultDto> {
-    const owner = await this.findOwnerById(id);
+  async findOwnerById(id: string): Promise<OwnerResultDto> {
+    const owner = await this.findOwnerDocumentById(id);
     return OwnerResultDto.fromOwnerModel(owner);
   }
 
@@ -94,7 +94,7 @@ export class OwnerService {
     id: string,
     updateOwnerDto: UpdateOwnerDto,
   ): Promise<OwnerResultDto> {
-    const owner = await this.findOwnerById(id);
+    const owner = await this.findOwnerDocumentById(id);
     this.log.debug(`Setting new values: ${JSON.stringify(updateOwnerDto)}`);
     Object.assign(owner, updateOwnerDto);
     try {
@@ -111,7 +111,7 @@ export class OwnerService {
   }
 
   async deleteOwner(id: string): Promise<OwnerResultDto> {
-    const owner = await this.findOwnerById(id);
+    const owner = await this.findOwnerDocumentById(id);
 
     this.log.debug(`Deleting Owner ${owner._id}`);
 

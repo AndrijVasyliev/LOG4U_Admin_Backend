@@ -17,6 +17,7 @@ import {
 } from './load.dto';
 import { LoggerService } from '../logger/logger.service';
 import { MONGO_UNIQUE_INDEX_CONFLICT } from '../utils/constants';
+import { TruckService } from '../truck/truck.service';
 import { GoogleGeoApiService } from '../googleGeoApi/googleGeoApi.service';
 
 const { MongoError } = mongo;
@@ -28,6 +29,7 @@ export class LoadService {
   constructor(
     @InjectModel(Load.name)
     private readonly loadModel: PaginateModel<LoadDocument>,
+    private readonly truckService: TruckService,
     private readonly geoApiService: GoogleGeoApiService,
     private configService: ConfigService,
     private readonly log: LoggerService,
@@ -38,7 +40,7 @@ export class LoadService {
     this.apiKey = this.configService.get<string>('google.key');
   }
 
-  private async findLoadById(id: string): Promise<LoadDocument> {
+  private async findLoadDocumentById(id: string): Promise<LoadDocument> {
     this.log.debug(`Searching for Load ${id}`);
     const load = await this.loadModel.findOne({ _id: id });
     if (!load) {
@@ -49,8 +51,8 @@ export class LoadService {
     return load;
   }
 
-  async findLoad(id: string): Promise<LoadResultDto> {
-    const load = await this.findLoadById(id);
+  async findLoadById(id: string): Promise<LoadResultDto> {
+    const load = await this.findLoadDocumentById(id);
     return LoadResultDto.fromLoadModel(load);
   }
 
@@ -68,6 +70,14 @@ export class LoadService {
     if (query?.search?.loadNumber) {
       documentQuery.loadNumber = {
         $eq: query.search.loadNumber,
+      };
+    }
+    if (query?.search?.truckNumber) {
+      const truck = await this.truckService.findTruckByNumber(
+        query.search.truckNumber,
+      );
+      documentQuery.truck = {
+        $eq: truck.id,
       };
     }
 
@@ -122,7 +132,7 @@ export class LoadService {
     id: string,
     updateLoadDto: UpdateLoadDto,
   ): Promise<LoadResultDto> {
-    let load = await this.findLoadById(id);
+    let load = await this.findLoadDocumentById(id);
     this.log.debug(`Setting new values: ${JSON.stringify(updateLoadDto)}`);
     Object.assign(load, updateLoadDto);
     try {
@@ -146,7 +156,7 @@ export class LoadService {
   }
 
   async deleteLoad(id: string): Promise<LoadResultDto> {
-    const load = await this.findLoadById(id);
+    const load = await this.findLoadDocumentById(id);
 
     this.log.debug(`Deleting Load ${load._id}`);
 

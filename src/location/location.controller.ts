@@ -54,7 +54,7 @@ export class LocationController {
   async getLocation(
     @Param('locationId', MongoObjectIdPipe) locationId: string,
   ): Promise<LocationResultDto> {
-    return this.locationService.findLocation(locationId);
+    return this.locationService.findLocationById(locationId);
   }
 
   @Post()

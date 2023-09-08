@@ -28,7 +28,9 @@ export class CoordinatorService {
     private readonly log: LoggerService,
   ) {}
 
-  private async findCoordinatorById(id: string): Promise<CoordinatorDocument> {
+  private async findCoordinatorDocumentById(
+    id: string,
+  ): Promise<CoordinatorDocument> {
     this.log.debug(`Searching for Coordinator ${id}`);
     const coordinator = await this.coordinatorModel.findOne({ _id: id });
     if (!coordinator) {
@@ -39,8 +41,8 @@ export class CoordinatorService {
     return coordinator;
   }
 
-  async findCoordinator(id: string): Promise<CoordinatorResultDto> {
-    const coordinator = await this.findCoordinatorById(id);
+  async findCoordinatorById(id: string): Promise<CoordinatorResultDto> {
+    const coordinator = await this.findCoordinatorDocumentById(id);
     return CoordinatorResultDto.fromCoordinatorModel(coordinator);
   }
 
@@ -102,7 +104,7 @@ export class CoordinatorService {
     id: string,
     updateCoordinatorDto: UpdateCoordinatorDto,
   ): Promise<CoordinatorResultDto> {
-    const coordinator = await this.findCoordinatorById(id);
+    const coordinator = await this.findCoordinatorDocumentById(id);
     this.log.debug(
       `Setting new values: ${JSON.stringify(updateCoordinatorDto)}`,
     );
@@ -125,7 +127,7 @@ export class CoordinatorService {
   }
 
   async deleteCoordinator(id: string): Promise<CoordinatorResultDto> {
-    const coordinator = await this.findCoordinatorById(id);
+    const coordinator = await this.findCoordinatorDocumentById(id);
 
     this.log.debug(`Deleting Coordinator ${coordinator._id}`);
 

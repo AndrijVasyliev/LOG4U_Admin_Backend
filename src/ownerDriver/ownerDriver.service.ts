@@ -27,7 +27,9 @@ export class OwnerDriverService {
     private readonly log: LoggerService,
   ) {}
 
-  private async findOwnerDriverById(id: string): Promise<OwnerDriverDocument> {
+  private async findOwnerDriverDocumentById(
+    id: string,
+  ): Promise<OwnerDriverDocument> {
     this.log.debug(`Searching for OwnerDriver ${id}`);
     const ownerDriver = await this.ownerDriverModel.findOne({ _id: id });
     if (!ownerDriver) {
@@ -38,8 +40,8 @@ export class OwnerDriverService {
     return ownerDriver;
   }
 
-  async findOwnerDriver(id: string): Promise<OwnerDriverResultDto> {
-    const ownerDriver = await this.findOwnerDriverById(id);
+  async findOwnerDriverById(id: string): Promise<OwnerDriverResultDto> {
+    const ownerDriver = await this.findOwnerDriverDocumentById(id);
     return OwnerDriverResultDto.fromOwnerDriverModel(ownerDriver);
   }
 
@@ -97,7 +99,7 @@ export class OwnerDriverService {
     id: string,
     updateOwnerDriverDto: UpdateOwnerDriverDto,
   ): Promise<OwnerDriverResultDto> {
-    const ownerDriver = await this.findOwnerDriverById(id);
+    const ownerDriver = await this.findOwnerDriverDocumentById(id);
     this.log.debug(
       `Setting new values: ${JSON.stringify(updateOwnerDriverDto)}`,
     );
@@ -116,7 +118,7 @@ export class OwnerDriverService {
   }
 
   async deleteOwnerDriver(id: string): Promise<OwnerDriverResultDto> {
-    const ownerDriver = await this.findOwnerDriverById(id);
+    const ownerDriver = await this.findOwnerDriverDocumentById(id);
 
     this.log.debug(`Deleting OwnerDriver ${ownerDriver._id}`);
 

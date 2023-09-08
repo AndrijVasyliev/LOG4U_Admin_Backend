@@ -48,7 +48,7 @@ export class LoadController {
   async getLoad(
     @Param('loadId', MongoObjectIdPipe) loadId: string,
   ): Promise<LoadResultDto> {
-    return this.loadService.findLoad(loadId);
+    return this.loadService.findLoadById(loadId);
   }
 
   @Post()

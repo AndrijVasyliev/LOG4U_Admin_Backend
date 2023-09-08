@@ -48,7 +48,7 @@ export class DriverController {
   async getDriver(
     @Param('driverId', MongoObjectIdPipe) driverId: string,
   ): Promise<DriverResultDto> {
-    return this.driverService.findDriver(driverId);
+    return this.driverService.findDriverById(driverId);
   }
 
   @Post()

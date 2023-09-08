@@ -50,7 +50,7 @@ export class CoordinatorController {
   async getCoordinator(
     @Param('coordinatorId', MongoObjectIdPipe) coordinatorId: string,
   ): Promise<CoordinatorResultDto> {
-    return this.coordinatorService.findCoordinator(coordinatorId);
+    return this.coordinatorService.findCoordinatorById(coordinatorId);
   }
 
   @Post()

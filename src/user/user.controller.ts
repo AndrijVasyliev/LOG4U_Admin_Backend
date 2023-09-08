@@ -48,7 +48,7 @@ export class UserController {
   async getUser(
     @Param('userId', MongoObjectIdPipe) userId: string,
   ): Promise<UserResultDto> {
-    return this.userService.findUser(userId);
+    return this.userService.findUserById(userId);
   }
 
   @Post()

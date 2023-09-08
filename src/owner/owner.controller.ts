@@ -48,7 +48,7 @@ export class OwnerController {
   async getOwner(
     @Param('ownerId', MongoObjectIdPipe) ownerId: string,
   ): Promise<OwnerResultDto> {
-    return this.ownerService.findOwner(ownerId);
+    return this.ownerService.findOwnerById(ownerId);
   }
 
   @Post()

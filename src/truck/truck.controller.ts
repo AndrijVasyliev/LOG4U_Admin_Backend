@@ -48,7 +48,7 @@ export class TruckController {
   async getTruck(
     @Param('truckId', MongoObjectIdPipe) truckId: string,
   ): Promise<TruckResultDto> {
-    return this.truckService.findTruck(truckId);
+    return this.truckService.findTruckById(truckId);
   }
 
   @Post()

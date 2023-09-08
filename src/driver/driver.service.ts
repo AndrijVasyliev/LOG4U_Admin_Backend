@@ -27,7 +27,7 @@ export class DriverService {
     private readonly log: LoggerService,
   ) {}
 
-  private async findDriverById(id: string): Promise<DriverDocument> {
+  private async findDriverDocumentById(id: string): Promise<DriverDocument> {
     this.log.debug(`Searching for Driver ${id}`);
     const driver = await this.driverModel.findOne({
       _id: id,
@@ -41,8 +41,8 @@ export class DriverService {
     return driver;
   }
 
-  async findDriver(id: string): Promise<DriverResultDto> {
-    const driver = await this.findDriverById(id);
+  async findDriverById(id: string): Promise<DriverResultDto> {
+    const driver = await this.findDriverDocumentById(id);
     return DriverResultDto.fromDriverModel(driver);
   }
 
@@ -95,7 +95,7 @@ export class DriverService {
     id: string,
     updateDriverDto: UpdateDriverDto,
   ): Promise<DriverResultDto> {
-    const driver = await this.findDriverById(id);
+    const driver = await this.findDriverDocumentById(id);
     this.log.debug(`Setting new values: ${JSON.stringify(updateDriverDto)}`);
     Object.assign(driver, updateDriverDto);
     try {
@@ -112,7 +112,7 @@ export class DriverService {
   }
 
   async deleteDriver(id: string): Promise<DriverResultDto> {
-    const driver = await this.findDriverById(id);
+    const driver = await this.findDriverDocumentById(id);
 
     this.log.debug(`Deleting Driver ${driver._id}`);
 

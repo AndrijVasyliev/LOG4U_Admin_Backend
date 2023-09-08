@@ -43,6 +43,7 @@ export class LoadQuerySearch {
   readonly truckType?: TruckType;
   readonly bookedByCompany?: string;
   readonly checkInAs?: string;
+  readonly truckNumber?: number;
 }
 
 export class LoadQuery extends Query<LoadQuerySearch> {}

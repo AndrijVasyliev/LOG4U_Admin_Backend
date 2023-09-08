@@ -30,7 +30,7 @@ export class LocationService {
     private readonly log: LoggerService,
   ) {}
 
-  private async findLocationById(id: string): Promise<LocationDocument> {
+  private async findLocationDocumentById(id: string): Promise<LocationDocument> {
     this.log.debug(`Searching for Location ${id}`);
     const location = await this.locationModel.findOne({ _id: id });
     if (!location) {
@@ -41,8 +41,8 @@ export class LocationService {
     return location;
   }
 
-  async findLocation(id: string): Promise<LocationResultDto> {
-    const location = await this.findLocationById(id);
+  async findLocationById(id: string): Promise<LocationResultDto> {
+    const location = await this.findLocationDocumentById(id);
     return LocationResultDto.fromLocationModel(location);
   }
 
@@ -152,7 +152,7 @@ export class LocationService {
     id: string,
     updateLocationDto: UpdateLocationDto,
   ): Promise<LocationResultDto> {
-    const location = await this.findLocationById(id);
+    const location = await this.findLocationDocumentById(id);
     this.log.debug(`Setting new values: ${JSON.stringify(updateLocationDto)}`);
     Object.assign(location, updateLocationDto);
     try {
@@ -169,7 +169,7 @@ export class LocationService {
   }
 
   async deleteLocation(id: string): Promise<LocationResultDto> {
-    const location = await this.findLocationById(id);
+    const location = await this.findLocationDocumentById(id);
 
     this.log.debug(`Deleting Location ${location._id}`);
 

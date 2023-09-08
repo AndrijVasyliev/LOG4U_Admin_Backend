@@ -50,7 +50,7 @@ export class OwnerDriverController {
   async getOwnerDriver(
     @Param('ownerDriverId', MongoObjectIdPipe) ownerDriverId: string,
   ): Promise<OwnerDriverResultDto> {
-    return this.ownerDriverService.findOwnerDriver(ownerDriverId);
+    return this.ownerDriverService.findOwnerDriverById(ownerDriverId);
   }
 
   @Post()

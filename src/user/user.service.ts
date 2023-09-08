@@ -27,7 +27,7 @@ export class UserService {
     private readonly log: LoggerService,
   ) {}
 
-  private async findUserById(id: string): Promise<UserDocument> {
+  private async findUserDocumentById(id: string): Promise<UserDocument> {
     this.log.debug(`Searching for User ${id}`);
     const user = await this.userModel.findOne({ _id: id });
     if (!user) {
@@ -55,8 +55,8 @@ export class UserService {
     return UserResultDto.fromUserModel(user);
   }
 
-  async findUser(id: string): Promise<UserResultDto> {
-    const user = await this.findUserById(id);
+  async findUserById(id: string): Promise<UserResultDto> {
+    const user = await this.findUserDocumentById(id);
     return UserResultDto.fromUserModel(user);
   }
 
@@ -107,7 +107,7 @@ export class UserService {
     id: string,
     updateUserDto: UpdateUserDto,
   ): Promise<UserResultDto> {
-    const user = await this.findUserById(id);
+    const user = await this.findUserDocumentById(id);
     this.log.debug(`Setting new values: ${JSON.stringify(updateUserDto)}`);
     Object.assign(user, updateUserDto);
     try {
@@ -124,7 +124,7 @@ export class UserService {
   }
 
   async deleteUser(id: string): Promise<UserResultDto> {
-    const user = await this.findUserById(id);
+    const user = await this.findUserDocumentById(id);
 
     this.log.debug(`Deleting User ${user._id}`);
 

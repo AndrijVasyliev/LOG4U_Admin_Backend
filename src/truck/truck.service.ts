@@ -36,7 +36,7 @@ export class TruckService {
     private readonly log: LoggerService,
   ) {}
 
-  private async findTruckById(id: string): Promise<TruckDocument> {
+  private async findTruckDocumentById(id: string): Promise<TruckDocument> {
     this.log.debug(`Searching for Truck ${id}`);
     const truck = await this.truckModel.findOne({ _id: id });
     if (!truck) {
@@ -47,8 +47,28 @@ export class TruckService {
     return truck;
   }
 
-  async findTruck(id: string): Promise<TruckResultDto> {
-    const truck = await this.findTruckById(id);
+  private async findTruckDocumentByNumber(
+    truckNumber: number,
+  ): Promise<TruckDocument> {
+    this.log.debug(`Searching for Truck by number ${truckNumber}`);
+    const truck = await this.truckModel.findOne({ truckNumber });
+    if (!truck) {
+      throw new NotFoundException(
+        `Truck with number ${truckNumber} was not found`,
+      );
+    }
+    this.log.debug(`Truck ${truck._id}`);
+
+    return truck;
+  }
+
+  async findTruckById(id: string): Promise<TruckResultDto> {
+    const truck = await this.findTruckDocumentById(id);
+    return TruckResultDto.fromTruckModel(truck);
+  }
+
+  async findTruckByNumber(truckNumber: number): Promise<TruckResultDto> {
+    const truck = await this.findTruckDocumentByNumber(truckNumber);
     return TruckResultDto.fromTruckModel(truck);
   }
 
@@ -155,7 +175,7 @@ export class TruckService {
     id: string,
     updateTruckDto: UpdateTruckDto,
   ): Promise<TruckResultDto> {
-    const truck = await this.findTruckById(id);
+    const truck = await this.findTruckDocumentById(id);
     let lastCity = '';
     if (updateTruckDto.lastLocation) {
       try {
@@ -186,7 +206,7 @@ export class TruckService {
   }
 
   async deleteTruck(id: string): Promise<TruckResultDto> {
-    const truck = await this.findTruckById(id);
+    const truck = await this.findTruckDocumentById(id);
 
     this.log.debug(`Deleting Truck ${truck._id}`);
 
