@@ -7,6 +7,7 @@ import {
   Query,
 } from '../utils/general.dto';
 import { OwnerResultDto } from '../owner/owner.dto';
+import { TruckResultDto } from '../truck/truck.dto';
 
 export class CreateCoordinatorDto {
   readonly fullName: string;
@@ -82,6 +83,12 @@ export class CoordinatorResultDto {
   static fromCoordinatorModel(coordinator: Coordinator): CoordinatorResultDto {
     const owner =
       coordinator.owner && OwnerResultDto.fromOwnerModel(coordinator.owner);
+    const coordinateTrucks =
+      coordinator.coordinateTrucks &&
+      coordinator.coordinateTrucks.length > 0 &&
+      coordinator.coordinateTrucks.map((truck) =>
+        TruckResultDto.fromTruckModel(truck),
+      );
     let result: CoordinatorResultDto = {
       id: coordinator._id.toString(),
       type: coordinator.type,
@@ -109,6 +116,9 @@ export class CoordinatorResultDto {
     if (owner) {
       result = { ...result, owner };
     }
+    if (coordinateTrucks) {
+      result = { ...result, coordinateTrucks };
+    }
     return result;
   }
 
@@ -135,6 +145,7 @@ export class CoordinatorResultDto {
   readonly emergencyContactPhone: string;
   readonly notes?: string;
   readonly owner?: OwnerResultDto;
+  readonly coordinateTrucks?: TruckResultDto[];
 }
 
 export class PaginatedCoordinatorResultDto extends PaginatedResultDto<CoordinatorResultDto> {

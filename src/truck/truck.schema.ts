@@ -154,4 +154,5 @@ export class Truck {
 export const TruckSchema = SchemaFactory.createForClass(Truck);
 
 TruckSchema.index({ truckNumber: 1 }, { unique: true });
+TruckSchema.index({ driver: 1 }, { unique: true, sparse: true });
 TruckSchema.index({ lastLocation: '2dsphere' });

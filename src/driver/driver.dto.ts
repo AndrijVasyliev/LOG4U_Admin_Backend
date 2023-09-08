@@ -7,6 +7,7 @@ import {
   Query,
 } from '../utils/general.dto';
 import { OwnerResultDto } from '../owner/owner.dto';
+import { TruckResultDto } from '../truck/truck.dto';
 
 export class CreateDriverDto {
   readonly fullName: string;
@@ -94,6 +95,10 @@ export class DriverQuery extends Query<DriverQuerySearch> {}
 export class DriverResultDto {
   static fromDriverModel(driver: Driver): DriverResultDto {
     const owner = driver.owner && OwnerResultDto.fromOwnerModel(driver.owner);
+    const driveTrucks =
+      driver.driveTrucks &&
+      driver.driveTrucks.length > 0 &&
+      driver.driveTrucks.map((truck) => TruckResultDto.fromTruckModel(truck));
     let result: DriverResultDto = {
       id: driver._id.toString(),
       type: driver.type,
@@ -126,6 +131,9 @@ export class DriverResultDto {
     if (owner) {
       result = { ...result, owner };
     }
+    if (driveTrucks) {
+      result = { ...result, driveTrucks };
+    }
     return result;
   }
 
@@ -157,6 +165,7 @@ export class DriverResultDto {
   readonly appLogin?: string;
   readonly appPass?: string;
   readonly owner?: OwnerResultDto;
+  readonly driveTrucks?: TruckResultDto[];
 }
 
 export class PaginatedDriverResultDto extends PaginatedResultDto<DriverResultDto> {

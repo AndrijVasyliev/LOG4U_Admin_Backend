@@ -88,6 +88,7 @@ export class DriverService {
     if (query.direction && query.orderby) {
       options.sort = { [query.orderby]: query.direction };
     }
+    options.populate = ['driveTrucks'];
     documentQuery.type = { $in: DRIVER_TYPES };
     const res = await this.driverModel.paginate(documentQuery, options);
 

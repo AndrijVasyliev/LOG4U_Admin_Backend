@@ -91,7 +91,7 @@ export class CoordinatorService {
     if (query.direction && query.orderby) {
       options.sort = { [query.orderby]: query.direction };
     }
-
+    options.populate = ['coordinateTrucks'];
     const res = await this.coordinatorModel.paginate(documentQuery, options);
 
     return PaginatedCoordinatorResultDto.from(res);

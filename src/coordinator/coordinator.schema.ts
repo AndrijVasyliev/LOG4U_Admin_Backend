@@ -2,7 +2,8 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, ObjectId, Schema as MongooseSchema } from 'mongoose';
 import { LangPriorities } from '../utils/constants';
 import { LangPriority, PersonType } from '../utils/general.dto';
-import { Owner, OWNER_TYPES } from '../owner/owner.schema';
+import { Owner, OWNER_TYPES, OwnerSchema } from '../owner/owner.schema';
+import { Truck } from '../truck/truck.schema';
 
 export type CoordinatorDocument = Coordinator & Document;
 
@@ -76,6 +77,8 @@ export class Coordinator {
   })
   owner: Owner;
 
+  readonly coordinateTrucks?: Truck[];
+
   created_at: Date;
 
   updated_at: Date;
@@ -84,3 +87,9 @@ export class Coordinator {
 }
 
 export const CoordinatorSchema = SchemaFactory.createForClass(Coordinator);
+
+CoordinatorSchema.virtual('coordinateTrucks', {
+  ref: 'Truck',
+  localField: '_id',
+  foreignField: 'coordinator',
+});

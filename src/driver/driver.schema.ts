@@ -4,6 +4,8 @@ import { LangPriorities, PersonTypes } from '../utils/constants';
 import { LangPriority, PersonType } from '../utils/general.dto';
 import { hash } from '../utils/hash';
 import { Owner, OWNER_TYPES } from '../owner/owner.schema';
+import { Truck } from '../truck/truck.schema';
+import { CoordinatorSchema } from '../coordinator/coordinator.schema';
 
 export const DRIVER_TYPES: PersonType[] = ['Driver', 'OwnerDriver'];
 export type DriverDocument = Driver & Document;
@@ -109,6 +111,8 @@ export class Driver {
   })
   owner: Owner;
 
+  readonly driveTrucks?: Truck[];
+
   created_at: Date;
 
   updated_at: Date;
@@ -117,3 +121,9 @@ export class Driver {
 }
 
 export const DriverSchema = SchemaFactory.createForClass(Driver);
+
+DriverSchema.virtual('driveTrucks', {
+  ref: 'Truck',
+  localField: '_id',
+  foreignField: 'driver',
+});
