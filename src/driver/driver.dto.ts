@@ -86,6 +86,7 @@ export class DriverQuerySearch {
   readonly emergencyContactRel?: string;
   readonly emergencyContactPhone?: string;
   readonly appLogin?: string;
+  readonly truckNumber?: number;
 }
 
 export class DriverQuery extends Query<DriverQuerySearch> {}

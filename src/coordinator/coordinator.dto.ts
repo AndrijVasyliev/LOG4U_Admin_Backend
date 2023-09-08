@@ -73,6 +73,7 @@ export class CoordinatorQuerySearch {
   readonly emergencyContactName?: string;
   readonly emergencyContactRel?: string;
   readonly emergencyContactPhone?: string;
+  readonly truckNumber?: number;
 }
 
 export class CoordinatorQuery extends Query<CoordinatorQuerySearch> {}

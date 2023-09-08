@@ -16,6 +16,7 @@ import {
   PaginatedOwnerResultDto,
   UpdateOwnerDto,
 } from './owner.dto';
+import { TruckService } from '../truck/truck.service';
 
 const { MongoError } = mongo;
 
@@ -24,6 +25,7 @@ export class OwnerService {
   constructor(
     @InjectModel(Owner.name)
     private readonly ownerModel: PaginateModel<OwnerDocument>,
+    private readonly truckService: TruckService,
     private readonly log: LoggerService,
   ) {}
 
@@ -55,6 +57,28 @@ export class OwnerService {
       searchParams.forEach((entry) => {
         documentQuery[entry[0]] = { $regex: new RegExp(entry[1], 'i') };
       });
+    }
+    if (query?.search?.truckNumber) {
+      const truck = await this.truckService.findTruckByNumber(
+        query.search.truckNumber,
+      );
+      const { owner, coordinator, driver } = truck;
+      const conditions = [];
+      if (owner) {
+        conditions.push({ _id: owner.id });
+      }
+      if (coordinator) {
+        conditions.push({ _id: coordinator.id });
+      }
+      if (driver) {
+        conditions.push({ _id: driver.id });
+      }
+      if (conditions.length === 1) {
+        Object.assign(documentQuery, conditions[0]);
+      }
+      if (conditions.length > 1) {
+        documentQuery.$or = conditions;
+      }
     }
 
     const options: PaginateOptions = {

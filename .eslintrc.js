@@ -1,4 +1,3 @@
-// ToDo use global eslint config
 module.exports = {
   parser: '@typescript-eslint/parser',
   parserOptions: {

@@ -72,6 +72,7 @@ export const OwnerQueryParamsSchema = Joi.object({
   emergencyContactName: Joi.string().optional(),
   emergencyContactRel: Joi.string().optional(),
   emergencyContactPhone: Joi.string().optional(),
+  truckNumber: Joi.number().optional(),
 })
   .keys({
     orderby: Joi.string().valid(

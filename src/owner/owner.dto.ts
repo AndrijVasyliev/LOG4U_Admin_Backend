@@ -71,6 +71,7 @@ export class OwnerQuerySearch {
   readonly emergencyContactName?: string;
   readonly emergencyContactRel?: string;
   readonly emergencyContactPhone?: string;
+  readonly truckNumber?: number;
 }
 
 export class OwnerQuery extends Query<OwnerQuerySearch> {}

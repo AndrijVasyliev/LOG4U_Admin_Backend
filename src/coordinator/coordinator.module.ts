@@ -4,6 +4,7 @@ import { CoordinatorController } from './coordinator.controller';
 import { Coordinator, CoordinatorSchema } from './coordinator.schema';
 import { CoordinatorService } from './coordinator.service';
 import { Person, PersonSchema } from '../person/person.schema';
+import { TruckModule } from '../truck/truck.module';
 
 @Module({
   imports: [
@@ -14,6 +15,7 @@ import { Person, PersonSchema } from '../person/person.schema';
         discriminators: [{ name: Coordinator.name, schema: CoordinatorSchema }],
       },
     ]),
+    TruckModule,
   ],
   exports: [CoordinatorService],
   controllers: [CoordinatorController],
