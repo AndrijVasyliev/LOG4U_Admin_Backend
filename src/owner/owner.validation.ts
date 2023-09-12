@@ -1,5 +1,5 @@
 import * as Joi from 'joi';
-import { LangPriorities } from '../utils/constants';
+import { LANG_PRIORITIES } from '../utils/constants';
 
 export const CreateOwnerValidation = Joi.object({
   fullName: Joi.string().required(),
@@ -7,7 +7,7 @@ export const CreateOwnerValidation = Joi.object({
   birthPlace: Joi.string().required(),
   citizenship: Joi.string().required(),
   languagePriority: Joi.string()
-    .valid(...LangPriorities)
+    .valid(...LANG_PRIORITIES)
     .required(),
   hiredBy: Joi.string().required(),
   hireDate: Joi.date().iso().required(),
@@ -32,7 +32,7 @@ export const UpdateOwnerValidation = Joi.object({
   birthPlace: Joi.string().optional(),
   citizenship: Joi.string().optional(),
   languagePriority: Joi.string()
-    .valid(...LangPriorities)
+    .valid(...LANG_PRIORITIES)
     .optional(),
   hiredBy: Joi.string().optional(),
   hireDate: Joi.date().iso().optional(),
@@ -58,7 +58,7 @@ export const OwnerQueryParamsSchema = Joi.object({
   birthPlace: Joi.string().optional(),
   citizenship: Joi.string().optional(),
   languagePriority: Joi.string()
-    .valid(...LangPriorities)
+    .valid(...LANG_PRIORITIES)
     .optional(),
   hiredBy: Joi.string().optional(),
   snn: Joi.string().optional(),

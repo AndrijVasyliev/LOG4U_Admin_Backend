@@ -1,6 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, ObjectId } from 'mongoose';
-import { PersonTypes } from '../utils/constants';
+import { PERSON_TYPES } from '../utils/constants';
 import { PersonType } from '../utils/general.dto';
 
 export type PersonDocument = Person & Document;
@@ -12,7 +12,7 @@ export type PersonDocument = Person & Document;
   collection: 'persons',
 })
 export class Person {
-  @Prop({ required: true, immutable: true, enum: PersonTypes })
+  @Prop({ required: true, immutable: true, enum: PERSON_TYPES })
   type: PersonType;
 
   @Prop({ required: true })

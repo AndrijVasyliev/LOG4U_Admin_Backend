@@ -1,8 +1,8 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, ObjectId, Schema as MongooseSchema } from 'mongoose';
-import { LangPriorities } from '../utils/constants';
+import { LANG_PRIORITIES, OWNER_TYPES } from '../utils/constants';
 import { LangPriority, PersonType } from '../utils/general.dto';
-import { Owner, OWNER_TYPES, OwnerSchema } from '../owner/owner.schema';
+import { Owner } from '../owner/owner.schema';
 import { Truck } from '../truck/truck.schema';
 
 export type CoordinatorDocument = Coordinator & Document;
@@ -22,7 +22,7 @@ export class Coordinator {
   @Prop({ required: true })
   citizenship: string;
 
-  @Prop({ required: true, enum: LangPriorities })
+  @Prop({ required: true, enum: LANG_PRIORITIES })
   languagePriority: LangPriority;
 
   @Prop({ required: true })

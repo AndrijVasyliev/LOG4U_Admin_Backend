@@ -1,6 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, ObjectId, Schema as MongooseSchema } from 'mongoose';
-import { DEFAULT_CHECK_IN_AS, TruckTypes } from '../utils/constants';
+import { DEFAULT_CHECK_IN_AS, TRUCK_TYPES } from '../utils/constants';
 import { TruckType } from '../utils/general.dto';
 import { Location } from '../location/location.schema';
 import { User } from '../user/user.schema';
@@ -54,7 +54,7 @@ export class Load {
 
   @Prop({
     required: true,
-    type: [{ required: true, type: String, enum: TruckTypes }],
+    type: [{ required: true, type: String, enum: TRUCK_TYPES }],
     validate: (array: any[]) => {
       return array && array.length > 0;
     },

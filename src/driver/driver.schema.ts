@@ -1,13 +1,11 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, ObjectId, Schema as MongooseSchema } from 'mongoose';
-import { LangPriorities, PersonTypes } from '../utils/constants';
+import { LANG_PRIORITIES, OWNER_TYPES, PERSON_TYPES } from '../utils/constants';
 import { LangPriority, PersonType } from '../utils/general.dto';
 import { hash } from '../utils/hash';
-import { Owner, OWNER_TYPES } from '../owner/owner.schema';
+import { Owner } from '../owner/owner.schema';
 import { Truck } from '../truck/truck.schema';
-import { CoordinatorSchema } from '../coordinator/coordinator.schema';
 
-export const DRIVER_TYPES: PersonType[] = ['Driver', 'OwnerDriver'];
 export type DriverDocument = Driver & Document;
 
 @Schema({
@@ -20,7 +18,7 @@ export class Driver {
   @Prop({
     required: true,
     immutable: true,
-    enum: PersonTypes,
+    enum: PERSON_TYPES,
     default: 'Driver',
   })
   type: PersonType;
@@ -37,7 +35,7 @@ export class Driver {
   @Prop({ required: false })
   citizenship?: string;
 
-  @Prop({ required: false, enum: LangPriorities })
+  @Prop({ required: false, enum: LANG_PRIORITIES })
   languagePriority?: LangPriority;
 
   @Prop({ required: true })

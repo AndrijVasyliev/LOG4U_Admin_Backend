@@ -1,5 +1,5 @@
 import * as Joi from 'joi';
-import { LangPriorities } from '../utils/constants';
+import { LANG_PRIORITIES } from '../utils/constants';
 
 export const CreateOwnerDriverValidation = Joi.object({
   fullName: Joi.string().required(),
@@ -7,7 +7,7 @@ export const CreateOwnerDriverValidation = Joi.object({
   birthPlace: Joi.string().required(),
   citizenship: Joi.string().required(),
   languagePriority: Joi.string()
-    .valid(...LangPriorities)
+    .valid(...LANG_PRIORITIES)
     .required(),
   driverLicenceType: Joi.string().required(),
   driverLicenceNumber: Joi.string().required(),
@@ -42,7 +42,7 @@ export const UpdateOwnerDriverValidation = Joi.object({
   birthPlace: Joi.string().optional(),
   citizenship: Joi.string().optional(),
   languagePriority: Joi.string()
-    .valid(...LangPriorities)
+    .valid(...LANG_PRIORITIES)
     .optional(),
   driverLicenceType: Joi.string().optional(),
   driverLicenceNumber: Joi.string().optional(),
@@ -78,7 +78,7 @@ export const OwnerDriverQueryParamsSchema = Joi.object({
   birthPlace: Joi.string().optional(),
   citizenship: Joi.string().optional(),
   languagePriority: Joi.string()
-    .valid(...LangPriorities)
+    .valid(...LANG_PRIORITIES)
     .optional(),
   driverLicenceType: Joi.string().optional(),
   driverLicenceNumber: Joi.string().optional(),

@@ -7,6 +7,8 @@ import {
   PersonType,
 } from '../utils/general.dto';
 import { TruckResultDto } from '../truck/truck.dto';
+import { DriverResultDto } from '../driver/driver.dto';
+import { CoordinatorResultDto } from '../coordinator/coordinator.dto';
 
 export class CreateOwnerDto {
   readonly fullName: string;
@@ -82,6 +84,16 @@ export class OwnerResultDto {
       owner.ownTrucks &&
       owner.ownTrucks.length > 0 &&
       owner.ownTrucks.map((truck) => TruckResultDto.fromTruckModel(truck));
+    const coordinators =
+      owner.coordinators &&
+      owner.coordinators.length > 0 &&
+      owner.coordinators.map((coordinator) =>
+        CoordinatorResultDto.fromCoordinatorModel(coordinator),
+      );
+    const drivers =
+      owner.drivers &&
+      owner.drivers.length > 0 &&
+      owner.drivers.map((driver) => DriverResultDto.fromDriverModel(driver));
     let result: OwnerResultDto = {
       id: owner._id.toString(),
       type: owner.type,
@@ -109,6 +121,12 @@ export class OwnerResultDto {
     if (ownTrucks) {
       result = { ...result, ownTrucks };
     }
+    if (coordinators) {
+      result = { ...result, coordinators };
+    }
+    if (drivers) {
+      result = { ...result, drivers };
+    }
     return result;
   }
 
@@ -135,6 +153,8 @@ export class OwnerResultDto {
   readonly emergencyContactPhone: string;
   readonly notes?: string;
   readonly ownTrucks?: TruckResultDto[];
+  readonly coordinators?: CoordinatorResultDto[];
+  readonly drivers?: DriverResultDto[];
 }
 
 export class PaginatedOwnerResultDto extends PaginatedResultDto<OwnerResultDto> {

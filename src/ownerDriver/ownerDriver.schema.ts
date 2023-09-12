@@ -1,6 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, ObjectId } from 'mongoose';
-import { LangPriorities } from '../utils/constants';
+import { LANG_PRIORITIES } from '../utils/constants';
 import { LangPriority, PersonType } from '../utils/general.dto';
 import { hash } from '../utils/hash';
 
@@ -22,7 +22,7 @@ export class OwnerDriver {
   @Prop({ required: true })
   citizenship: string;
 
-  @Prop({ required: true, enum: LangPriorities })
+  @Prop({ required: true, enum: LANG_PRIORITIES })
   languagePriority: LangPriority;
 
   @Prop({ required: true })

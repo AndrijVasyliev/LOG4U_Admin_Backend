@@ -1,6 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, ObjectId } from 'mongoose';
-import { UserRoles } from '../utils/constants';
+import { USER_ROLES } from '../utils/constants';
 import { UserRole } from '../utils/general.dto';
 import { hash } from '../utils/hash';
 
@@ -18,7 +18,7 @@ export class User {
   @Prop({ required: false })
   phone?: string;
 
-  @Prop({ required: true, enum: UserRoles })
+  @Prop({ required: true, enum: USER_ROLES })
   userRole: UserRole;
 
   @Prop({ required: true })

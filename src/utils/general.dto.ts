@@ -1,24 +1,24 @@
 import {
-  LangPriorities,
-  PersonTypes,
-  TruckCertificates,
-  TruckCrossborders,
-  TruckEquipments,
-  TruckStatuses,
-  TruckTypes,
-  UserRoles,
+  LANG_PRIORITIES,
+  PERSON_TYPES,
+  TRUCK_CERTIFICATES,
+  TRUCK_CROSSBORDERS,
+  TRUCK_EQUIPMENTS,
+  TRUCK_STATUSES,
+  TRUCK_TYPES,
+  USER_ROLES,
 } from './constants';
 
 export type GeoPointType = { type: 'Point'; coordinates: [number, number] };
 
-export type PersonType = (typeof PersonTypes)[number];
-export type LangPriority = (typeof LangPriorities)[number];
-export type UserRole = (typeof UserRoles)[number];
-export type TruckType = (typeof TruckTypes)[number];
-export type TruckStatus = (typeof TruckStatuses)[number];
-export type TruckCrossborder = (typeof TruckCrossborders)[number];
-export type TruckCertificate = (typeof TruckCertificates)[number];
-export type TruckEquipment = (typeof TruckEquipments)[number];
+export type PersonType = (typeof PERSON_TYPES)[number];
+export type LangPriority = (typeof LANG_PRIORITIES)[number];
+export type UserRole = (typeof USER_ROLES)[number];
+export type TruckType = (typeof TRUCK_TYPES)[number];
+export type TruckStatus = (typeof TRUCK_STATUSES)[number];
+export type TruckCrossborder = (typeof TRUCK_CROSSBORDERS)[number];
+export type TruckCertificate = (typeof TRUCK_CERTIFICATES)[number];
+export type TruckEquipment = (typeof TRUCK_EQUIPMENTS)[number];
 
 export class Query<T> {
   readonly offset: number;

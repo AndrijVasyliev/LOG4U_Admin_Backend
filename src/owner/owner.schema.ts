@@ -1,10 +1,16 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, ObjectId } from 'mongoose';
-import { LangPriorities, PersonTypes } from '../utils/constants';
+import {
+  LANG_PRIORITIES,
+  PERSON_TYPES,
+  COORDINATOR_TYPES,
+  DRIVER_TYPES,
+} from '../utils/constants';
 import { LangPriority, PersonType } from '../utils/general.dto';
 import { Truck } from '../truck/truck.schema';
+import { Driver } from '../driver/driver.schema';
+import { Coordinator } from '../coordinator/coordinator.schema';
 
-export const OWNER_TYPES: PersonType[] = ['Owner', 'OwnerDriver'];
 export type OwnerDocument = Owner & Document;
 
 @Schema({
@@ -17,7 +23,7 @@ export class Owner {
   @Prop({
     required: true,
     immutable: true,
-    enum: PersonTypes,
+    enum: PERSON_TYPES,
     default: 'Owner',
   })
   type: PersonType;
@@ -34,7 +40,7 @@ export class Owner {
   @Prop({ required: true })
   citizenship: string;
 
-  @Prop({ required: true, enum: LangPriorities })
+  @Prop({ required: true, enum: LANG_PRIORITIES })
   languagePriority: LangPriority;
 
   @Prop({ required: true })
@@ -83,6 +89,8 @@ export class Owner {
   notes?: string;
 
   readonly ownTrucks?: Truck[];
+  readonly coordinators?: Coordinator[];
+  readonly drivers?: Driver[];
 
   created_at: Date;
 
@@ -97,4 +105,20 @@ OwnerSchema.virtual('ownTrucks', {
   ref: 'Truck',
   localField: '_id',
   foreignField: 'owner',
+});
+
+OwnerSchema.virtual('coordinators', {
+  ref: 'Coordinator',
+  localField: '_id',
+  foreignField: 'owner',
+  match: { type: { $in: COORDINATOR_TYPES } },
+});
+
+OwnerSchema.virtual('drivers', {
+  ref: 'Driver',
+  localField: '_id',
+  foreignField: 'owner',
+  options: {
+    match: { type: { $in: DRIVER_TYPES } },
+  },
 });

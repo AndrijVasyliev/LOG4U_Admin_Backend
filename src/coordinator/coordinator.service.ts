@@ -7,7 +7,7 @@ import {
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { LoggerService } from '../logger/logger.service';
-import { MONGO_UNIQUE_INDEX_CONFLICT } from '../utils/constants';
+import { MONGO_UNIQUE_INDEX_CONFLICT, OWNER_TYPES } from '../utils/constants';
 import { Coordinator, CoordinatorDocument } from './coordinator.schema';
 import {
   CreateCoordinatorDto,
@@ -16,7 +16,6 @@ import {
   PaginatedCoordinatorResultDto,
   UpdateCoordinatorDto,
 } from './coordinator.dto';
-import { OWNER_TYPES } from '../owner/owner.schema';
 import { TruckService } from '../truck/truck.service';
 
 const { MongoError } = mongo;

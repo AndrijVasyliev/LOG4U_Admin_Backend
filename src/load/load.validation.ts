@@ -1,5 +1,5 @@
 import * as Joi from 'joi';
-import { TruckTypes } from '../utils/constants';
+import { TRUCK_TYPES } from '../utils/constants';
 import { MongoObjectIdValidation } from '../utils/idValidate.pipe';
 
 export const CreateLoadValidation = Joi.object({
@@ -12,7 +12,7 @@ export const CreateLoadValidation = Joi.object({
     .min(1)
     .items(
       Joi.string()
-        .valid(...TruckTypes)
+        .valid(...TRUCK_TYPES)
         .required(),
     )
     .required(),
@@ -38,7 +38,7 @@ export const UpdateLoadValidation = Joi.object({
     .min(1)
     .items(
       Joi.string()
-        .valid(...TruckTypes)
+        .valid(...TRUCK_TYPES)
         .required(),
     )
     .optional(),
@@ -56,7 +56,7 @@ export const LoadQueryParamsSchema = Joi.object({
   loadNumber: Joi.number().min(0).optional(),
   weight: Joi.string().optional(),
   truckType: Joi.string()
-    .valid(...TruckTypes)
+    .valid(...TRUCK_TYPES)
     .optional(),
   rate: Joi.number().min(0).optional(),
   bookedByCompany: Joi.string().optional(),

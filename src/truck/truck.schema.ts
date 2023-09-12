@@ -1,11 +1,14 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, ObjectId, Schema as MongooseSchema } from 'mongoose';
 import {
-  TruckCertificates,
-  TruckCrossborders,
-  TruckEquipments,
-  TruckStatuses,
-  TruckTypes,
+  COORDINATOR_TYPES,
+  DRIVER_TYPES,
+  OWNER_TYPES,
+  TRUCK_CERTIFICATES,
+  TRUCK_CROSSBORDERS,
+  TRUCK_EQUIPMENTS,
+  TRUCK_STATUSES,
+  TRUCK_TYPES,
 } from '../utils/constants';
 import {
   GeoPointType,
@@ -16,9 +19,9 @@ import {
   TruckType,
 } from '../utils/general.dto';
 import { GeoPointSchema, Location } from '../location/location.schema';
-import { Owner, OWNER_TYPES } from '../owner/owner.schema';
+import { Owner } from '../owner/owner.schema';
 import { Coordinator } from '../coordinator/coordinator.schema';
-import { Driver, DRIVER_TYPES } from '../driver/driver.schema';
+import { Driver } from '../driver/driver.schema';
 
 export type TruckDocument = Truck & Document;
 
@@ -31,7 +34,7 @@ export class Truck {
   @Prop({ required: true })
   truckNumber: number;
 
-  @Prop({ required: true, enum: TruckStatuses })
+  @Prop({ required: true, enum: TRUCK_STATUSES })
   status: TruckStatus;
 
   @Prop({
@@ -66,18 +69,18 @@ export class Truck {
   @Prop({ required: false })
   locationUpdatedAt: Date;
 
-  @Prop({ required: true, enum: TruckCrossborders })
+  @Prop({ required: true, enum: TRUCK_CROSSBORDERS })
   crossborder: TruckCrossborder;
 
-  @Prop({ required: false, enum: TruckCertificates })
+  @Prop({ required: false, enum: TRUCK_CERTIFICATES })
   certificate?: TruckCertificate;
 
-  @Prop({ required: true, enum: TruckTypes })
+  @Prop({ required: true, enum: TRUCK_TYPES })
   type: TruckType;
 
   @Prop({
     required: false,
-    type: [{ required: false, type: String, enum: TruckEquipments }],
+    type: [{ required: false, type: String, enum: TRUCK_EQUIPMENTS }],
   })
   equipment?: TruckEquipment[];
 
@@ -132,7 +135,7 @@ export class Truck {
     required: false,
     type: MongooseSchema.Types.ObjectId,
     ref: 'Coordinator',
-    autopopulate: true,
+    autopopulate: { match: { type: { $in: COORDINATOR_TYPES } } },
   })
   coordinator?: Coordinator;
 

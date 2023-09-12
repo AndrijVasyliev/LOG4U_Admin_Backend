@@ -1,6 +1,4 @@
-import { Owner } from '../owner/owner.schema';
-import { Coordinator } from '../coordinator/coordinator.schema';
-import { Driver } from '../driver/driver.schema';
+import { PersonType } from './general.dto';
 
 export const HEALTH_MEMORY_HEAP_LIMIT = 150 * 1024 * 1024;
 export const HEALTH_MEMORY_RSS_LIMIT = 150 * 1024 * 1024;
@@ -16,13 +14,30 @@ export const DEFAULT_OFFSET = 0;
 
 export const DEFAULT_CHECK_IN_AS = '4ULogistics';
 
-export const LangPriorities = ['EN', 'UA', 'ES', 'RU'] as const;
+export const LANG_PRIORITIES = ['EN', 'UA', 'ES', 'RU'] as const;
 
-export const PersonTypes = [Owner.name, Coordinator.name, Driver.name] as const;
+export const PERSON_TYPES = [
+  'Owner',
+  'OwnerDriver',
+  'Coordinator',
+  'CoordinatorDriver',
+  'Driver',
+] as const;
 
-export const UserRoles = ['Admin', 'Super Admin'] as const;
+export const OWNER_TYPES: PersonType[] = ['Owner', 'OwnerDriver'];
+export const COORDINATOR_TYPES: PersonType[] = [
+  'Coordinator',
+  'CoordinatorDriver',
+];
+export const DRIVER_TYPES: PersonType[] = [
+  'OwnerDriver',
+  'CoordinatorDriver',
+  'Driver',
+];
 
-export const TruckTypes = [
+export const USER_ROLES = ['Admin', 'Super Admin'] as const;
+
+export const TRUCK_TYPES = [
   'Cargo van',
   'Reefer van',
   'Box truck',
@@ -32,18 +47,18 @@ export const TruckTypes = [
   'Tented box',
 ] as const;
 
-export const TruckStatuses = ['Available', 'Not Available'] as const;
+export const TRUCK_STATUSES = ['Available', 'Not Available'] as const;
 
-export const TruckCrossborders = ['Yes', 'No'] as const;
+export const TRUCK_CROSSBORDERS = ['Yes', 'No'] as const;
 
-export const TruckCertificates = [
+export const TRUCK_CERTIFICATES = [
   'Hazmat',
   'Tsa',
   'TWIC',
   'Tanker Endorsement',
 ] as const;
 
-export const TruckEquipments = [
+export const TRUCK_EQUIPMENTS = [
   'Dock height risers',
   'Air ride',
   'Lift gate',

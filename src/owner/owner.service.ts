@@ -7,8 +7,8 @@ import {
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { LoggerService } from '../logger/logger.service';
-import { MONGO_UNIQUE_INDEX_CONFLICT } from '../utils/constants';
-import { Owner, OWNER_TYPES, OwnerDocument } from './owner.schema';
+import { MONGO_UNIQUE_INDEX_CONFLICT, OWNER_TYPES } from '../utils/constants';
+import { Owner, OwnerDocument } from './owner.schema';
 import {
   CreateOwnerDto,
   OwnerQuery,
@@ -40,7 +40,7 @@ export class OwnerService {
     }
     this.log.debug(`Owner ${owner._id}`);
 
-    return owner.populate('ownTrucks');
+    return owner.populate('ownTrucks'); //.populate('coordinators').populate('drivers');
   }
 
   async findOwnerById(id: string): Promise<OwnerResultDto> {
@@ -88,7 +88,7 @@ export class OwnerService {
     if (query.direction && query.orderby) {
       options.sort = { [query.orderby]: query.direction };
     }
-    options.populate = ['ownTrucks'];
+    options.populate = ['ownTrucks', 'coordinators', 'drivers'];
     documentQuery.type = { $in: OWNER_TYPES };
     const res = await this.ownerModel.paginate(documentQuery, options);
 

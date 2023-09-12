@@ -7,8 +7,8 @@ import {
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { LoggerService } from '../logger/logger.service';
-import { MONGO_UNIQUE_INDEX_CONFLICT } from '../utils/constants';
-import { Driver, DRIVER_TYPES, DriverDocument } from './driver.schema';
+import { DRIVER_TYPES, MONGO_UNIQUE_INDEX_CONFLICT } from '../utils/constants';
+import { Driver, DriverDocument } from './driver.schema';
 import {
   CreateDriverDto,
   DriverQuery,

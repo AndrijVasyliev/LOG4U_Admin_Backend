@@ -1,18 +1,18 @@
 import * as Joi from 'joi';
 import {
   EARTH_RADIUS_MILES,
-  TruckCertificates,
-  TruckCrossborders,
-  TruckEquipments,
-  TruckStatuses,
-  TruckTypes,
+  TRUCK_CERTIFICATES,
+  TRUCK_CROSSBORDERS,
+  TRUCK_EQUIPMENTS,
+  TRUCK_STATUSES,
+  TRUCK_TYPES,
 } from '../utils/constants';
 import { MongoObjectIdValidation } from '../utils/idValidate.pipe';
 
 export const CreateTruckValidation = Joi.object({
   truckNumber: Joi.number().min(0).required(),
   status: Joi.string()
-    .valid(...TruckStatuses)
+    .valid(...TRUCK_STATUSES)
     .required(),
   lastLocation: Joi.array()
     .min(2)
@@ -23,18 +23,18 @@ export const CreateTruckValidation = Joi.object({
     )
     .optional(),
   crossborder: Joi.string()
-    .valid(...TruckCrossborders)
+    .valid(...TRUCK_CROSSBORDERS)
     .required(),
   certificate: Joi.string()
-    .valid(...TruckCertificates)
+    .valid(...TRUCK_CERTIFICATES)
     .optional(),
   type: Joi.string()
-    .valid(...TruckTypes)
+    .valid(...TRUCK_TYPES)
     .required(),
   equipment: Joi.array()
     .items(
       Joi.string()
-        .valid(...TruckEquipments)
+        .valid(...TRUCK_EQUIPMENTS)
         .required(),
     )
     .optional(),
@@ -59,7 +59,7 @@ export const CreateTruckValidation = Joi.object({
 export const UpdateTruckValidation = Joi.object({
   truckNumber: Joi.number().min(0).optional(),
   status: Joi.string()
-    .valid(...TruckStatuses)
+    .valid(...TRUCK_STATUSES)
     .optional(),
   lastLocation: Joi.array()
     .min(2)
@@ -70,18 +70,18 @@ export const UpdateTruckValidation = Joi.object({
     )
     .optional(),
   crossborder: Joi.string()
-    .valid(...TruckCrossborders)
+    .valid(...TRUCK_CROSSBORDERS)
     .optional(),
   certificate: Joi.string()
-    .valid(...TruckCertificates)
+    .valid(...TRUCK_CERTIFICATES)
     .optional(),
   type: Joi.string()
-    .valid(...TruckTypes)
+    .valid(...TRUCK_TYPES)
     .optional(),
   equipment: Joi.array()
     .items(
       Joi.string()
-        .valid(...TruckEquipments)
+        .valid(...TRUCK_EQUIPMENTS)
         .required(),
     )
     .optional(),
@@ -108,19 +108,19 @@ export const TruckQueryParamsSchema = Joi.object({
   limit: Joi.number().integer().min(1).optional(),
   truckNumber: Joi.number().min(0).optional(),
   status: Joi.string()
-    .valid(...TruckStatuses)
+    .valid(...TRUCK_STATUSES)
     .optional(),
   crossborder: Joi.string()
-    .valid(...TruckCrossborders)
+    .valid(...TRUCK_CROSSBORDERS)
     .optional(),
   certificate: Joi.string()
-    .valid(...TruckCertificates)
+    .valid(...TRUCK_CERTIFICATES)
     .optional(),
   type: Joi.string()
-    .valid(...TruckTypes)
+    .valid(...TRUCK_TYPES)
     .optional(),
   equipment: Joi.string()
-    .valid(...TruckEquipments)
+    .valid(...TRUCK_EQUIPMENTS)
     .optional(),
   grossWeight: Joi.string().optional(),
   make: Joi.string().optional(),
