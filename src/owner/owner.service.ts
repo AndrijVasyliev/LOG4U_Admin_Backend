@@ -31,16 +31,19 @@ export class OwnerService {
 
   private async findOwnerDocumentById(id: string): Promise<OwnerDocument> {
     this.log.debug(`Searching for Owner ${id}`);
-    const owner = await this.ownerModel.findOne({
-      _id: id,
-      type: { $in: OWNER_TYPES },
-    });
+    const owner = await this.ownerModel
+      .findOne({
+        _id: id,
+        type: { $in: OWNER_TYPES },
+      })
+      .populate('ownTrucks')
+      .populate('coordinators')
+      .populate('drivers');
     if (!owner) {
       throw new NotFoundException(`Owner ${id} was not found`);
     }
     this.log.debug(`Owner ${owner._id}`);
-
-    return owner.populate('ownTrucks'); //.populate('coordinators').populate('drivers');
+    return owner;
   }
 
   async findOwnerById(id: string): Promise<OwnerResultDto> {

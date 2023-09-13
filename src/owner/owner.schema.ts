@@ -118,7 +118,5 @@ OwnerSchema.virtual('drivers', {
   ref: 'Driver',
   localField: '_id',
   foreignField: 'owner',
-  options: {
-    match: { type: { $in: DRIVER_TYPES } },
-  },
+  match: { type: { $in: DRIVER_TYPES } },
 });

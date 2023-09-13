@@ -31,16 +31,17 @@ export class DriverService {
 
   private async findDriverDocumentById(id: string): Promise<DriverDocument> {
     this.log.debug(`Searching for Driver ${id}`);
-    const driver = await this.driverModel.findOne({
-      _id: id,
-      type: { $in: DRIVER_TYPES },
-    });
+    const driver = await this.driverModel
+      .findOne({
+        _id: id,
+        type: { $in: DRIVER_TYPES },
+      })
+      .populate('driveTrucks');
     if (!driver) {
       throw new NotFoundException(`Driver ${id} was not found`);
     }
     this.log.debug(`Driver ${driver._id}`);
-
-    return driver.populate('driveTrucks');
+    return driver;
   }
 
   async findDriverById(id: string): Promise<DriverResultDto> {

@@ -47,7 +47,6 @@ export class LoadService {
       throw new NotFoundException(`Load ${id} was not found`);
     }
     this.log.debug(`Load ${load._id}`);
-
     return load;
   }
 
