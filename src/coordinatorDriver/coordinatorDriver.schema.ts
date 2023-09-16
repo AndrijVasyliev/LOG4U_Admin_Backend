@@ -2,40 +2,41 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, ObjectId, Schema as MongooseSchema } from 'mongoose';
 import { LANG_PRIORITIES, OWNER_TYPES, PERSON_TYPES } from '../utils/constants';
 import { LangPriority, PersonType } from '../utils/general.dto';
-import { hash } from '../utils/hash';
 import { Owner } from '../owner/owner.schema';
 import { Truck } from '../truck/truck.schema';
+import { DriverSchema } from '../driver/driver.schema';
+import { hash } from '../utils/hash';
 
-export type DriverDocument = Driver & Document;
+export type CoordinatorDriverDocument = CoordinatorDriver & Document;
 
 @Schema({
   timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' },
   optimisticConcurrency: true,
   collection: 'persons',
 })
-export class Driver {
+export class CoordinatorDriver {
   @Prop({
     required: true,
     immutable: true,
     enum: PERSON_TYPES,
-    default: 'Driver',
+    default: 'CoordinatorDriver',
   })
   type: PersonType;
 
   @Prop({ required: true })
   fullName: string;
 
-  @Prop({ required: false })
-  birthDate?: Date;
+  @Prop({ required: true })
+  birthDate: Date;
 
-  @Prop({ required: false })
-  birthPlace?: string;
+  @Prop({ required: true })
+  birthPlace: string;
 
-  @Prop({ required: false })
-  citizenship?: string;
+  @Prop({ required: true })
+  citizenship: string;
 
-  @Prop({ required: false, enum: LANG_PRIORITIES })
-  languagePriority?: LangPriority;
+  @Prop({ required: true, enum: LANG_PRIORITIES })
+  languagePriority: LangPriority;
 
   @Prop({ required: true })
   driverLicenceType: string;
@@ -61,14 +62,29 @@ export class Driver {
   @Prop({ required: false })
   idDocExp?: Date;
 
-  @Prop({ required: false })
-  hiredBy?: string;
+  @Prop({ required: true })
+  hiredBy: string;
+
+  @Prop({ required: true })
+  hireDate: Date;
+
+  @Prop({ required: true })
+  snn: string;
 
   @Prop({ required: false })
-  hireDate?: Date;
+  company?: string;
 
-  @Prop({ required: false })
-  address?: string;
+  @Prop({ required: true })
+  insurancePolicy: string;
+
+  @Prop({ required: true })
+  insurancePolicyEFF: string;
+
+  @Prop({ required: true })
+  insurancePolicyExp: Date;
+
+  @Prop({ required: true })
+  address: string;
 
   @Prop({ required: true })
   phone: string;
@@ -76,19 +92,18 @@ export class Driver {
   @Prop({ required: false })
   phone2?: string;
 
-  @Prop({ required: false })
-  email?: string;
+  @Prop({ required: true })
+  email: string;
 
-  @Prop({ required: false })
-  emergencyContactName?: string;
+  @Prop({ required: true })
+  emergencyContactName: string;
 
   @Prop({ required: false })
   emergencyContactRel?: string;
 
-  @Prop({ required: false })
-  emergencyContactPhone?: string;
+  @Prop({ required: true })
+  emergencyContactPhone: string;
 
-  @Prop({ required: false })
   notes?: string;
 
   @Prop({ required: false })
@@ -108,6 +123,7 @@ export class Driver {
   })
   owner: Owner;
 
+  readonly coordinateTrucks?: Truck[];
   readonly driveTrucks?: Truck[];
 
   created_at: Date;
@@ -117,9 +133,16 @@ export class Driver {
   _id: ObjectId;
 }
 
-export const DriverSchema = SchemaFactory.createForClass(Driver);
+export const CoordinatorDriverSchema =
+  SchemaFactory.createForClass(CoordinatorDriver);
 
-DriverSchema.virtual('driveTrucks', {
+CoordinatorDriverSchema.virtual('coordinateTrucks', {
+  ref: 'Truck',
+  localField: '_id',
+  foreignField: 'coordinator',
+});
+
+CoordinatorDriverSchema.virtual('driveTrucks', {
   ref: 'Truck',
   localField: '_id',
   foreignField: 'driver',

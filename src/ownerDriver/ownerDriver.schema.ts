@@ -1,13 +1,30 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, ObjectId } from 'mongoose';
-import { LANG_PRIORITIES } from '../utils/constants';
+import {
+  COORDINATOR_TYPES,
+  DRIVER_TYPES,
+  LANG_PRIORITIES, PERSON_TYPES,
+} from '../utils/constants';
 import { LangPriority, PersonType } from '../utils/general.dto';
 import { hash } from '../utils/hash';
+import { Truck } from '../truck/truck.schema';
+import { Coordinator } from '../coordinator/coordinator.schema';
+import { Driver } from '../driver/driver.schema';
 
 export type OwnerDriverDocument = OwnerDriver & Document;
 
-@Schema({ optimisticConcurrency: true })
+@Schema({
+  timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' },
+  optimisticConcurrency: true,
+  collection: 'persons',
+})
 export class OwnerDriver {
+  @Prop({
+    required: true,
+    immutable: true,
+    enum: PERSON_TYPES,
+    default: 'OwnerDriver',
+  })
   type: PersonType;
 
   @Prop({ required: true })
@@ -91,7 +108,6 @@ export class OwnerDriver {
   @Prop({ required: true })
   emergencyContactPhone: string;
 
-  @Prop({ required: false })
   notes?: string;
 
   @Prop({ required: false })
@@ -103,6 +119,11 @@ export class OwnerDriver {
   })
   appPass?: string;
 
+  readonly ownTrucks?: Truck[];
+  readonly coordinators?: Coordinator[];
+  readonly drivers?: Driver[];
+  readonly driveTrucks?: Truck[];
+
   created_at: Date;
 
   updated_at: Date;
@@ -111,3 +132,29 @@ export class OwnerDriver {
 }
 
 export const OwnerDriverSchema = SchemaFactory.createForClass(OwnerDriver);
+
+OwnerDriverSchema.virtual('ownTrucks', {
+  ref: 'Truck',
+  localField: '_id',
+  foreignField: 'owner',
+});
+
+OwnerDriverSchema.virtual('coordinators', {
+  ref: 'Coordinator',
+  localField: '_id',
+  foreignField: 'owner',
+  match: { type: { $in: COORDINATOR_TYPES } },
+});
+
+OwnerDriverSchema.virtual('drivers', {
+  ref: 'Driver',
+  localField: '_id',
+  foreignField: 'owner',
+  match: { type: { $in: DRIVER_TYPES } },
+});
+
+OwnerDriverSchema.virtual('driveTrucks', {
+  ref: 'Truck',
+  localField: '_id',
+  foreignField: 'driver',
+});

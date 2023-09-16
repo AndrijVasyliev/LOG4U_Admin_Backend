@@ -7,7 +7,11 @@ import {
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { LoggerService } from '../logger/logger.service';
-import { MONGO_UNIQUE_INDEX_CONFLICT, OWNER_TYPES } from '../utils/constants';
+import {
+  COORDINATOR_TYPES,
+  MONGO_UNIQUE_INDEX_CONFLICT,
+  OWNER_TYPES,
+} from '../utils/constants';
 import { Coordinator, CoordinatorDocument } from './coordinator.schema';
 import {
   CreateCoordinatorDto,
@@ -33,7 +37,12 @@ export class CoordinatorService {
     id: string,
   ): Promise<CoordinatorDocument> {
     this.log.debug(`Searching for Coordinator ${id}`);
-    const coordinator = await this.coordinatorModel.findOne({ _id: id });
+    const coordinator = await this.coordinatorModel
+      .findOne({
+        _id: id,
+        type: { $in: COORDINATOR_TYPES },
+      })
+      .populate('coordinateTrucks');
     if (!coordinator) {
       throw new NotFoundException(`Coordinator ${id} was not found`);
     }
@@ -91,6 +100,7 @@ export class CoordinatorService {
       options.sort = { [query.orderby]: query.direction };
     }
     options.populate = ['coordinateTrucks'];
+    documentQuery.type = { $in: COORDINATOR_TYPES };
     const res = await this.coordinatorModel.paginate(documentQuery, options);
 
     return PaginatedCoordinatorResultDto.from(res);

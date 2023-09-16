@@ -1,7 +1,8 @@
 import * as Joi from 'joi';
 import { LANG_PRIORITIES } from '../utils/constants';
+import { MongoObjectIdValidation } from '../utils/idValidate.pipe';
 
-export const CreateOwnerDriverValidation = Joi.object({
+export const CreateCoordinatorDriverValidation = Joi.object({
   fullName: Joi.string().required(),
   birthDate: Joi.date().iso().required(),
   birthPlace: Joi.string().required(),
@@ -34,9 +35,10 @@ export const CreateOwnerDriverValidation = Joi.object({
   notes: Joi.string().optional(),
   appLogin: Joi.string().optional(),
   appPass: Joi.string().optional(),
+  owner: MongoObjectIdValidation.required(),
 });
 
-export const UpdateOwnerDriverValidation = Joi.object({
+export const UpdateCoordinatorDriverValidation = Joi.object({
   fullName: Joi.string().optional(),
   birthDate: Joi.date().iso().optional(),
   birthPlace: Joi.string().optional(),
@@ -69,9 +71,10 @@ export const UpdateOwnerDriverValidation = Joi.object({
   notes: Joi.string().optional(),
   appLogin: Joi.string().optional(),
   appPass: Joi.string().optional(),
+  owner: MongoObjectIdValidation.optional(),
 });
 
-export const OwnerDriverQueryParamsSchema = Joi.object({
+export const CoordinatorDriverQueryParamsSchema = Joi.object({
   offset: Joi.number().integer().min(0).optional(),
   limit: Joi.number().integer().min(1).optional(),
   fullName: Joi.string().optional(),

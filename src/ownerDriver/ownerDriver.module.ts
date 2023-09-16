@@ -3,17 +3,14 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { OwnerDriverController } from './ownerDriver.controller';
 import { OwnerDriver, OwnerDriverSchema } from './ownerDriver.schema';
 import { OwnerDriverService } from './ownerDriver.service';
-import { Person, PersonSchema } from '../person/person.schema';
+import { TruckModule } from '../truck/truck.module';
 
 @Module({
   imports: [
     MongooseModule.forFeature([
-      {
-        name: Person.name,
-        schema: PersonSchema,
-        discriminators: [{ name: OwnerDriver.name, schema: OwnerDriverSchema }],
-      },
+      { name: OwnerDriver.name, schema: OwnerDriverSchema },
     ]),
+    TruckModule,
   ],
   exports: [OwnerDriverService],
   controllers: [OwnerDriverController],

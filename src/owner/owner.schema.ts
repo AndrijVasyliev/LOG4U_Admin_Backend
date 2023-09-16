@@ -14,7 +14,6 @@ import { Coordinator } from '../coordinator/coordinator.schema';
 export type OwnerDocument = Owner & Document;
 
 @Schema({
-  discriminatorKey: 'type',
   timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' },
   optimisticConcurrency: true,
   collection: 'persons',

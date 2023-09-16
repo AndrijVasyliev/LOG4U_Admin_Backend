@@ -126,7 +126,6 @@ export class DriverResultDto {
       emergencyContactPhone: driver.emergencyContactPhone,
       notes: driver.notes,
       appLogin: driver.appLogin,
-      appPass: driver.appPass,
     };
     if (owner) {
       result = { ...result, owner };
@@ -163,7 +162,6 @@ export class DriverResultDto {
   readonly emergencyContactPhone?: string;
   readonly notes?: string;
   readonly appLogin?: string;
-  readonly appPass?: string;
   readonly owner?: OwnerResultDto;
   readonly driveTrucks?: TruckResultDto[];
 }

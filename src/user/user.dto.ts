@@ -31,7 +31,7 @@ export class UserQuerySearch {
 
 export class UserQuery extends Query<UserQuerySearch> {}
 
-export class UserResultDto extends CreateUserDto {
+export class UserResultDto {
   static fromUserModel(user: User): UserResultDto {
     return {
       id: user._id.toString(),
@@ -40,11 +40,15 @@ export class UserResultDto extends CreateUserDto {
       userRole: user.userRole,
       jobTitle: user.jobTitle,
       email: user.email,
-      password: user.password,
     };
   }
 
   readonly id: string;
+  readonly fullName: string;
+  readonly phone?: string;
+  readonly userRole: UserRole;
+  readonly jobTitle: string;
+  readonly email: string;
 }
 
 export class PaginatedUserResultDto extends PaginatedResultDto<UserResultDto> {

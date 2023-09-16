@@ -29,6 +29,8 @@ import { OwnerDriverController } from './ownerDriver/ownerDriver.controller';
 import { OwnerDriverModule } from './ownerDriver/ownerDriver.module';
 import { CoordinatorController } from './coordinator/coordinator.controller';
 import { CoordinatorModule } from './coordinator/coordinator.module';
+import { CoordinatorDriverController } from './coordinatorDriver/coordinatorDriver.controller';
+import { CoordinatorDriverModule } from './coordinatorDriver/coordinatorDriver.module';
 import { DriverController } from './driver/driver.controller';
 import { DriverModule } from './driver/driver.module';
 import { UserController } from './user/user.controller';
@@ -83,6 +85,7 @@ import { AuthModule } from './auth/auth.module';
     OwnerModule,
     OwnerDriverModule,
     CoordinatorModule,
+    CoordinatorDriverModule,
     DriverModule,
     UserModule,
     LocationModule,
@@ -102,6 +105,7 @@ export class AppModule implements NestModule {
         OwnerController,
         OwnerDriverController,
         CoordinatorController,
+        CoordinatorDriverController,
         DriverController,
         UserController,
         LocationController,
@@ -116,6 +120,7 @@ export class AppModule implements NestModule {
         OwnerController,
         OwnerDriverController,
         CoordinatorController,
+        CoordinatorDriverController,
         DriverController,
         UserController,
         LocationController,
@@ -130,6 +135,7 @@ export class AppModule implements NestModule {
         OwnerController,
         OwnerDriverController,
         CoordinatorController,
+        CoordinatorDriverController,
         DriverController,
         UserController,
         LocationController,

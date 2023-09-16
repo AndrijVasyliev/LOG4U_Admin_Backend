@@ -1,16 +1,15 @@
 import { PaginateResult } from 'mongoose';
-import { OwnerDriver } from './ownerDriver.schema';
+import { CoordinatorDriver } from './coordinatorDriver.schema';
 import {
   LangPriority,
-  Query,
   PaginatedResultDto,
   PersonType,
+  Query,
 } from '../utils/general.dto';
+import { OwnerResultDto } from '../owner/owner.dto';
 import { TruckResultDto } from '../truck/truck.dto';
-import { CoordinatorResultDto } from '../coordinator/coordinator.dto';
-import { DriverResultDto } from '../driver/driver.dto';
 
-export class CreateOwnerDriverDto {
+export class CreateCoordinatorDriverDto {
   readonly fullName: string;
   readonly birthDate: Date;
   readonly birthPlace: string;
@@ -41,9 +40,10 @@ export class CreateOwnerDriverDto {
   readonly notes?: string;
   readonly appLogin?: string;
   readonly appPass?: string;
+  readonly owner: string;
 }
 
-export class UpdateOwnerDriverDto {
+export class UpdateCoordinatorDriverDto {
   readonly fullName?: string;
   readonly birthDate?: Date;
   readonly birthPlace?: string;
@@ -74,9 +74,10 @@ export class UpdateOwnerDriverDto {
   readonly notes?: string;
   readonly appLogin?: string;
   readonly appPass?: string;
+  readonly owner?: string;
 }
 
-export class OwnerDriverQuerySearch {
+export class CoordinatorDriverQuerySearch {
   readonly fullName?: string;
   readonly birthPlace?: string;
   readonly citizenship?: string;
@@ -103,75 +104,65 @@ export class OwnerDriverQuerySearch {
   readonly truckNumber?: number;
 }
 
-export class OwnerDriverQuery extends Query<OwnerDriverQuerySearch> {}
+export class CoordinatorDriverQuery extends Query<CoordinatorDriverQuerySearch> {}
 
-export class OwnerDriverResultDto {
-  static fromOwnerDriverModel(ownerDriver: OwnerDriver): OwnerDriverResultDto {
-    const ownTrucks =
-      ownerDriver.ownTrucks &&
-      ownerDriver.ownTrucks.length > 0 &&
-      ownerDriver.ownTrucks.map((truck) =>
+export class CoordinatorDriverResultDto {
+  static fromCoordinatorDriverModel(
+    coordinatorDriver: CoordinatorDriver,
+  ): CoordinatorDriverResultDto {
+    const owner =
+      coordinatorDriver.owner &&
+      OwnerResultDto.fromOwnerModel(coordinatorDriver.owner);
+    const coordinateTrucks =
+      coordinatorDriver.coordinateTrucks &&
+      coordinatorDriver.coordinateTrucks.length > 0 &&
+      coordinatorDriver.coordinateTrucks.map((truck) =>
         TruckResultDto.fromTruckModel(truck),
-      );
-    const coordinators =
-      ownerDriver.coordinators &&
-      ownerDriver.coordinators.length > 0 &&
-      ownerDriver.coordinators.map((coordinator) =>
-        CoordinatorResultDto.fromCoordinatorModel(coordinator),
-      );
-    const drivers =
-      ownerDriver.drivers &&
-      ownerDriver.drivers.length > 0 &&
-      ownerDriver.drivers.map((driver) =>
-        DriverResultDto.fromDriverModel(driver),
       );
     const driveTrucks =
-      ownerDriver.driveTrucks &&
-      ownerDriver.driveTrucks.length > 0 &&
-      ownerDriver.driveTrucks.map((truck) =>
+      coordinatorDriver.driveTrucks &&
+      coordinatorDriver.driveTrucks.length > 0 &&
+      coordinatorDriver.driveTrucks.map((truck) =>
         TruckResultDto.fromTruckModel(truck),
       );
-    let result: OwnerDriverResultDto = {
-      id: ownerDriver._id.toString(),
-      type: ownerDriver.type,
-      fullName: ownerDriver.fullName,
-      birthDate: ownerDriver.birthDate,
-      birthPlace: ownerDriver.birthPlace,
-      citizenship: ownerDriver.citizenship,
-      languagePriority: ownerDriver.languagePriority,
-      driverLicenceType: ownerDriver.driverLicenceType,
-      driverLicenceNumber: ownerDriver.driverLicenceNumber,
-      driverLicenceState: ownerDriver.driverLicenceState,
-      driverLicenceClass: ownerDriver.driverLicenceClass,
-      driverLicenceExp: ownerDriver.driverLicenceExp,
-      idDocId: ownerDriver.idDocId,
-      idDocType: ownerDriver.idDocType,
-      idDocExp: ownerDriver.idDocExp,
-      hiredBy: ownerDriver.hiredBy,
-      hireDate: ownerDriver.hireDate,
-      snn: ownerDriver.snn,
-      company: ownerDriver.company,
-      insurancePolicy: ownerDriver.insurancePolicy,
-      insurancePolicyEFF: ownerDriver.insurancePolicyEFF,
-      insurancePolicyExp: ownerDriver.insurancePolicyExp,
-      address: ownerDriver.address,
-      phone: ownerDriver.phone,
-      phone2: ownerDriver.phone2,
-      email: ownerDriver.email,
-      emergencyContactName: ownerDriver.emergencyContactName,
-      emergencyContactRel: ownerDriver.emergencyContactRel,
-      emergencyContactPhone: ownerDriver.emergencyContactPhone,
-      notes: ownerDriver.notes,
-      appLogin: ownerDriver.appLogin,
+    let result: CoordinatorDriverResultDto = {
+      id: coordinatorDriver._id.toString(),
+      type: coordinatorDriver.type,
+      fullName: coordinatorDriver.fullName,
+      birthDate: coordinatorDriver.birthDate,
+      birthPlace: coordinatorDriver.birthPlace,
+      citizenship: coordinatorDriver.citizenship,
+      languagePriority: coordinatorDriver.languagePriority,
+      driverLicenceType: coordinatorDriver.driverLicenceType,
+      driverLicenceNumber: coordinatorDriver.driverLicenceNumber,
+      driverLicenceState: coordinatorDriver.driverLicenceState,
+      driverLicenceClass: coordinatorDriver.driverLicenceClass,
+      driverLicenceExp: coordinatorDriver.driverLicenceExp,
+      idDocId: coordinatorDriver.idDocId,
+      idDocType: coordinatorDriver.idDocType,
+      idDocExp: coordinatorDriver.idDocExp,
+      hiredBy: coordinatorDriver.hiredBy,
+      hireDate: coordinatorDriver.hireDate,
+      snn: coordinatorDriver.snn,
+      company: coordinatorDriver.company,
+      insurancePolicy: coordinatorDriver.insurancePolicy,
+      insurancePolicyEFF: coordinatorDriver.insurancePolicyEFF,
+      insurancePolicyExp: coordinatorDriver.insurancePolicyExp,
+      address: coordinatorDriver.address,
+      phone: coordinatorDriver.phone,
+      phone2: coordinatorDriver.phone2,
+      email: coordinatorDriver.email,
+      emergencyContactName: coordinatorDriver.emergencyContactName,
+      emergencyContactRel: coordinatorDriver.emergencyContactRel,
+      emergencyContactPhone: coordinatorDriver.emergencyContactPhone,
+      notes: coordinatorDriver.notes,
+      appLogin: coordinatorDriver.appLogin,
     };
-    if (ownTrucks) {
-      result = { ...result, ownTrucks };
+    if (owner) {
+      result = { ...result, owner };
     }
-    if (coordinators) {
-      result = { ...result, coordinators };
-    }
-    if (drivers) {
-      result = { ...result, drivers };
+    if (coordinateTrucks) {
+      result = { ...result, coordinateTrucks };
     }
     if (driveTrucks) {
       result = { ...result, driveTrucks };
@@ -210,23 +201,24 @@ export class OwnerDriverResultDto {
   readonly emergencyContactPhone: string;
   readonly notes?: string;
   readonly appLogin?: string;
-  readonly ownTrucks?: TruckResultDto[];
-  readonly coordinators?: CoordinatorResultDto[];
-  readonly drivers?: DriverResultDto[];
+  readonly owner?: OwnerResultDto;
+  readonly coordinateTrucks?: TruckResultDto[];
   readonly driveTrucks?: TruckResultDto[];
 }
 
-export class PaginatedOwnerDriverResultDto extends PaginatedResultDto<OwnerDriverResultDto> {
+export class PaginatedCoordinatorDriverResultDto extends PaginatedResultDto<CoordinatorDriverResultDto> {
   static from(
-    paginatedOwnerDrivers: PaginateResult<OwnerDriver>,
-  ): PaginatedOwnerDriverResultDto {
+    paginatedCoordinatorDrivers: PaginateResult<CoordinatorDriver>,
+  ): PaginatedCoordinatorDriverResultDto {
     return {
-      items: paginatedOwnerDrivers.docs.map((owner) =>
-        OwnerDriverResultDto.fromOwnerDriverModel(owner),
+      items: paginatedCoordinatorDrivers.docs.map((coordinatorDriver) =>
+        CoordinatorDriverResultDto.fromCoordinatorDriverModel(
+          coordinatorDriver,
+        ),
       ),
-      offset: paginatedOwnerDrivers.offset,
-      limit: paginatedOwnerDrivers.limit,
-      total: paginatedOwnerDrivers.totalDocs,
+      offset: paginatedCoordinatorDrivers.offset,
+      limit: paginatedCoordinatorDrivers.limit,
+      total: paginatedCoordinatorDrivers.totalDocs,
     };
   }
 }

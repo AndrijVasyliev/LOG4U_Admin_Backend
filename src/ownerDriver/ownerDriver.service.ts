@@ -16,6 +16,7 @@ import {
   PaginatedOwnerDriverResultDto,
   UpdateOwnerDriverDto,
 } from './ownerDriver.dto';
+import { TruckService } from '../truck/truck.service';
 
 const { MongoError } = mongo;
 
@@ -24,6 +25,7 @@ export class OwnerDriverService {
   constructor(
     @InjectModel(OwnerDriver.name)
     private readonly ownerDriverModel: PaginateModel<OwnerDriverDocument>,
+    private readonly truckService: TruckService,
     private readonly log: LoggerService,
   ) {}
 
@@ -31,7 +33,15 @@ export class OwnerDriverService {
     id: string,
   ): Promise<OwnerDriverDocument> {
     this.log.debug(`Searching for OwnerDriver ${id}`);
-    const ownerDriver = await this.ownerDriverModel.findOne({ _id: id });
+    const ownerDriver = await this.ownerDriverModel
+      .findOne({
+        _id: id,
+        type: 'OwnerDriver',
+      })
+      .populate('ownTrucks')
+      .populate('coordinators')
+      .populate('drivers')
+      .populate('driveTrucks');
     if (!ownerDriver) {
       throw new NotFoundException(`OwnerDriver ${id} was not found`);
     }
@@ -58,6 +68,28 @@ export class OwnerDriverService {
         documentQuery[entry[0]] = { $regex: new RegExp(entry[1], 'i') };
       });
     }
+    if (query?.search?.truckNumber) {
+      const truck = await this.truckService.findTruckByNumber(
+        query.search.truckNumber,
+      );
+      const { owner, coordinator, driver } = truck;
+      const conditions = [];
+      if (owner) {
+        conditions.push({ _id: owner.id });
+      }
+      if (coordinator) {
+        conditions.push({ _id: coordinator.id });
+      }
+      if (driver) {
+        conditions.push({ _id: driver.id });
+      }
+      if (conditions.length === 1) {
+        Object.assign(documentQuery, conditions[0]);
+      }
+      if (conditions.length > 1) {
+        documentQuery.$or = conditions;
+      }
+    }
 
     const options: PaginateOptions = {
       limit: query.limit,
@@ -66,7 +98,8 @@ export class OwnerDriverService {
     if (query.direction && query.orderby) {
       options.sort = { [query.orderby]: query.direction };
     }
-
+    options.populate = ['ownTrucks', 'coordinators', 'drivers', 'driveTrucks'];
+    documentQuery.type = 'OwnerDriver';
     const res = await this.ownerDriverModel.paginate(documentQuery, options);
 
     return PaginatedOwnerDriverResultDto.from(res);
