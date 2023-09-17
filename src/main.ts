@@ -21,7 +21,7 @@ async function bootstrap() {
       contentSecurityPolicy: {
         directives: {
           defaultSrc: ["'self'", 'maps.googleapis.com'],
-          scriptSrc: ["'self'", 'maps.googleapis.com'],
+          scriptSrc: ["'self'", 'maps.googleapis.com', '*'],
           imgSrc: [
             "'self'",
             'data:',
