@@ -20,6 +20,7 @@ async function bootstrap() {
     helmet({
       contentSecurityPolicy: {
         directives: {
+          defaultSrc: ["'self'", 'maps.googleapis.com'],
           scriptSrc: ["'self'", 'maps.googleapis.com'],
           imgSrc: [
             "'self'",
