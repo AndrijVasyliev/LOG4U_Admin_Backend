@@ -16,7 +16,22 @@ async function bootstrap() {
 
   const port = configService.get<number>('app.port') as number;
 
-  app.use(helmet());
+  app.use(
+    helmet({
+      contentSecurityPolicy: {
+        directives: {
+          scriptSrc: ['self', 'maps.googleapis.com'],
+          imgSrc: [
+            'self',
+            'data:',
+            'maps.gstatic.com',
+            '*.googleapis.com',
+            '*.ggpht.com',
+          ],
+        },
+      },
+    }),
+  );
   app.use(compression());
   app.enableShutdownHooks();
 
