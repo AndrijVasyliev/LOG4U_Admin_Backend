@@ -1371,7 +1371,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{origin}}/truck?lastLocation=50.484278,30.335073&distance=55",
+							"raw": "{{origin}}/truck",
 							"host": [
 								"{{origin}}"
 							],
@@ -1399,6 +1399,11 @@
 									"key": "direction",
 									"value": "asc",
 									"description": "asc or desc",
+									"disabled": true
+								},
+								{
+									"key": "search",
+									"value": null,
 									"disabled": true
 								},
 								{
@@ -1469,12 +1474,14 @@
 								{
 									"key": "lastLocation",
 									"value": "50.484278,30.335073",
-									"description": "Latitude, Longitude"
+									"description": "Latitude, Longitude",
+									"disabled": true
 								},
 								{
 									"key": "distance",
 									"value": "55",
-									"description": "miles"
+									"description": "miles",
+									"disabled": true
 								}
 							]
 						}
@@ -1852,6 +1859,11 @@
 									"description": "asc or desc"
 								},
 								{
+									"key": "search",
+									"value": null,
+									"disabled": true
+								},
+								{
 									"key": "fullName",
 									"value": "Ivo",
 									"disabled": true
@@ -1863,12 +1875,12 @@
 								},
 								{
 									"key": "userRole",
-									"value": null,
+									"value": "",
 									"disabled": true
 								},
 								{
 									"key": "jobTitle",
-									"value": null,
+									"value": "",
 									"disabled": true
 								},
 								{

@@ -21,6 +21,7 @@ export class UpdateUserDto {
 }
 
 export class UserQuerySearch {
+  readonly search?: string;
   readonly fullName?: string;
   readonly phone?: string;
   readonly userRole?: UserRole;

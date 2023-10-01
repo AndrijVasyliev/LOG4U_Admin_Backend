@@ -26,6 +26,7 @@ export const UpdateUserValidation = Joi.object({
 export const UserQueryParamsSchema = Joi.object({
   offset: Joi.number().integer().min(0).optional(),
   limit: Joi.number().integer().min(1).optional(),
+  search: Joi.string().optional(),
   fullName: Joi.string().optional(),
   phone: Joi.string().optional(),
   userRole: Joi.string()

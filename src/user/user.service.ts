@@ -70,6 +70,12 @@ export class UserService {
         documentQuery[entry[0]] = { $regex: new RegExp(entry[1], 'i') };
       });
     }
+    if (query?.search?.search) {
+      const search = query?.search?.search;
+      documentQuery.$or = [{ fullName: { $regex: new RegExp(search, 'i') } }];
+      documentQuery.$or = [{ phone: { $regex: new RegExp(search, 'i') } }];
+      documentQuery.$or = [{ email: { $regex: new RegExp(search, 'i') } }];
+    }
 
     const options: PaginateOptions = {
       limit: query.limit,

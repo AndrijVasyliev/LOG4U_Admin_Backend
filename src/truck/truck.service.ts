@@ -99,6 +99,14 @@ export class TruckService {
         $eq: query.search.truckNumber,
       };
     }
+    if (query?.search?.search) {
+      const search = query?.search?.search;
+      documentQuery.$or = [{ truckNumber: { $eq: search } }];
+      documentQuery.$or = [{ vinCode: { $regex: new RegExp(search, 'i') } }];
+      documentQuery.$or = [
+        { licencePlate: { $regex: new RegExp(search, 'i') } },
+      ];
+    }
 
     const options: PaginateOptions = {
       limit: query.limit,

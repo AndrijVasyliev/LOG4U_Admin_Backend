@@ -71,6 +71,7 @@ export class UpdateTruckDto {
 }
 
 export class TruckQuerySearch {
+  readonly search?: string;
   readonly truckNumber?: number;
   readonly status?: TruckStatus;
   readonly lastLocation?: [number, number];

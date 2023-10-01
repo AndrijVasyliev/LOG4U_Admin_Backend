@@ -106,6 +106,7 @@ export const UpdateTruckValidation = Joi.object({
 export const TruckQueryParamsSchema = Joi.object({
   offset: Joi.number().integer().min(0).optional(),
   limit: Joi.number().integer().min(1).optional(),
+  search: Joi.string().optional(),
   truckNumber: Joi.number().min(0).optional(),
   status: Joi.string()
     .valid(...TRUCK_STATUSES)
