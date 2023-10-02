@@ -101,11 +101,13 @@ export class TruckService {
     }
     if (query?.search?.search) {
       const search = query?.search?.search;
-      documentQuery.$or = [{ truckNumber: { $eq: search } }];
-      documentQuery.$or = [{ vinCode: { $regex: new RegExp(search, 'i') } }];
       documentQuery.$or = [
+        { vinCode: { $regex: new RegExp(search, 'i') } },
         { licencePlate: { $regex: new RegExp(search, 'i') } },
       ];
+      if (Number.isFinite(+search) && !Number.isNaN(+search)) {
+        documentQuery.$or.push({ truckNumber: { $eq: +search } });
+      }
     }
 
     const options: PaginateOptions = {

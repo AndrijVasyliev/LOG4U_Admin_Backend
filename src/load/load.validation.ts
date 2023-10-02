@@ -6,7 +6,7 @@ export const CreateLoadValidation = Joi.object({
   pick: MongoObjectIdValidation.required(),
   pickDate: Joi.date().iso().required(),
   deliver: MongoObjectIdValidation.required(),
-  deliverDate: Joi.date().iso().min(Joi.ref('pickDate')).optional(),
+  deliverDate: Joi.date().iso().min(Joi.ref('pickDate')).required(),
   weight: Joi.string().required(),
   truckType: Joi.array()
     .min(1)
@@ -17,9 +17,9 @@ export const CreateLoadValidation = Joi.object({
     )
     .required(),
   rate: Joi.number().min(0).optional(),
-  bookedByUser: MongoObjectIdValidation.required(),
+  bookedByUser: Joi.alternatives(null, MongoObjectIdValidation).optional(),
   bookedByCompany: Joi.string().optional(),
-  dispatchers: Joi.array().items(MongoObjectIdValidation.required()).optional(),
+  dispatchers: Joi.array().items(MongoObjectIdValidation.optional()).optional(),
   checkInAs: Joi.string().optional(),
   truck: MongoObjectIdValidation.optional(),
 });
@@ -43,9 +43,9 @@ export const UpdateLoadValidation = Joi.object({
     )
     .optional(),
   rate: Joi.number().min(0).optional(),
-  bookedByUser: MongoObjectIdValidation.optional(),
+  bookedByUser: Joi.alternatives(null, MongoObjectIdValidation).optional(),
   bookedByCompany: Joi.string().optional(),
-  dispatchers: Joi.array().items(MongoObjectIdValidation.required()).optional(),
+  dispatchers: Joi.array().items(MongoObjectIdValidation.optional()).optional(),
   checkInAs: Joi.string().optional(),
   truck: Joi.alternatives(null, MongoObjectIdValidation).optional(),
 });
