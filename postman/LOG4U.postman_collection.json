@@ -43,6 +43,11 @@
 									"description": "asc or desc"
 								},
 								{
+									"key": "search",
+									"value": null,
+									"disabled": true
+								},
+								{
 									"key": "fullName",
 									"value": "Ivo",
 									"disabled": true
@@ -298,6 +303,11 @@
 									"description": "asc or desc"
 								},
 								{
+									"key": "search",
+									"value": null,
+									"disabled": true
+								},
+								{
 									"key": "fullName",
 									"value": "Ivo",
 									"disabled": true
@@ -319,32 +329,32 @@
 								},
 								{
 									"key": "driverLicenceType",
-									"value": null,
+									"value": "",
 									"disabled": true
 								},
 								{
 									"key": "driverLicenceNumber",
-									"value": null,
+									"value": "",
 									"disabled": true
 								},
 								{
 									"key": "driverLicenceState",
-									"value": null,
+									"value": "",
 									"disabled": true
 								},
 								{
 									"key": "driverLicenceClass",
-									"value": null,
+									"value": "",
 									"disabled": true
 								},
 								{
 									"key": "idDocId",
-									"value": null,
+									"value": "",
 									"disabled": true
 								},
 								{
 									"key": "idDocType",
-									"value": null,
+									"value": "",
 									"disabled": true
 								},
 								{
@@ -409,7 +419,7 @@
 								},
 								{
 									"key": "appLogin",
-									"value": null,
+									"value": "",
 									"disabled": true
 								}
 							]
@@ -581,6 +591,11 @@
 									"key": "direction",
 									"value": "asc",
 									"description": "asc or desc"
+								},
+								{
+									"key": "search",
+									"value": null,
+									"disabled": true
 								},
 								{
 									"key": "fullName",
@@ -836,6 +851,11 @@
 									"key": "direction",
 									"value": "asc",
 									"description": "asc or desc"
+								},
+								{
+									"key": "search",
+									"value": null,
+									"disabled": true
 								},
 								{
 									"key": "fullName",
@@ -1126,6 +1146,11 @@
 									"key": "direction",
 									"value": "asc",
 									"description": "asc or desc"
+								},
+								{
+									"key": "search",
+									"value": null,
+									"disabled": true
 								},
 								{
 									"key": "fullName",

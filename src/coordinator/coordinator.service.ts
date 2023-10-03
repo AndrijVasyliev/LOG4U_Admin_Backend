@@ -91,6 +91,16 @@ export class CoordinatorService {
         documentQuery.$or = conditions;
       }
     }
+    if (query?.search?.search) {
+      const search = query?.search?.search;
+      documentQuery.$or = [
+        ...(documentQuery.$or ? documentQuery.$or : []),
+        { fullName: { $regex: new RegExp(search, 'i') } },
+        { phone: { $regex: new RegExp(search, 'i') } },
+        { phone2: { $regex: new RegExp(search, 'i') } },
+        { email: { $regex: new RegExp(search, 'i') } },
+      ];
+    }
 
     const options: PaginateOptions = {
       limit: query.limit,

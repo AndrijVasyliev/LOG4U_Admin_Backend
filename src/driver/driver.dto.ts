@@ -68,6 +68,7 @@ export class UpdateDriverDto {
 }
 
 export class DriverQuerySearch {
+  readonly search?: string;
   readonly fullName?: string;
   readonly birthPlace?: string;
   readonly citizenship?: string;

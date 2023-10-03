@@ -77,6 +77,7 @@ export class UpdateOwnerDriverDto {
 }
 
 export class OwnerDriverQuerySearch {
+  readonly search?: string;
   readonly fullName?: string;
   readonly birthPlace?: string;
   readonly citizenship?: string;

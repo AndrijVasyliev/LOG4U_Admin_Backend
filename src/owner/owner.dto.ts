@@ -57,6 +57,7 @@ export class UpdateOwnerDto {
 }
 
 export class OwnerQuerySearch {
+  readonly search?: string;
   readonly fullName?: string;
   readonly birthPlace?: string;
   readonly citizenship?: string;

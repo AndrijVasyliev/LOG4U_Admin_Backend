@@ -58,6 +58,7 @@ export class UpdateCoordinatorDto {
 }
 
 export class CoordinatorQuerySearch {
+  readonly search?: string;
   readonly fullName?: string;
   readonly birthPlace?: string;
   readonly citizenship?: string;

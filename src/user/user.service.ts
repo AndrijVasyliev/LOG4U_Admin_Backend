@@ -72,9 +72,11 @@ export class UserService {
     }
     if (query?.search?.search) {
       const search = query?.search?.search;
-      documentQuery.$or = [{ fullName: { $regex: new RegExp(search, 'i') } }];
-      documentQuery.$or = [{ phone: { $regex: new RegExp(search, 'i') } }];
-      documentQuery.$or = [{ email: { $regex: new RegExp(search, 'i') } }];
+      documentQuery.$or = [
+        { fullName: { $regex: new RegExp(search, 'i') } },
+        { phone: { $regex: new RegExp(search, 'i') } },
+        { email: { $regex: new RegExp(search, 'i') } },
+      ];
     }
 
     const options: PaginateOptions = {

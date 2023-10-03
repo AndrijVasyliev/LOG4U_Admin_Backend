@@ -106,6 +106,7 @@ export class LocationService {
     if (query?.search?.searchState) {
       const searchState = query?.search?.searchState;
       documentQuery.$or = [
+        ...(documentQuery.$or ? documentQuery.$or : []),
         { stateCode: { $regex: new RegExp(searchState, 'i') } },
         { stateName: { $regex: new RegExp(searchState, 'i') } },
       ];

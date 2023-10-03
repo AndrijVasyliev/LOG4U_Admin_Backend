@@ -67,6 +67,7 @@ export const UpdateDriverValidation = Joi.object({
 export const DriverQueryParamsSchema = Joi.object({
   offset: Joi.number().integer().min(0).optional(),
   limit: Joi.number().integer().min(1).optional(),
+  search: Joi.string().optional(),
   fullName: Joi.string().optional(),
   birthPlace: Joi.string().optional(),
   citizenship: Joi.string().optional(),

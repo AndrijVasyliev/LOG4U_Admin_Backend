@@ -78,6 +78,7 @@ export class UpdateCoordinatorDriverDto {
 }
 
 export class CoordinatorDriverQuerySearch {
+  readonly search?: string;
   readonly fullName?: string;
   readonly birthPlace?: string;
   readonly citizenship?: string;
