@@ -102,6 +102,7 @@ export class OwnerDriverQuerySearch {
   readonly emergencyContactPhone?: string;
   readonly appLogin?: string;
   readonly truckNumber?: number;
+  readonly owner?: string;
 }
 
 export class OwnerDriverQuery extends Query<OwnerDriverQuerySearch> {}

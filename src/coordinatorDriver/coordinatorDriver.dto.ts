@@ -103,6 +103,7 @@ export class CoordinatorDriverQuerySearch {
   readonly emergencyContactPhone?: string;
   readonly appLogin?: string;
   readonly truckNumber?: number;
+  readonly owner?: string;
 }
 
 export class CoordinatorDriverQuery extends Query<CoordinatorDriverQuerySearch> {}

@@ -90,6 +90,7 @@ export const DriverQueryParamsSchema = Joi.object({
   emergencyContactPhone: Joi.string().optional(),
   appLogin: Joi.string().optional(),
   truckNumber: Joi.number().optional(),
+  owner: Joi.string().optional(),
 })
   .keys({
     orderby: Joi.string().valid(

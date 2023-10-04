@@ -76,6 +76,7 @@ export class CoordinatorQuerySearch {
   readonly emergencyContactRel?: string;
   readonly emergencyContactPhone?: string;
   readonly truckNumber?: number;
+  readonly owner?: string;
 }
 
 export class CoordinatorQuery extends Query<CoordinatorQuerySearch> {}

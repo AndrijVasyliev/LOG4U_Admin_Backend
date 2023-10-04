@@ -73,8 +73,15 @@ export class CoordinatorDriverService {
     if (query.search) {
       const searchParams = Object.entries(query.search);
       searchParams.forEach((entry) => {
-        documentQuery[entry[0]] = { $regex: new RegExp(entry[1], 'i') };
+        entry[0] !== 'owner' &&
+          entry[0] !== 'truckNumber' &&
+          (documentQuery[entry[0]] = { $regex: new RegExp(entry[1], 'i') });
       });
+    }
+    if (query?.search?.owner) {
+      documentQuery.owner = {
+        $eq: query.search.owner,
+      };
     }
     if (query?.search?.truckNumber) {
       const truck = await this.truckService.findTruckByNumber(

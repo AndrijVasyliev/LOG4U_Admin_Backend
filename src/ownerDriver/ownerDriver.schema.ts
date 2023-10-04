@@ -1,15 +1,18 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document, ObjectId } from 'mongoose';
+import { Document, ObjectId, Schema as MongooseSchema } from 'mongoose';
 import {
   COORDINATOR_TYPES,
   DRIVER_TYPES,
-  LANG_PRIORITIES, PERSON_TYPES,
+  LANG_PRIORITIES,
+  OWNER_TYPES,
+  PERSON_TYPES,
 } from '../utils/constants';
 import { LangPriority, PersonType } from '../utils/general.dto';
 import { hash } from '../utils/hash';
 import { Truck } from '../truck/truck.schema';
 import { Coordinator } from '../coordinator/coordinator.schema';
 import { Driver } from '../driver/driver.schema';
+import { Owner } from '../owner/owner.schema';
 
 export type OwnerDriverDocument = OwnerDriver & Document;
 
@@ -118,6 +121,15 @@ export class OwnerDriver {
     set: hash,
   })
   appPass?: string;
+
+  @Prop({
+    required: true,
+    immutable: true,
+    type: MongooseSchema.Types.ObjectId,
+    ref: 'Owner',
+    autopopulate: false, // { match: { type: { $in: OWNER_TYPES } } },
+  })
+  owner: Owner;
 
   readonly ownTrucks?: Truck[];
   readonly coordinators?: Coordinator[];

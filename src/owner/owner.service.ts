@@ -58,7 +58,8 @@ export class OwnerService {
     if (query.search) {
       const searchParams = Object.entries(query.search);
       searchParams.forEach((entry) => {
-        documentQuery[entry[0]] = { $regex: new RegExp(entry[1], 'i') };
+        entry[0] !== 'truckNumber' &&
+          (documentQuery[entry[0]] = { $regex: new RegExp(entry[1], 'i') });
       });
     }
     if (query?.search?.truckNumber) {
