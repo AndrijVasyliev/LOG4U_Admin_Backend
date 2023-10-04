@@ -52,8 +52,8 @@ export const CreateTruckValidation = Joi.object({
   doorDims: Joi.string().required(),
   validDims: Joi.string().required(),
   owner: MongoObjectIdValidation.required(),
-  coordinator: MongoObjectIdValidation.optional(),
-  driver: MongoObjectIdValidation.optional(),
+  coordinator: Joi.alternatives(null, MongoObjectIdValidation).optional(),
+  driver: Joi.alternatives(null, MongoObjectIdValidation).optional(),
 });
 
 export const UpdateTruckValidation = Joi.object({
