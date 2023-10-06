@@ -16,7 +16,10 @@ import {
   UpdateLoadDto,
 } from './load.dto';
 import { LoggerService } from '../logger/logger.service';
-import { MONGO_UNIQUE_INDEX_CONFLICT } from '../utils/constants';
+import {
+  MONGO_UNIQUE_INDEX_CONFLICT,
+  UNIQUE_CONSTRAIN_ERROR,
+} from '../utils/constants';
 import { TruckService } from '../truck/truck.service';
 import { GoogleGeoApiService } from '../googleGeoApi/googleGeoApi.service';
 
@@ -121,7 +124,7 @@ export class LoadService {
         throw new InternalServerErrorException(JSON.stringify(e));
       }
       if (e instanceof MongoError && e.code === MONGO_UNIQUE_INDEX_CONFLICT) {
-        throw new ConflictException(e.message);
+        throw new ConflictException({ type: UNIQUE_CONSTRAIN_ERROR, e });
       }
       throw new InternalServerErrorException(e.message);
     }
@@ -149,6 +152,9 @@ export class LoadService {
     } catch (e) {
       if (!(e instanceof Error)) {
         throw new InternalServerErrorException(JSON.stringify(e));
+      }
+      if (e instanceof MongoError && e.code === MONGO_UNIQUE_INDEX_CONFLICT) {
+        throw new ConflictException({ type: UNIQUE_CONSTRAIN_ERROR, e });
       }
       throw new InternalServerErrorException(e.message);
     }

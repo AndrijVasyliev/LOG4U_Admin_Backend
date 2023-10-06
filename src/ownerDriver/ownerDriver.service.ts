@@ -7,7 +7,10 @@ import {
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { LoggerService } from '../logger/logger.service';
-import { MONGO_UNIQUE_INDEX_CONFLICT } from '../utils/constants';
+import {
+  MONGO_UNIQUE_INDEX_CONFLICT,
+  UNIQUE_CONSTRAIN_ERROR,
+} from '../utils/constants';
 import { OwnerDriver, OwnerDriverDocument } from './ownerDriver.schema';
 import {
   CreateOwnerDriverDto,
@@ -140,7 +143,7 @@ export class OwnerDriverService {
         throw new InternalServerErrorException(JSON.stringify(e));
       }
       if (e instanceof MongoError && e.code === MONGO_UNIQUE_INDEX_CONFLICT) {
-        throw new ConflictException(e.message);
+        throw new ConflictException({ type: UNIQUE_CONSTRAIN_ERROR, e });
       }
       throw new InternalServerErrorException(e.message);
     }
@@ -163,6 +166,9 @@ export class OwnerDriverService {
     } catch (e) {
       if (!(e instanceof Error)) {
         throw new InternalServerErrorException(JSON.stringify(e));
+      }
+      if (e instanceof MongoError && e.code === MONGO_UNIQUE_INDEX_CONFLICT) {
+        throw new ConflictException({ type: UNIQUE_CONSTRAIN_ERROR, e });
       }
       throw new InternalServerErrorException(e.message);
     }

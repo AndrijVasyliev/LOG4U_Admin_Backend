@@ -7,7 +7,11 @@ import {
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { LoggerService } from '../logger/logger.service';
-import { MONGO_UNIQUE_INDEX_CONFLICT, OWNER_TYPES } from '../utils/constants';
+import {
+  MONGO_UNIQUE_INDEX_CONFLICT,
+  OWNER_TYPES,
+  UNIQUE_CONSTRAIN_ERROR,
+} from '../utils/constants';
 import {
   CoordinatorDriver,
   CoordinatorDriverDocument,
@@ -160,7 +164,7 @@ export class CoordinatorDriverService {
         throw new InternalServerErrorException(JSON.stringify(e));
       }
       if (e instanceof MongoError && e.code === MONGO_UNIQUE_INDEX_CONFLICT) {
-        throw new ConflictException(e.message);
+        throw new ConflictException({ type: UNIQUE_CONSTRAIN_ERROR, e });
       }
       throw new InternalServerErrorException(e.message);
     }
@@ -189,6 +193,9 @@ export class CoordinatorDriverService {
     } catch (e) {
       if (!(e instanceof Error)) {
         throw new InternalServerErrorException(JSON.stringify(e));
+      }
+      if (e instanceof MongoError && e.code === MONGO_UNIQUE_INDEX_CONFLICT) {
+        throw new ConflictException({ type: UNIQUE_CONSTRAIN_ERROR, e });
       }
       throw new InternalServerErrorException(e.message);
     }

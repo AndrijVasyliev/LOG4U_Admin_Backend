@@ -5,6 +5,7 @@ import {
   BadRequestException,
 } from '@nestjs/common';
 import { ObjectSchema, ArraySchema } from 'joi';
+import { BODY_VALIDATION_ERROR } from './constants';
 
 @Injectable()
 export class BodyValidationPipe implements PipeTransform {
@@ -18,11 +19,7 @@ export class BodyValidationPipe implements PipeTransform {
       abortEarly: false,
     });
     if (error) {
-      throw new BadRequestException(
-        `Body validation failed: ${error.message}, ${JSON.stringify(
-          error.details,
-        )}`,
-      );
+      throw new BadRequestException({ type: BODY_VALIDATION_ERROR, error });
     }
     return transformedValue;
   }

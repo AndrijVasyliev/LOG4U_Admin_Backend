@@ -10,6 +10,7 @@ import { LoggerService } from '../logger/logger.service';
 import {
   EARTH_RADIUS_MILES,
   MONGO_UNIQUE_INDEX_CONFLICT,
+  UNIQUE_CONSTRAIN_ERROR,
 } from '../utils/constants';
 import { Location, LocationDocument } from './location.schema';
 import {
@@ -30,7 +31,9 @@ export class LocationService {
     private readonly log: LoggerService,
   ) {}
 
-  private async findLocationDocumentById(id: string): Promise<LocationDocument> {
+  private async findLocationDocumentById(
+    id: string,
+  ): Promise<LocationDocument> {
     this.log.debug(`Searching for Location ${id}`);
     const location = await this.locationModel.findOne({ _id: id });
     if (!location) {
@@ -143,7 +146,7 @@ export class LocationService {
         throw new InternalServerErrorException(JSON.stringify(e));
       }
       if (e instanceof MongoError && e.code === MONGO_UNIQUE_INDEX_CONFLICT) {
-        throw new ConflictException(e.message);
+        throw new ConflictException({ type: UNIQUE_CONSTRAIN_ERROR, e });
       }
       throw new InternalServerErrorException(e.message);
     }
@@ -164,6 +167,9 @@ export class LocationService {
     } catch (e) {
       if (!(e instanceof Error)) {
         throw new InternalServerErrorException(JSON.stringify(e));
+      }
+      if (e instanceof MongoError && e.code === MONGO_UNIQUE_INDEX_CONFLICT) {
+        throw new ConflictException({ type: UNIQUE_CONSTRAIN_ERROR, e });
       }
       throw new InternalServerErrorException(e.message);
     }

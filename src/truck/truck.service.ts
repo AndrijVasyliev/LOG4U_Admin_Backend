@@ -1,4 +1,4 @@
-import { mongo, ObjectId, PaginateModel, PaginateOptions } from 'mongoose';
+import { mongo, PaginateModel, PaginateOptions } from 'mongoose';
 import {
   ConflictException,
   Injectable,
@@ -10,6 +10,7 @@ import { LoggerService } from '../logger/logger.service';
 import {
   EARTH_RADIUS_MILES,
   MONGO_UNIQUE_INDEX_CONFLICT,
+  UNIQUE_CONSTRAIN_ERROR,
 } from '../utils/constants';
 import { calcDistance } from '../utils/haversine.distance';
 import { Truck, TruckDocument } from './truck.schema';
@@ -175,7 +176,7 @@ export class TruckService {
         throw new InternalServerErrorException(JSON.stringify(e));
       }
       if (e instanceof MongoError && e.code === MONGO_UNIQUE_INDEX_CONFLICT) {
-        throw new ConflictException(e.message);
+        throw new ConflictException({ type: UNIQUE_CONSTRAIN_ERROR, e });
       }
       throw new InternalServerErrorException(e.message);
     }
@@ -210,6 +211,9 @@ export class TruckService {
     } catch (e) {
       if (!(e instanceof Error)) {
         throw new InternalServerErrorException(JSON.stringify(e));
+      }
+      if (e instanceof MongoError && e.code === MONGO_UNIQUE_INDEX_CONFLICT) {
+        throw new ConflictException({ type: UNIQUE_CONSTRAIN_ERROR, e });
       }
       throw new InternalServerErrorException(e.message);
     }

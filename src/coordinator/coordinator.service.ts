@@ -11,6 +11,7 @@ import {
   COORDINATOR_TYPES,
   MONGO_UNIQUE_INDEX_CONFLICT,
   OWNER_TYPES,
+  UNIQUE_CONSTRAIN_ERROR,
 } from '../utils/constants';
 import { Coordinator, CoordinatorDocument } from './coordinator.schema';
 import {
@@ -144,7 +145,7 @@ export class CoordinatorService {
         throw new InternalServerErrorException(JSON.stringify(e));
       }
       if (e instanceof MongoError && e.code === MONGO_UNIQUE_INDEX_CONFLICT) {
-        throw new ConflictException(e.message);
+        throw new ConflictException({ type: UNIQUE_CONSTRAIN_ERROR, e });
       }
       throw new InternalServerErrorException(e.message);
     }
@@ -171,6 +172,9 @@ export class CoordinatorService {
     } catch (e) {
       if (!(e instanceof Error)) {
         throw new InternalServerErrorException(JSON.stringify(e));
+      }
+      if (e instanceof MongoError && e.code === MONGO_UNIQUE_INDEX_CONFLICT) {
+        throw new ConflictException({ type: UNIQUE_CONSTRAIN_ERROR, e });
       }
       throw new InternalServerErrorException(e.message);
     }

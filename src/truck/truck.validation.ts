@@ -82,7 +82,7 @@ export const UpdateTruckValidation = Joi.object({
     .items(
       Joi.string()
         .valid(...TRUCK_EQUIPMENTS)
-        .required(),
+        .optional(),
     )
     .optional(),
   payload: Joi.number().integer().optional(),
