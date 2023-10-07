@@ -111,6 +111,7 @@ export class OwnerDriver {
   @Prop({ required: true })
   emergencyContactPhone: string;
 
+  @Prop({ required: false })
   notes?: string;
 
   @Prop({ required: false })

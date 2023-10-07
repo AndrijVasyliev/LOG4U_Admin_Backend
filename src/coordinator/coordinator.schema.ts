@@ -78,6 +78,7 @@ export class Coordinator {
   @Prop({ required: true })
   emergencyContactPhone: string;
 
+  @Prop({ required: false })
   notes?: string;
 
   @Prop({
