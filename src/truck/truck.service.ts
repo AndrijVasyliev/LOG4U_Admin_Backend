@@ -107,7 +107,14 @@ export class TruckService {
         { licencePlate: { $regex: new RegExp(search, 'i') } },
       ];
       if (Number.isFinite(+search) && !Number.isNaN(+search)) {
-        documentQuery.$or.push({ truckNumber: { $eq: +search } });
+        documentQuery.$or.push({
+          $expr: {
+            $regexMatch: {
+              input: { $toString: '$truckNumber' },
+              regex: new RegExp(search, 'i'),
+            },
+          },
+        });
       }
     }
 

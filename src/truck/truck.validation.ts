@@ -50,7 +50,6 @@ export const CreateTruckValidation = Joi.object({
   plateExpires: Joi.date().iso().required(),
   insideDims: Joi.string().required(),
   doorDims: Joi.string().required(),
-  validDims: Joi.string().required(),
   owner: MongoObjectIdValidation.required(),
   coordinator: Joi.alternatives(null, MongoObjectIdValidation).optional(),
   driver: Joi.alternatives(null, MongoObjectIdValidation).optional(),
@@ -97,7 +96,6 @@ export const UpdateTruckValidation = Joi.object({
   plateExpires: Joi.date().iso().optional(),
   insideDims: Joi.string().optional(),
   doorDims: Joi.string().optional(),
-  validDims: Joi.string().optional(),
   owner: MongoObjectIdValidation.optional(),
   coordinator: Joi.alternatives(null, MongoObjectIdValidation).optional(),
   driver: Joi.alternatives(null, MongoObjectIdValidation).optional(),
@@ -150,7 +148,6 @@ export const TruckQueryParamsSchema = Joi.object({
       'plateExpires',
       'insideDims',
       'doorDims',
-      'validDims',
     ),
     direction: Joi.string().valid('asc', 'desc'),
   })

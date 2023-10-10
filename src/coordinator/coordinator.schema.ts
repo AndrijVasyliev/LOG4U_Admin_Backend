@@ -69,13 +69,13 @@ export class Coordinator {
   @Prop({ required: true })
   email: string;
 
-  @Prop({ required: true })
+  @Prop({ required: false })
   emergencyContactName: string;
 
   @Prop({ required: false })
   emergencyContactRel?: string;
 
-  @Prop({ required: true })
+  @Prop({ required: false })
   emergencyContactPhone: string;
 
   @Prop({ required: false })

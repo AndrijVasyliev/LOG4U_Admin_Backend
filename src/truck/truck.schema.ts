@@ -120,9 +120,6 @@ export class Truck {
   @Prop({ required: true })
   doorDims: string;
 
-  @Prop({ required: true })
-  validDims: string;
-
   @Prop({
     required: true,
     type: MongooseSchema.Types.ObjectId,

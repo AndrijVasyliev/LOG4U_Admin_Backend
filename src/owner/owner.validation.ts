@@ -20,9 +20,9 @@ export const CreateOwnerValidation = Joi.object({
   phone: Joi.string().required(),
   phone2: Joi.string().optional(),
   email: Joi.string().required(),
-  emergencyContactName: Joi.string().required(),
+  emergencyContactName: Joi.string().optional(),
   emergencyContactRel: Joi.string().optional(),
-  emergencyContactPhone: Joi.string().required(),
+  emergencyContactPhone: Joi.string().optional(),
   notes: Joi.string().optional(),
 });
 

@@ -36,7 +36,6 @@ export class CreateTruckDto {
   readonly plateExpires: Date;
   readonly insideDims: string;
   readonly doorDims: string;
-  readonly validDims: string;
   readonly owner: string;
   readonly coordinator?: string;
   readonly driver?: string;
@@ -64,7 +63,6 @@ export class UpdateTruckDto {
   readonly plateExpires?: Date;
   readonly insideDims?: string;
   readonly doorDims?: string;
-  readonly validDims?: string;
   readonly owner?: string;
   readonly coordinator?: string;
   readonly driver?: string;
@@ -127,7 +125,6 @@ export class TruckResultDto {
       plateExpires: truck.plateExpires,
       insideDims: truck.insideDims,
       doorDims: truck.doorDims,
-      validDims: truck.validDims,
     };
     if (lastCity) {
       result = { ...result, lastCity };
@@ -174,7 +171,6 @@ export class TruckResultDto {
   readonly plateExpires: Date;
   readonly insideDims: string;
   readonly doorDims: string;
-  readonly validDims: string;
   readonly owner?: OwnerResultDto;
   readonly coordinator?: CoordinatorResultDto;
   readonly driver?: DriverResultDto;
