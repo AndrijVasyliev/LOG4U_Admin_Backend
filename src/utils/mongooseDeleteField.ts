@@ -6,7 +6,7 @@ export function DeleteField(schema: MongooseSchema, opts?: any): void {
     // @ts-ignore
     const schema = this.constructor.schema;
     schema.eachPath((pathname: string, schematype: SchemaType) => {
-      if (schematype?.options?.ref) {
+      if (schematype?.options?.ref && schematype?.options?.required === false) {
         // eslint-disable-next-line @typescript-eslint/no-this-alias
         const document = this;
         const value = document.get(pathname);
