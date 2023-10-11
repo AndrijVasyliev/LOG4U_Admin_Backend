@@ -8,6 +8,7 @@ import { ServeStaticModule } from '@nestjs/serve-static';
 import { Connection, Schema as MongooseSchema } from 'mongoose';
 import * as mongoosePaginate from 'mongoose-paginate-v2';
 import * as mongooseAutopopulate from 'mongoose-autopopulate';
+import { DeleteField } from './utils/mongooseDeleteField';
 import { join } from 'path';
 
 import { AppController } from './app.controller';
@@ -64,12 +65,14 @@ import { AuthModule } from './auth/auth.module';
         return {
           uri: configService.get<string>('db.uri'),
           connectionFactory: (connection: Connection): Connection => {
-            connection.plugin(mongoosePaginate);
-            connection.plugin(
-              mongooseAutopopulate as unknown as (
-                schema: MongooseSchema,
-              ) => void,
-            );
+            connection
+              .plugin(mongoosePaginate)
+              .plugin(
+                mongooseAutopopulate as unknown as (
+                  schema: MongooseSchema,
+                ) => void,
+              )
+              .plugin(DeleteField);
             return connection;
           },
         };
