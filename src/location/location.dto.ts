@@ -1,6 +1,68 @@
 import { PaginateResult } from 'mongoose';
-import { Location } from './location.schema';
+import { GeoLocation, GeometryLocation, Location } from './location.schema';
 import { Query, PaginatedResultDto } from '../utils/general.dto';
+
+export class AddressLocation {
+  short_name: string;
+  long_name: string;
+  postcode_localities?: string[];
+  types: string[];
+}
+
+export class GeoCode {
+  compound_code: string;
+  global_code: string;
+}
+
+export class LatLng {
+  lat: number;
+  lng: number;
+}
+
+export class GeometryLocationDto {
+  static fromGeometryLocationModel(
+    geometryLocation: GeometryLocation,
+  ): GeometryLocationDto {
+    return {
+      location: geometryLocation.location,
+      location_type: geometryLocation.location_type,
+      viewport: geometryLocation.viewport,
+      bounds: geometryLocation.bounds,
+    };
+  }
+
+  location: LatLng;
+  location_type?: string;
+  viewport?: object;
+  bounds?: object;
+}
+
+export class GeoLocationDto {
+  static fromGeoLocationModel(geoLocation: GeoLocation): GeoLocation {
+    const geometry =
+      geoLocation.geometry &&
+      GeometryLocationDto.fromGeometryLocationModel(geoLocation.geometry);
+    return {
+      types: geoLocation.types,
+      formatted_address: geoLocation.formatted_address,
+      address_components: geoLocation.address_components,
+      partial_match: geoLocation.partial_match,
+      place_id: geoLocation.place_id,
+      plus_code: geoLocation.plus_code,
+      postcode_localities: geoLocation.postcode_localities,
+      geometry,
+    };
+  }
+
+  types?: string[];
+  formatted_address: string;
+  address_components?: AddressLocation[];
+  partial_match?: boolean;
+  place_id?: string;
+  plus_code?: GeoCode;
+  postcode_localities?: string[];
+  geometry: GeometryLocationDto;
+}
 
 export class CreateLocationDto {
   readonly zipCode: string;

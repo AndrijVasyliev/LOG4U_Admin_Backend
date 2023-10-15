@@ -1,16 +1,16 @@
 import { PaginateResult } from 'mongoose';
 import { Load } from './load.schema';
 import { PaginatedResultDto, Query, TruckType } from '../utils/general.dto';
-import { LocationResultDto } from '../location/location.dto';
+import { GeoLocationDto, LocationResultDto } from '../location/location.dto';
 import { calcDistance } from '../utils/haversine.distance';
 import { UserResultDto } from '../user/user.dto';
 import { TruckResultDto } from '../truck/truck.dto';
 
 export class CreateLoadDto {
   readonly loadNumber: number;
-  readonly pick: string;
+  readonly pick: GeoLocationDto;
   readonly pickDate: Date;
-  readonly deliver: string;
+  readonly deliver: GeoLocationDto;
   readonly deliverDate?: Date;
   readonly weight: string;
   readonly truckType: TruckType[];
@@ -23,9 +23,9 @@ export class CreateLoadDto {
 }
 
 export class UpdateLoadDto {
-  readonly pick?: string;
+  readonly pick?: GeoLocationDto;
   readonly pickDate?: Date;
-  readonly deliver?: string;
+  readonly deliver?: GeoLocationDto;
   readonly deliverDate?: Date;
   readonly weight?: string;
   readonly truckType?: TruckType[];
@@ -50,9 +50,15 @@ export class LoadQuery extends Query<LoadQuerySearch> {}
 
 export class LoadResultDto {
   static fromLoadModel(load: Load): LoadResultDto {
-    const pick = load.pick && LocationResultDto.fromLocationModel(load.pick);
+    const pick = load.pick && GeoLocationDto.fromGeoLocationModel(load.pick);
+    const pickLocation =
+      load.pickLocation &&
+      LocationResultDto.fromLocationModel(load.pickLocation);
     const deliver =
-      load.deliver && LocationResultDto.fromLocationModel(load.deliver);
+      load.deliver && GeoLocationDto.fromGeoLocationModel(load.deliver);
+    const deliverLocation =
+      load.deliverLocation &&
+      LocationResultDto.fromLocationModel(load.deliverLocation);
     const bookedByUser =
       load.bookedByUser && UserResultDto.fromUserModel(load.bookedByUser);
     const dispatchers =
@@ -67,14 +73,19 @@ export class LoadResultDto {
       id: load._id.toString(),
       loadNumber: load.loadNumber,
       pick,
+      pickLocation,
       pickDate: load.pickDate,
       deliver,
+      deliverLocation,
       deliverDate: load.deliverDate,
       milesByRoads: load.miles,
       milesHaversine:
-        pick?.location &&
-        deliver?.location &&
-        calcDistance(pick?.location, deliver?.location),
+        pick?.geometry?.location &&
+        deliver?.geometry?.location &&
+        calcDistance(
+          [pick?.geometry?.location?.lng, pick?.geometry?.location?.lat],
+          [deliver?.geometry?.location?.lng, deliver?.geometry?.location?.lat],
+        ),
       weight: load.weight,
       truckType: load.truckType,
       rate: load.rate,
@@ -95,9 +106,11 @@ export class LoadResultDto {
 
   readonly id: string;
   readonly loadNumber: number;
-  readonly pick?: LocationResultDto;
+  readonly pick?: GeoLocationDto;
+  readonly pickLocation?: LocationResultDto;
   readonly pickDate?: Date;
-  readonly deliver?: LocationResultDto;
+  readonly deliver?: GeoLocationDto;
+  readonly deliverLocation?: LocationResultDto;
   readonly deliverDate?: Date;
   readonly milesByRoads?: number;
   readonly milesHaversine?: number;

@@ -1,5 +1,11 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document, ObjectId } from 'mongoose';
+import { Document, ObjectId, Schema as MongooseSchema } from 'mongoose';
+import {
+  GeoCode,
+  AddressLocation,
+  GeometryLocationDto,
+  LatLng,
+} from './location.dto';
 import { GeoPointType } from '../utils/general.dto';
 
 export type LocationDocument = Location & Document;
@@ -17,6 +23,76 @@ export class GeoPoint {
 }
 
 export const GeoPointSchema = SchemaFactory.createForClass(GeoPoint);
+
+@Schema({
+  _id: false,
+  timestamps: false,
+})
+export class GeometryLocation {
+  @Prop({
+    required: true,
+    type: GeoPointSchema,
+    set: (point: LatLng): GeoPointType => {
+      return {
+        type: 'Point',
+        coordinates: [point.lng, point.lat],
+      };
+    },
+    get: (point: GeoPointType): LatLng => {
+      return { lat: point.coordinates[1], lng: point.coordinates[0] };
+    },
+  })
+  location: LatLng;
+
+  @Prop({ required: false })
+  location_type?: string;
+
+  @Prop({ required: false, type: MongooseSchema.Types.Mixed })
+  viewport?: object;
+
+  @Prop({ required: false, type: MongooseSchema.Types.Mixed })
+  bounds?: object;
+}
+
+export const GeometryLocationSchema =
+  SchemaFactory.createForClass(GeometryLocation);
+
+GeometryLocationSchema.index({ location: '2dsphere' });
+
+@Schema({
+  _id: false,
+  timestamps: false,
+})
+export class GeoLocation {
+  @Prop({ required: false })
+  types?: string[];
+
+  @Prop({ required: true })
+  formatted_address: string;
+
+  @Prop({ required: false })
+  address_components?: AddressLocation[];
+
+  @Prop({ required: false })
+  partial_match?: boolean;
+
+  @Prop({ required: false })
+  place_id?: string;
+
+  @Prop({ required: false })
+  plus_code?: GeoCode;
+
+  @Prop({ required: false })
+  postcode_localities?: string[];
+
+  @Prop({
+    required: true,
+    type: GeometryLocationSchema,
+  })
+  geometry: GeometryLocationDto;
+}
+
+export const GeoLocationSchema = SchemaFactory.createForClass(GeoLocation);
 
 @Schema({
   timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' },

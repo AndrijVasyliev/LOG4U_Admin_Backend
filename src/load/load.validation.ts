@@ -1,11 +1,12 @@
 import * as Joi from 'joi';
 import { TRUCK_TYPES } from '../utils/constants';
 import { MongoObjectIdValidation } from '../utils/idValidate.pipe';
+import { GeoLocation } from '../location/location.validation';
 
 export const CreateLoadValidation = Joi.object({
-  pick: MongoObjectIdValidation.required(),
+  pick: GeoLocation.required(),
   pickDate: Joi.date().iso().required(),
-  deliver: MongoObjectIdValidation.required(),
+  deliver: GeoLocation.required(),
   deliverDate: Joi.date().iso().min(Joi.ref('pickDate')).required(),
   weight: Joi.string().required(),
   truckType: Joi.array()
@@ -18,16 +19,16 @@ export const CreateLoadValidation = Joi.object({
     .required(),
   rate: Joi.number().min(0).optional(),
   bookedByUser: Joi.alternatives(null, MongoObjectIdValidation).optional(),
-  bookedByCompany: Joi.string().optional(),
+  bookedByCompany: Joi.string().allow('').optional(),
   dispatchers: Joi.array().items(MongoObjectIdValidation.optional()).optional(),
-  checkInAs: Joi.string().optional(),
-  truck: MongoObjectIdValidation.optional(),
+  checkInAs: Joi.string().allow('').optional(),
+  truck: Joi.alternatives(null, MongoObjectIdValidation).optional(),
 });
 
 export const UpdateLoadValidation = Joi.object({
-  pick: MongoObjectIdValidation.optional(),
+  pick: GeoLocation.optional(),
   pickDate: Joi.date().iso().optional(),
-  deliver: MongoObjectIdValidation.optional(),
+  deliver: GeoLocation.optional(),
   deliverDate: Joi.when('pickDate', {
     is: Joi.exist(),
     then: Joi.date().iso().min(Joi.ref('pickDate')),
@@ -44,9 +45,9 @@ export const UpdateLoadValidation = Joi.object({
     .optional(),
   rate: Joi.number().min(0).optional(),
   bookedByUser: Joi.alternatives(null, MongoObjectIdValidation).optional(),
-  bookedByCompany: Joi.string().optional(),
+  bookedByCompany: Joi.string().allow('').optional(),
   dispatchers: Joi.array().items(MongoObjectIdValidation.optional()).optional(),
-  checkInAs: Joi.string().optional(),
+  checkInAs: Joi.string().allow('').optional(),
   truck: Joi.alternatives(null, MongoObjectIdValidation).optional(),
 });
 

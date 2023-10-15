@@ -2,9 +2,10 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, ObjectId, Schema as MongooseSchema } from 'mongoose';
 import { DEFAULT_CHECK_IN_AS, TRUCK_TYPES } from '../utils/constants';
 import { TruckType } from '../utils/general.dto';
-import { Location } from '../location/location.schema';
+import { GeoLocationSchema, Location } from '../location/location.schema';
 import { User } from '../user/user.schema';
 import { Truck } from '../truck/truck.schema';
+import { GeoLocationDto } from '../location/location.dto';
 
 export type LoadDocument = Load & Document;
 
@@ -23,22 +24,34 @@ export class Load {
 
   @Prop({
     required: true,
+    type: GeoLocationSchema,
+  })
+  pick: GeoLocationDto;
+
+  @Prop({
+    required: false,
     type: MongooseSchema.Types.ObjectId,
     ref: 'Location',
     autopopulate: true,
   })
-  pick: Location;
+  pickLocation?: Location;
 
   @Prop({ required: true })
   pickDate: Date;
 
   @Prop({
     required: true,
+    type: GeoLocationSchema,
+  })
+  deliver: GeoLocationDto;
+
+  @Prop({
+    required: false,
     type: MongooseSchema.Types.ObjectId,
     ref: 'Location',
     autopopulate: true,
   })
-  deliver: Location;
+  deliverLocation?: Location;
 
   @Prop({ required: false })
   deliverDate?: Date;

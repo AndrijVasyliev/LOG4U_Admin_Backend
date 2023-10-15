@@ -1,6 +1,35 @@
 import * as Joi from 'joi';
 import { EARTH_RADIUS_MILES } from '../utils/constants';
 
+export const GeoLocation = Joi.object({
+  types: Joi.array().items(Joi.string()),
+  formatted_address: Joi.string().required(),
+  address_components: Joi.array().items(
+    Joi.object({
+      short_name: Joi.string(),
+      long_name: Joi.string(),
+      postcode_localities: Joi.array().items(Joi.string()),
+      types: Joi.array().items(Joi.string()),
+    }),
+  ),
+  partial_match: Joi.boolean(),
+  place_id: Joi.string(),
+  plus_code: Joi.object({
+    compound_code: Joi.string(),
+    global_code: Joi.string(),
+  }),
+  postcode_localities: Joi.array().items(Joi.string()),
+  geometry: Joi.object({
+    location: Joi.object({
+      lat: Joi.number().min(-90).max(90).required(),
+      lng: Joi.number().min(-180).max(180).required(),
+    }).required(),
+    location_type: Joi.string(),
+    viewport: Joi.object(),
+    bounds: Joi.object(),
+  }).required(),
+});
+
 export const CreateLocationValidation = Joi.object({
   zipCode: Joi.string().required(),
   name: Joi.string().required(),

@@ -21,6 +21,7 @@ import {
   UNIQUE_CONSTRAIN_ERROR,
 } from '../utils/constants';
 import { TruckService } from '../truck/truck.service';
+import { LocationService } from '../location/location.service';
 import { GoogleGeoApiService } from '../googleGeoApi/googleGeoApi.service';
 
 const { MongoError } = mongo;
@@ -33,6 +34,7 @@ export class LoadService {
     @InjectModel(Load.name)
     private readonly loadModel: PaginateModel<LoadDocument>,
     private readonly truckService: TruckService,
+    private readonly locationService: LocationService,
     private readonly geoApiService: GoogleGeoApiService,
     private configService: ConfigService,
     private readonly log: LoggerService,
@@ -97,11 +99,33 @@ export class LoadService {
 
   async createLoad(createLoadDto: CreateLoadDto): Promise<LoadResultDto> {
     this.log.debug(`Creating new Load: ${JSON.stringify(createLoadDto)}`);
+    const [pickLocationResult, deliverLocationResult] =
+      await Promise.allSettled([
+        createLoadDto?.pick?.geometry?.location &&
+          this.locationService.findNearestLocation([
+            createLoadDto.pick.geometry.location.lng,
+            createLoadDto.pick.geometry.location.lat,
+          ]),
+        createLoadDto?.deliver?.geometry?.location &&
+          this.locationService.findNearestLocation([
+            createLoadDto.deliver.geometry.location.lng,
+            createLoadDto.deliver.geometry.location.lat,
+          ]),
+      ]);
+
     const lastLoadNumber = await this.loadModel
       .findOne({}, { loadNumber: 1 }, { sort: { loadNumber: -1 } })
       .lean();
     const createdLoad = new this.loadModel({
       ...createLoadDto,
+      pickLocation:
+        pickLocationResult.status === 'fulfilled'
+          ? pickLocationResult.value.id
+          : undefined,
+      deliverLocation:
+        deliverLocationResult.status === 'fulfilled'
+          ? deliverLocationResult.value.id
+          : undefined,
       loadNumber: lastLoadNumber?.loadNumber
         ? lastLoadNumber.loadNumber + 1
         : 1,
@@ -110,10 +134,16 @@ export class LoadService {
     try {
       this.log.debug('Saving Load');
       let load = await createdLoad.save();
-      this.log.debug('Calculatind distance');
+      this.log.debug('Calculating distance');
       const miles = await this.geoApiService.getDistance(
-        load?.pick?.location,
-        load?.deliver?.location,
+        [
+          load.get('pick.geometry.location')?.lng,
+          load.get('pick.geometry.location')?.lat,
+        ],
+        [
+          load.get('deliver.geometry.location')?.lng,
+          load.get('deliver.geometry.location')?.lat,
+        ],
       );
       this.log.debug(`Updating Load: miles ${miles}`);
       load = await createdLoad.set('miles', miles).save();
@@ -140,10 +170,16 @@ export class LoadService {
     try {
       this.log.debug('Saving Load');
       load = await load.save();
-      this.log.debug('Calculatind distance');
+      this.log.debug('Calculating distance');
       const miles = await this.geoApiService.getDistance(
-        load?.pick?.location,
-        load?.deliver?.location,
+        [
+          load.get('pick.geometry.location')?.lng,
+          load.get('pick.geometry.location')?.lat,
+        ],
+        [
+          load.get('deliver.geometry.location')?.lng,
+          load.get('deliver.geometry.location')?.lat,
+        ],
       );
       this.log.debug(`Updating Load: miles ${miles}`);
       load = await load.set('miles', miles).save();

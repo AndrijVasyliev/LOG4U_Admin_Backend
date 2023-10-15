@@ -3,7 +3,7 @@ import { USER_ROLES } from '../utils/constants';
 
 export const CreateUserValidation = Joi.object({
   fullName: Joi.string().required(),
-  phone: Joi.string().optional(),
+  phone: Joi.string().allow('').optional(),
   userRole: Joi.string()
     .valid(...USER_ROLES)
     .required(),
@@ -14,7 +14,7 @@ export const CreateUserValidation = Joi.object({
 
 export const UpdateUserValidation = Joi.object({
   fullName: Joi.string().optional(),
-  phone: Joi.string().optional(),
+  phone: Joi.string().allow('').optional(),
   userRole: Joi.string()
     .valid(...USER_ROLES)
     .optional(),
