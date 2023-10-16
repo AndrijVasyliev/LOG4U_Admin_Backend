@@ -103,13 +103,13 @@ export class LoadService {
       await Promise.allSettled([
         createLoadDto?.pick?.geometry?.location &&
           this.locationService.findNearestLocation([
-            createLoadDto.pick.geometry.location.lng,
             createLoadDto.pick.geometry.location.lat,
+            createLoadDto.pick.geometry.location.lng,
           ]),
         createLoadDto?.deliver?.geometry?.location &&
           this.locationService.findNearestLocation([
-            createLoadDto.deliver.geometry.location.lng,
             createLoadDto.deliver.geometry.location.lat,
+            createLoadDto.deliver.geometry.location.lng,
           ]),
       ]);
 
@@ -120,11 +120,11 @@ export class LoadService {
       ...createLoadDto,
       pickLocation:
         pickLocationResult.status === 'fulfilled'
-          ? pickLocationResult.value.id
+          ? pickLocationResult.value?.id
           : undefined,
       deliverLocation:
         deliverLocationResult.status === 'fulfilled'
-          ? deliverLocationResult.value.id
+          ? deliverLocationResult.value?.id
           : undefined,
       loadNumber: lastLoadNumber?.loadNumber
         ? lastLoadNumber.loadNumber + 1
@@ -137,12 +137,12 @@ export class LoadService {
       this.log.debug('Calculating distance');
       const miles = await this.geoApiService.getDistance(
         [
-          load.get('pick.geometry.location')?.lng,
           load.get('pick.geometry.location')?.lat,
+          load.get('pick.geometry.location')?.lng,
         ],
         [
-          load.get('deliver.geometry.location')?.lng,
           load.get('deliver.geometry.location')?.lat,
+          load.get('deliver.geometry.location')?.lng,
         ],
       );
       this.log.debug(`Updating Load: miles ${miles}`);
@@ -165,20 +165,43 @@ export class LoadService {
     updateLoadDto: UpdateLoadDto,
   ): Promise<LoadResultDto> {
     let load = await this.findLoadDocumentById(id);
+    const [pickLocationResult, deliverLocationResult] =
+      await Promise.allSettled([
+        updateLoadDto?.pick?.geometry?.location &&
+          this.locationService.findNearestLocation([
+            updateLoadDto.pick.geometry.location.lat,
+            updateLoadDto.pick.geometry.location.lng,
+          ]),
+        updateLoadDto?.deliver?.geometry?.location &&
+          this.locationService.findNearestLocation([
+            updateLoadDto.deliver.geometry.location.lat,
+            updateLoadDto.deliver.geometry.location.lng,
+          ]),
+      ]);
     this.log.debug(`Setting new values: ${JSON.stringify(updateLoadDto)}`);
-    Object.assign(load, updateLoadDto);
+    Object.assign(load, {
+      ...updateLoadDto,
+      pickLocation:
+        pickLocationResult.status === 'fulfilled'
+          ? pickLocationResult.value?.id
+          : undefined,
+      deliverLocation:
+        deliverLocationResult.status === 'fulfilled'
+          ? deliverLocationResult.value?.id
+          : undefined,
+    });
     try {
       this.log.debug('Saving Load');
       load = await load.save();
       this.log.debug('Calculating distance');
       const miles = await this.geoApiService.getDistance(
         [
-          load.get('pick.geometry.location')?.lng,
           load.get('pick.geometry.location')?.lat,
+          load.get('pick.geometry.location')?.lng,
         ],
         [
-          load.get('deliver.geometry.location')?.lng,
           load.get('deliver.geometry.location')?.lat,
+          load.get('deliver.geometry.location')?.lng,
         ],
       );
       this.log.debug(`Updating Load: miles ${miles}`);

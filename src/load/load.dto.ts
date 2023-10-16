@@ -83,8 +83,8 @@ export class LoadResultDto {
         pick?.geometry?.location &&
         deliver?.geometry?.location &&
         calcDistance(
-          [pick?.geometry?.location?.lng, pick?.geometry?.location?.lat],
-          [deliver?.geometry?.location?.lng, deliver?.geometry?.location?.lat],
+          [pick?.geometry?.location?.lat, pick?.geometry?.location?.lng],
+          [deliver?.geometry?.location?.lat, deliver?.geometry?.location?.lng],
         ),
       weight: load.weight,
       truckType: load.truckType,
