@@ -1,10 +1,9 @@
 {
 	"info": {
-		"_postman_id": "f34e8807-244d-4dd1-a9eb-0156c42c6df7",
+		"_postman_id": "4f03b237-9f95-47dc-a31d-965c4f2119e5",
 		"name": "LOG4U",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "19519023",
-		"_collection_link": "https://gold-trinity-573225.postman.co/workspace/API-Collections~c6f6860b-9b45-4dd9-9df8-8acc84dec6b2/collection/19519023-f34e8807-244d-4dd1-a9eb-0156c42c6df7?action=share&source=collection_link&creator=19519023"
+		"_exporter_id": "10622264"
 	},
 	"item": [
 		{
@@ -1872,6 +1871,24 @@
 			"name": "User",
 			"item": [
 				{
+					"name": "Auth",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{origin}}/user/auth",
+							"host": [
+								"{{origin}}"
+							],
+							"path": [
+								"user",
+								"auth"
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "List Users",
 					"request": {
 						"method": "GET",
@@ -2311,8 +2328,136 @@
 			]
 		},
 		{
+			"name": "Mobile",
+			"item": [
+				{
+					"name": "Auth",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{origin}}/mobileApp/auth",
+							"host": [
+								"{{origin}}"
+							],
+							"path": [
+								"mobileApp",
+								"auth"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "List Loads",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{origin}}/mobileApp/getLoad?limit=15&offset=0",
+							"host": [
+								"{{origin}}"
+							],
+							"path": [
+								"mobileApp",
+								"getLoad"
+							],
+							"query": [
+								{
+									"key": "limit",
+									"value": "15"
+								},
+								{
+									"key": "offset",
+									"value": "0"
+								},
+								{
+									"key": "orderby",
+									"value": "loadNumber",
+									"description": "'loadNumber','pickDate','deliverDate','weight','rate','bookedByCompany','checkInAs'",
+									"disabled": true
+								},
+								{
+									"key": "direction",
+									"value": "desc",
+									"description": "asc or desc",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Truck Location",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"lastLocation\":[33.0219,-117.2735]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{origin}}/mobileApp/updateLocation",
+							"host": [
+								"{{origin}}"
+							],
+							"path": [
+								"mobileApp",
+								"updateLocation"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"auth": {
+				"type": "basic",
+				"basic": [
+					{
+						"key": "password",
+						"value": "SuperPass",
+						"type": "string"
+					},
+					{
+						"key": "username",
+						"value": "MegoMan",
+						"type": "string"
+					}
+				]
+			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
 			"name": "Get Status",
 			"request": {
+				"auth": {
+					"type": "noauth"
+				},
 				"method": "GET",
 				"header": [],
 				"url": {
@@ -2330,6 +2475,9 @@
 		{
 			"name": "Get Health",
 			"request": {
+				"auth": {
+					"type": "noauth"
+				},
 				"method": "GET",
 				"header": [],
 				"url": {
@@ -2347,6 +2495,9 @@
 		{
 			"name": "Readiness",
 			"request": {
+				"auth": {
+					"type": "noauth"
+				},
 				"method": "GET",
 				"header": [],
 				"url": {
@@ -2364,6 +2515,9 @@
 		{
 			"name": "Liveness",
 			"request": {
+				"auth": {
+					"type": "noauth"
+				},
 				"method": "GET",
 				"header": [],
 				"url": {
@@ -2381,6 +2535,9 @@
 		{
 			"name": "Metrics",
 			"request": {
+				"auth": {
+					"type": "noauth"
+				},
 				"method": "GET",
 				"header": [],
 				"url": {
@@ -2390,6 +2547,26 @@
 					],
 					"path": [
 						"metrics"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Main",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{origin}}/main",
+					"host": [
+						"{{origin}}"
+					],
+					"path": [
+						"main"
 					]
 				}
 			},
@@ -2435,13 +2612,13 @@
 		{
 			"key": "origin",
 			"value": "http://localhost:8181",
-			"type": "string",
-			"disabled": true
+			"type": "string"
 		},
 		{
 			"key": "origin",
 			"value": "https://admin-test-lt5d.onrender.com",
-			"type": "string"
+			"type": "string",
+			"disabled": true
 		}
 	]
 }

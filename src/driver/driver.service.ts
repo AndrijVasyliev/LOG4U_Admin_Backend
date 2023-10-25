@@ -48,6 +48,26 @@ export class DriverService {
     return driver;
   }
 
+  async getDriverByCredentials(
+    username: string,
+    password: string,
+  ): Promise<DriverResultDto | null> {
+    this.log.debug(`Searching for Driver by App credentials ${username}`);
+    const driver = await this.driverModel
+      .findOne({
+        appLogin: username,
+        appPass: password,
+        type: { $in: DRIVER_TYPES },
+      })
+      .populate('driveTrucks');
+    if (!driver) {
+      this.log.debug(`Driver with App login ${username} was not found`);
+      return null;
+    }
+    this.log.debug(`Driver ${driver._id}`);
+    return DriverResultDto.fromDriverModel(driver);
+  }
+
   async findDriverById(id: string): Promise<DriverResultDto> {
     const driver = await this.findDriverDocumentById(id);
     return DriverResultDto.fromDriverModel(driver);

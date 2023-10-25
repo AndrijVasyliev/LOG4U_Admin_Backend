@@ -1,20 +1,25 @@
 import { PersonType } from './general.dto';
-
+// Health
 export const HEALTH_MEMORY_HEAP_LIMIT = 150 * 1024 * 1024;
 export const HEALTH_MEMORY_RSS_LIMIT = 150 * 1024 * 1024;
+// Mongo
 export const MONGO_UNIQUE_INDEX_CONFLICT = 11000;
 export const UNIQUE_CONSTRAIN_ERROR = 'Unique constrain error';
+// Validation
 export const PATHPARAM_VALIDATION_ERROR = 'Pathparam validation error';
 export const BODY_VALIDATION_ERROR = 'Body validation error';
+// Auth
 export const IS_PUBLIC_KEY = 'isPublic';
 export const USER_ROLES_KEY = 'userRoles';
-
+export const ADMIN_BASIC_STRATEGY = 'admin_basic';
+export const MOBILE_BASIC_STRATEGY = 'mobile_basic';
+// Geospatial
 export const EARTH_RADIUS_MILES = 3963.2;
 export const MILES_IN_KM = 0.6213711922;
-
+// Pagination
 export const DEFAULT_LIMIT = 50;
 export const DEFAULT_OFFSET = 0;
-
+// Misc
 export const DEFAULT_CHECK_IN_AS = '4ULogistics';
 
 export const LANG_PRIORITIES = ['EN', 'UA', 'ES', 'RU'] as const;
@@ -38,7 +43,7 @@ export const DRIVER_TYPES: PersonType[] = [
   'Driver',
 ];
 
-export const USER_ROLES = ['Admin', 'Super Admin'] as const;
+export const USER_ROLES = ['Admin', 'Super Admin', 'Driver'] as const;
 
 export const TRUCK_TYPES = [
   'Cargo van',

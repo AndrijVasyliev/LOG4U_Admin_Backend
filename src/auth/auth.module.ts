@@ -1,18 +1,27 @@
 import { Module } from '@nestjs/common';
 import { PassportModule } from '@nestjs/passport';
-import { AuthBasicStrategy } from './auth.strategy';
+import {
+  AdminAuthBasicStrategy,
+  MobileAuthBasicStrategy,
+} from './auth.strategy';
 import { ConfigModule } from '@nestjs/config';
 import { APP_GUARD } from '@nestjs/core';
-import { AuthBasicGuard } from './auth.guard';
+import { AdminAuthBasicGuard, MobileAuthBasicGuard } from './auth.guard';
 import { UserModule } from '../user/user.module';
+import { DriverModule } from '../driver/driver.module';
 
 @Module({
-  imports: [PassportModule, ConfigModule, UserModule],
+  imports: [PassportModule, ConfigModule, UserModule, DriverModule],
   providers: [
-    AuthBasicStrategy,
+    AdminAuthBasicStrategy,
+    MobileAuthBasicStrategy,
     {
       provide: APP_GUARD,
-      useClass: AuthBasicGuard,
+      useClass: AdminAuthBasicGuard,
+    },
+    {
+      provide: APP_GUARD,
+      useClass: MobileAuthBasicGuard,
     },
   ],
 })

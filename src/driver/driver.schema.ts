@@ -124,3 +124,5 @@ DriverSchema.virtual('driveTrucks', {
   localField: '_id',
   foreignField: 'driver',
 });
+
+DriverSchema.index({ appLogin: 1 }, { unique: true, sparse: true });

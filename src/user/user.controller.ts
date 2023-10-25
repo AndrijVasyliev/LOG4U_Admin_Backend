@@ -1,6 +1,7 @@
 import {
   Controller,
   Get,
+  Req,
   Param,
   Query,
   Body,
@@ -8,6 +9,7 @@ import {
   Patch,
   Delete,
 } from '@nestjs/common';
+import { Request } from 'express';
 import {
   CreateUserDto,
   UserQuery,
@@ -35,6 +37,14 @@ export class UserController {
     private readonly log: LoggerService,
     private readonly userService: UserService,
   ) {}
+
+  @Get('auth')
+  async auth(@Req() request: Request): Promise<UserResultDto> {
+    const { user } = request as unknown as {
+      user: UserResultDto;
+    };
+    return user;
+  }
 
   @Get()
   async getUsers(

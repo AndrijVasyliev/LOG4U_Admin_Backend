@@ -7,7 +7,7 @@ export class AppController {
   constructor(private readonly appService: AppService) {}
 
   @Get('main')
-  // @Public()
+  @Public()
   getRoot(): string {
     return this.appService.getRoot();
   }

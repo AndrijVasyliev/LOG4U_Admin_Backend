@@ -43,6 +43,8 @@ import { LoadModule } from './load/load.module';
 import { TruckController } from './truck/truck.controller';
 import { TruckModule } from './truck/truck.module';
 import { GoogleGeoApiModule } from './googleGeoApi/googleGeoApi.module';
+import { MobileAppController } from './mobileApp/mobileApp.controller';
+import { MobileAppModule } from './mobileApp/mobileApp.module';
 import { AuthModule } from './auth/auth.module';
 
 @Module({
@@ -94,6 +96,7 @@ import { AuthModule } from './auth/auth.module';
     LocationModule,
     LoadModule,
     TruckModule,
+    MobileAppModule,
   ],
   controllers: [AppController],
   providers: [AppService],
@@ -114,6 +117,7 @@ export class AppModule implements NestModule {
         LocationController,
         LoadController,
         TruckController,
+        MobileAppController,
       );
     consumer
       .apply(LoggerMiddleware)
@@ -129,6 +133,7 @@ export class AppModule implements NestModule {
         LocationController,
         LoadController,
         TruckController,
+        MobileAppController,
       );
     consumer
       .apply(ResponseTimeMiddleware)
@@ -144,6 +149,7 @@ export class AppModule implements NestModule {
         LocationController,
         LoadController,
         TruckController,
+        MobileAppController,
       );
   }
 }
