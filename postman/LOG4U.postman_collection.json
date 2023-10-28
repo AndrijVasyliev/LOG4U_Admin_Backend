@@ -2403,13 +2403,13 @@
 							}
 						},
 						"url": {
-							"raw": "{{origin}}/mobileApp/updateLocation",
+							"raw": "{{origin}}/mobileApp/updateTruck",
 							"host": [
 								"{{origin}}"
 							],
 							"path": [
 								"mobileApp",
-								"updateLocation"
+								"updateTruck"
 							]
 						}
 					},
@@ -2612,13 +2612,13 @@
 		{
 			"key": "origin",
 			"value": "http://localhost:8181",
-			"type": "string"
+			"type": "string",
+			"disabled": true
 		},
 		{
 			"key": "origin",
 			"value": "https://admin-test-lt5d.onrender.com",
-			"type": "string",
-			"disabled": true
+			"type": "string"
 		}
 	]
 }

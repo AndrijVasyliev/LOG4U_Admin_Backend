@@ -64,7 +64,7 @@ export class MobileAppController {
     });
   }
 
-  @Patch('updateLocation')
+  @Patch('updateTruck')
   async updateTruck(
     @Req() request: Request,
     @Body(new BodyValidationPipe(MobileUpdateTruckLocationValidation))
