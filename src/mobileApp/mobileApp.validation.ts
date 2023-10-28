@@ -1,6 +1,10 @@
 import * as Joi from 'joi';
+import { TRUCK_STATUSES } from '../utils/constants';
 
 export const MobileUpdateTruckLocationValidation = Joi.object({
+  status: Joi.string()
+    .valid(...TRUCK_STATUSES)
+    .optional(),
   lastLocation: Joi.array()
     .min(2)
     .max(2)
