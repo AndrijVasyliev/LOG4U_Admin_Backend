@@ -5,6 +5,7 @@ import {
   PreconditionFailedException,
   Query,
   Patch,
+  Post,
   Body,
 } from '@nestjs/common';
 import { Request } from 'express';
@@ -17,6 +18,7 @@ import { QueryParamsPipe } from '../utils/queryParamsValidate.pipe';
 import { MobileLoadQuery, MobileLoadQuerySearch } from './mobileApp.dto';
 import {
   MobileLoadQueryParamsSchema,
+  MobileUpdateTruckValidation,
   MobileUpdateTruckLocationValidation,
 } from './mobileApp.validation';
 import { TruckService } from '../truck/truck.service';
@@ -67,7 +69,7 @@ export class MobileAppController {
   @Patch('updateTruck')
   async updateTruck(
     @Req() request: Request,
-    @Body(new BodyValidationPipe(MobileUpdateTruckLocationValidation))
+    @Body(new BodyValidationPipe(MobileUpdateTruckValidation))
     updateTruckBodyDto: UpdateTruckDto,
   ): Promise<TruckResultDto> {
     const { user } = request as unknown as {
@@ -82,5 +84,15 @@ export class MobileAppController {
       user.driveTrucks[0].id,
       updateTruckBodyDto,
     );
+  }
+
+  @Post('setTruckLocation')
+  async setTruckLocation(
+    @Req() request: Request,
+    @Body(new BodyValidationPipe(MobileUpdateTruckLocationValidation))
+    updateTruckLocationBodyDto: any,
+  ): Promise<string> {
+    this.log.warn(`Geo: ${JSON.stringify(updateTruckLocationBodyDto)}`);
+    return 'Super';
   }
 }

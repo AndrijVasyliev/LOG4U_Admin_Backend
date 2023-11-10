@@ -1,19 +1,20 @@
 import * as Joi from 'joi';
 import { TRUCK_STATUSES } from '../utils/constants';
 
-export const MobileUpdateTruckLocationValidation = Joi.object({
+export const MobileUpdateTruckValidation = Joi.object({
   status: Joi.string()
     .valid(...TRUCK_STATUSES)
     .optional(),
-  lastLocation: Joi.array()
-    .min(2)
-    .max(2)
-    .items(
-      Joi.number().min(-90).max(90).required(),
-      Joi.number().min(-180).max(180).required(),
-    )
-    .optional(),
+  //lastLocation: Joi.array()
+  //  .min(2)
+  //  .max(2)
+  //  .items(
+  //    Joi.number().min(-90).max(90).required(),
+  //    Joi.number().min(-180).max(180).required(),
+  //  )
+  //  .optional(),
 });
+export const MobileUpdateTruckLocationValidation = Joi.object().unknown(true);
 
 export const MobileLoadQueryParamsSchema = Joi.object({
   offset: Joi.number().integer().min(0).optional(),
