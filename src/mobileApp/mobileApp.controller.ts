@@ -90,9 +90,24 @@ export class MobileAppController {
   async setTruckLocation(
     @Req() request: Request,
     @Body(new BodyValidationPipe(MobileUpdateTruckLocationValidation))
-    updateTruckLocationBodyDto: any,
+    updateTruckLocationBodyDto: {
+      location: { coords: { latitude: number; longitude: number } };
+    },
   ): Promise<string> {
-    this.log.warn(`Geo: ${JSON.stringify(updateTruckLocationBodyDto)}`);
-    return 'Super';
+    const { user } = request as unknown as {
+      user: DriverResultDto;
+    };
+    if (!user.driveTrucks || user.driveTrucks.length !== 1) {
+      throw new PreconditionFailedException(
+        `Driver ${user.fullName} have no trucks`,
+      );
+    }
+    await this.truckService.updateTruck(user.driveTrucks[0].id, {
+      lastLocation: [
+        updateTruckLocationBodyDto.location.coords.latitude,
+        updateTruckLocationBodyDto.location.coords.longitude,
+      ],
+    });
+    return 'Location Accepted';
   }
 }

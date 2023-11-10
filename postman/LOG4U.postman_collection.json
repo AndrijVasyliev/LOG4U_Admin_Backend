@@ -2389,13 +2389,13 @@
 					"response": []
 				},
 				{
-					"name": "Update Truck Status&Location",
+					"name": "Update Truck Status",
 					"request": {
 						"method": "PATCH",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"status\":\"Available\",\r\n    \"lastLocation\":[33.0219,-117.2735]\r\n}",
+							"raw": "{\r\n    \"status\":\"Available\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -2414,6 +2414,33 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "Set Truck Location",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n   \"location\": {\r\n        \"coords\": {\r\n        \"latitude\": 50.4615774,\r\n        \"longitude\":30.3391369\r\n      }\r\n   }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{origin}}/mobileApp/setTruckLocation",
+							"host": [
+								"{{origin}}"
+							],
+							"path": [
+								"mobileApp",
+								"setTruckLocation"
+							]
+						}
+					},
+					"response": []
 				}
 			],
 			"auth": {
@@ -2421,12 +2448,12 @@
 				"basic": [
 					{
 						"key": "password",
-						"value": "SuperPass",
+						"value": "Super2Pass",
 						"type": "string"
 					},
 					{
 						"key": "username",
-						"value": "MegoMan",
+						"value": "Mego2Man",
 						"type": "string"
 					}
 				]
@@ -2612,13 +2639,13 @@
 		{
 			"key": "origin",
 			"value": "http://localhost:8181",
-			"type": "string",
-			"disabled": true
+			"type": "string"
 		},
 		{
 			"key": "origin",
 			"value": "https://admin-test-lt5d.onrender.com",
-			"type": "string"
+			"type": "string",
+			"disabled": true
 		}
 	]
 }

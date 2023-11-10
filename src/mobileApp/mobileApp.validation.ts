@@ -14,7 +14,20 @@ export const MobileUpdateTruckValidation = Joi.object({
   //  )
   //  .optional(),
 });
-export const MobileUpdateTruckLocationValidation = Joi.object().unknown(true);
+export const MobileUpdateTruckLocationValidation = Joi.object({
+  location: Joi.object({
+    coords: Joi.object({
+      latitude: Joi.number().min(-90).max(90).required(),
+      longitude: Joi.number().min(-180).max(180).required(),
+    })
+      .unknown(true)
+      .required(),
+  })
+    .unknown(true)
+    .required(),
+})
+  .unknown(true)
+  .required();
 
 export const MobileLoadQueryParamsSchema = Joi.object({
   offset: Joi.number().integer().min(0).optional(),
