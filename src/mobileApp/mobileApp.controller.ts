@@ -91,12 +91,14 @@ export class MobileAppController {
     @Req() request: Request,
     @Body(new BodyValidationPipe(MobileUpdateTruckLocationValidation))
     updateTruckLocationBodyDto: {
+      deviceId?: string;
       location: { coords: { latitude: number; longitude: number } };
     },
   ): Promise<string> {
     const { user } = request as unknown as {
       user: DriverResultDto;
     };
+    this.log.error(`deviceId: ${updateTruckLocationBodyDto.deviceId}`);
     if (!user.driveTrucks || user.driveTrucks.length !== 1) {
       throw new PreconditionFailedException(
         `Driver ${user.fullName} have no trucks`,
