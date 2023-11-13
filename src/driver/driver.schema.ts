@@ -94,6 +94,9 @@ export class Driver {
   @Prop({ required: false })
   appLogin?: string;
 
+  @Prop({ required: false })
+  deviceId: string;
+
   @Prop({
     required: false,
     set: hash,
@@ -126,3 +129,4 @@ DriverSchema.virtual('driveTrucks', {
 });
 
 DriverSchema.index({ appLogin: 1 }, { unique: true, sparse: true });
+DriverSchema.index({ deviceId: 1 }, { unique: true, sparse: true });

@@ -1,6 +1,10 @@
 import * as Joi from 'joi';
 import { TRUCK_STATUSES } from '../utils/constants';
 
+export const MobileAuthValidation = Joi.object({
+  deviceId: Joi.string().required(),
+});
+
 export const MobileUpdateTruckValidation = Joi.object({
   status: Joi.string()
     .valid(...TRUCK_STATUSES)
@@ -15,6 +19,7 @@ export const MobileUpdateTruckValidation = Joi.object({
   //  .optional(),
 });
 export const MobileUpdateTruckLocationValidation = Joi.object({
+  deviceId: Joi.string().required(),
   location: Joi.object({
     coords: Joi.object({
       latitude: Joi.number().min(-90).max(90).required(),

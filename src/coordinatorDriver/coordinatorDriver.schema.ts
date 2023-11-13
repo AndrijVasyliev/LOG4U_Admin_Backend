@@ -110,6 +110,9 @@ export class CoordinatorDriver {
   @Prop({ required: false })
   appLogin?: string;
 
+  @Prop({ required: false })
+  deviceId: string;
+
   @Prop({
     required: false,
     set: hash,
@@ -148,3 +151,6 @@ CoordinatorDriverSchema.virtual('driveTrucks', {
   localField: '_id',
   foreignField: 'driver',
 });
+
+CoordinatorDriverSchema.index({ appLogin: 1 }, { unique: true, sparse: true });
+CoordinatorDriverSchema.index({ deviceId: 1 }, { unique: true, sparse: true });

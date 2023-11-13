@@ -4,7 +4,7 @@ export default () => ({
     serviceName: process.env.SERVICE_NAME || 'Admin_BE',
   },
   log: {
-    level: process.env.LOG_LEVEL || 'error',
+    level: process.env.LOG_LEVEL || 'silly',
     format: process.env.NODE_ENV === 'development' ? 'string' : 'json',
   },
   db: {

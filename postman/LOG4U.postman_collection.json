@@ -2333,8 +2333,17 @@
 				{
 					"name": "Auth",
 					"request": {
-						"method": "GET",
+						"method": "PATCH",
 						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"deviceId\": \"mego_device\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
 						"url": {
 							"raw": "{{origin}}/mobileApp/auth",
 							"host": [
@@ -2343,6 +2352,24 @@
 							"path": [
 								"mobileApp",
 								"auth"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Driver",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{origin}}/mobileApp/driver",
+							"host": [
+								"{{origin}}"
+							],
+							"path": [
+								"mobileApp",
+								"driver"
 							]
 						}
 					},
@@ -2418,11 +2445,14 @@
 				{
 					"name": "Set Truck Location",
 					"request": {
+						"auth": {
+							"type": "noauth"
+						},
 						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n   \"location\": {\r\n        \"coords\": {\r\n        \"latitude\": 50.4615774,\r\n        \"longitude\":30.3391369\r\n      }\r\n   }\r\n}",
+							"raw": "{\r\n   \"deviceId\": \"mego_device\",\r\n   \"location\": {\r\n        \"coords\": {\r\n        \"latitude\": 50.4615774,\r\n        \"longitude\":30.3391369\r\n      }\r\n   }\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"

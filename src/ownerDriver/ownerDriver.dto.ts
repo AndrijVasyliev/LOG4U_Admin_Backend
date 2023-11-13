@@ -40,6 +40,7 @@ export class CreateOwnerDriverDto {
   readonly emergencyContactPhone: string;
   readonly notes?: string;
   readonly appLogin?: string;
+  readonly deviceId?: string;
   readonly appPass?: string;
 }
 
@@ -73,6 +74,7 @@ export class UpdateOwnerDriverDto {
   readonly emergencyContactPhone?: string;
   readonly notes?: string;
   readonly appLogin?: string;
+  readonly deviceId?: string;
   readonly appPass?: string;
 }
 
@@ -101,6 +103,7 @@ export class OwnerDriverQuerySearch {
   readonly emergencyContactRel?: string;
   readonly emergencyContactPhone?: string;
   readonly appLogin?: string;
+  readonly deviceId?: string;
   readonly truckNumber?: number;
   readonly owner?: string;
 }
@@ -165,6 +168,7 @@ export class OwnerDriverResultDto {
       emergencyContactPhone: ownerDriver.emergencyContactPhone,
       notes: ownerDriver.notes,
       appLogin: ownerDriver.appLogin,
+      deviceId: ownerDriver.deviceId,
     };
     if (ownTrucks) {
       result = { ...result, ownTrucks };
@@ -212,6 +216,7 @@ export class OwnerDriverResultDto {
   readonly emergencyContactPhone: string;
   readonly notes?: string;
   readonly appLogin?: string;
+  readonly deviceId?: string;
   readonly ownTrucks?: TruckResultDto[];
   readonly coordinators?: CoordinatorResultDto[];
   readonly drivers?: DriverResultDto[];
