@@ -199,7 +199,10 @@ export class DriverService {
 
   async setDeviceId(id: string, deviceId: string): Promise<DriverResultDto> {
     this.log.debug(`Clearing existing deviceId: ${deviceId}`);
-    await this.driverModel.updateMany({ deviceId }, { $set: { deviceId: '' } });
+    await this.driverModel.updateMany(
+      { deviceId },
+      { $unset: { deviceId: 1 } },
+    );
     this.log.debug(
       `Setting new deviceId: ${deviceId} for driver with id: ${id}`,
     );
