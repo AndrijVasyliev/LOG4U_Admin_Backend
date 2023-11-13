@@ -19,7 +19,7 @@ import {
 } from './mobileApp.dto';
 import { DriverResultDto } from '../driver/driver.dto';
 import { PaginatedLoadResultDto } from '../load/load.dto';
-import { TruckResultDto, UpdateTruckDto } from '../truck/truck.dto';
+import { UpdateTruckDto } from '../truck/truck.dto';
 import { DriverService } from '../driver/driver.service';
 import { LoadService } from '../load/load.service';
 import { TruckService } from '../truck/truck.service';
@@ -42,20 +42,12 @@ export class MobileAppController {
     private readonly truckService: TruckService,
   ) {}
 
-  /*@Get('auth')
-  async auth(@Req() request: Request): Promise<DriverResultDto> {
-    const { user } = request as unknown as {
-      user: DriverResultDto;
-    };
-    return user;
-  }*/
-
   @Patch('auth')
   async auth(
     @Req() request: Request,
     @Body(new BodyValidationPipe(MobileAuthValidation))
     authDto: AuthDto,
-  ): Promise<string> {
+  ): Promise<DriverResultDto> {
     const { user: driver } = request as unknown as {
       user: DriverResultDto;
     };
@@ -66,7 +58,7 @@ export class MobileAppController {
     if (driver.deviceId !== deviceId) {
       await this.driverService.setDeviceId(driver.id, deviceId);
     }
-    return deviceId;
+    return driver;
   }
 
   @Get('driver')
