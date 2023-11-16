@@ -2477,13 +2477,13 @@
 				"type": "basic",
 				"basic": [
 					{
-						"key": "password",
-						"value": "Super2Pass",
+						"key": "username",
+						"value": "Mego2Man",
 						"type": "string"
 					},
 					{
-						"key": "username",
-						"value": "Mego2Man",
+						"key": "password",
+						"value": "superpass",
 						"type": "string"
 					}
 				]
@@ -2634,13 +2634,13 @@
 		"type": "basic",
 		"basic": [
 			{
-				"key": "password",
-				"value": "SuperPass",
+				"key": "username",
+				"value": "4ulogisticsllc@gmail.com",
 				"type": "string"
 			},
 			{
-				"key": "username",
-				"value": "ivo.bobul@gmail.com",
+				"key": "password",
+				"value": "SuperPass",
 				"type": "string"
 			}
 		]
@@ -2669,13 +2669,25 @@
 		{
 			"key": "origin",
 			"value": "http://localhost:8181",
-			"type": "string"
+			"type": "string",
+			"disabled": true
 		},
 		{
 			"key": "origin",
 			"value": "https://admin-test-lt5d.onrender.com",
 			"type": "string",
 			"disabled": true
+		},
+		{
+			"key": "origin",
+			"value": "https://log4u.onrender.com",
+			"type": "string",
+			"disabled": true
+		},
+		{
+			"key": "origin",
+			"value": "https://admin.4u-logistics.com",
+			"type": "string"
 		}
 	]
 }

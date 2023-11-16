@@ -1,7 +1,7 @@
 import { PersonType } from './general.dto';
 // Health
 export const HEALTH_MEMORY_HEAP_LIMIT = 150 * 1024 * 1024;
-export const HEALTH_MEMORY_RSS_LIMIT = 150 * 1024 * 1024;
+export const HEALTH_MEMORY_RSS_LIMIT = 500 * 1024 * 1024;
 // Mongo
 export const MONGO_UNIQUE_INDEX_CONFLICT = 11000;
 export const UNIQUE_CONSTRAIN_ERROR = 'Unique constrain error';
