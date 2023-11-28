@@ -1,4 +1,7 @@
-import { HEALTH_MEMORY_HEAP_LIMIT, HEALTH_MEMORY_RSS_LIMIT } from '../src/utils/constants';
+import {
+  HEALTH_MEMORY_HEAP_LIMIT,
+  HEALTH_MEMORY_RSS_LIMIT,
+} from '../src/utils/constants';
 
 export default () => ({
   app: {
