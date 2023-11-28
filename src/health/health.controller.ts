@@ -13,6 +13,7 @@ import {
 
 import { LoggerService } from '../logger/logger.service';
 import { Public } from '../auth/auth.decorator';
+import { ConfigService } from '@nestjs/config';
 
 function getVersionFromStatusFile() {
   try {
@@ -34,12 +35,20 @@ const defaultVersion = getVersionFromPackageJson();
 @Controller()
 @Public()
 export class HealthController {
+  readonly heapLimit: number;
+  readonly rssLimit: number;
   constructor(
     private readonly health: HealthCheckService,
     private readonly memory: MemoryHealthIndicator,
     private readonly mongoose: MongooseHealthIndicator,
+    private readonly configService: ConfigService,
     private readonly log: LoggerService,
-  ) {}
+  ) {
+    this.heapLimit =
+      configService.get<number>('app.heapLimit') || HEALTH_MEMORY_HEAP_LIMIT;
+    this.rssLimit =
+      configService.get<number>('app.rssLimit') || HEALTH_MEMORY_RSS_LIMIT;
+  }
 
   @Get('/liveness')
   checkLiveness() {
@@ -50,8 +59,8 @@ export class HealthController {
   @Get('/readiness')
   async checkReadiness() {
     const healthCheckResult = await this.health.check([
-      () => this.memory.checkHeap('memory_heap', HEALTH_MEMORY_HEAP_LIMIT),
-      () => this.memory.checkRSS('memory_rss', HEALTH_MEMORY_RSS_LIMIT),
+      () => this.memory.checkHeap('memory_heap', this.heapLimit),
+      () => this.memory.checkRSS('memory_rss', this.rssLimit),
       async () => this.mongoose.pingCheck('mongoose'),
     ]);
     this.log.silly(`Readiness check ${JSON.stringify(healthCheckResult)}`);
@@ -77,8 +86,8 @@ export class HealthController {
   @HealthCheck()
   async check() {
     const healthCheckResult = this.health.check([
-      () => this.memory.checkHeap('memory_heap', HEALTH_MEMORY_HEAP_LIMIT),
-      () => this.memory.checkRSS('memory_rss', HEALTH_MEMORY_RSS_LIMIT),
+      () => this.memory.checkHeap('memory_heap', this.heapLimit),
+      () => this.memory.checkRSS('memory_rss', this.rssLimit),
       async () => this.mongoose.pingCheck('mongoose'),
     ]);
     this.log.silly(`Health check ${JSON.stringify(healthCheckResult)}`);
