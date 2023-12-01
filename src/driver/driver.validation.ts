@@ -4,7 +4,7 @@ import { MongoObjectIdValidation } from '../utils/idValidate.pipe';
 
 export const CreateDriverValidation = Joi.object({
   fullName: Joi.string().required(),
-  birthDate: Joi.date().iso().optional(),
+  birthDate: Joi.date().iso().required(),
   birthPlace: Joi.string().allow('').optional(),
   citizenship: Joi.string().allow('').optional(),
   languagePriority: Joi.string()

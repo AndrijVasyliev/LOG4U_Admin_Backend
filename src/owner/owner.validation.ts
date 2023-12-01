@@ -15,7 +15,7 @@ export const CreateOwnerValidation = Joi.object({
   company: Joi.string().allow('').optional(),
   insurancePolicy: Joi.string().required(),
   insurancePolicyEFF: Joi.string().required(),
-  insurancePolicyExp: Joi.date().iso().required(),
+  intestsurancePolicyExp: Joi.date().iso().required(),
   address: Joi.string().required(),
   phone: Joi.string().required(),
   phone2: Joi.string().allow('').optional(),
@@ -23,7 +23,7 @@ export const CreateOwnerValidation = Joi.object({
   emergencyContactName: Joi.string().allow('').optional(),
   emergencyContactRel: Joi.string().allow('').optional(),
   emergencyContactPhone: Joi.string().allow('').optional(),
-  notes: Joi.string().allow('').optional(),
+  test: Joi.string().allow('').optional(),
 });
 
 export const UpdateOwnerValidation = Joi.object({
