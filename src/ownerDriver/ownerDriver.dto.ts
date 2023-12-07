@@ -13,13 +13,10 @@ import { DriverResultDto } from '../driver/driver.dto';
 export class CreateOwnerDriverDto {
   readonly fullName: string;
   readonly birthDate: Date;
-  readonly birthPlace: string;
   readonly citizenship: string;
   readonly languagePriority: LangPriority;
-  readonly driverLicenceType: string;
   readonly driverLicenceNumber: string;
   readonly driverLicenceState: string;
-  readonly driverLicenceClass: string;
   readonly driverLicenceExp: Date;
   readonly idDocId?: string;
   readonly idDocType?: string;
@@ -29,7 +26,6 @@ export class CreateOwnerDriverDto {
   readonly snn: string;
   readonly company?: string;
   readonly insurancePolicy: string;
-  readonly insurancePolicyEFF: string;
   readonly insurancePolicyExp: Date;
   readonly address: string;
   readonly phone: string;
@@ -47,13 +43,10 @@ export class CreateOwnerDriverDto {
 export class UpdateOwnerDriverDto {
   readonly fullName?: string;
   readonly birthDate?: Date;
-  readonly birthPlace?: string;
   readonly citizenship?: string;
   readonly languagePriority?: LangPriority;
-  readonly driverLicenceType?: string;
   readonly driverLicenceNumber?: string;
   readonly driverLicenceState?: string;
-  readonly driverLicenceClass?: string;
   readonly driverLicenceExp?: Date;
   readonly idDocId?: string;
   readonly idDocType?: string;
@@ -63,7 +56,6 @@ export class UpdateOwnerDriverDto {
   readonly snn?: string;
   readonly company?: string;
   readonly insurancePolicy?: string;
-  readonly insurancePolicyEFF?: string;
   readonly insurancePolicyExp?: Date;
   readonly address?: string;
   readonly phone?: string;
@@ -81,20 +73,16 @@ export class UpdateOwnerDriverDto {
 export class OwnerDriverQuerySearch {
   readonly search?: string;
   readonly fullName?: string;
-  readonly birthPlace?: string;
   readonly citizenship?: string;
   readonly languagePriority?: LangPriority;
-  readonly driverLicenceType?: string;
   readonly driverLicenceNumber?: string;
   readonly driverLicenceState?: string;
-  readonly driverLicenceClass?: string;
   readonly idDocId?: string;
   readonly idDocType?: string;
   readonly hiredBy?: string;
   readonly snn?: string;
   readonly company?: string;
   readonly insurancePolicy?: string;
-  readonly insurancePolicyEFF?: string;
   readonly address?: string;
   readonly phone?: string;
   readonly phone2?: string;
@@ -141,13 +129,10 @@ export class OwnerDriverResultDto {
       type: ownerDriver.type,
       fullName: ownerDriver.fullName,
       birthDate: ownerDriver.birthDate,
-      birthPlace: ownerDriver.birthPlace,
       citizenship: ownerDriver.citizenship,
       languagePriority: ownerDriver.languagePriority,
-      driverLicenceType: ownerDriver.driverLicenceType,
       driverLicenceNumber: ownerDriver.driverLicenceNumber,
       driverLicenceState: ownerDriver.driverLicenceState,
-      driverLicenceClass: ownerDriver.driverLicenceClass,
       driverLicenceExp: ownerDriver.driverLicenceExp,
       idDocId: ownerDriver.idDocId,
       idDocType: ownerDriver.idDocType,
@@ -157,7 +142,6 @@ export class OwnerDriverResultDto {
       snn: ownerDriver.snn,
       company: ownerDriver.company,
       insurancePolicy: ownerDriver.insurancePolicy,
-      insurancePolicyEFF: ownerDriver.insurancePolicyEFF,
       insurancePolicyExp: ownerDriver.insurancePolicyExp,
       address: ownerDriver.address,
       phone: ownerDriver.phone,
@@ -189,13 +173,10 @@ export class OwnerDriverResultDto {
   readonly type: PersonType;
   readonly fullName: string;
   readonly birthDate: Date;
-  readonly birthPlace: string;
   readonly citizenship: string;
   readonly languagePriority: LangPriority;
-  readonly driverLicenceType: string;
   readonly driverLicenceNumber: string;
   readonly driverLicenceState: string;
-  readonly driverLicenceClass: string;
   readonly driverLicenceExp: Date;
   readonly idDocId?: string;
   readonly idDocType?: string;
@@ -205,7 +186,6 @@ export class OwnerDriverResultDto {
   readonly snn: string;
   readonly company?: string;
   readonly insurancePolicy: string;
-  readonly insurancePolicyEFF: string;
   readonly insurancePolicyExp: Date;
   readonly address: string;
   readonly phone: string;

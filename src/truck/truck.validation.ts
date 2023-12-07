@@ -46,8 +46,6 @@ export const CreateTruckValidation = Joi.object({
   color: Joi.string().required(),
   vinCode: Joi.string().required(),
   licencePlate: Joi.string().required(),
-  licenceState: Joi.string().required(),
-  plateExpires: Joi.date().iso().required(),
   insideDims: Joi.string().required(),
   doorDims: Joi.string().required(),
   owner: MongoObjectIdValidation.required(),
@@ -92,8 +90,6 @@ export const UpdateTruckValidation = Joi.object({
   color: Joi.string().optional(),
   vinCode: Joi.string().optional(),
   licencePlate: Joi.string().optional(),
-  licenceState: Joi.string().optional(),
-  plateExpires: Joi.date().iso().optional(),
   insideDims: Joi.string().optional(),
   doorDims: Joi.string().optional(),
   owner: MongoObjectIdValidation.optional(),
@@ -127,7 +123,6 @@ export const TruckQueryParamsSchema = Joi.object({
   color: Joi.string().optional(),
   vinCode: Joi.string().optional(),
   licencePlate: Joi.string().optional(),
-  licenceState: Joi.string().optional(),
 })
   .keys({
     orderby: Joi.string().valid(
@@ -144,8 +139,6 @@ export const TruckQueryParamsSchema = Joi.object({
       'color',
       'vinCode',
       'licencePlate',
-      'licenceState',
-      'plateExpires',
       'insideDims',
       'doorDims',
     ),

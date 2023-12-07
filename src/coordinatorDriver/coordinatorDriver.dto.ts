@@ -12,13 +12,10 @@ import { TruckResultDto } from '../truck/truck.dto';
 export class CreateCoordinatorDriverDto {
   readonly fullName: string;
   readonly birthDate: Date;
-  readonly birthPlace: string;
   readonly citizenship: string;
   readonly languagePriority: LangPriority;
-  readonly driverLicenceType: string;
   readonly driverLicenceNumber: string;
   readonly driverLicenceState: string;
-  readonly driverLicenceClass: string;
   readonly driverLicenceExp: Date;
   readonly idDocId?: string;
   readonly idDocType?: string;
@@ -28,7 +25,6 @@ export class CreateCoordinatorDriverDto {
   readonly snn: string;
   readonly company?: string;
   readonly insurancePolicy: string;
-  readonly insurancePolicyEFF: string;
   readonly insurancePolicyExp: Date;
   readonly address: string;
   readonly phone: string;
@@ -47,13 +43,10 @@ export class CreateCoordinatorDriverDto {
 export class UpdateCoordinatorDriverDto {
   readonly fullName?: string;
   readonly birthDate?: Date;
-  readonly birthPlace?: string;
   readonly citizenship?: string;
   readonly languagePriority?: LangPriority;
-  readonly driverLicenceType?: string;
   readonly driverLicenceNumber?: string;
   readonly driverLicenceState?: string;
-  readonly driverLicenceClass?: string;
   readonly driverLicenceExp?: Date;
   readonly idDocId?: string;
   readonly idDocType?: string;
@@ -63,7 +56,6 @@ export class UpdateCoordinatorDriverDto {
   readonly snn?: string;
   readonly company?: string;
   readonly insurancePolicy?: string;
-  readonly insurancePolicyEFF?: string;
   readonly insurancePolicyExp?: Date;
   readonly address?: string;
   readonly phone?: string;
@@ -82,20 +74,16 @@ export class UpdateCoordinatorDriverDto {
 export class CoordinatorDriverQuerySearch {
   readonly search?: string;
   readonly fullName?: string;
-  readonly birthPlace?: string;
   readonly citizenship?: string;
   readonly languagePriority?: LangPriority;
-  readonly driverLicenceType?: string;
   readonly driverLicenceNumber?: string;
   readonly driverLicenceState?: string;
-  readonly driverLicenceClass?: string;
   readonly idDocId?: string;
   readonly idDocType?: string;
   readonly hiredBy?: string;
   readonly snn?: string;
   readonly company?: string;
   readonly insurancePolicy?: string;
-  readonly insurancePolicyEFF?: string;
   readonly address?: string;
   readonly phone?: string;
   readonly phone2?: string;
@@ -135,13 +123,10 @@ export class CoordinatorDriverResultDto {
       type: coordinatorDriver.type,
       fullName: coordinatorDriver.fullName,
       birthDate: coordinatorDriver.birthDate,
-      birthPlace: coordinatorDriver.birthPlace,
       citizenship: coordinatorDriver.citizenship,
       languagePriority: coordinatorDriver.languagePriority,
-      driverLicenceType: coordinatorDriver.driverLicenceType,
       driverLicenceNumber: coordinatorDriver.driverLicenceNumber,
       driverLicenceState: coordinatorDriver.driverLicenceState,
-      driverLicenceClass: coordinatorDriver.driverLicenceClass,
       driverLicenceExp: coordinatorDriver.driverLicenceExp,
       idDocId: coordinatorDriver.idDocId,
       idDocType: coordinatorDriver.idDocType,
@@ -151,7 +136,6 @@ export class CoordinatorDriverResultDto {
       snn: coordinatorDriver.snn,
       company: coordinatorDriver.company,
       insurancePolicy: coordinatorDriver.insurancePolicy,
-      insurancePolicyEFF: coordinatorDriver.insurancePolicyEFF,
       insurancePolicyExp: coordinatorDriver.insurancePolicyExp,
       address: coordinatorDriver.address,
       phone: coordinatorDriver.phone,
@@ -180,13 +164,10 @@ export class CoordinatorDriverResultDto {
   readonly type: PersonType;
   readonly fullName: string;
   readonly birthDate: Date;
-  readonly birthPlace: string;
   readonly citizenship: string;
   readonly languagePriority: LangPriority;
-  readonly driverLicenceType: string;
   readonly driverLicenceNumber: string;
   readonly driverLicenceState: string;
-  readonly driverLicenceClass: string;
   readonly driverLicenceExp: Date;
   readonly idDocId?: string;
   readonly idDocType?: string;
@@ -196,7 +177,6 @@ export class CoordinatorDriverResultDto {
   readonly snn: string;
   readonly company?: string;
   readonly insurancePolicy: string;
-  readonly insurancePolicyEFF: string;
   readonly insurancePolicyExp: Date;
   readonly address: string;
   readonly phone: string;

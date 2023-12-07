@@ -5,15 +5,12 @@ import { MongoObjectIdValidation } from '../utils/idValidate.pipe';
 export const CreateDriverValidation = Joi.object({
   fullName: Joi.string().required(),
   birthDate: Joi.date().iso().required(),
-  birthPlace: Joi.string().allow('').optional(),
   citizenship: Joi.string().allow('').optional(),
   languagePriority: Joi.string()
     .valid(...LANG_PRIORITIES)
     .optional(),
-  driverLicenceType: Joi.string().required(),
   driverLicenceNumber: Joi.string().required(),
   driverLicenceState: Joi.string().required(),
-  driverLicenceClass: Joi.string().required(),
   driverLicenceExp: Joi.date().iso().required(),
   idDocId: Joi.string().allow('').optional(),
   idDocType: Joi.string().allow('').optional(),
@@ -36,15 +33,12 @@ export const CreateDriverValidation = Joi.object({
 export const UpdateDriverValidation = Joi.object({
   fullName: Joi.string().optional(),
   birthDate: Joi.date().iso().optional(),
-  birthPlace: Joi.string().allow('').optional(),
   citizenship: Joi.string().allow('').optional(),
   languagePriority: Joi.string()
     .valid(...LANG_PRIORITIES)
     .optional(),
-  driverLicenceType: Joi.string().optional(),
   driverLicenceNumber: Joi.string().optional(),
   driverLicenceState: Joi.string().optional(),
-  driverLicenceClass: Joi.string().optional(),
   driverLicenceExp: Joi.date().iso().optional(),
   idDocId: Joi.string().allow('').optional(),
   idDocType: Joi.string().allow('').optional(),
@@ -69,15 +63,12 @@ export const DriverQueryParamsSchema = Joi.object({
   limit: Joi.number().integer().min(1).optional(),
   search: Joi.string().optional(),
   fullName: Joi.string().optional(),
-  birthPlace: Joi.string().optional(),
   citizenship: Joi.string().optional(),
   languagePriority: Joi.string()
     .valid(...LANG_PRIORITIES)
     .optional(),
-  driverLicenceType: Joi.string().optional(),
   driverLicenceNumber: Joi.string().optional(),
   driverLicenceState: Joi.string().optional(),
-  driverLicenceClass: Joi.string().optional(),
   idDocId: Joi.string().optional(),
   idDocType: Joi.string().optional(),
   hiredBy: Joi.string().optional(),
@@ -96,13 +87,10 @@ export const DriverQueryParamsSchema = Joi.object({
     orderby: Joi.string().valid(
       'fullName',
       'birthDate',
-      'birthPlace',
       'citizenship',
       'languagePriority',
-      'driverLicenceType',
       'driverLicenceNumber',
       'driverLicenceState',
-      'driverLicenceClass',
       'driverLicenceExp',
       'idDocId',
       'idDocType',

@@ -12,7 +12,6 @@ import { TruckResultDto } from '../truck/truck.dto';
 export class CreateCoordinatorDto {
   readonly fullName: string;
   readonly birthDate: Date;
-  readonly birthPlace: string;
   readonly citizenship: string;
   readonly languagePriority: LangPriority;
   readonly hiredBy: string;
@@ -20,7 +19,6 @@ export class CreateCoordinatorDto {
   readonly snn: string;
   readonly company?: string;
   readonly insurancePolicy: string;
-  readonly insurancePolicyEFF: string;
   readonly insurancePolicyExp: Date;
   readonly address: string;
   readonly phone: string;
@@ -36,7 +34,6 @@ export class CreateCoordinatorDto {
 export class UpdateCoordinatorDto {
   readonly fullName?: string;
   readonly birthDate?: Date;
-  readonly birthPlace?: string;
   readonly citizenship?: string;
   readonly languagePriority?: LangPriority;
   readonly hiredBy?: string;
@@ -44,7 +41,6 @@ export class UpdateCoordinatorDto {
   readonly snn?: string;
   readonly company?: string;
   readonly insurancePolicy?: string;
-  readonly insurancePolicyEFF?: string;
   readonly insurancePolicyExp?: Date;
   readonly address?: string;
   readonly phone?: string;
@@ -60,14 +56,12 @@ export class UpdateCoordinatorDto {
 export class CoordinatorQuerySearch {
   readonly search?: string;
   readonly fullName?: string;
-  readonly birthPlace?: string;
   readonly citizenship?: string;
   readonly languagePriority?: LangPriority;
   readonly hiredBy?: string;
   readonly snn?: string;
   readonly company?: string;
   readonly insurancePolicy?: string;
-  readonly insurancePolicyEFF?: string;
   readonly address?: string;
   readonly phone?: string;
   readonly phone2?: string;
@@ -96,7 +90,6 @@ export class CoordinatorResultDto {
       type: coordinator.type,
       fullName: coordinator.fullName,
       birthDate: coordinator.birthDate,
-      birthPlace: coordinator.birthPlace,
       citizenship: coordinator.citizenship,
       languagePriority: coordinator.languagePriority,
       hiredBy: coordinator.hiredBy,
@@ -104,7 +97,6 @@ export class CoordinatorResultDto {
       snn: coordinator.snn,
       company: coordinator.company,
       insurancePolicy: coordinator.insurancePolicy,
-      insurancePolicyEFF: coordinator.insurancePolicyEFF,
       insurancePolicyExp: coordinator.insurancePolicyExp,
       address: coordinator.address,
       phone: coordinator.phone,
@@ -128,7 +120,6 @@ export class CoordinatorResultDto {
   readonly type: PersonType;
   readonly fullName: string;
   readonly birthDate: Date;
-  readonly birthPlace: string;
   readonly citizenship: string;
   readonly languagePriority: LangPriority;
   readonly hiredBy: string;
@@ -136,7 +127,6 @@ export class CoordinatorResultDto {
   readonly snn: string;
   readonly company?: string;
   readonly insurancePolicy: string;
-  readonly insurancePolicyEFF: string;
   readonly insurancePolicyExp: Date;
   readonly address: string;
   readonly phone: string;

@@ -13,7 +13,6 @@ import { CoordinatorResultDto } from '../coordinator/coordinator.dto';
 export class CreateOwnerDto {
   readonly fullName: string;
   readonly birthDate: Date;
-  readonly birthPlace: string;
   readonly citizenship: string;
   readonly languagePriority: LangPriority;
   readonly hiredBy: string;
@@ -21,7 +20,6 @@ export class CreateOwnerDto {
   readonly snn: string;
   readonly company?: string;
   readonly insurancePolicy: string;
-  readonly insurancePolicyEFF: string;
   readonly insurancePolicyExp: Date;
   readonly address: string;
   readonly phone: string;
@@ -36,7 +34,6 @@ export class CreateOwnerDto {
 export class UpdateOwnerDto {
   readonly fullName?: string;
   readonly birthDate?: Date;
-  readonly birthPlace?: string;
   readonly citizenship?: string;
   readonly languagePriority?: LangPriority;
   readonly hiredBy?: string;
@@ -44,7 +41,6 @@ export class UpdateOwnerDto {
   readonly snn?: string;
   readonly company?: string;
   readonly insurancePolicy?: string;
-  readonly insurancePolicyEFF?: string;
   readonly insurancePolicyExp?: Date;
   readonly address?: string;
   readonly phone?: string;
@@ -59,14 +55,12 @@ export class UpdateOwnerDto {
 export class OwnerQuerySearch {
   readonly search?: string;
   readonly fullName?: string;
-  readonly birthPlace?: string;
   readonly citizenship?: string;
   readonly languagePriority?: LangPriority;
   readonly hiredBy?: string;
   readonly snn?: string;
   readonly company?: string;
   readonly insurancePolicy?: string;
-  readonly insurancePolicyEFF?: string;
   readonly address?: string;
   readonly phone?: string;
   readonly phone2?: string;
@@ -100,7 +94,6 @@ export class OwnerResultDto {
       type: owner.type,
       fullName: owner.fullName,
       birthDate: owner.birthDate,
-      birthPlace: owner.birthPlace,
       citizenship: owner.citizenship,
       languagePriority: owner.languagePriority,
       hiredBy: owner.hiredBy,
@@ -108,7 +101,6 @@ export class OwnerResultDto {
       snn: owner.snn,
       company: owner.company,
       insurancePolicy: owner.insurancePolicy,
-      insurancePolicyEFF: owner.insurancePolicyEFF,
       insurancePolicyExp: owner.insurancePolicyExp,
       address: owner.address,
       phone: owner.phone,
@@ -135,7 +127,6 @@ export class OwnerResultDto {
   readonly type: PersonType;
   readonly fullName: string;
   readonly birthDate: Date;
-  readonly birthPlace: string;
   readonly citizenship: string;
   readonly languagePriority: LangPriority;
   readonly hiredBy: string;
@@ -143,7 +134,6 @@ export class OwnerResultDto {
   readonly snn: string;
   readonly company?: string;
   readonly insurancePolicy: string;
-  readonly insurancePolicyEFF: string;
   readonly insurancePolicyExp: Date;
   readonly address: string;
   readonly phone: string;

@@ -30,25 +30,16 @@ export class CoordinatorDriver {
   birthDate: Date;
 
   @Prop({ required: true })
-  birthPlace: string;
-
-  @Prop({ required: true })
   citizenship: string;
 
   @Prop({ required: true, enum: LANG_PRIORITIES })
   languagePriority: LangPriority;
 
   @Prop({ required: true })
-  driverLicenceType: string;
-
-  @Prop({ required: true })
   driverLicenceNumber: string;
 
   @Prop({ required: true })
   driverLicenceState: string;
-
-  @Prop({ required: true })
-  driverLicenceClass: string;
 
   @Prop({ required: true })
   driverLicenceExp: Date;
@@ -76,9 +67,6 @@ export class CoordinatorDriver {
 
   @Prop({ required: true })
   insurancePolicy: string;
-
-  @Prop({ required: true })
-  insurancePolicyEFF: string;
 
   @Prop({ required: true })
   insurancePolicyExp: Date;

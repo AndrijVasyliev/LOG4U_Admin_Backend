@@ -34,7 +34,7 @@
 								{
 									"key": "orderby",
 									"value": "fullName",
-									"description": "'fullName', 'birthDate', 'citizenship', 'languagePriority', 'hiredBy', 'hireDate', 'snn', 'company', 'insurancePolicy', 'insurancePolicyEFF', 'insurancePolicyExp', 'address', 'phone', 'phone2', 'email', 'emergencyContactName', 'emergencyContactRel', 'emergencyContactPhone'"
+									"description": "'fullName', 'birthDate', 'citizenship', 'languagePriority', 'hiredBy', 'hireDate', 'snn', 'company', 'insurancePolicy', 'insurancePolicyExp', 'address', 'phone', 'phone2', 'email', 'emergencyContactName', 'emergencyContactRel', 'emergencyContactPhone'"
 								},
 								{
 									"key": "direction",
@@ -43,17 +43,12 @@
 								},
 								{
 									"key": "search",
-									"value": null,
+									"value": "",
 									"disabled": true
 								},
 								{
 									"key": "fullName",
 									"value": "Ivo",
-									"disabled": true
-								},
-								{
-									"key": "birthPlace",
-									"value": "",
 									"disabled": true
 								},
 								{
@@ -83,11 +78,6 @@
 								},
 								{
 									"key": "insurancePolicy",
-									"value": "",
-									"disabled": true
-								},
-								{
-									"key": "insurancePolicyEFF",
 									"value": "",
 									"disabled": true
 								},
@@ -179,7 +169,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"fullName\":\"Ivo Bobul\",\r\n    \"birthDate\":\"2001-07-24T20:33:52.147Z\",\r\n    \"birthPlace\":\"Zimbabve\",\r\n    \"citizenship\":\"USA\",\r\n    \"languagePriority\":\"EN\",\r\n    \"hiredBy\":\"Pavlo Zibrov\",\r\n    \"hireDate\":\"2020-07-24T20:33:52.147Z\",\r\n    \"snn\":\"6661313\",\r\n    \"company\":\"Horns&Hufs\",\r\n    \"insurancePolicy\":\"SomeData\",\r\n    \"insurancePolicyEFF\":\"SomeEFF\",\r\n    \"insurancePolicyExp\":\"2024-07-24T20:33:52.147Z\",\r\n    \"address\":\"Pupkina, 25-a, 6\",\r\n    \"phone\":\"0989809898\",\r\n    \"phone2\":\"0565605656\",\r\n    \"email\":\"ivo.bobul@gmail.com\",\r\n    \"emergencyContactName\":\"Maryna\",\r\n    \"emergencyContactRel\": \"Lubov moja edyna\",\r\n    \"emergencyContactPhone\":\"0666606666\",\r\n    \"notes\":\"Bla bla bla\"\r\n}",
+							"raw": "{\r\n    \"fullName\":\"Ivo Bobul\",\r\n    \"birthDate\":\"2001-07-24T20:33:52.147Z\",\r\n    \"citizenship\":\"USA\",\r\n    \"languagePriority\":\"EN\",\r\n    \"hiredBy\":\"Pavlo Zibrov\",\r\n    \"hireDate\":\"2020-07-24T20:33:52.147Z\",\r\n    \"snn\":\"6661313\",\r\n    \"company\":\"Horns&Hufs\",\r\n    \"insurancePolicy\":\"SomeData\",\r\n    \"insurancePolicyExp\":\"2024-07-24T20:33:52.147Z\",\r\n    \"address\":\"Pupkina, 25-a, 6\",\r\n    \"phone\":\"0989809898\",\r\n    \"phone2\":\"0565605656\",\r\n    \"email\":\"ivo.bobul@gmail.com\",\r\n    \"emergencyContactName\":\"Maryna\",\r\n    \"emergencyContactRel\": \"Lubov moja edyna\",\r\n    \"emergencyContactPhone\":\"0666606666\",\r\n    \"notes\":\"Bla bla bla\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -205,7 +195,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"fullName\":\"Ivo Bobul\",\r\n    \"birthDate\":\"2001-07-24T20:33:52.147Z\",\r\n    \"birthPlace\":\"Cameroon\",\r\n    \"citizenship\":\"USA\",\r\n    \"languagePriority\":\"EN\",\r\n    \"hiredBy\":\"Pavlo Zibrov\",\r\n    \"hireDate\":\"2020-07-24T20:33:52.147Z\",\r\n    \"snn\":\"6661313\",\r\n    \"company\":\"Horns&Hufs\",\r\n    \"insurancePolicy\":\"SomeData\",\r\n    \"insurancePolicyEFF\":\"SomeEFF\",\r\n    \"insurancePolicyExp\":\"2024-07-24T20:33:52.147Z\",\r\n    \"address\":\"Pupkina, 25-a, 6\",\r\n    \"phone\":\"0989809898\",\r\n    \"email\":\"ivo.bobul@gmail.com\",\r\n    \"emergencyContactName\":\"Maryna\",\r\n    \"emergencyContactPhone\":\"0666606666\"\r\n}",
+							"raw": "{\r\n    \"fullName\":\"Ivo Bobul\",\r\n    \"birthDate\":\"2001-07-24T20:33:52.147Z\",\r\n    \"citizenship\":\"USA\",\r\n    \"languagePriority\":\"EN\",\r\n    \"hiredBy\":\"Pavlo Zibrov\",\r\n    \"hireDate\":\"2020-07-24T20:33:52.147Z\",\r\n    \"snn\":\"6661313\",\r\n    \"company\":\"Horns&Hufs\",\r\n    \"insurancePolicy\":\"SomeData\",\r\n    \"insurancePolicyExp\":\"2024-07-24T20:33:52.147Z\",\r\n    \"address\":\"Pupkina, 25-a, 6\",\r\n    \"phone\":\"0989809898\",\r\n    \"email\":\"ivo.bobul@gmail.com\",\r\n    \"emergencyContactName\":\"Maryna\",\r\n    \"emergencyContactPhone\":\"0666606666\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -294,7 +284,7 @@
 								{
 									"key": "orderby",
 									"value": "fullName",
-									"description": "'fullName','birthDate','birthPlace','citizenship','languagePriority','driverLicenceType','driverLicenceNumber','driverLicenceState','driverLicenceClass','driverLicenceExp','idDocId','idDocType','idDocExp','hiredBy','hireDate','snn','company','insurancePolicy','insurancePolicyEFF','insurancePolicyExp','address','phone','phone2','email','emergencyContactName','emergencyContactRel','emergencyContactPhone','appLogin'"
+									"description": "'fullName','birthDate','citizenship','languagePriority','driverLicenceNumber','driverLicenceState','driverLicenceExp','idDocId','idDocType','idDocExp','hiredBy','hireDate','snn','company','insurancePolicy','insurancePolicyExp','address','phone','phone2','email','emergencyContactName','emergencyContactRel','emergencyContactPhone','appLogin'"
 								},
 								{
 									"key": "direction",
@@ -312,11 +302,6 @@
 									"disabled": true
 								},
 								{
-									"key": "birthPlace",
-									"value": "",
-									"disabled": true
-								},
-								{
 									"key": "citizenship",
 									"value": "USA",
 									"disabled": true
@@ -327,22 +312,12 @@
 									"disabled": true
 								},
 								{
-									"key": "driverLicenceType",
-									"value": "",
-									"disabled": true
-								},
-								{
 									"key": "driverLicenceNumber",
 									"value": "",
 									"disabled": true
 								},
 								{
 									"key": "driverLicenceState",
-									"value": "",
-									"disabled": true
-								},
-								{
-									"key": "driverLicenceClass",
 									"value": "",
 									"disabled": true
 								},
@@ -373,11 +348,6 @@
 								},
 								{
 									"key": "insurancePolicy",
-									"value": "",
-									"disabled": true
-								},
-								{
-									"key": "insurancePolicyEFF",
 									"value": "",
 									"disabled": true
 								},
@@ -474,7 +444,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"fullName\":\"Ivo Bobul 2\",\r\n    \"birthDate\":\"2001-07-24T20:33:52.147Z\",\r\n    \"birthPlace\":\"Zimbabve\",\r\n    \"citizenship\":\"USA\",\r\n    \"languagePriority\":\"EN\",\r\n    \"driverLicenceType\":\"tractor\",\r\n    \"driverLicenceNumber\":\"1313666\",\r\n    \"driverLicenceState\":\"Active\",\r\n    \"driverLicenceClass\":\"Super\",\r\n    \"driverLicenceExp\":\"2014-06-24T20:34:02.047Z\",\r\n    \"idDocId\":\"O3459876\",\r\n    \"idDocType\":\"Passport\",\r\n    \"idDocExp\":\"2201-01-14T10:23:52.147Z\",\r\n    \"hiredBy\":\"Pavlo Zibrov\",\r\n    \"hireDate\":\"2020-07-24T20:33:52.147Z\",\r\n    \"snn\":\"6661313\",\r\n    \"company\":\"Horns&Hufs\",\r\n    \"insurancePolicy\":\"SomeData\",\r\n    \"insurancePolicyEFF\":\"SomeEFF\",\r\n    \"insurancePolicyExp\":\"2024-07-24T20:33:52.147Z\",\r\n    \"address\":\"Pupkina, 25-a, 6\",\r\n    \"phone\":\"0989809898\",\r\n    \"phone2\":\"0565605656\",\r\n    \"email\":\"ivo.bobul@gmail.com\",\r\n    \"emergencyContactName\":\"Maryna\",\r\n    \"emergencyContactRel\": \"Lubov moja edyna\",\r\n    \"emergencyContactPhone\":\"0666606666\",\r\n    \"notes\":\"Bla bla bla\",\r\n    \"appLogin\":\"MegoMan\",\r\n    \"appPass\":\"SecretPass\"\r\n}",
+							"raw": "{\r\n    \"fullName\":\"Ivo Bobul 2\",\r\n    \"birthDate\":\"2001-07-24T20:33:52.147Z\",\r\n    \"citizenship\":\"USA\",\r\n    \"languagePriority\":\"EN\",\r\n    \"driverLicenceNumber\":\"1313666\",\r\n    \"driverLicenceState\":\"Active\",\r\n    \"driverLicenceExp\":\"2014-06-24T20:34:02.047Z\",\r\n    \"idDocId\":\"O3459876\",\r\n    \"idDocType\":\"Passport\",\r\n    \"idDocExp\":\"2201-01-14T10:23:52.147Z\",\r\n    \"hiredBy\":\"Pavlo Zibrov\",\r\n    \"hireDate\":\"2020-07-24T20:33:52.147Z\",\r\n    \"snn\":\"6661313\",\r\n    \"company\":\"Horns&Hufs\",\r\n    \"insurancePolicy\":\"SomeData\",\r\n    \"insurancePolicyExp\":\"2024-07-24T20:33:52.147Z\",\r\n    \"address\":\"Pupkina, 25-a, 6\",\r\n    \"phone\":\"0989809898\",\r\n    \"phone2\":\"0565605656\",\r\n    \"email\":\"ivo.bobul@gmail.com\",\r\n    \"emergencyContactName\":\"Maryna\",\r\n    \"emergencyContactRel\": \"Lubov moja edyna\",\r\n    \"emergencyContactPhone\":\"0666606666\",\r\n    \"notes\":\"Bla bla bla\",\r\n    \"appLogin\":\"MegoMan\",\r\n    \"appPass\":\"SecretPass\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -500,7 +470,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"fullName\":\"Ivo Bobul\",\r\n    \"birthDate\":\"2001-07-24T20:33:52.147Z\",\r\n    \"birthPlace\":\"Zimbabve\",\r\n    \"citizenship\":\"USA\",\r\n    \"languagePriority\":\"EN\",\r\n    \"driverLicenceType\":\"tractor\",\r\n    \"driverLicenceNumber\":\"1313666\",\r\n    \"driverLicenceState\":\"Active\",\r\n    \"driverLicenceClass\":\"Super\",\r\n    \"driverLicenceExp\":\"2014-06-24T20:34:02.047Z\",\r\n    \"idDocId\":\"O3459876\",\r\n    \"idDocType\":\"Passport\",\r\n    \"idDocExp\":\"2201-01-14T10:23:52.147Z\",\r\n    \"hiredBy\":\"Pavlo Zibrov\",\r\n    \"hireDate\":\"2020-07-24T20:33:52.147Z\",\r\n    \"snn\":\"6661313\",\r\n    \"company\":\"Horns&Hufs\",\r\n    \"insurancePolicy\":\"SomeData\",\r\n    \"insurancePolicyEFF\":\"SomeEFF\",\r\n    \"insurancePolicyExp\":\"2024-07-24T20:33:52.147Z\",\r\n    \"address\":\"Pupkina, 25-a, 6\",\r\n    \"phone\":\"0989809898\",\r\n    \"phone2\":\"0565605656\",\r\n    \"email\":\"ivo.bobul@gmail.com\",\r\n    \"emergencyContactName\":\"Maryna\",\r\n    \"emergencyContactRel\": \"Lubov moja edyna\",\r\n    \"emergencyContactPhone\":\"0666606666\",\r\n    \"notes\":\"Bla bla bla\",\r\n    \"appLogin\":\"MegoMan\",\r\n    \"appPass\":\"SecretPass\"\r\n}",
+							"raw": "{\r\n    \"fullName\":\"Ivo Bobul\",\r\n    \"birthDate\":\"2001-07-24T20:33:52.147Z\",\r\n    \"citizenship\":\"USA\",\r\n    \"languagePriority\":\"EN\",\r\n    \"driverLicenceNumber\":\"1313666\",\r\n    \"driverLicenceState\":\"Active\",\r\n    \"driverLicenceExp\":\"2014-06-24T20:34:02.047Z\",\r\n    \"idDocId\":\"O3459876\",\r\n    \"idDocType\":\"Passport\",\r\n    \"idDocExp\":\"2201-01-14T10:23:52.147Z\",\r\n    \"hiredBy\":\"Pavlo Zibrov\",\r\n    \"hireDate\":\"2020-07-24T20:33:52.147Z\",\r\n    \"snn\":\"6661313\",\r\n    \"company\":\"Horns&Hufs\",\r\n    \"insurancePolicy\":\"SomeData\",\r\n    \"insurancePolicyExp\":\"2024-07-24T20:33:52.147Z\",\r\n    \"address\":\"Pupkina, 25-a, 6\",\r\n    \"phone\":\"0989809898\",\r\n    \"phone2\":\"0565605656\",\r\n    \"email\":\"ivo.bobul@gmail.com\",\r\n    \"emergencyContactName\":\"Maryna\",\r\n    \"emergencyContactRel\": \"Lubov moja edyna\",\r\n    \"emergencyContactPhone\":\"0666606666\",\r\n    \"notes\":\"Bla bla bla\",\r\n    \"appLogin\":\"MegoMan\",\r\n    \"appPass\":\"SecretPass\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -589,7 +559,7 @@
 								{
 									"key": "orderby",
 									"value": "fullName",
-									"description": "'fullName', 'birthDate', 'citizenship', 'languagePriority', 'hiredBy', 'hireDate', 'snn', 'company', 'insurancePolicy', 'insurancePolicyEFF', 'insurancePolicyExp', 'address', 'phone', 'phone2', 'email', 'emergencyContactName', 'emergencyContactRel', 'emergencyContactPhone'"
+									"description": "'fullName', 'birthDate', 'citizenship', 'languagePriority', 'hiredBy', 'hireDate', 'snn', 'company', 'insurancePolicy', 'insurancePolicyExp', 'address', 'phone', 'phone2', 'email', 'emergencyContactName', 'emergencyContactRel', 'emergencyContactPhone'"
 								},
 								{
 									"key": "direction",
@@ -604,11 +574,6 @@
 								{
 									"key": "fullName",
 									"value": "Ivo",
-									"disabled": true
-								},
-								{
-									"key": "birthPlace",
-									"value": "",
 									"disabled": true
 								},
 								{
@@ -638,11 +603,6 @@
 								},
 								{
 									"key": "insurancePolicy",
-									"value": "",
-									"disabled": true
-								},
-								{
-									"key": "insurancePolicyEFF",
 									"value": "",
 									"disabled": true
 								},
@@ -739,7 +699,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"fullName\":\"Stepan Giga 2\",\r\n    \"birthDate\":\"2001-07-24T20:33:52.147Z\",\r\n    \"birthPlace\":\"Zimbabve\",\r\n    \"citizenship\":\"USA\",\r\n    \"languagePriority\":\"EN\",\r\n    \"hiredBy\":\"Pavlo Zibrov\",\r\n    \"hireDate\":\"2020-07-24T20:33:52.147Z\",\r\n    \"snn\":\"6661313\",\r\n    \"company\":\"Horns&Hufs\",\r\n    \"insurancePolicy\":\"SomeData\",\r\n    \"insurancePolicyEFF\":\"SomeEFF\",\r\n    \"insurancePolicyExp\":\"2024-07-24T20:33:52.147Z\",\r\n    \"address\":\"Pupkina, 25-a, 6\",\r\n    \"phone\":\"0989809898\",\r\n    \"phone2\":\"0565605656\",\r\n    \"email\":\"ivo.bobul@gmail.com\",\r\n    \"emergencyContactName\":\"Maryna\",\r\n    \"emergencyContactRel\": \"Lubov moja edyna\",\r\n    \"emergencyContactPhone\":\"0666606666\",\r\n    \"notes\":\"Bla bla bla\",\r\n    \"owner\":\"6505cd91c8506650905f4544\"\r\n}",
+							"raw": "{\r\n    \"fullName\":\"Stepan Giga 2\",\r\n    \"birthDate\":\"2001-07-24T20:33:52.147Z\",\r\n    \"citizenship\":\"USA\",\r\n    \"languagePriority\":\"EN\",\r\n    \"hiredBy\":\"Pavlo Zibrov\",\r\n    \"hireDate\":\"2020-07-24T20:33:52.147Z\",\r\n    \"snn\":\"6661313\",\r\n    \"company\":\"Horns&Hufs\",\r\n    \"insurancePolicy\":\"SomeData\",\r\n    \"insurancePolicyExp\":\"2024-07-24T20:33:52.147Z\",\r\n    \"address\":\"Pupkina, 25-a, 6\",\r\n    \"phone\":\"0989809898\",\r\n    \"phone2\":\"0565605656\",\r\n    \"email\":\"ivo.bobul@gmail.com\",\r\n    \"emergencyContactName\":\"Maryna\",\r\n    \"emergencyContactRel\": \"Lubov moja edyna\",\r\n    \"emergencyContactPhone\":\"0666606666\",\r\n    \"notes\":\"Bla bla bla\",\r\n    \"owner\":\"6505cd91c8506650905f4544\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -765,7 +725,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"fullName\":\"Stepan Giga\",\r\n    \"birthDate\":\"2001-07-24T20:33:52.147Z\",\r\n    \"birthPlace\":\"Zimbabve\",\r\n    \"citizenship\":\"USA\",\r\n    \"languagePriority\":\"EN\",\r\n    \"hiredBy\":\"Pavlo Zibrov\",\r\n    \"hireDate\":\"2020-07-24T20:33:52.147Z\",\r\n    \"snn\":\"6661313\",\r\n    \"company\":\"Horns&Hufs\",\r\n    \"insurancePolicy\":\"SomeData\",\r\n    \"insurancePolicyEFF\":\"SomeEFF\",\r\n    \"insurancePolicyExp\":\"2024-07-24T20:33:52.147Z\",\r\n    \"address\":\"Pupkina, 25-a, 6\",\r\n    \"phone\":\"0989809898\",\r\n    \"phone2\":\"0565605656\",\r\n    \"email\":\"ivo.bobul@gmail.com\",\r\n    \"emergencyContactName\":\"Maryna\",\r\n    \"emergencyContactRel\": \"Lubov moja edyna\",\r\n    \"emergencyContactPhone\":\"0666606666\",\r\n    \"notes\":\"Bla bla bla\",\r\n    \"owner\":\"64dcb747db730feec83a7a8c\"\r\n}",
+							"raw": "{\r\n    \"fullName\":\"Stepan Giga\",\r\n    \"birthDate\":\"2001-07-24T20:33:52.147Z\",\r\n    \"citizenship\":\"USA\",\r\n    \"languagePriority\":\"EN\",\r\n    \"hiredBy\":\"Pavlo Zibrov\",\r\n    \"hireDate\":\"2020-07-24T20:33:52.147Z\",\r\n    \"snn\":\"6661313\",\r\n    \"company\":\"Horns&Hufs\",\r\n    \"insurancePolicy\":\"SomeData\",\r\n    \"insurancePolicyExp\":\"2024-07-24T20:33:52.147Z\",\r\n    \"address\":\"Pupkina, 25-a, 6\",\r\n    \"phone\":\"0989809898\",\r\n    \"phone2\":\"0565605656\",\r\n    \"email\":\"ivo.bobul@gmail.com\",\r\n    \"emergencyContactName\":\"Maryna\",\r\n    \"emergencyContactRel\": \"Lubov moja edyna\",\r\n    \"emergencyContactPhone\":\"0666606666\",\r\n    \"notes\":\"Bla bla bla\",\r\n    \"owner\":\"64dcb747db730feec83a7a8c\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -854,7 +814,7 @@
 								{
 									"key": "orderby",
 									"value": "fullName",
-									"description": "'fullName', 'birthDate', 'citizenship', 'languagePriority','driverLicenceType', 'driverLicenceNumber', 'driverLicenceState', 'driverLicenceClass', 'driverLicenceExp', 'idDocId', 'idDocType', 'idDocExp', 'hiredBy', 'hireDate', 'snn', 'company', 'insurancePolicy', 'insurancePolicyEFF', 'insurancePolicyExp', 'address', 'phone', 'phone2', 'email', 'emergencyContactName', 'emergencyContactRel', 'emergencyContactPhone', 'appLogin'"
+									"description": "'fullName', 'birthDate', 'citizenship', 'languagePriority', 'driverLicenceNumber', 'driverLicenceState', 'driverLicenceExp', 'idDocId', 'idDocType', 'idDocExp', 'hiredBy', 'hireDate', 'snn', 'company', 'insurancePolicy', 'insurancePolicyExp', 'address', 'phone', 'phone2', 'email', 'emergencyContactName', 'emergencyContactRel', 'emergencyContactPhone', 'appLogin'"
 								},
 								{
 									"key": "direction",
@@ -872,11 +832,6 @@
 									"disabled": true
 								},
 								{
-									"key": "birthPlace",
-									"value": "",
-									"disabled": true
-								},
-								{
 									"key": "citizenship",
 									"value": "USA",
 									"disabled": true
@@ -887,11 +842,6 @@
 									"disabled": true
 								},
 								{
-									"key": "driverLicenceType",
-									"value": "",
-									"disabled": true
-								},
-								{
 									"key": "driverLicenceNumber",
 									"value": "",
 									"disabled": true
@@ -899,11 +849,6 @@
 								{
 									"key": "driverLicenceState",
 									"value": "InActive",
-									"disabled": true
-								},
-								{
-									"key": "driverLicenceClass",
-									"value": "",
 									"disabled": true
 								},
 								{
@@ -933,11 +878,6 @@
 								},
 								{
 									"key": "insurancePolicy",
-									"value": "",
-									"disabled": true
-								},
-								{
-									"key": "insurancePolicyEFF",
 									"value": "",
 									"disabled": true
 								},
@@ -1039,7 +979,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"fullName\":\"Stepan Giga 10\",\r\n    \"birthDate\":\"2001-07-24T20:33:52.147Z\",\r\n    \"birthPlace\":\"Zimbabve\",\r\n    \"citizenship\":\"USA\",\r\n    \"languagePriority\":\"EN\",\r\n    \"driverLicenceType\":\"tractor\",\r\n    \"driverLicenceNumber\":\"1313666\",\r\n    \"driverLicenceState\":\"Active\",\r\n    \"driverLicenceClass\":\"Super\",\r\n    \"driverLicenceExp\":\"2014-06-24T20:34:02.047Z\",\r\n    \"idDocId\":\"O3459876\",\r\n    \"idDocType\":\"Passport\",\r\n    \"idDocExp\":\"2201-01-14T10:23:52.147Z\",\r\n    \"hiredBy\":\"Pavlo Zibrov\",\r\n    \"hireDate\":\"2020-07-24T20:33:52.147Z\",\r\n    \"snn\":\"6661313\",\r\n    \"company\":\"Horns&Hufs\",\r\n    \"insurancePolicy\":\"SomeData\",\r\n    \"insurancePolicyEFF\":\"SomeEFF\",\r\n    \"insurancePolicyExp\":\"2024-07-24T20:33:52.147Z\",\r\n    \"address\":\"Pupkina, 25-a, 6\",\r\n    \"phone\":\"0989809898\",\r\n    \"phone2\":\"0565605656\",\r\n    \"email\":\"ivo.bobul@gmail.com\",\r\n    \"emergencyContactName\":\"Maryna\",\r\n    \"emergencyContactRel\": \"Lubov moja edyna\",\r\n    \"emergencyContactPhone\":\"0666606666\",\r\n    \"notes\":\"Bla bla bla\",\r\n    \"appLogin\":\"MegoMan\",\r\n    \"appPass\":\"SecretPass\",\r\n    \"owner\":\"6505cd91c8506650905f4544\"\r\n}",
+							"raw": "{\r\n    \"fullName\":\"Stepan Giga 10\",\r\n    \"birthDate\":\"2001-07-24T20:33:52.147Z\",\r\n    \"citizenship\":\"USA\",\r\n    \"languagePriority\":\"EN\",\r\n    \"driverLicenceNumber\":\"1313666\",\r\n    \"driverLicenceState\":\"Active\",\r\n    \"driverLicenceExp\":\"2014-06-24T20:34:02.047Z\",\r\n    \"idDocId\":\"O3459876\",\r\n    \"idDocType\":\"Passport\",\r\n    \"idDocExp\":\"2201-01-14T10:23:52.147Z\",\r\n    \"hiredBy\":\"Pavlo Zibrov\",\r\n    \"hireDate\":\"2020-07-24T20:33:52.147Z\",\r\n    \"snn\":\"6661313\",\r\n    \"company\":\"Horns&Hufs\",\r\n    \"insurancePolicy\":\"SomeData\",\r\n    \"insurancePolicyExp\":\"2024-07-24T20:33:52.147Z\",\r\n    \"address\":\"Pupkina, 25-a, 6\",\r\n    \"phone\":\"0989809898\",\r\n    \"phone2\":\"0565605656\",\r\n    \"email\":\"ivo.bobul@gmail.com\",\r\n    \"emergencyContactName\":\"Maryna\",\r\n    \"emergencyContactRel\": \"Lubov moja edyna\",\r\n    \"emergencyContactPhone\":\"0666606666\",\r\n    \"notes\":\"Bla bla bla\",\r\n    \"appLogin\":\"MegoMan\",\r\n    \"appPass\":\"SecretPass\",\r\n    \"owner\":\"6505cd91c8506650905f4544\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1065,7 +1005,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"fullName\":\"Stepan Giga 10\",\r\n    \"birthDate\":\"2001-07-24T20:33:52.147Z\",\r\n    \"birthPlace\":\"Zimbabve\",\r\n    \"citizenship\":\"USA\",\r\n    \"languagePriority\":\"EN\",\r\n    \"driverLicenceType\":\"tractor\",\r\n    \"driverLicenceNumber\":\"1313666\",\r\n    \"driverLicenceState\":\"Active\",\r\n    \"driverLicenceClass\":\"Super\",\r\n    \"driverLicenceExp\":\"2014-06-24T20:34:02.047Z\",\r\n    \"idDocId\":\"O3459876\",\r\n    \"idDocType\":\"Passport\",\r\n    \"idDocExp\":\"2201-01-14T10:23:52.147Z\",\r\n    \"hiredBy\":\"Pavlo Zibrov\",\r\n    \"hireDate\":\"2020-07-24T20:33:52.147Z\",\r\n    \"snn\":\"6661313\",\r\n    \"company\":\"Horns&Hufs\",\r\n    \"insurancePolicy\":\"SomeData\",\r\n    \"insurancePolicyEFF\":\"SomeEFF\",\r\n    \"insurancePolicyExp\":\"2024-07-24T20:33:52.147Z\",\r\n    \"address\":\"Pupkina, 25-a, 6\",\r\n    \"phone\":\"0989809898\",\r\n    \"phone2\":\"0565605656\",\r\n    \"email\":\"ivo.bobul@gmail.com\",\r\n    \"emergencyContactName\":\"Maryna\",\r\n    \"emergencyContactRel\": \"Lubov moja edyna\",\r\n    \"emergencyContactPhone\":\"0666606666\",\r\n    \"notes\":\"Bla bla bla\",\r\n    \"appLogin\":\"MegoMan\",\r\n    \"appPass\":\"SecretPass\",\r\n    \"owner\":\"6505cd91c8506650905f4544\"\r\n}",
+							"raw": "{\r\n    \"fullName\":\"Stepan Giga 10\",\r\n    \"birthDate\":\"2001-07-24T20:33:52.147Z\",\r\n    \"citizenship\":\"USA\",\r\n    \"languagePriority\":\"EN\",\r\n    \"driverLicenceNumber\":\"1313666\",\r\n    \"driverLicenceState\":\"Active\",\r\n    \"driverLicenceExp\":\"2014-06-24T20:34:02.047Z\",\r\n    \"idDocId\":\"O3459876\",\r\n    \"idDocType\":\"Passport\",\r\n    \"idDocExp\":\"2201-01-14T10:23:52.147Z\",\r\n    \"hiredBy\":\"Pavlo Zibrov\",\r\n    \"hireDate\":\"2020-07-24T20:33:52.147Z\",\r\n    \"snn\":\"6661313\",\r\n    \"company\":\"Horns&Hufs\",\r\n    \"insurancePolicy\":\"SomeData\",\r\n    \"insurancePolicyExp\":\"2024-07-24T20:33:52.147Z\",\r\n    \"address\":\"Pupkina, 25-a, 6\",\r\n    \"phone\":\"0989809898\",\r\n    \"phone2\":\"0565605656\",\r\n    \"email\":\"ivo.bobul@gmail.com\",\r\n    \"emergencyContactName\":\"Maryna\",\r\n    \"emergencyContactRel\": \"Lubov moja edyna\",\r\n    \"emergencyContactPhone\":\"0666606666\",\r\n    \"notes\":\"Bla bla bla\",\r\n    \"appLogin\":\"MegoMan\",\r\n    \"appPass\":\"SecretPass\",\r\n    \"owner\":\"6505cd91c8506650905f4544\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1154,7 +1094,7 @@
 								{
 									"key": "orderby",
 									"value": "fullName",
-									"description": "'fullName', 'birthDate', 'birthPlace', 'citizenship', 'languagePriority', 'languagePriority', 'driverLicenceType', 'driverLicenceNumber', 'driverLicenceState', 'driverLicenceClass', 'driverLicenceExp', 'idDocId', 'idDocType', 'idDocExp', 'hiredBy', 'hireDate', 'address', 'phone', 'phone2', 'email', 'emergencyContactName', 'emergencyContactRel', 'emergencyContactPhone', 'appLogin'"
+									"description": "'fullName', 'birthDate', 'citizenship', 'languagePriority', 'languagePriority', 'driverLicenceNumber', 'driverLicenceState', 'driverLicenceExp', 'idDocId', 'idDocType', 'idDocExp', 'hiredBy', 'hireDate', 'address', 'phone', 'phone2', 'email', 'emergencyContactName', 'emergencyContactRel', 'emergencyContactPhone', 'appLogin'"
 								},
 								{
 									"key": "direction",
@@ -1172,11 +1112,6 @@
 									"disabled": true
 								},
 								{
-									"key": "birthPlace",
-									"value": "",
-									"disabled": true
-								},
-								{
 									"key": "citizenship",
 									"value": "USA",
 									"disabled": true
@@ -1187,22 +1122,12 @@
 									"disabled": true
 								},
 								{
-									"key": "driverLicenceType",
-									"value": "",
-									"disabled": true
-								},
-								{
 									"key": "driverLicenceNumber",
 									"value": "",
 									"disabled": true
 								},
 								{
 									"key": "driverLicenceState",
-									"value": "",
-									"disabled": true
-								},
-								{
-									"key": "driverLicenceClass",
 									"value": "",
 									"disabled": true
 								},
@@ -1319,7 +1244,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"fullName\":\"Oleksandr Pipa 2\",\r\n    \"birthDate\":\"2001-07-24T20:33:52.147Z\",\r\n    \"birthPlace\":\"Puerto-Rico\",\r\n    \"citizenship\":\"USA\",\r\n    \"languagePriority\":\"ES\",\r\n    \"driverLicenceType\":\"tractor\",\r\n    \"driverLicenceNumber\":\"1313666\",\r\n    \"driverLicenceState\":\"Active\",\r\n    \"driverLicenceClass\":\"Super\",\r\n    \"driverLicenceExp\":\"2014-06-24T20:34:02.047Z\",\r\n    \"idDocId\":\"O3459876\",\r\n    \"idDocType\":\"Passport\",\r\n    \"idDocExp\":\"2201-01-14T10:23:52.147Z\",\r\n    \"hiredBy\":\"Pavlo Zibrov\",\r\n    \"hireDate\":\"2020-07-24T20:33:52.147Z\",    \r\n    \"address\":\"Dupkina, 25-a, 6\",\r\n    \"phone\":\"0989809898\",\r\n    \"phone2\":\"0565605656\",\r\n    \"email\":\"a.pipa@gmail.com\",\r\n    \"emergencyContactName\":\"Maryna\",\r\n    \"emergencyContactRel\": \"Lubov moja edyna\",\r\n    \"emergencyContactPhone\":\"0666606666\",\r\n    \"notes\":\"Bla bla bla\",\r\n    \"appLogin\":\"MegoMan\",\r\n    \"appPass\":\"SecretPass\",\r\n    \"owner\":\"6505cd91c8506650905f4544\"\r\n}",
+							"raw": "{\r\n    \"fullName\":\"Oleksandr Pipa 2\",\r\n    \"birthDate\":\"2001-07-24T20:33:52.147Z\",\r\n    \"citizenship\":\"USA\",\r\n    \"languagePriority\":\"ES\",\r\n    \"driverLicenceNumber\":\"1313666\",\r\n    \"driverLicenceState\":\"Active\",\r\n    \"driverLicenceExp\":\"2014-06-24T20:34:02.047Z\",\r\n    \"idDocId\":\"O3459876\",\r\n    \"idDocType\":\"Passport\",\r\n    \"idDocExp\":\"2201-01-14T10:23:52.147Z\",\r\n    \"hiredBy\":\"Pavlo Zibrov\",\r\n    \"hireDate\":\"2020-07-24T20:33:52.147Z\",    \r\n    \"address\":\"Dupkina, 25-a, 6\",\r\n    \"phone\":\"0989809898\",\r\n    \"phone2\":\"0565605656\",\r\n    \"email\":\"a.pipa@gmail.com\",\r\n    \"emergencyContactName\":\"Maryna\",\r\n    \"emergencyContactRel\": \"Lubov moja edyna\",\r\n    \"emergencyContactPhone\":\"0666606666\",\r\n    \"notes\":\"Bla bla bla\",\r\n    \"appLogin\":\"MegoMan\",\r\n    \"appPass\":\"SecretPass\",\r\n    \"owner\":\"6505cd91c8506650905f4544\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1345,7 +1270,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"fullName\":\"Oleksandr Pipa\",\r\n    \"birthDate\":\"2001-07-24T20:33:52.147Z\",\r\n    \"birthPlace\":\"Puerto-Rico\",\r\n    \"citizenship\":\"USA\",\r\n    \"languagePriority\":\"ES\",\r\n    \"driverLicenceType\":\"tractor\",\r\n    \"driverLicenceNumber\":\"1313666\",\r\n    \"driverLicenceState\":\"Active\",\r\n    \"driverLicenceClass\":\"Super\",\r\n    \"driverLicenceExp\":\"2014-06-24T20:34:02.047Z\",\r\n    \"idDocId\":\"O3459876\",\r\n    \"idDocType\":\"Passport\",\r\n    \"idDocExp\":\"2201-01-14T10:23:52.147Z\",\r\n    \"hiredBy\":\"Pavlo Zibrov\",\r\n    \"hireDate\":\"2020-07-24T20:33:52.147Z\",    \r\n    \"address\":\"Dupkina, 25-a, 6\",\r\n    \"phone\":\"0989809898\",\r\n    \"phone2\":\"0565605656\",\r\n    \"email\":\"a.pipa@gmail.com\",\r\n    \"emergencyContactName\":\"Maryna\",\r\n    \"emergencyContactRel\": \"Lubov moja edyna\",\r\n    \"emergencyContactPhone\":\"0666606666\",\r\n    \"notes\":\"Bla bla bla\",\r\n    \"appLogin\":\"MegoMan\",\r\n    \"appPass\":\"SecretPass\",\r\n    \"owner\":\"64d69a409e4807b416b85556\"\r\n}",
+							"raw": "{\r\n    \"fullName\":\"Oleksandr Pipa\",\r\n    \"birthDate\":\"2001-07-24T20:33:52.147Z\",\r\n    \"citizenship\":\"USA\",\r\n    \"languagePriority\":\"ES\",\r\n    \"driverLicenceNumber\":\"1313666\",\r\n    \"driverLicenceState\":\"Active\",\r\n    \"driverLicenceExp\":\"2014-06-24T20:34:02.047Z\",\r\n    \"idDocId\":\"O3459876\",\r\n    \"idDocType\":\"Passport\",\r\n    \"idDocExp\":\"2201-01-14T10:23:52.147Z\",\r\n    \"hiredBy\":\"Pavlo Zibrov\",\r\n    \"hireDate\":\"2020-07-24T20:33:52.147Z\",    \r\n    \"address\":\"Dupkina, 25-a, 6\",\r\n    \"phone\":\"0989809898\",\r\n    \"phone2\":\"0565605656\",\r\n    \"email\":\"a.pipa@gmail.com\",\r\n    \"emergencyContactName\":\"Maryna\",\r\n    \"emergencyContactRel\": \"Lubov moja edyna\",\r\n    \"emergencyContactPhone\":\"0666606666\",\r\n    \"notes\":\"Bla bla bla\",\r\n    \"appLogin\":\"MegoMan\",\r\n    \"appPass\":\"SecretPass\",\r\n    \"owner\":\"64d69a409e4807b416b85556\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1436,7 +1361,7 @@
 								{
 									"key": "orderby",
 									"value": "truckNumber",
-									"description": "'truckNumber','status','crossborder','certificate','type','payload','grossWeight','make','model','year','color','vinCode','licencePlate','licenceState','plateExpires','insideDims','doorDims'",
+									"description": "'truckNumber','status','crossborder','certificate','type','payload','grossWeight','make','model','year','color','vinCode','licencePlate','insideDims','doorDims'",
 									"disabled": true
 								},
 								{
@@ -1511,11 +1436,6 @@
 									"disabled": true
 								},
 								{
-									"key": "licenceState",
-									"value": "Active",
-									"disabled": true
-								},
-								{
 									"key": "lastLocation",
 									"value": "50.484278,30.335073",
 									"description": "Latitude, Longitude",
@@ -1575,7 +1495,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"truckNumber\":\"2446\",\r\n    \"status\":\"Available\",\r\n    \"lastLocation\":[50.824229, 29.221783],\r\n    \"crossborder\":\"Yes\",\r\n    \"certificate\":\"Hazmat\",\r\n    \"type\":\"Box truck\",\r\n    \"equipment\":[\r\n        \"Dock height risers\",\r\n        \"Air ride\",\r\n        \"Lift gate\",\r\n        \"Keep from freezing\",\r\n        \"ICC bar\",\r\n        \"Vertical E-track\",\r\n        \"Horizontal E-track\",\r\n        \"Pallet jack\",\r\n        \"PPE\",\r\n        \"Ramps\",\r\n        \"Straps\",\r\n        \"Loads bars\",\r\n        \"Blankets\",\r\n        \"Pads\",\r\n        \"Fire extinguisher\"\r\n    ],\r\n    \"payload\":100500,\r\n    \"grossWeight\":\"150 ton\",\r\n    \"make\":\"Mercedes\",\r\n    \"model\":\"Sprinter\",\r\n    \"year\":1967,\r\n    \"color\":\"Yello\",\r\n    \"vinCode\":\"vf938749843\",\r\n    \"licencePlate\":\"AA7676BK\",\r\n    \"licenceState\":\"Active\",\r\n    \"plateExpires\":\"2001-07-24T20:33:52.147Z\",\r\n    \"insideDims\":\"100 x 200\",\r\n    \"doorDims\":\"20 x 20\",\r\n    \"owner\":\"6505cd91c8506650905f4544\",\r\n    \"coordinator\":\"6505e7d4187ddabdc941e8e5\",\r\n    \"driver\":\"6505e7d4187ddabdc941e8e5\"\r\n}",
+							"raw": "{\r\n    \"truckNumber\":\"2446\",\r\n    \"status\":\"Available\",\r\n    \"lastLocation\":[50.824229, 29.221783],\r\n    \"crossborder\":\"Yes\",\r\n    \"certificate\":\"Hazmat\",\r\n    \"type\":\"Box truck\",\r\n    \"equipment\":[\r\n        \"Dock height risers\",\r\n        \"Air ride\",\r\n        \"Lift gate\",\r\n        \"Keep from freezing\",\r\n        \"ICC bar\",\r\n        \"Vertical E-track\",\r\n        \"Horizontal E-track\",\r\n        \"Pallet jack\",\r\n        \"PPE\",\r\n        \"Ramps\",\r\n        \"Straps\",\r\n        \"Loads bars\",\r\n        \"Blankets\",\r\n        \"Pads\",\r\n        \"Fire extinguisher\"\r\n    ],\r\n    \"payload\":100500,\r\n    \"grossWeight\":\"150 ton\",\r\n    \"make\":\"Mercedes\",\r\n    \"model\":\"Sprinter\",\r\n    \"year\":1967,\r\n    \"color\":\"Yello\",\r\n    \"vinCode\":\"vf938749843\",\r\n    \"licencePlate\":\"AA7676BK\",\r\n    \"insideDims\":\"100 x 200\",\r\n    \"doorDims\":\"20 x 20\",\r\n    \"owner\":\"6505cd91c8506650905f4544\",\r\n    \"coordinator\":\"6505e7d4187ddabdc941e8e5\",\r\n    \"driver\":\"6505e7d4187ddabdc941e8e5\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1601,7 +1521,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"truckNumber\":\"7731\",\r\n    \"status\":\"Available\",\r\n    \"lastLocation\":[33.0219,-117.2735],\r\n    \"crossborder\":\"Yes\",\r\n    \"certificate\":\"Hazmat\",\r\n    \"type\":\"Box truck\",\r\n    \"equipment\":[\r\n        \"Dock height risers\",\r\n        \"Air ride\",\r\n        \"Lift gate\",\r\n        \"Keep from freezing\",\r\n        \"ICC bar\",\r\n        \"Vertical E-track\",\r\n        \"Horizontal E-track\",\r\n        \"Pallet jack\",\r\n        \"PPE\",\r\n        \"Ramps\",\r\n        \"Straps\",\r\n        \"Loads bars\",\r\n        \"Blankets\",\r\n        \"Pads\",\r\n        \"Fire extinguisher\"\r\n    ],\r\n    \"payload\":100500,\r\n    \"grossWeight\":\"150 ton\",\r\n    \"make\":\"Mercedes\",\r\n    \"model\":\"Sprinter\",\r\n    \"year\":1967,\r\n    \"color\":\"Yello\",\r\n    \"vinCode\":\"vf938749843\",\r\n    \"licencePlate\":\"AA7676BK\",\r\n    \"licenceState\":\"Active\",\r\n    \"plateExpires\":\"2001-07-24T20:33:52.147Z\",\r\n    \"insideDims\":\"100 x 200\",\r\n    \"doorDims\":\"20 x 20\",\r\n    \"owner\":\"64dcb842db730feec83a7ac5\",\r\n    \"coordinator\":\"64dcc026f4a06e8814ae8894\",\r\n    \"driver\":\"64dcb747db730feec83a7a8c\"\r\n}",
+							"raw": "{\r\n    \"truckNumber\":\"7731\",\r\n    \"status\":\"Available\",\r\n    \"lastLocation\":[33.0219,-117.2735],\r\n    \"crossborder\":\"Yes\",\r\n    \"certificate\":\"Hazmat\",\r\n    \"type\":\"Box truck\",\r\n    \"equipment\":[\r\n        \"Dock height risers\",\r\n        \"Air ride\",\r\n        \"Lift gate\",\r\n        \"Keep from freezing\",\r\n        \"ICC bar\",\r\n        \"Vertical E-track\",\r\n        \"Horizontal E-track\",\r\n        \"Pallet jack\",\r\n        \"PPE\",\r\n        \"Ramps\",\r\n        \"Straps\",\r\n        \"Loads bars\",\r\n        \"Blankets\",\r\n        \"Pads\",\r\n        \"Fire extinguisher\"\r\n    ],\r\n    \"payload\":100500,\r\n    \"grossWeight\":\"150 ton\",\r\n    \"make\":\"Mercedes\",\r\n    \"model\":\"Sprinter\",\r\n    \"year\":1967,\r\n    \"color\":\"Yello\",\r\n    \"vinCode\":\"vf938749843\",\r\n    \"licencePlate\":\"AA7676BK\",\r\n    \"insideDims\":\"100 x 200\",\r\n    \"doorDims\":\"20 x 20\",\r\n    \"owner\":\"64dcb842db730feec83a7ac5\",\r\n    \"coordinator\":\"64dcc026f4a06e8814ae8894\",\r\n    \"driver\":\"64dcb747db730feec83a7a8c\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"

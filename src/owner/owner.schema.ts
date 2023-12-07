@@ -34,9 +34,6 @@ export class Owner {
   birthDate: Date;
 
   @Prop({ required: true })
-  birthPlace: string;
-
-  @Prop({ required: true })
   citizenship: string;
 
   @Prop({ required: true, enum: LANG_PRIORITIES })
@@ -56,9 +53,6 @@ export class Owner {
 
   @Prop({ required: true })
   insurancePolicy: string;
-
-  @Prop({ required: true })
-  insurancePolicyEFF: string;
 
   @Prop({ required: true })
   insurancePolicyExp: Date;

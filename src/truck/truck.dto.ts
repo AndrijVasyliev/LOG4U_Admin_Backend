@@ -32,8 +32,6 @@ export class CreateTruckDto {
   readonly color: string;
   readonly vinCode: string;
   readonly licencePlate: string;
-  readonly licenceState: string;
-  readonly plateExpires: Date;
   readonly insideDims: string;
   readonly doorDims: string;
   readonly owner: string;
@@ -59,8 +57,6 @@ export class UpdateTruckDto {
   readonly color?: string;
   readonly vinCode?: string;
   readonly licencePlate?: string;
-  readonly licenceState?: string;
-  readonly plateExpires?: Date;
   readonly insideDims?: string;
   readonly doorDims?: string;
   readonly owner?: string;
@@ -83,8 +79,6 @@ export class TruckQuerySearch {
   readonly model?: string;
   readonly color?: string;
   readonly vinCode?: string;
-  readonly licencePlate?: string;
-  readonly licenceState?: string;
 }
 
 export class TruckQuery extends Query<TruckQuerySearch> {}
@@ -121,8 +115,6 @@ export class TruckResultDto {
       color: truck.color,
       vinCode: truck.vinCode,
       licencePlate: truck.licencePlate,
-      licenceState: truck.licenceState,
-      plateExpires: truck.plateExpires,
       insideDims: truck.insideDims,
       doorDims: truck.doorDims,
     };
@@ -167,8 +159,6 @@ export class TruckResultDto {
   readonly color: string;
   readonly vinCode: string;
   readonly licencePlate: string;
-  readonly licenceState: string;
-  readonly plateExpires: Date;
   readonly insideDims: string;
   readonly doorDims: string;
   readonly owner?: OwnerResultDto;

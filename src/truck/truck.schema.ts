@@ -109,12 +109,6 @@ export class Truck {
   licencePlate: string;
 
   @Prop({ required: true })
-  licenceState: string;
-
-  @Prop({ required: true })
-  plateExpires: Date;
-
-  @Prop({ required: true })
   insideDims: string;
 
   @Prop({ required: true })

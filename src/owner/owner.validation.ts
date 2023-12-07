@@ -4,7 +4,6 @@ import { LANG_PRIORITIES } from '../utils/constants';
 export const CreateOwnerValidation = Joi.object({
   fullName: Joi.string().required(),
   birthDate: Joi.date().iso().required(),
-  birthPlace: Joi.string().required(),
   citizenship: Joi.string().required(),
   languagePriority: Joi.string()
     .valid(...LANG_PRIORITIES)
@@ -14,7 +13,6 @@ export const CreateOwnerValidation = Joi.object({
   snn: Joi.string().required(),
   company: Joi.string().allow('').optional(),
   insurancePolicy: Joi.string().required(),
-  insurancePolicyEFF: Joi.string().required(),
   intestsurancePolicyExp: Joi.date().iso().required(),
   address: Joi.string().required(),
   phone: Joi.string().required(),
@@ -29,7 +27,6 @@ export const CreateOwnerValidation = Joi.object({
 export const UpdateOwnerValidation = Joi.object({
   fullName: Joi.string().optional(),
   birthDate: Joi.date().iso().optional(),
-  birthPlace: Joi.string().optional(),
   citizenship: Joi.string().optional(),
   languagePriority: Joi.string()
     .valid(...LANG_PRIORITIES)
@@ -39,7 +36,6 @@ export const UpdateOwnerValidation = Joi.object({
   snn: Joi.string().optional(),
   company: Joi.string().allow('').optional(),
   insurancePolicy: Joi.string().optional(),
-  insurancePolicyEFF: Joi.string().optional(),
   insurancePolicyExp: Joi.date().iso().optional(),
   address: Joi.string().optional(),
   phone: Joi.string().optional(),
@@ -56,7 +52,6 @@ export const OwnerQueryParamsSchema = Joi.object({
   limit: Joi.number().integer().min(1).optional(),
   search: Joi.string().optional(),
   fullName: Joi.string().optional(),
-  birthPlace: Joi.string().optional(),
   citizenship: Joi.string().optional(),
   languagePriority: Joi.string()
     .valid(...LANG_PRIORITIES)
@@ -65,7 +60,6 @@ export const OwnerQueryParamsSchema = Joi.object({
   snn: Joi.string().optional(),
   company: Joi.string().optional(),
   insurancePolicy: Joi.string().optional(),
-  insurancePolicyEFF: Joi.string().optional(),
   address: Joi.string().optional(),
   phone: Joi.string().optional(),
   phone2: Joi.string().optional(),
@@ -79,7 +73,6 @@ export const OwnerQueryParamsSchema = Joi.object({
     orderby: Joi.string().valid(
       'fullName',
       'birthDate',
-      'birthPlace',
       'citizenship',
       'languagePriority',
       'hiredBy',
@@ -87,7 +80,6 @@ export const OwnerQueryParamsSchema = Joi.object({
       'snn',
       'company',
       'insurancePolicy',
-      'insurancePolicyEFF',
       'insurancePolicyExp',
       'address',
       'phone',

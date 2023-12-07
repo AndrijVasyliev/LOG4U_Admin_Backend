@@ -28,9 +28,6 @@ export class Coordinator {
   birthDate: Date;
 
   @Prop({ required: true })
-  birthPlace: string;
-
-  @Prop({ required: true })
   citizenship: string;
 
   @Prop({ required: true, enum: LANG_PRIORITIES })
@@ -50,9 +47,6 @@ export class Coordinator {
 
   @Prop({ required: true })
   insurancePolicy: string;
-
-  @Prop({ required: true })
-  insurancePolicyEFF: string;
 
   @Prop({ required: true })
   insurancePolicyExp: Date;

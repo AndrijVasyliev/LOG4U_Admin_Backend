@@ -12,13 +12,10 @@ import { TruckResultDto } from '../truck/truck.dto';
 export class CreateDriverDto {
   readonly fullName: string;
   readonly birthDate?: Date;
-  readonly birthPlace?: string;
   readonly citizenship?: string;
   readonly languagePriority?: LangPriority;
-  readonly driverLicenceType: string;
   readonly driverLicenceNumber: string;
   readonly driverLicenceState: string;
-  readonly driverLicenceClass: string;
   readonly driverLicenceExp: Date;
   readonly idDocId?: string;
   readonly idDocType?: string;
@@ -42,13 +39,10 @@ export class CreateDriverDto {
 export class UpdateDriverDto {
   readonly fullName?: string;
   readonly birthDate?: Date;
-  readonly birthPlace?: string;
   readonly citizenship?: string;
   readonly languagePriority?: LangPriority;
-  readonly driverLicenceType?: string;
   readonly driverLicenceNumber?: string;
   readonly driverLicenceState?: string;
-  readonly driverLicenceClass?: string;
   readonly driverLicenceExp?: Date;
   readonly idDocId?: string;
   readonly idDocType?: string;
@@ -72,13 +66,10 @@ export class UpdateDriverDto {
 export class DriverQuerySearch {
   readonly search?: string;
   readonly fullName?: string;
-  readonly birthPlace?: string;
   readonly citizenship?: string;
   readonly languagePriority?: LangPriority;
-  readonly driverLicenceType?: string;
   readonly driverLicenceNumber?: string;
   readonly driverLicenceState?: string;
-  readonly driverLicenceClass?: string;
   readonly idDocId?: string;
   readonly idDocType?: string;
   readonly hiredBy?: string;
@@ -109,13 +100,10 @@ export class DriverResultDto {
       type: driver.type,
       fullName: driver.fullName,
       birthDate: driver.birthDate,
-      birthPlace: driver.birthPlace,
       citizenship: driver.citizenship,
       languagePriority: driver.languagePriority,
-      driverLicenceType: driver.driverLicenceType,
       driverLicenceNumber: driver.driverLicenceNumber,
       driverLicenceState: driver.driverLicenceState,
-      driverLicenceClass: driver.driverLicenceClass,
       driverLicenceExp: driver.driverLicenceExp,
       idDocId: driver.idDocId,
       idDocType: driver.idDocType,
@@ -146,13 +134,10 @@ export class DriverResultDto {
   readonly type: PersonType;
   readonly fullName: string;
   readonly birthDate?: Date;
-  readonly birthPlace?: string;
   readonly citizenship?: string;
   readonly languagePriority?: LangPriority;
-  readonly driverLicenceType: string;
   readonly driverLicenceNumber: string;
   readonly driverLicenceState: string;
-  readonly driverLicenceClass: string;
   readonly driverLicenceExp: Date;
   readonly idDocId?: string;
   readonly idDocType?: string;

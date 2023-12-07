@@ -29,25 +29,16 @@ export class Driver {
   birthDate?: Date;
 
   @Prop({ required: false })
-  birthPlace?: string;
-
-  @Prop({ required: false })
   citizenship?: string;
 
   @Prop({ required: false, enum: LANG_PRIORITIES })
   languagePriority?: LangPriority;
 
   @Prop({ required: true })
-  driverLicenceType: string;
-
-  @Prop({ required: true })
   driverLicenceNumber: string;
 
   @Prop({ required: true })
   driverLicenceState: string;
-
-  @Prop({ required: true })
-  driverLicenceClass: string;
 
   @Prop({ required: true })
   driverLicenceExp: Date;
