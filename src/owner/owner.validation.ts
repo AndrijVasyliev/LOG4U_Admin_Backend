@@ -21,7 +21,7 @@ export const CreateOwnerValidation = Joi.object({
   emergencyContactName: Joi.string().allow('').optional(),
   emergencyContactRel: Joi.string().allow('').optional(),
   emergencyContactPhone: Joi.string().allow('').optional(),
-  test: Joi.string().allow('').optional(),
+  notes: Joi.string().allow('').optional(),
 });
 
 export const UpdateOwnerValidation = Joi.object({

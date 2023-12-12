@@ -82,4 +82,7 @@ export const TRUCK_EQUIPMENTS = [
   'Blankets',
   'Pads',
   'Fire extinguisher',
+  'Metal hooks',
+  'Reefer',
+  'Heater',
 ] as const;
