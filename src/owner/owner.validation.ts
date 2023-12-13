@@ -13,7 +13,7 @@ export const CreateOwnerValidation = Joi.object({
   snn: Joi.string().required(),
   company: Joi.string().allow('').optional(),
   insurancePolicy: Joi.string().required(),
-  intestsurancePolicyExp: Joi.date().iso().required(),
+  insurancePolicyExp: Joi.date().iso().required(),
   address: Joi.string().required(),
   phone: Joi.string().required(),
   phone2: Joi.string().allow('').optional(),

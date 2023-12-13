@@ -75,7 +75,6 @@ import { AuthModule } from './auth/auth.module';
                 ) => void,
               )
               .plugin(DeleteField);
-            console.log('####################');
             return connection;
           },
         };
