@@ -184,7 +184,7 @@ export class DriverService {
     try {
       this.log.debug('Saving Driver');
       const savedDriver = await driver.save();
-      this.log.debug(`Operator ${savedDriver._id} saved`);
+      this.log.debug(`Driver ${savedDriver._id} saved`);
       return DriverResultDto.fromDriverModel(driver);
     } catch (e) {
       if (!(e instanceof Error)) {
@@ -211,7 +211,7 @@ export class DriverService {
     try {
       this.log.debug('Saving Driver');
       const savedDriver = await driver.save();
-      this.log.debug(`Operator ${savedDriver._id} saved`);
+      this.log.debug(`Driver ${savedDriver._id} saved`);
       return DriverResultDto.fromDriverModel(driver);
     } catch (e) {
       if (!(e instanceof Error)) {

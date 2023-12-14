@@ -161,7 +161,7 @@ export class OwnerDriverService {
     try {
       this.log.debug('Saving OwnerDriver');
       const savedOwnerDriver = await ownerDriver.save();
-      this.log.debug(`Operator ${savedOwnerDriver._id} saved`);
+      this.log.debug(`OwnerDriver ${savedOwnerDriver._id} saved`);
       return OwnerDriverResultDto.fromOwnerDriverModel(ownerDriver);
     } catch (e) {
       if (!(e instanceof Error)) {

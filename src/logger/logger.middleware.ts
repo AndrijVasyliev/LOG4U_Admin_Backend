@@ -9,7 +9,11 @@ export class LoggerMiddleware implements NestMiddleware {
 
   public use(req: Request, res: Response, next: () => void) {
     const log = this.logger;
-    log.http(`${req.method} ${req.hostname}${req.originalUrl}`);
+    log.http(
+      `${req.method}: ${req.hostname}(${req.ip})${req.originalUrl} -> ${
+        req.socket.localAddress
+      }:${req.socket.localPort}, ${JSON.stringify(req.headers)}`,
+    );
     next();
     res.on('finish', () => {
       const rt = res.get('X-Response-Time');

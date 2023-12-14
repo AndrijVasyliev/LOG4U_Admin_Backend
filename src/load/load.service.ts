@@ -206,7 +206,7 @@ export class LoadService {
       );
       this.log.debug(`Updating Load: miles ${miles}`);
       load = await load.set('miles', miles).save();
-      this.log.debug(`Operator ${load._id} saved`);
+      this.log.debug(`Load ${load._id} saved`);
       return LoadResultDto.fromLoadModel(load);
     } catch (e) {
       if (!(e instanceof Error)) {

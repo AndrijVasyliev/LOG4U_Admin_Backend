@@ -163,7 +163,7 @@ export class CoordinatorService {
     try {
       this.log.debug('Saving Coordinator');
       const savedCoordinator = await coordinator.save();
-      this.log.debug(`Operator ${savedCoordinator._id} saved`);
+      this.log.debug(`Coordinator ${savedCoordinator._id} saved`);
       await coordinator.populate({
         path: 'owner',
         match: { type: { $in: OWNER_TYPES } },

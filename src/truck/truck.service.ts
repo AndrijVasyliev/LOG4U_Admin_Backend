@@ -213,7 +213,7 @@ export class TruckService {
     try {
       this.log.debug('Saving Truck');
       const savedTruck = await truck.save();
-      this.log.debug(`Operator ${savedTruck._id} saved`);
+      this.log.debug(`Truck ${savedTruck._id} saved`);
       return TruckResultDto.fromTruckModel(truck);
     } catch (e) {
       if (!(e instanceof Error)) {

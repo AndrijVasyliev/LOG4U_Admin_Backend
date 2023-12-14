@@ -162,7 +162,7 @@ export class LocationService {
     try {
       this.log.debug('Saving Location');
       const savedLocation = await location.save();
-      this.log.debug(`Operator ${savedLocation._id} saved`);
+      this.log.debug(`Location ${savedLocation._id} saved`);
       return LocationResultDto.fromLocationModel(location);
     } catch (e) {
       if (!(e instanceof Error)) {

@@ -1,3 +1,4 @@
+import * as os from 'node:os';
 import {
   Injectable,
   LoggerService as BaseLoggerService,
@@ -13,6 +14,7 @@ import {
   createLogger,
 } from 'winston';
 
+const hostname = os.hostname();
 const { combine, printf, colorize, splat, errors } = format;
 
 type Meta = Record<string, any>;
@@ -21,6 +23,7 @@ type Meta = Record<string, any>;
 export class LoggerService implements BaseLoggerService {
   private readonly logger: winstonLogger;
   readonly logLevel: LogLevel;
+  readonly serviceName: string;
   readonly logFormat: string;
 
   private injectRequestId = (meta?: Meta): Meta => {
@@ -34,7 +37,7 @@ export class LoggerService implements BaseLoggerService {
   };
 
   private logJsonFormat = printf((info: object): string =>
-    JSON.stringify(info),
+    JSON.stringify({ ...info, hostname, servicename: this.serviceName }),
   );
 
   private logStringFormat = printf((info): string => {
@@ -85,6 +88,7 @@ export class LoggerService implements BaseLoggerService {
 
   constructor(private configService: ConfigService) {
     this.logLevel = configService.get<LogLevel>('log.level') as LogLevel;
+    this.serviceName = configService.get<string>('app.serviceName') as string;
     this.logFormat = configService.get<string>('log.format') as string;
     this.logger = createLogger({
       level: this.logLevel,

@@ -182,7 +182,7 @@ export class CoordinatorDriverService {
     try {
       this.log.debug('Saving CoordinatorDriver');
       const savedCoordinatorDriver = await coordinatorDriver.save();
-      this.log.debug(`Operator ${savedCoordinatorDriver._id} saved`);
+      this.log.debug(`CoordinatorDriver ${savedCoordinatorDriver._id} saved`);
       await coordinatorDriver.populate({
         path: 'owner',
         match: { type: { $in: OWNER_TYPES } },

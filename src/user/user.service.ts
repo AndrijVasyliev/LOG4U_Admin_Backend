@@ -124,7 +124,7 @@ export class UserService {
     try {
       this.log.debug('Saving User');
       const savedUser = await user.save();
-      this.log.debug(`Operator ${savedUser._id} saved`);
+      this.log.debug(`User ${savedUser._id} saved`);
       return UserResultDto.fromUserModel(user);
     } catch (e) {
       if (!(e instanceof Error)) {

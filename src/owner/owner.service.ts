@@ -142,7 +142,7 @@ export class OwnerService {
     try {
       this.log.debug('Saving Owner');
       const savedOwner = await owner.save();
-      this.log.debug(`Operator ${savedOwner._id} saved`);
+      this.log.debug(`Owner ${savedOwner._id} saved`);
       return OwnerResultDto.fromOwnerModel(owner);
     } catch (e) {
       if (!(e instanceof Error)) {
