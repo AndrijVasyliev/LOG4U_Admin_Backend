@@ -45,9 +45,10 @@ export class HealthController {
     private readonly log: LoggerService,
   ) {
     this.heapLimit =
-      configService.get<number>('app.heapLimit') || HEALTH_MEMORY_HEAP_LIMIT;
+      this.configService.get<number>('app.heapLimit') ||
+      HEALTH_MEMORY_HEAP_LIMIT;
     this.rssLimit =
-      configService.get<number>('app.rssLimit') || HEALTH_MEMORY_RSS_LIMIT;
+      this.configService.get<number>('app.rssLimit') || HEALTH_MEMORY_RSS_LIMIT;
   }
 
   @Get('/liveness')
