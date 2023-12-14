@@ -23,6 +23,7 @@ import { LoggerModule } from './logger/logger.module';
 import { LoggerMiddleware } from './logger/logger.middleware';
 import { ResponseTimeMiddleware } from './utils/responseTime.middleware';
 import { RequestIdMiddleware } from './utils/requestId.middleware';
+import { DisableETagMiddleware } from './utils/disableETag.middleware';
 
 import { OwnerController } from './owner/owner.controller';
 import { OwnerModule } from './owner/owner.module';
@@ -103,6 +104,22 @@ import { AuthModule } from './auth/auth.module';
 })
 export class AppModule implements NestModule {
   public configure(consumer: MiddlewareConsumer) {
+    consumer
+      .apply(DisableETagMiddleware)
+      .forRoutes(
+        AppController,
+        HealthController,
+        OwnerController,
+        OwnerDriverController,
+        CoordinatorController,
+        CoordinatorDriverController,
+        DriverController,
+        UserController,
+        LocationController,
+        LoadController,
+        TruckController,
+        MobileAppController,
+      );
     consumer
       .apply(RequestIdMiddleware)
       .forRoutes(
