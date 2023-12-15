@@ -17,6 +17,7 @@ import {
 } from './load.dto';
 import { LoggerService } from '../logger/logger.service';
 import {
+  MONGO_CONNECTION_NAME,
   MONGO_UNIQUE_INDEX_CONFLICT,
   UNIQUE_CONSTRAIN_ERROR,
 } from '../utils/constants';
@@ -31,7 +32,7 @@ export class LoadService {
   private readonly matrixUri?: string;
   private readonly apiKey?: string;
   constructor(
-    @InjectModel(Load.name)
+    @InjectModel(Load.name, MONGO_CONNECTION_NAME)
     private readonly loadModel: PaginateModel<LoadDocument>,
     private readonly truckService: TruckService,
     private readonly locationService: LocationService,

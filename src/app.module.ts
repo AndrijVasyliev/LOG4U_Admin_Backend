@@ -3,7 +3,7 @@ import { Module, NestModule, MiddlewareConsumer } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { PrometheusModule } from '@willsoto/nestjs-prometheus';
 import { PromConfigService } from './prometheus/prometheus.config.service';
-import { MongooseModule } from '@nestjs/mongoose';
+import { MongooseModule, MongooseModuleFactoryOptions } from '@nestjs/mongoose';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { Connection, Schema as MongooseSchema } from 'mongoose';
 import * as mongoosePaginate from 'mongoose-paginate-v2';
@@ -47,6 +47,7 @@ import { GoogleGeoApiModule } from './googleGeoApi/googleGeoApi.module';
 import { MobileAppController } from './mobileApp/mobileApp.controller';
 import { MobileAppModule } from './mobileApp/mobileApp.module';
 import { AuthModule } from './auth/auth.module';
+import { MONGO_CONNECTION_NAME } from './utils/constants';
 
 @Module({
   imports: [
@@ -64,9 +65,10 @@ import { AuthModule } from './auth/auth.module';
     GoogleGeoApiModule,
     MongooseModule.forRootAsync({
       imports: [ConfigModule],
+      connectionName: MONGO_CONNECTION_NAME,
       useFactory: async (configService: ConfigService) => {
         return {
-          uri: configService.get<string>('db.uri'),
+          ...configService.get<MongooseModuleFactoryOptions>('db'),
           connectionFactory: (connection: Connection): Connection => {
             connection
               .plugin(mongoosePaginate)
@@ -104,6 +106,7 @@ import { AuthModule } from './auth/auth.module';
 })
 export class AppModule implements NestModule {
   public configure(consumer: MiddlewareConsumer) {
+    // ToDo Fix by some other means
     consumer
       .apply(DisableETagMiddleware)
       .forRoutes(

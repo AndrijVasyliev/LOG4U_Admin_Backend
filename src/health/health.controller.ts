@@ -1,5 +1,7 @@
 import * as fs from 'node:fs';
 import { Controller, Get, InternalServerErrorException } from '@nestjs/common';
+import { InjectConnection } from '@nestjs/mongoose';
+import { connection } from 'mongoose';
 import {
   HealthCheck,
   HealthCheckService,
@@ -9,6 +11,8 @@ import {
 import {
   HEALTH_MEMORY_HEAP_LIMIT,
   HEALTH_MEMORY_RSS_LIMIT,
+  MONGO_CONNECTION_NAME,
+  DB_CHECK_TIMEOUT,
 } from '../utils/constants';
 
 import { LoggerService } from '../logger/logger.service';
@@ -43,6 +47,9 @@ export class HealthController {
     private readonly mongoose: MongooseHealthIndicator,
     private readonly configService: ConfigService,
     private readonly log: LoggerService,
+    @InjectConnection(MONGO_CONNECTION_NAME)
+    @InjectConnection()
+    private mongoConnection: typeof connection,
   ) {
     this.heapLimit =
       this.configService.get<number>('app.heapLimit') ||
@@ -62,7 +69,11 @@ export class HealthController {
     const healthCheckResult = await this.health.check([
       () => this.memory.checkHeap('memory_heap', this.heapLimit),
       () => this.memory.checkRSS('memory_rss', this.rssLimit),
-      async () => this.mongoose.pingCheck('mongoose'),
+      async () =>
+        this.mongoose.pingCheck('mongoose', {
+          connection: this.mongoConnection,
+          timeout: DB_CHECK_TIMEOUT,
+        }),
     ]);
     this.log.silly(`Readiness check ${JSON.stringify(healthCheckResult)}`);
     if (healthCheckResult.status === 'ok') {
@@ -89,7 +100,11 @@ export class HealthController {
     const healthCheckResult = this.health.check([
       () => this.memory.checkHeap('memory_heap', this.heapLimit),
       () => this.memory.checkRSS('memory_rss', this.rssLimit),
-      async () => this.mongoose.pingCheck('mongoose'),
+      async () =>
+        this.mongoose.pingCheck('mongoose', {
+          connection: this.mongoConnection,
+          timeout: DB_CHECK_TIMEOUT,
+        }),
     ]);
     this.log.silly(`Health check ${JSON.stringify(healthCheckResult)}`);
     return healthCheckResult;

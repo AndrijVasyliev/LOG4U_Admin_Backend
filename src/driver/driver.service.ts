@@ -9,6 +9,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { LoggerService } from '../logger/logger.service';
 import {
   DRIVER_TYPES,
+  MONGO_CONNECTION_NAME,
   MONGO_UNIQUE_INDEX_CONFLICT,
   UNIQUE_CONSTRAIN_ERROR,
 } from '../utils/constants';
@@ -27,7 +28,7 @@ const { MongoError } = mongo;
 @Injectable()
 export class DriverService {
   constructor(
-    @InjectModel(Driver.name)
+    @InjectModel(Driver.name, MONGO_CONNECTION_NAME)
     private readonly driverModel: PaginateModel<DriverDocument>,
     private readonly truckService: TruckService,
     private readonly log: LoggerService,

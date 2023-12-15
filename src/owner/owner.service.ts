@@ -8,6 +8,7 @@ import {
 import { InjectModel } from '@nestjs/mongoose';
 import { LoggerService } from '../logger/logger.service';
 import {
+  MONGO_CONNECTION_NAME,
   MONGO_UNIQUE_INDEX_CONFLICT,
   OWNER_TYPES,
   UNIQUE_CONSTRAIN_ERROR,
@@ -27,7 +28,7 @@ const { MongoError } = mongo;
 @Injectable()
 export class OwnerService {
   constructor(
-    @InjectModel(Owner.name)
+    @InjectModel(Owner.name, MONGO_CONNECTION_NAME)
     private readonly ownerModel: PaginateModel<OwnerDocument>,
     private readonly truckService: TruckService,
     private readonly log: LoggerService,

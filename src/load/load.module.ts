@@ -6,10 +6,14 @@ import { LoadService } from './load.service';
 import { TruckModule } from '../truck/truck.module';
 import { LocationModule } from '../location/location.module';
 import { GoogleGeoApiModule } from '../googleGeoApi/googleGeoApi.module';
+import { MONGO_CONNECTION_NAME } from '../utils/constants';
 
 @Module({
   imports: [
-    MongooseModule.forFeature([{ name: Load.name, schema: LoadSchema }]),
+    MongooseModule.forFeature(
+      [{ name: Load.name, schema: LoadSchema }],
+      MONGO_CONNECTION_NAME,
+    ),
     TruckModule,
     LocationModule,
     GoogleGeoApiModule,

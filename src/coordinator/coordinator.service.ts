@@ -9,6 +9,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { LoggerService } from '../logger/logger.service';
 import {
   COORDINATOR_TYPES,
+  MONGO_CONNECTION_NAME,
   MONGO_UNIQUE_INDEX_CONFLICT,
   OWNER_TYPES,
   UNIQUE_CONSTRAIN_ERROR,
@@ -28,7 +29,7 @@ const { MongoError } = mongo;
 @Injectable()
 export class CoordinatorService {
   constructor(
-    @InjectModel(Coordinator.name)
+    @InjectModel(Coordinator.name, MONGO_CONNECTION_NAME)
     private readonly coordinatorModel: PaginateModel<CoordinatorDocument>,
     private readonly truckService: TruckService,
     private readonly log: LoggerService,

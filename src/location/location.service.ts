@@ -9,6 +9,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { LoggerService } from '../logger/logger.service';
 import {
   EARTH_RADIUS_MILES,
+  MONGO_CONNECTION_NAME,
   MONGO_UNIQUE_INDEX_CONFLICT,
   UNIQUE_CONSTRAIN_ERROR,
 } from '../utils/constants';
@@ -26,7 +27,7 @@ const { MongoError } = mongo;
 @Injectable()
 export class LocationService {
   constructor(
-    @InjectModel(Location.name)
+    @InjectModel(Location.name, MONGO_CONNECTION_NAME)
     private readonly locationModel: PaginateModel<LocationDocument>,
     private readonly log: LoggerService,
   ) {}
