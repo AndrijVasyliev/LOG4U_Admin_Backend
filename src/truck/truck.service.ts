@@ -128,17 +128,20 @@ export class TruckService {
       options.sort = { [query.orderby]: query.direction };
     }
 
+    this.log.debug('Requesting paginated trucks');
     const res = await this.truckModel.paginate(documentQuery, options);
 
     let haversineDistances: CalculatedDistances;
     let roadsDistances: CalculatedDistances;
     if (query?.search?.lastLocation) {
+      this.log.debug('Calculating haversine distance');
       haversineDistances = res.docs.map(
         (truck) =>
           truck.lastLocation &&
           query?.search?.lastLocation &&
           calcDistance(truck.lastLocation, query.search.lastLocation),
       );
+      this.log.debug('Calculating distance by roads');
       roadsDistances = await Promise.all(
         res.docs.map(
           (truck) =>
@@ -151,6 +154,8 @@ export class TruckService {
         ),
       );
     }
+
+    this.log.debug('Returning results');
     return PaginatedTruckResultDto.from(
       res,
       haversineDistances,
