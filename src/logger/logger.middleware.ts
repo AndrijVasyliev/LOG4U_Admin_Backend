@@ -38,7 +38,7 @@ export class LoggerMiddleware implements NestMiddleware {
           res.statusCode < 200 || res.statusCode >= 300
             ? // eslint-disable-next-line @typescript-eslint/ban-ts-comment
               // @ts-ignore
-              'Response body: ' + JSON.stringify(res.contentBody)
+              ', Response body: ' + JSON.stringify(res.contentBody)
             : ''
         }`,
       );
