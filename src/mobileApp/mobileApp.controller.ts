@@ -129,7 +129,7 @@ export class MobileAppController {
     );
     if (!driver) {
       throw new PreconditionFailedException(
-        `Driver with deviceId${updateTruckLocationBodyDto.deviceId} does not found`,
+        `Driver with deviceId ${updateTruckLocationBodyDto.deviceId} does not found`,
       );
     }
     if (!driver.driveTrucks || driver.driveTrucks.length !== 1) {
