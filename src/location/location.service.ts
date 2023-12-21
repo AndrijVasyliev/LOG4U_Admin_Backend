@@ -91,13 +91,13 @@ export class LocationService {
     }
     if (query?.search?.search) {
       let search = query?.search?.search;
-      const stateCodeMatches = search?.match(/(\b|,[A-Z]{2}\b)/);
+      const stateCodeMatches = search?.match(/((\b|,)[A-Z]{2}\b)/);
       if (stateCodeMatches && stateCodeMatches[1]) {
         const stateCode = stateCodeMatches[1];
         documentQuery.stateCode = { $eq: stateCode };
         search = search?.replace(stateCode, '').trim();
       }
-      const zipCodeMatches = search?.match(/(\b|,[0-9]{1,5}\b)/);
+      const zipCodeMatches = search?.match(/((\b|,)[0-9]{1,5}\b)/);
       if (zipCodeMatches && zipCodeMatches[1]) {
         const zipCode = zipCodeMatches[1];
         documentQuery.zipCode = { $regex: new RegExp('^' + zipCode, 'i') };
@@ -105,7 +105,7 @@ export class LocationService {
       }
       if (search) {
         documentQuery.$or = [
-          { name: { $regex: new RegExp(search.trim(), 'i') } },
+          { name: { $regex: new RegExp(search.replace(',', '').trim(), 'i') } },
         ];
       }
     }
