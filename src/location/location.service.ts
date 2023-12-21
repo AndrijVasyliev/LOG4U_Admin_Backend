@@ -94,13 +94,15 @@ export class LocationService {
       const stateCodeMatches = search?.match(/((\b|,)[A-Z]{2}\b)/);
       if (stateCodeMatches && stateCodeMatches[1]) {
         const stateCode = stateCodeMatches[1];
-        documentQuery.stateCode = { $eq: stateCode };
+        documentQuery.stateCode = { $eq: stateCode.replace(',', '').trim() };
         search = search?.replace(stateCode, '').trim();
       }
       const zipCodeMatches = search?.match(/((\b|,)[0-9]{1,5}\b)/);
       if (zipCodeMatches && zipCodeMatches[1]) {
         const zipCode = zipCodeMatches[1];
-        documentQuery.zipCode = { $regex: new RegExp('^' + zipCode, 'i') };
+        documentQuery.zipCode = {
+          $regex: new RegExp('^' + zipCode.replace(',', '').trim(), 'i'),
+        };
         search = search?.replace(zipCode, '').trim();
       }
       if (search) {
