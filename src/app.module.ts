@@ -18,33 +18,21 @@ import configuration from '../config/configuration';
 
 import { MetricsController } from './metrics/metrics.controller';
 import { HealthModule } from './health/health.module';
-import { HealthController } from './health/health.controller';
 import { LoggerModule } from './logger/logger.module';
 import { LoggerMiddleware } from './logger/logger.middleware';
 import { ResponseTimeMiddleware } from './utils/responseTime.middleware';
 import { RequestIdMiddleware } from './utils/requestId.middleware';
-import { DisableETagMiddleware } from './utils/disableETag.middleware';
 
-import { OwnerController } from './owner/owner.controller';
 import { OwnerModule } from './owner/owner.module';
-import { OwnerDriverController } from './ownerDriver/ownerDriver.controller';
 import { OwnerDriverModule } from './ownerDriver/ownerDriver.module';
-import { CoordinatorController } from './coordinator/coordinator.controller';
 import { CoordinatorModule } from './coordinator/coordinator.module';
-import { CoordinatorDriverController } from './coordinatorDriver/coordinatorDriver.controller';
 import { CoordinatorDriverModule } from './coordinatorDriver/coordinatorDriver.module';
-import { DriverController } from './driver/driver.controller';
 import { DriverModule } from './driver/driver.module';
-import { UserController } from './user/user.controller';
 import { UserModule } from './user/user.module';
-import { LocationController } from './location/location.controller';
 import { LocationModule } from './location/location.module';
-import { LoadController } from './load/load.controller';
 import { LoadModule } from './load/load.module';
-import { TruckController } from './truck/truck.controller';
 import { TruckModule } from './truck/truck.module';
 import { GoogleGeoApiModule } from './googleGeoApi/googleGeoApi.module';
-import { MobileAppController } from './mobileApp/mobileApp.controller';
 import { MobileAppModule } from './mobileApp/mobileApp.module';
 import { AuthModule } from './auth/auth.module';
 import { MONGO_CONNECTION_NAME } from './utils/constants';
@@ -106,70 +94,8 @@ import { MONGO_CONNECTION_NAME } from './utils/constants';
 })
 export class AppModule implements NestModule {
   public configure(consumer: MiddlewareConsumer) {
-    // ToDo Fix by some other means
     consumer
-      .apply(DisableETagMiddleware)
-      .forRoutes(
-        AppController,
-        HealthController,
-        OwnerController,
-        OwnerDriverController,
-        CoordinatorController,
-        CoordinatorDriverController,
-        DriverController,
-        UserController,
-        LocationController,
-        LoadController,
-        TruckController,
-        MobileAppController,
-      );
-    consumer
-      .apply(RequestIdMiddleware)
-      .forRoutes(
-        AppController,
-        HealthController,
-        OwnerController,
-        OwnerDriverController,
-        CoordinatorController,
-        CoordinatorDriverController,
-        DriverController,
-        UserController,
-        LocationController,
-        LoadController,
-        TruckController,
-        MobileAppController,
-      );
-    consumer
-      .apply(LoggerMiddleware)
-      .forRoutes(
-        AppController,
-        HealthController,
-        OwnerController,
-        OwnerDriverController,
-        CoordinatorController,
-        CoordinatorDriverController,
-        DriverController,
-        UserController,
-        LocationController,
-        LoadController,
-        TruckController,
-        MobileAppController,
-      );
-    consumer
-      .apply(ResponseTimeMiddleware)
-      .forRoutes(
-        AppController,
-        HealthController,
-        OwnerController,
-        OwnerDriverController,
-        CoordinatorController,
-        CoordinatorDriverController,
-        DriverController,
-        UserController,
-        LocationController,
-        LoadController,
-        TruckController,
-        MobileAppController,
-      );
+      .apply(RequestIdMiddleware, LoggerMiddleware, ResponseTimeMiddleware)
+      .forRoutes('*');
   }
 }
