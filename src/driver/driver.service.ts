@@ -99,6 +99,8 @@ export class DriverService {
       searchParams.forEach((entry) => {
         entry[0] !== 'owner' &&
           entry[0] !== 'truckNumber' &&
+          entry[0] !== 'search' &&
+          entry[0] !== 'allPhone' &&
           (documentQuery[entry[0]] = { $regex: new RegExp(entry[1], 'i') });
       });
     }
@@ -137,6 +139,14 @@ export class DriverService {
         { phone: { $regex: new RegExp(search, 'i') } },
         { phone2: { $regex: new RegExp(search, 'i') } },
         { email: { $regex: new RegExp(search, 'i') } },
+      ];
+    }
+    if (query?.search?.allPhone) {
+      const phone = query?.search?.allPhone;
+      documentQuery.$or = [
+        ...(documentQuery.$or ? documentQuery.$or : []),
+        { phone: { $regex: new RegExp(phone, 'i') } },
+        { phone2: { $regex: new RegExp(phone, 'i') } },
       ];
     }
 

@@ -73,6 +73,7 @@ export const DriverQueryParamsSchema = Joi.object({
   idDocType: Joi.string().optional(),
   hiredBy: Joi.string().optional(),
   address: Joi.string().optional(),
+  allPhone: Joi.string().optional(),
   phone: Joi.string().optional(),
   phone2: Joi.string().optional(),
   email: Joi.string().optional(),

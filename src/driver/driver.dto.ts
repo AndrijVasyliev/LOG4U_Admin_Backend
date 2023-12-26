@@ -74,6 +74,7 @@ export class DriverQuerySearch {
   readonly idDocType?: string;
   readonly hiredBy?: string;
   readonly address?: string;
+  readonly allPhone?: string;
   readonly phone?: string;
   readonly phone2?: string;
   readonly email?: string;
