@@ -22,6 +22,7 @@ import {
   UpdateDriverDto,
 } from './driver.dto';
 import { TruckService } from '../truck/truck.service';
+import { escapeForRegExp } from '../utils/escapeForRegExp';
 
 const { MongoError } = mongo;
 
@@ -101,7 +102,9 @@ export class DriverService {
           entry[0] !== 'truckNumber' &&
           entry[0] !== 'search' &&
           entry[0] !== 'allPhone' &&
-          (documentQuery[entry[0]] = { $regex: new RegExp(entry[1], 'i') });
+          (documentQuery[entry[0]] = {
+            $regex: new RegExp(escapeForRegExp(entry[1]), 'i'),
+          });
       });
     }
     if (query?.search?.owner) {
@@ -132,7 +135,7 @@ export class DriverService {
       }
     }
     if (query?.search?.search) {
-      const search = query?.search?.search;
+      const search = escapeForRegExp(query?.search?.search);
       documentQuery.$or = [
         ...(documentQuery.$or ? documentQuery.$or : []),
         { fullName: { $regex: new RegExp(search, 'i') } },
@@ -142,7 +145,7 @@ export class DriverService {
       ];
     }
     if (query?.search?.allPhone) {
-      const phone = query?.search?.allPhone;
+      const phone = escapeForRegExp(query?.search?.allPhone);
       documentQuery.$or = [
         ...(documentQuery.$or ? documentQuery.$or : []),
         { phone: { $regex: new RegExp(phone, 'i') } },

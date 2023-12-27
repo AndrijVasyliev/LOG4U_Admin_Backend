@@ -24,6 +24,7 @@ import {
 import { TruckService } from '../truck/truck.service';
 import { LocationService } from '../location/location.service';
 import { GoogleGeoApiService } from '../googleGeoApi/googleGeoApi.service';
+import { escapeForRegExp } from '../utils/escapeForRegExp';
 
 const { MongoError } = mongo;
 
@@ -69,7 +70,9 @@ export class LoadService {
       const searchParams = Object.entries(query.search);
       searchParams.forEach((entry) => {
         entry[0] !== 'loadNumber' &&
-          (documentQuery[entry[0]] = { $regex: new RegExp(entry[1], 'i') });
+          (documentQuery[entry[0]] = {
+            $regex: new RegExp(escapeForRegExp(entry[1]), 'i'),
+          });
       });
     }
     if (query?.search?.loadNumber) {

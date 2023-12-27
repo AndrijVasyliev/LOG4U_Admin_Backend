@@ -22,6 +22,7 @@ import {
   UpdateOwnerDto,
 } from './owner.dto';
 import { TruckService } from '../truck/truck.service';
+import { escapeForRegExp } from '../utils/escapeForRegExp';
 
 const { MongoError } = mongo;
 
@@ -64,7 +65,9 @@ export class OwnerService {
       const searchParams = Object.entries(query.search);
       searchParams.forEach((entry) => {
         entry[0] !== 'truckNumber' &&
-          (documentQuery[entry[0]] = { $regex: new RegExp(entry[1], 'i') });
+          (documentQuery[entry[0]] = {
+            $regex: new RegExp(escapeForRegExp(entry[1]), 'i'),
+          });
       });
     }
     if (query?.search?.truckNumber) {
@@ -90,7 +93,7 @@ export class OwnerService {
       }
     }
     if (query?.search?.search) {
-      const search = query?.search?.search;
+      const search = escapeForRegExp(query?.search?.search);
       documentQuery.$or = [
         ...(documentQuery.$or ? documentQuery.$or : []),
         { fullName: { $regex: new RegExp(search, 'i') } },

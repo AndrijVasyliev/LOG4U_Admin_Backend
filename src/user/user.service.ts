@@ -20,6 +20,7 @@ import {
   PaginatedUserResultDto,
   UpdateUserDto,
 } from './user.dto';
+import { escapeForRegExp } from '../utils/escapeForRegExp';
 
 const { MongoError } = mongo;
 
@@ -71,11 +72,13 @@ export class UserService {
     if (query.search) {
       const searchParams = Object.entries(query.search);
       searchParams.forEach((entry) => {
-        documentQuery[entry[0]] = { $regex: new RegExp(entry[1], 'i') };
+        documentQuery[entry[0]] = {
+          $regex: new RegExp(escapeForRegExp(entry[1]), 'i'),
+        };
       });
     }
     if (query?.search?.search) {
-      const search = query?.search?.search;
+      const search = escapeForRegExp(query?.search?.search);
       documentQuery.$or = [
         { fullName: { $regex: new RegExp(search, 'i') } },
         { phone: { $regex: new RegExp(search, 'i') } },

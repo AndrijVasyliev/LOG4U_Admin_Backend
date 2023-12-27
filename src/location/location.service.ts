@@ -21,6 +21,7 @@ import {
   PaginatedLocationResultDto,
   UpdateLocationDto,
 } from './location.dto';
+import { escapeForRegExp } from '../utils/escapeForRegExp';
 
 const { MongoError } = mongo;
 
@@ -80,7 +81,9 @@ export class LocationService {
         entry[0] !== 'location' &&
           entry[0] !== 'distance' &&
           entry[0] !== 'search' &&
-          (documentQuery[entry[0]] = { $regex: new RegExp(entry[1], 'i') });
+          (documentQuery[entry[0]] = {
+            $regex: new RegExp(escapeForRegExp(entry[1]), 'i'),
+          });
       });
     }
     if (query?.search?.location && query?.search?.distance) {
@@ -101,18 +104,28 @@ export class LocationService {
       if (zipCodeMatches && zipCodeMatches[1]) {
         const zipCode = zipCodeMatches[1];
         documentQuery.zipCode = {
-          $regex: new RegExp('^' + zipCode.replace(',', '').trim(), 'i'),
+          $regex: new RegExp(
+            '^' + escapeForRegExp(zipCode.replace(',', '').trim()),
+            'i',
+          ),
         };
         search = search?.replace(zipCode, '').trim();
       }
       if (search) {
         documentQuery.$or = [
-          { name: { $regex: new RegExp(search.replace(',', '').trim(), 'i') } },
+          {
+            name: {
+              $regex: new RegExp(
+                escapeForRegExp(search.replace(',', '').trim()),
+                'i',
+              ),
+            },
+          },
         ];
       }
     }
     if (query?.search?.searchState) {
-      const searchState = query?.search?.searchState;
+      const searchState = escapeForRegExp(query?.search?.searchState);
       documentQuery.$or = [
         ...(documentQuery.$or ? documentQuery.$or : []),
         { stateCode: { $regex: new RegExp(searchState, 'i') } },

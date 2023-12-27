@@ -25,6 +25,7 @@ import {
 } from './truck.dto';
 import { GoogleGeoApiService } from '../googleGeoApi/googleGeoApi.service';
 import { LocationService } from '../location/location.service';
+import { escapeForRegExp } from '../utils/escapeForRegExp';
 
 const { MongoError } = mongo;
 
@@ -84,7 +85,9 @@ export class TruckService {
         entry[0] !== 'lastLocation' &&
           entry[0] !== 'distance' &&
           entry[0] !== 'truckNumber' &&
-          (documentQuery[entry[0]] = { $regex: new RegExp(entry[1], 'i') });
+          (documentQuery[entry[0]] = {
+            $regex: new RegExp(escapeForRegExp(entry[1]), 'i'),
+          });
       });
     }
     if (query?.search?.lastLocation && query?.search?.distance) {
@@ -102,7 +105,7 @@ export class TruckService {
       };
     }
     if (query?.search?.search) {
-      const search = query?.search?.search;
+      const search = escapeForRegExp(query?.search?.search);
       documentQuery.$or = [
         { vinCode: { $regex: new RegExp(search, 'i') } },
         { licencePlate: { $regex: new RegExp(search, 'i') } },
