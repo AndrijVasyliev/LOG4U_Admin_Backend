@@ -20,6 +20,7 @@ import {
   TruckQuery,
   TruckResultDto,
   PaginatedTruckResultDto,
+  TruckResultForMapDto,
   UpdateTruckDto,
   CalculatedDistances,
 } from './truck.dto';
@@ -164,6 +165,22 @@ export class TruckService {
       haversineDistances,
       roadsDistances,
     );
+  }
+
+  async getTrucksForMap(): Promise<TruckResultForMapDto[]> {
+    this.log.debug('Searching for Trucks for map');
+
+    const res = await this.truckModel.find(
+      { lastLocation: { $exists: true } },
+      {
+        id: true,
+        truckNumber: true,
+        status: true,
+        lastLocation: true,
+        lastCity: true,
+      },
+    );
+    return res.map((truck) => TruckResultForMapDto.fromTruckForMapModel(truck));
   }
 
   async createTruck(createTruckDto: CreateTruckDto): Promise<TruckResultDto> {

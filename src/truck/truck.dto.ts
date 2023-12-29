@@ -197,3 +197,46 @@ export class PaginatedTruckResultDto extends PaginatedResultDto<TruckResultDto> 
     };
   }
 }
+
+export class TruckResultForMapDto {
+  static fromTruckForMapModel(truck: Truck): TruckResultForMapDto {
+    const lastCity =
+      truck.lastCity && LocationResultDto.fromLocationModel(truck.lastCity);
+    const owner = truck.owner && OwnerResultDto.fromOwnerModel(truck.owner);
+    const coordinator =
+      truck.coordinator &&
+      CoordinatorResultDto.fromCoordinatorModel(truck.coordinator);
+    const driver =
+      truck.driver && DriverResultDto.fromDriverModel(truck.driver);
+    let result: TruckResultForMapDto = {
+      id: truck._id.toString(),
+      truckNumber: truck.truckNumber,
+      status: truck.status,
+      lastLocation: truck.lastLocation,
+      locationUpdatedAt: truck.locationUpdatedAt,
+    };
+    if (lastCity) {
+      result = { ...result, lastCity };
+    }
+    if (owner) {
+      result = { ...result, owner };
+    }
+    if (coordinator) {
+      result = { ...result, coordinator };
+    }
+    if (driver) {
+      result = { ...result, driver };
+    }
+    return result;
+  }
+
+  readonly id: string;
+  readonly truckNumber: number;
+  readonly status: TruckStatus;
+  readonly lastLocation?: [number, number];
+  readonly lastCity?: LocationResultDto;
+  readonly locationUpdatedAt?: Date;
+  readonly owner?: OwnerResultDto;
+  readonly coordinator?: CoordinatorResultDto;
+  readonly driver?: DriverResultDto;
+}

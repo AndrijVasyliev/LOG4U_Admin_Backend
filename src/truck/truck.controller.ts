@@ -14,7 +14,7 @@ import {
   TruckQuerySearch,
   TruckResultDto,
   PaginatedTruckResultDto,
-  UpdateTruckDto,
+  UpdateTruckDto, TruckResultForMapDto,
 } from './truck.dto';
 import { BodyValidationPipe } from '../utils/bodyValidate.pipe';
 import { TruckService } from './truck.service';
@@ -42,6 +42,11 @@ export class TruckController {
     truckQuery: TruckQuery,
   ): Promise<PaginatedTruckResultDto> {
     return this.truckService.getTrucks(truckQuery);
+  }
+
+  @Get('forMap')
+  async getTrucksForMap(): Promise<TruckResultForMapDto[]> {
+    return this.truckService.getTrucksForMap();
   }
 
   @Get(':truckId')
