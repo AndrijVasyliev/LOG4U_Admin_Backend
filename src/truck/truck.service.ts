@@ -170,16 +170,27 @@ export class TruckService {
   async getTrucksForMap(): Promise<TruckResultForMapDto[]> {
     this.log.debug('Searching for Trucks for map');
 
-    const res = await this.truckModel.find(
-      { lastLocation: { $exists: true } },
-      {
-        id: true,
-        truckNumber: true,
-        status: true,
-        lastLocation: true,
-        lastCity: true,
-      },
-    );
+    const res = await this.truckModel
+      .find(
+        { lastLocation: { $exists: true } },
+        ['truckNumber', 'status', 'lastLocation'],
+        { autopopulate: false },
+      )
+      .populate({
+        path: 'lastCity',
+        options: { autopopulate: false },
+      })
+      .populate({
+        path: 'owner',
+        select: ['fullName', 'type', 'phone'],
+        options: { autopopulate: false },
+      })
+      .populate({
+        path: 'coordinator',
+        select: ['fullName', 'type', 'phone'],
+        options: { autopopulate: false },
+      })
+      .exec();
     return res.map((truck) => TruckResultForMapDto.fromTruckForMapModel(truck));
   }
 
