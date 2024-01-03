@@ -165,7 +165,7 @@ export class OwnerService {
     this.log.debug(`Deleting Owner ${owner._id}`);
 
     try {
-      await owner.delete();
+      await owner.deleteOne();
       this.log.debug('Owner deleted');
     } catch (e) {
       if (!(e instanceof Error)) {

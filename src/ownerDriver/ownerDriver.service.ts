@@ -184,7 +184,7 @@ export class OwnerDriverService {
     this.log.debug(`Deleting OwnerDriver ${ownerDriver._id}`);
 
     try {
-      await ownerDriver.delete();
+      await ownerDriver.deleteOne();
       this.log.debug('OwnerDriver deleted');
     } catch (e) {
       if (!(e instanceof Error)) {

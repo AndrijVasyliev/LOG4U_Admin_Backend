@@ -190,7 +190,7 @@ export class CoordinatorService {
     this.log.debug(`Deleting Coordinator ${coordinator._id}`);
 
     try {
-      await coordinator.delete();
+      await coordinator.deleteOne();
       this.log.debug('Coordinator deleted');
     } catch (e) {
       if (!(e instanceof Error)) {

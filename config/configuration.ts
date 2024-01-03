@@ -31,7 +31,7 @@ export default (): {
   db: {
     uri: process.env.MONGO_DSN || 'mongodb://localhost:27017/log4u',
     appName: process.env.SERVICE_NAME || 'Admin_BE',
-    useNewUrlParser: true,
+    // useNewUrlParser: true,
     autoIndex: true,
     autoCreate: true,
     maxPoolSize: +(process.env.MONGO_MAX_POOL_SIZE || 100),

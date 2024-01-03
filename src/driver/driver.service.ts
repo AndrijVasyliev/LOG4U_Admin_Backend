@@ -244,7 +244,7 @@ export class DriverService {
     this.log.debug(`Deleting Driver ${driver._id}`);
 
     try {
-      await driver.delete();
+      await driver.deleteOne();
       this.log.debug('Driver deleted');
     } catch (e) {
       if (!(e instanceof Error)) {

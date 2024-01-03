@@ -269,7 +269,7 @@ export class TruckService {
     this.log.debug(`Deleting Truck ${truck._id}`);
 
     try {
-      await truck.delete();
+      await truck.deleteOne();
       this.log.debug('Truck deleted');
     } catch (e) {
       if (!(e instanceof Error)) {

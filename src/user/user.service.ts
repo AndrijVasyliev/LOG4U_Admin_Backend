@@ -147,7 +147,7 @@ export class UserService {
     this.log.debug(`Deleting User ${user._id}`);
 
     try {
-      await user.delete();
+      await user.deleteOne();
       this.log.debug('User deleted');
     } catch (e) {
       if (!(e instanceof Error)) {

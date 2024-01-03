@@ -199,7 +199,7 @@ export class LocationService {
     this.log.debug(`Deleting Location ${location._id}`);
 
     try {
-      await location.delete();
+      await location.deleteOne();
       this.log.debug('Location deleted');
     } catch (e) {
       if (!(e instanceof Error)) {

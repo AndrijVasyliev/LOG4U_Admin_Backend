@@ -229,7 +229,7 @@ export class LoadService {
     this.log.debug(`Deleting Load ${load._id}`);
 
     try {
-      await load.delete();
+      await load.deleteOne();
       this.log.debug('Load deleted');
     } catch (e) {
       if (!(e instanceof Error)) {

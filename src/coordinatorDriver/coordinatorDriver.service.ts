@@ -213,7 +213,7 @@ export class CoordinatorDriverService {
     this.log.debug(`Deleting CoordinatorDriver ${coordinatorDriver._id}`);
 
     try {
-      await coordinatorDriver.delete();
+      await coordinatorDriver.deleteOne();
       this.log.debug('CoordinatorDriver deleted');
     } catch (e) {
       if (!(e instanceof Error)) {
