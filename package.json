@@ -45,7 +45,7 @@
         "helmet": "^7.1.0",
         "joi": "^17.11.0",
         "mime-types": "^2.1.35",
-        "mongoose": "^7.6.7",
+        "mongoose": "^8.0.3",
         "mongoose-autopopulate": "^1.1.0",
         "mongoose-paginate-v2": "^1.7.4",
         "passport-http": "^0.3.0",

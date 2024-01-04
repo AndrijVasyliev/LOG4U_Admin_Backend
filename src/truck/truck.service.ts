@@ -126,7 +126,6 @@ export class TruckService {
     const options: PaginateOptions = {
       limit: query.limit,
       offset: query.offset,
-      forceCountFn: true,
     };
     if (query.direction && query.orderby) {
       options.sort = { [query.orderby]: query.direction };
