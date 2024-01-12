@@ -13,6 +13,7 @@ import { OwnerResultDto } from '../owner/owner.dto';
 import { CoordinatorResultDto } from '../coordinator/coordinator.dto';
 import { DriverResultDto } from '../driver/driver.dto';
 import { LocationResultDto } from '../location/location.dto';
+import { UserResultDto } from '../user/user.dto';
 
 export class CreateTruckDto {
   readonly truckNumber: number;
@@ -37,6 +38,8 @@ export class CreateTruckDto {
   readonly owner: string;
   readonly coordinator?: string;
   readonly driver?: string;
+  readonly reservedAt?: Date;
+  readonly reservedBy?: string;
 }
 
 export class UpdateTruckDto {
@@ -62,6 +65,8 @@ export class UpdateTruckDto {
   readonly owner?: string;
   readonly coordinator?: string;
   readonly driver?: string;
+  readonly reservedAt?: Date;
+  readonly reservedBy?: string;
 }
 
 export class TruckQuerySearch {
@@ -97,6 +102,8 @@ export class TruckResultDto {
       CoordinatorResultDto.fromCoordinatorModel(truck.coordinator);
     const driver =
       truck.driver && DriverResultDto.fromDriverModel(truck.driver);
+    const reservedBy =
+      truck.reservedBy && UserResultDto.fromUserModel(truck.reservedBy);
     let result: TruckResultDto = {
       id: truck._id.toString(),
       truckNumber: truck.truckNumber,
@@ -117,6 +124,7 @@ export class TruckResultDto {
       licencePlate: truck.licencePlate,
       insideDims: truck.insideDims,
       doorDims: truck.doorDims,
+      reservedAt: truck.reservedAt,
     };
     if (lastCity) {
       result = { ...result, lastCity };
@@ -135,6 +143,9 @@ export class TruckResultDto {
     }
     if (Number.isFinite(milesByRoads)) {
       result = { ...result, milesByRoads };
+    }
+    if (reservedBy) {
+      result = { ...result, reservedBy };
     }
     return result;
   }
@@ -164,6 +175,8 @@ export class TruckResultDto {
   readonly owner?: OwnerResultDto;
   readonly coordinator?: CoordinatorResultDto;
   readonly driver?: DriverResultDto;
+  readonly reservedAt?: Date;
+  readonly reservedBy?: UserResultDto;
 }
 
 export type CalculatedDistances = Array<number | undefined> | undefined;
@@ -200,43 +213,16 @@ export class PaginatedTruckResultDto extends PaginatedResultDto<TruckResultDto> 
 
 export class TruckResultForMapDto {
   static fromTruckForMapModel(truck: Truck): TruckResultForMapDto {
-    const lastCity =
-      truck.lastCity && LocationResultDto.fromLocationModel(truck.lastCity);
-    const owner = truck.owner && OwnerResultDto.fromOwnerModel(truck.owner);
-    const coordinator =
-      truck.coordinator &&
-      CoordinatorResultDto.fromCoordinatorModel(truck.coordinator);
-    const driver =
-      truck.driver && DriverResultDto.fromDriverModel(truck.driver);
-    let result: TruckResultForMapDto = {
+    return {
       id: truck._id.toString(),
       truckNumber: truck.truckNumber,
       status: truck.status,
       lastLocation: truck.lastLocation,
-      locationUpdatedAt: truck.locationUpdatedAt,
     };
-    if (lastCity) {
-      result = { ...result, lastCity };
-    }
-    if (owner) {
-      result = { ...result, owner };
-    }
-    if (coordinator) {
-      result = { ...result, coordinator };
-    }
-    if (driver) {
-      result = { ...result, driver };
-    }
-    return result;
   }
 
   readonly id: string;
   readonly truckNumber: number;
   readonly status: TruckStatus;
   readonly lastLocation?: [number, number];
-  readonly lastCity?: LocationResultDto;
-  readonly locationUpdatedAt?: Date;
-  readonly owner?: OwnerResultDto;
-  readonly coordinator?: CoordinatorResultDto;
-  readonly driver?: DriverResultDto;
 }

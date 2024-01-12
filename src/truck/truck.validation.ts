@@ -95,6 +95,7 @@ export const UpdateTruckValidation = Joi.object({
   owner: MongoObjectIdValidation.optional(),
   coordinator: Joi.alternatives(null, MongoObjectIdValidation).optional(),
   driver: Joi.alternatives(null, MongoObjectIdValidation).optional(),
+  reservedAt: Joi.date().iso().optional(),
 });
 
 export const TruckQueryParamsSchema = Joi.object({

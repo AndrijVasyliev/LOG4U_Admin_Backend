@@ -7,14 +7,17 @@ import {
   Post,
   Patch,
   Delete,
+  Req,
 } from '@nestjs/common';
+import { Request } from 'express';
 import {
   CreateTruckDto,
   TruckQuery,
   TruckQuerySearch,
   TruckResultDto,
   PaginatedTruckResultDto,
-  UpdateTruckDto, TruckResultForMapDto,
+  UpdateTruckDto,
+  TruckResultForMapDto,
 } from './truck.dto';
 import { BodyValidationPipe } from '../utils/bodyValidate.pipe';
 import { TruckService } from './truck.service';
@@ -27,6 +30,7 @@ import {
 import { MongoObjectIdPipe } from '../utils/idValidate.pipe';
 import { QueryParamsPipe } from '../utils/queryParamsValidate.pipe';
 import { Roles } from '../auth/auth.decorator';
+import { UserResultDto } from '../user/user.dto';
 
 @Controller('truck')
 @Roles('Admin', 'Super Admin')
@@ -66,11 +70,15 @@ export class TruckController {
 
   @Patch(':truckId')
   async updateTruck(
+    @Req() request: Request,
     @Param('truckId', MongoObjectIdPipe) truckId: string,
     @Body(new BodyValidationPipe(UpdateTruckValidation))
     updateTruckBodyDto: UpdateTruckDto,
   ): Promise<TruckResultDto> {
-    return this.truckService.updateTruck(truckId, updateTruckBodyDto);
+    const { user } = request as unknown as {
+      user: UserResultDto;
+    };
+    return this.truckService.updateTruck(truckId, updateTruckBodyDto, user);
   }
 
   @Delete(':truckId')

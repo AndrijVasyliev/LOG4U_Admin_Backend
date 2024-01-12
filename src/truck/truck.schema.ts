@@ -22,6 +22,7 @@ import { GeoPointSchema, Location } from '../location/location.schema';
 import { Owner } from '../owner/owner.schema';
 import { Coordinator } from '../coordinator/coordinator.schema';
 import { Driver } from '../driver/driver.schema';
+import { User } from '../user/user.schema';
 
 export type TruckDocument = Truck & Document;
 
@@ -137,6 +138,17 @@ export class Truck {
     autopopulate: { match: { type: { $in: DRIVER_TYPES } } },
   })
   driver?: Driver;
+
+  @Prop({ required: false })
+  reservedAt: Date;
+
+  @Prop({
+    required: false,
+    type: MongooseSchema.Types.ObjectId,
+    ref: 'User',
+    autopopulate: true,
+  })
+  reservedBy?: User;
 
   created_at: Date;
 

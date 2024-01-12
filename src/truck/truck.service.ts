@@ -27,6 +27,7 @@ import {
 import { GoogleGeoApiService } from '../googleGeoApi/googleGeoApi.service';
 import { LocationService } from '../location/location.service';
 import { escapeForRegExp } from '../utils/escapeForRegExp';
+import { UserResultDto } from '../user/user.dto';
 
 const { MongoError } = mongo;
 
@@ -173,9 +174,12 @@ export class TruckService {
       .find(
         { lastLocation: { $exists: true } },
         ['truckNumber', 'status', 'lastLocation'],
-        { autopopulate: false },
+        {
+          autopopulate: false,
+        },
       )
-      .populate({
+      .exec();
+    /*.populate({
         path: 'lastCity',
         options: { autopopulate: false },
       })
@@ -188,8 +192,7 @@ export class TruckService {
         path: 'coordinator',
         select: ['fullName', 'type', 'phone'],
         options: { autopopulate: false },
-      })
-      .exec();
+      })*/
     return res.map((truck) => TruckResultForMapDto.fromTruckForMapModel(truck));
   }
 
@@ -228,6 +231,7 @@ export class TruckService {
   async updateTruck(
     id: string,
     updateTruckDto: UpdateTruckDto,
+    user?: UserResultDto,
   ): Promise<TruckResultDto> {
     const truck = await this.findTruckDocumentById(id);
     let lastCity = '';
@@ -240,12 +244,13 @@ export class TruckService {
       } catch {}
     }
     this.log.debug(`Setting new values: ${JSON.stringify(updateTruckDto)}`);
-    Object.assign(
-      truck,
-      lastCity
-        ? { ...updateTruckDto, lastCity, locationUpdatedAt: new Date() }
-        : updateTruckDto,
-    );
+    Object.assign(truck, updateTruckDto);
+    if (lastCity) {
+      Object.assign(truck, { lastCity, locationUpdatedAt: new Date() });
+    }
+    if (updateTruckDto.reservedAt && user) {
+      Object.assign(truck, { reservedBy: user.id });
+    }
     try {
       this.log.debug('Saving Truck');
       const savedTruck = await truck.save();
