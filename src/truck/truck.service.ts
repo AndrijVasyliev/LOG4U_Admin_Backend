@@ -251,6 +251,9 @@ export class TruckService {
     if (updateTruckDto.reservedAt && user) {
       Object.assign(truck, { reservedBy: user.id });
     }
+    if (updateTruckDto.reservedAt === null) {
+      Object.assign(truck, { reservedBy: null });
+    }
     try {
       this.log.debug('Saving Truck');
       const savedTruck = await truck.save();
