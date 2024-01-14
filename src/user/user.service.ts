@@ -72,9 +72,10 @@ export class UserService {
     if (query.search) {
       const searchParams = Object.entries(query.search);
       searchParams.forEach((entry) => {
-        documentQuery[entry[0]] = {
-          $regex: new RegExp(escapeForRegExp(entry[1]), 'i'),
-        };
+        entry[0] !== 'search' &&
+          (documentQuery[entry[0]] = {
+            $regex: new RegExp(escapeForRegExp(entry[1]), 'i'),
+          });
       });
     }
     if (query?.search?.search) {

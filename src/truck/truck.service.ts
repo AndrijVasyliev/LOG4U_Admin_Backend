@@ -87,6 +87,7 @@ export class TruckService {
         entry[0] !== 'lastLocation' &&
           entry[0] !== 'distance' &&
           entry[0] !== 'truckNumber' &&
+          entry[0] !== 'search' &&
           (documentQuery[entry[0]] = {
             $regex: new RegExp(escapeForRegExp(entry[1]), 'i'),
           });
