@@ -70,6 +70,7 @@ export class LoadService {
       const searchParams = Object.entries(query.search);
       searchParams.forEach((entry) => {
         entry[0] !== 'loadNumber' &&
+          entry[0] !== 'truckNumber' &&
           (documentQuery[entry[0]] = {
             $regex: new RegExp(escapeForRegExp(entry[1]), 'i'),
           });
