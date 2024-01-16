@@ -45,6 +45,7 @@
     "pp.html": "/pp.html",
     "sw.js": "/sw.js",
     "index.html": "/index.html",
+    "register_sw.js": "/register_sw.js",
     "main.98aad6cd.css.map": "/static/css/main.98aad6cd.css.map",
     "main.af1e422f.js.map": "/static/js/main.af1e422f.js.map",
     "666.0d15100c.chunk.js.map": "/static/js/666.0d15100c.chunk.js.map",
