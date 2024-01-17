@@ -37,6 +37,8 @@ import { MobileAppModule } from './mobileApp/mobileApp.module';
 import { AuthModule } from './auth/auth.module';
 import { MONGO_CONNECTION_NAME } from './utils/constants';
 
+import { ChatModule } from './chat/chat.module';
+
 @Module({
   imports: [
     AuthModule,
@@ -88,6 +90,7 @@ import { MONGO_CONNECTION_NAME } from './utils/constants';
     LoadModule,
     TruckModule,
     MobileAppModule,
+    ChatModule,
   ],
   controllers: [AppController],
   providers: [AppService],
