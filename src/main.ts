@@ -24,9 +24,9 @@ async function bootstrap() {
           defaultSrc: [
             "'self'",
             'maps.googleapis.com',
-            'fonts.gstatic.com',
+            // 'fonts.gstatic.com',
             'maps.gstatic.com',
-            '*',
+            // '*',
           ],
           fontSrc: [
             "'self'",
