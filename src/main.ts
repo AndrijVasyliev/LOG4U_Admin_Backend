@@ -21,8 +21,18 @@ async function bootstrap() {
       crossOriginEmbedderPolicy: false,
       contentSecurityPolicy: {
         directives: {
-          defaultSrc: ["'self'", 'maps.googleapis.com', 'fonts.gstatic.com'],
-          fontSrc: ["'self'", 'fonts.googleapis.com', 'fonts.gstatic.com'],
+          defaultSrc: [
+            "'self'",
+            'maps.googleapis.com',
+            'fonts.gstatic.com',
+            'maps.gstatic.com',
+          ],
+          fontSrc: [
+            "'self'",
+            'fonts.googleapis.com',
+            'fonts.gstatic.com',
+            'maps.gstatic.com',
+          ],
           scriptSrc: ["'self'", 'maps.googleapis.com'],
           imgSrc: [
             "'self'",
