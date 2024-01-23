@@ -23,7 +23,7 @@ async function bootstrap() {
         directives: {
           defaultSrc: [
             "'self'",
-            'maps.googleapis.com',
+            '*.googleapis.com',
             // 'fonts.gstatic.com',
             '*.gstatic.com',
             // '*',
@@ -32,14 +32,14 @@ async function bootstrap() {
             "'self'",
             'fonts.googleapis.com',
             'fonts.gstatic.com',
-            'maps.gstatic.com',
+            // 'maps.gstatic.com',
           ],
           scriptSrc: ["'self'", 'maps.googleapis.com'],
           workerSrc: ["'self'", 'blob:'],
           imgSrc: [
             "'self'",
             'data:',
-            'maps.gstatic.com',
+            '*.gstatic.com',
             '*.googleapis.com',
             '*.ggpht.com',
           ],
