@@ -16,7 +16,7 @@ async function bootstrap() {
 
   const port = configService.get<number>('app.port') as number;
 
-  app.use(
+  /*app.use(
     helmet({
       crossOriginEmbedderPolicy: false,
       contentSecurityPolicy: {
@@ -44,7 +44,7 @@ async function bootstrap() {
         },
       },
     }),
-  );
+  );*/
   app.use(compression());
   app.enableShutdownHooks();
   app.setGlobalPrefix('api', {
