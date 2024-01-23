@@ -35,6 +35,7 @@ async function bootstrap() {
             'maps.gstatic.com',
           ],
           scriptSrc: ["'self'", 'maps.googleapis.com'],
+          workSrc: ["'self'", 'blob:'],
           imgSrc: [
             "'self'",
             'data:',
