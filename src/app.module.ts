@@ -35,6 +35,7 @@ import { TruckModule } from './truck/truck.module';
 import { GoogleGeoApiModule } from './googleGeoApi/googleGeoApi.module';
 import { MobileAppModule } from './mobileApp/mobileApp.module';
 import { AuthModule } from './auth/auth.module';
+import { EmailModule } from './email/email.module';
 import { MONGO_CONNECTION_NAME } from './utils/constants';
 
 @Module({
@@ -88,6 +89,7 @@ import { MONGO_CONNECTION_NAME } from './utils/constants';
     LoadModule,
     TruckModule,
     MobileAppModule,
+    EmailModule,
   ],
   controllers: [AppController],
   providers: [AppService],

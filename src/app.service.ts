@@ -5,8 +5,8 @@ import { LoggerService } from './logger/logger.service';
 @Injectable()
 export class AppService {
   constructor(
-    private configService: ConfigService,
-    private log: LoggerService,
+    private readonly configService: ConfigService,
+    private readonly log: LoggerService,
   ) {}
 
   getRoot(): string {

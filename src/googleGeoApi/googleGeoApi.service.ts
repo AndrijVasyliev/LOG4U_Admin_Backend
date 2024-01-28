@@ -10,7 +10,7 @@ export class GoogleGeoApiService {
   private readonly apiKey?: string;
   constructor(
     private readonly httpService: HttpService,
-    private configService: ConfigService,
+    private readonly configService: ConfigService,
     private readonly log: LoggerService,
   ) {
     this.matrixUri = this.configService.get<string>(

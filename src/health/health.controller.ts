@@ -1,7 +1,8 @@
 import * as fs from 'node:fs';
-import { Controller, Get, InternalServerErrorException } from '@nestjs/common';
-import { InjectConnection } from '@nestjs/mongoose';
 import { connection } from 'mongoose';
+import { Controller, Get, InternalServerErrorException } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
+import { InjectConnection } from '@nestjs/mongoose';
 import {
   HealthCheck,
   HealthCheckService,
@@ -16,8 +17,8 @@ import {
 } from '../utils/constants';
 
 import { LoggerService } from '../logger/logger.service';
+import { EmailService } from '../email/email.service';
 import { Public } from '../auth/auth.decorator';
-import { ConfigService } from '@nestjs/config';
 
 function getVersionFromStatusFile() {
   try {
@@ -45,10 +46,10 @@ export class HealthController {
     private readonly health: HealthCheckService,
     private readonly memory: MemoryHealthIndicator,
     private readonly mongoose: MongooseHealthIndicator,
+    private readonly email: EmailService,
     private readonly configService: ConfigService,
     private readonly log: LoggerService,
     @InjectConnection(MONGO_CONNECTION_NAME)
-    @InjectConnection()
     private mongoConnection: typeof connection,
   ) {
     this.heapLimit =
@@ -69,6 +70,7 @@ export class HealthController {
     const healthCheckResult = await this.health.check([
       () => this.memory.checkHeap('memory_heap', this.heapLimit),
       () => this.memory.checkRSS('memory_rss', this.rssLimit),
+      async () => this.email.checkConnectivity('email'),
       async () =>
         this.mongoose.pingCheck('mongoose', {
           connection: this.mongoConnection,
@@ -100,6 +102,7 @@ export class HealthController {
     const healthCheckResult = this.health.check([
       () => this.memory.checkHeap('memory_heap', this.heapLimit),
       () => this.memory.checkRSS('memory_rss', this.rssLimit),
+      async () => this.email.checkConnectivity('email'),
       async () =>
         this.mongoose.pingCheck('mongoose', {
           connection: this.mongoConnection,

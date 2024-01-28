@@ -86,7 +86,7 @@ export class LoggerService implements BaseLoggerService {
     return info;
   });
 
-  constructor(private configService: ConfigService) {
+  constructor(private readonly configService: ConfigService) {
     this.logLevel = configService.get<LogLevel>('log.level') as LogLevel;
     this.serviceName = configService.get<string>('app.serviceName') as string;
     this.logFormat = configService.get<string>('log.format') as string;

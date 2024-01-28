@@ -38,7 +38,7 @@ export class LoadService {
     private readonly truckService: TruckService,
     private readonly locationService: LocationService,
     private readonly geoApiService: GoogleGeoApiService,
-    private configService: ConfigService,
+    private readonly configService: ConfigService,
     private readonly log: LoggerService,
   ) {
     this.matrixUri = this.configService.get<string>(
