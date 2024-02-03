@@ -4,7 +4,7 @@ import { PersonType } from '../utils/general.dto';
 export class UpdatePersonAuthDto {
   // readonly fullName?: string;
   // readonly appLogin?: string;
-  readonly appPermissions?: Record<string, string>;
+  readonly appPermissions?: Record<string, any>;
   readonly appLastLogin?: Date;
   readonly deviceId?: string;
   readonly deviceIdLastChange?: Date;
@@ -31,7 +31,7 @@ export class PersonResultDto {
   readonly fullName: string;
   readonly isAppInDebugMode?: boolean;
   readonly appLogin?: string;
-  // readonly appPermissions?: Record<string, string>;
+  // readonly appPermissions?: Record<string, any>;
   // readonly appLastLogin?: Date;
   readonly deviceId?: string;
   // readonly deviceIdLastChange?: Date;

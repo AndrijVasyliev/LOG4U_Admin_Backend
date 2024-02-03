@@ -27,7 +27,7 @@ export class Person {
   appLogin?: string;
 
   @Prop({ required: false, type: Object })
-  appPermissions?: Record<string, string>;
+  appPermissions?: Record<string, any>;
 
   @Prop({ required: false })
   appLastLogin?: Date;
