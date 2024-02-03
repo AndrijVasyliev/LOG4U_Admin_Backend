@@ -21,7 +21,7 @@ export class PersonResultDto {
       appLogin: person.appLogin,
       // appPermissions: person.appPermissions,
       // appLastLogin: person.appLastLogin,
-      // deviceId: person.deviceId,
+      deviceId: person.deviceId,
       // deviceIdLastChange: person.deviceIdLastChange,
     };
   }
@@ -33,6 +33,6 @@ export class PersonResultDto {
   readonly appLogin?: string;
   // readonly appPermissions?: Record<string, string>;
   // readonly appLastLogin?: Date;
-  // readonly deviceId?: string;
+  readonly deviceId?: string;
   // readonly deviceIdLastChange?: Date;
 }
