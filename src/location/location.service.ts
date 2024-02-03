@@ -6,7 +6,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { LoggerService } from '../logger/logger.service';
+import { LoggerService } from '../logger';
 import {
   EARTH_RADIUS_MILES,
   MONGO_CONNECTION_NAME,

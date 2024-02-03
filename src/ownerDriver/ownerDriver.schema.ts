@@ -4,14 +4,13 @@ import {
   COORDINATOR_TYPES,
   DRIVER_TYPES,
   LANG_PRIORITIES,
-  OWNER_TYPES,
   PERSON_TYPES,
 } from '../utils/constants';
 import { LangPriority, PersonType } from '../utils/general.dto';
 import { hash } from '../utils/hash';
 import { Truck } from '../truck/truck.schema';
 import { Coordinator } from '../coordinator/coordinator.schema';
-import { Driver, DriverSchema } from '../driver/driver.schema';
+import { Driver } from '../driver/driver.schema';
 import { Owner } from '../owner/owner.schema';
 
 export type OwnerDriverDocument = OwnerDriver & Document;
@@ -105,9 +104,6 @@ export class OwnerDriver {
   @Prop({ required: false })
   appLogin?: string;
 
-  @Prop({ required: false })
-  deviceId: string;
-
   @Prop({
     required: false,
     set: hash,
@@ -164,4 +160,3 @@ OwnerDriverSchema.virtual('driveTrucks', {
 });
 
 OwnerDriverSchema.index({ appLogin: 1 }, { unique: true, sparse: true });
-OwnerDriverSchema.index({ deviceId: 1 }, { unique: true, sparse: true });

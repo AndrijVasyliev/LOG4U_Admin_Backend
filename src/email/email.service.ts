@@ -2,7 +2,7 @@ import { Transporter, createTransport } from 'nodemailer';
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { HealthIndicatorResult } from '@nestjs/terminus';
-import { LoggerService } from '../logger/logger.service';
+import { LoggerService } from '../logger';
 import { SendEmailDto } from './email.dto';
 
 @Injectable()

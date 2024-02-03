@@ -18,7 +18,7 @@ import {
 } from './coordinatorDriver.dto';
 import { BodyValidationPipe } from '../utils/bodyValidate.pipe';
 import { CoordinatorDriverService } from './coordinatorDriver.service';
-import { LoggerService } from '../logger/logger.service';
+import { LoggerService } from '../logger';
 import {
   CreateCoordinatorDriverValidation,
   UpdateCoordinatorDriverValidation,

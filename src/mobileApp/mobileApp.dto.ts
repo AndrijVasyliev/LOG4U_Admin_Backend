@@ -2,6 +2,7 @@ import { Query } from '../utils/general.dto';
 
 export class AuthDto {
   deviceId: string;
+  userPermissions: Record<string, string>;
 }
 
 export class MobileLoadQuerySearch {}

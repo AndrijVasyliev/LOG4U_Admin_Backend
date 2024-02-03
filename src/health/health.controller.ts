@@ -16,7 +16,7 @@ import {
   DB_CHECK_TIMEOUT,
 } from '../utils/constants';
 
-import { LoggerService } from '../logger/logger.service';
+import { LoggerService } from '../logger';
 import { EmailService } from '../email/email.service';
 import { Public } from '../auth/auth.decorator';
 

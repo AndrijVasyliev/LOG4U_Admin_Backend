@@ -1,141 +1,314 @@
-import * as os from 'node:os';
 import {
   Injectable,
-  LoggerService as BaseLoggerService,
-  LogLevel,
+  LoggerService as LoggerServiceInterface,
 } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
-import { isEmpty } from 'ramda';
 import * as rTracer from 'cls-rtracer';
-import {
-  Logger as winstonLogger,
-  transports,
-  format,
-  createLogger,
-} from 'winston';
+import * as DefaultLogger from 'winston';
+import { stringify } from 'safe-stable-stringify';
+import { replacer } from './logger.replacer.util';
+import { REQUEST_ID, CONTEXT, STACK } from './logger.constants.util';
 
-const hostname = os.hostname();
-const { combine, printf, colorize, splat, errors } = format;
-
-type Meta = Record<string, any>;
+type Meta = Record<string | symbol, any>;
+const injectRequestId = (): Meta => {
+  const newMeta: Meta = {};
+  const traceId = rTracer.id();
+  if (traceId) {
+    newMeta[REQUEST_ID] = traceId;
+  }
+  return newMeta;
+};
+const isString = (val: any): val is string => typeof val === 'string';
+export const isUndefined = (obj: any): obj is undefined =>
+  typeof obj === 'undefined';
 
 @Injectable()
-export class LoggerService implements BaseLoggerService {
-  private readonly logger: winstonLogger;
-  readonly logLevel: LogLevel;
-  readonly serviceName: string;
-  readonly logFormat: string;
+export class LoggerService implements LoggerServiceInterface {
+  private readonly logger: typeof DefaultLogger;
 
-  private injectRequestId = (meta?: Meta): Meta => {
-    const newMeta: Meta = meta ? meta : {};
-    const traceId = rTracer.id();
-    if (traceId) {
-      newMeta.requestId = traceId;
-    }
-    newMeta.timestamp = new Date();
-    return newMeta;
-  };
-
-  private logJsonFormat = printf((info: object): string =>
-    JSON.stringify({ ...info, hostname, servicename: this.serviceName }),
-  );
-
-  private logStringFormat = printf((info): string => {
-    const {
-      level,
-      stack,
-      context,
+  constructor() {
+    this.logger = DefaultLogger;
+  }
+  public error(message: string, ...optionalParams: any[]): void;
+  public error(message: Error): void;
+  public error(message: any, ...optionalParams: any[]): void {
+    if (message instanceof Error)
+      return void this.logger.error(
+        message as unknown as string,
+        injectRequestId(),
+      );
+    return void this.logger.error(
       message,
-      timestamp: timeStamp,
-      requestId,
-      ...metadata
-    } = info;
-    let log = `${(timeStamp || new Date())
-      .toJSON()
-      .replace('T', ' ')
-      .substring(0, 19)} [${level}]${context ? ' (' + context + ')' : ''} ${
-      requestId || ''
-    }: ${message}`;
-    if (!isEmpty(metadata)) {
-      log += `${JSON.stringify(metadata)}`;
+      ...[...optionalParams, injectRequestId()],
+    );
+  }
+  public warn(message: string, ...optionalParams: any[]): void;
+  public warn(message: Error): void;
+  public warn(message: any, ...optionalParams: any[]): void {
+    return void this.logger.warn(
+      message,
+      ...[...optionalParams, injectRequestId()],
+    );
+  }
+  public info(message: string, ...optionalParams: any[]): void;
+  public info(message: Error): void;
+  public info(message: any, ...optionalParams: any[]): void {
+    if (message instanceof Error)
+      return void this.logger.info(
+        message as unknown as string,
+        injectRequestId(),
+      );
+    return void this.logger.info(
+      message,
+      ...[...optionalParams, injectRequestId()],
+    );
+  }
+  public http(message: string, ...optionalParams: any[]): void;
+  public http(message: Error): void;
+  public http(message: any, ...optionalParams: any[]): void {
+    if (message instanceof Error)
+      return void this.logger.http(
+        message as unknown as string,
+        injectRequestId(),
+      );
+    return void this.logger.http(
+      message,
+      ...[...optionalParams, injectRequestId()],
+    );
+  }
+  public verbose(message: string, ...optionalParams: any[]): void;
+  public verbose(message: Error): void;
+  public verbose(message: any, ...optionalParams: any[]): void {
+    if (message instanceof Error)
+      // ToDO is it needed?
+      return void this.logger.verbose(
+        message as unknown as string,
+        injectRequestId(),
+      );
+    return void this.logger.verbose(
+      message,
+      ...[...optionalParams, injectRequestId()],
+    );
+  }
+  public debug(message: string, ...optionalParams: any[]): void;
+  public debug(message: Error): void;
+  public debug(message: any, ...optionalParams: any[]): void {
+    if (message instanceof Error)
+      return void this.logger.debug(
+        message as unknown as string,
+        injectRequestId(),
+      );
+    return void this.logger.debug(
+      message,
+      ...[...optionalParams, injectRequestId()],
+    );
+  }
+  public silly(message: string, ...optionalParams: any[]): void;
+  public silly(message: Error): void;
+  public silly(message: any, ...optionalParams: any[]): void {
+    if (message instanceof Error)
+      return void this.logger.silly(
+        message as unknown as string,
+        injectRequestId(),
+      );
+    return void this.logger.silly(
+      message,
+      ...[...optionalParams, injectRequestId()],
+    );
+  }
+
+  public log(message: string, ...optionalParams: any[]): void;
+  public log(message: Error): void;
+  public log(message: any, ...optionalParams: any[]): void {
+    if (message instanceof Error)
+      return void this.logger.log(
+        message as unknown as string,
+        injectRequestId(),
+      );
+    return void this.logger.log(
+      'info',
+      message,
+      ...[...optionalParams, injectRequestId()],
+    );
+  }
+}
+
+@Injectable()
+export class NestLoggerService implements LoggerServiceInterface {
+  private readonly logger: typeof DefaultLogger;
+
+  private isStackFormat(stack: unknown) {
+    if (!isString(stack) && !isUndefined(stack)) {
+      return false;
     }
-    return stack ? `${log} stack: ${stack.replace(/\n/g, ' ')}` : log;
-  });
 
-  private json = format((info) => {
-    const messageType = typeof info.message;
-    if (messageType === 'object' && !isEmpty(info.message)) {
-      // eslint-disable-next-line no-param-reassign
-      info.message = Object.entries(info.message)
-        .map(
-          ([key, value]) =>
-            `${key}: ${
-              typeof value === 'string' ? value : JSON.stringify(value)
-            }`,
-        )
-        .join(this.logFormat === 'string' ? '; ' : ';\n');
-    } else if (messageType !== 'string') {
-      // eslint-disable-next-line no-param-reassign
-      info.message = JSON.stringify(info.message, null, 0);
+    return /^(.)+\n\s+at .+:\d+:\d+$/.test(<string>stack);
+  }
+  private getContextAndMessages(args: unknown[]) {
+    if (args?.length <= 1) {
+      return { messages: args };
     }
-    // eslint-disable-next-line no-param-reassign
-    info.message =
-      info.message && typeof info.message === 'object'
-        ? JSON.stringify(info.message, null, 0)
-        : info.message;
-    return info;
-  });
-
-  constructor(private readonly configService: ConfigService) {
-    this.logLevel = configService.get<LogLevel>('log.level') as LogLevel;
-    this.serviceName = configService.get<string>('app.serviceName') as string;
-    this.logFormat = configService.get<string>('log.format') as string;
-    this.logger = createLogger({
-      level: this.logLevel,
-      transports: [
-        new transports.Console({
-          level: this.logLevel,
-          format:
-            this.logFormat === 'string'
-              ? format.combine(colorize(), this.logStringFormat)
-              : combine(this.logJsonFormat),
-          handleExceptions: true,
-          handleRejections: true,
-        }),
-      ],
-      format: combine(splat(), errors({ stack: true }), this.json()),
-      exitOnError: true,
-    });
+    const lastElement = args[args.length - 1];
+    const isContext = isString(lastElement);
+    if (!isContext) {
+      return { messages: args };
+    }
+    return {
+      context: lastElement as string,
+      messages: args.slice(0, args.length - 1),
+    };
   }
 
-  public error(message: string, error?: any, context?: string): void;
-  public error(message: any, meta?: Meta): void;
+  private getContextAndStackAndMessages(args: unknown[]) {
+    if (args.length === 2) {
+      return this.isStackFormat(args[1])
+        ? {
+            messages: [args[0]],
+            stack: args[1] as string,
+          }
+        : {
+            messages: [args[0]],
+            context: args[1] as string,
+          };
+    }
 
-  public error(message: any, arg?: Meta, context?: string): void {
-    const newMeta =
-      !context && arg && typeof arg === 'object' ? arg : { context };
-    this.logger.error(message, this.injectRequestId(newMeta));
-  }
-  public warn(message: any, meta?: Meta): void {
-    this.logger.warn(message, this.injectRequestId(meta));
-  }
-  public info(message: any, meta?: Meta): void {
-    this.logger.info(message, this.injectRequestId(meta));
-  }
-  public http(message: any, meta?: Meta): void {
-    this.logger.http(message, this.injectRequestId(meta));
-  }
-  public verbose(message: any, meta?: Meta): void {
-    this.logger.verbose(message, this.injectRequestId(meta));
-  }
-  public debug(message: any, meta?: Meta): void {
-    this.logger.debug(message, this.injectRequestId(meta));
-  }
-  public silly(message: any, meta?: Meta): void {
-    this.logger.silly(message, this.injectRequestId(meta));
+    const { messages, context } = this.getContextAndMessages(args);
+    if (messages?.length <= 1) {
+      return { messages, context };
+    }
+    const lastElement = messages[messages.length - 1];
+    const isStack = isString(lastElement);
+    if (!isStack && !isUndefined(lastElement)) {
+      return { messages, context };
+    }
+    return {
+      stack: lastElement as string,
+      messages: messages.slice(0, messages.length - 1),
+      context,
+    };
   }
 
-  public log(message: any, context: string): void {
-    this.logger.log('info', message, { context });
+  constructor() {
+    this.logger = DefaultLogger;
+  }
+  error(message: any, stack?: string, context?: string): void;
+  error(message: any, ...optionalParams: [...any, string?, string?]): void;
+  error(message: any, ...optionalParams: any[]) {
+    const { messages, context, stack } = this.getContextAndStackAndMessages([
+      message,
+      ...optionalParams,
+    ]);
+    messages.forEach((message) =>
+      this.logger.log(
+        'error',
+        typeof message === 'string'
+          ? message
+          : (stringify(message, replacer) as string),
+        {
+          [STACK]: stack,
+          [CONTEXT]: context,
+          ...injectRequestId(),
+        },
+      ),
+    );
+  }
+  log(message: any, context?: string): void;
+  log(message: any, ...optionalParams: [...any, string?]): void;
+  log(message: any, ...optionalParams: any[]) {
+    const { messages, context } = this.getContextAndMessages([
+      message,
+      ...optionalParams,
+    ]);
+    messages.forEach((message) =>
+      this.logger.log(
+        'info',
+        typeof message === 'string'
+          ? message
+          : (stringify(message, replacer) as string),
+        {
+          [CONTEXT]: context,
+          ...injectRequestId(),
+        },
+      ),
+    );
+  }
+  warn(message: any, context?: string): void;
+  warn(message: any, ...optionalParams: [...any, string?]): void;
+  warn(message: any, ...optionalParams: any[]) {
+    const { messages, context } = this.getContextAndMessages([
+      message,
+      ...optionalParams,
+    ]);
+    messages.forEach((message) =>
+      this.logger.log(
+        'warn',
+        typeof message === 'string'
+          ? message
+          : (stringify(message, replacer) as string),
+        {
+          [CONTEXT]: context,
+          ...injectRequestId(),
+        },
+      ),
+    );
+  }
+  debug(message: any, context?: string): void;
+  debug(message: any, ...optionalParams: [...any, string?]): void;
+  debug(message: any, ...optionalParams: any[]) {
+    const { messages, context } = this.getContextAndMessages([
+      message,
+      ...optionalParams,
+    ]);
+    messages.forEach((message) =>
+      this.logger.log(
+        'debug',
+        typeof message === 'string'
+          ? message
+          : (stringify(message, replacer) as string),
+        {
+          [CONTEXT]: context,
+          ...injectRequestId(),
+        },
+      ),
+    );
+  }
+  verbose(message: any, context?: string): void;
+  verbose(message: any, ...optionalParams: [...any, string?]): void;
+  verbose(message: any, ...optionalParams: any[]) {
+    const { messages, context } = this.getContextAndMessages([
+      message,
+      ...optionalParams,
+    ]);
+    messages.forEach((message) =>
+      this.logger.log(
+        'verbose',
+        typeof message === 'string'
+          ? message
+          : (stringify(message, replacer) as string),
+        {
+          [CONTEXT]: context,
+          ...injectRequestId(),
+        },
+      ),
+    );
+  }
+  fatal(message: any, context?: string): void;
+  fatal(message: any, ...optionalParams: [...any, string?]): void;
+  fatal(message: any, ...optionalParams: any[]) {
+    const { messages, context } = this.getContextAndMessages([
+      message,
+      ...optionalParams,
+    ]);
+    messages.forEach((message) =>
+      this.logger.log(
+        'error',
+        typeof message === 'string'
+          ? message
+          : (stringify(message, replacer) as string),
+        {
+          [CONTEXT]: context,
+          ...injectRequestId(),
+        },
+      ),
+    );
   }
 }

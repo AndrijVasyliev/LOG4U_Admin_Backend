@@ -10,16 +10,18 @@ import {
   Body,
 } from '@nestjs/common';
 import { Request } from 'express';
-import { LoggerService } from '../logger/logger.service';
+import { LoggerService } from '../logger';
 import { Public, Roles } from '../auth/auth.decorator';
 import {
   AuthDto,
   MobileLoadQuery,
   MobileLoadQuerySearch,
 } from './mobileApp.dto';
+import { PersonResultDto } from '../person/person.dto';
 import { DriverResultDto } from '../driver/driver.dto';
 import { PaginatedLoadResultDto } from '../load/load.dto';
 import { UpdateTruckDto } from '../truck/truck.dto';
+import { PersonService } from '../person/person.service';
 import { DriverService } from '../driver/driver.service';
 import { LoadService } from '../load/load.service';
 import { TruckService } from '../truck/truck.service';
@@ -37,17 +39,38 @@ import { BodyValidationPipe } from '../utils/bodyValidate.pipe';
 export class MobileAppController {
   constructor(
     private readonly log: LoggerService,
+    private readonly personService: PersonService,
     private readonly driverService: DriverService,
     private readonly loadService: LoadService,
     private readonly truckService: TruckService,
   ) {}
-
+  // ToDo remove after switching to new auth schema
   @Patch('auth')
   async auth(
     @Req() request: Request,
     @Body(new BodyValidationPipe(MobileAuthValidation))
     authDto: AuthDto,
   ): Promise<DriverResultDto> {
+    const { user: person } = request as unknown as {
+      user: PersonResultDto;
+    };
+    const { deviceId } = authDto;
+    if (!deviceId) {
+      throw new BadRequestException(`No deviceId in auth request`);
+    }
+    if (person.deviceId !== deviceId) {
+      await this.personService.setDeviceId(person.id, deviceId);
+    }
+    return this.driverService.findDriverById(person.id);
+  }
+  /*
+  @Patch('setAuth')
+  async setAuth(
+    @Req() request: Request,
+    @Body(new BodyValidationPipe(MobileAuthValidation))
+    authDto: AuthDto,
+  ): Promise<DriverResultDto> {
+    // Set
     const { user: driver } = request as unknown as {
       user: DriverResultDto;
     };
@@ -56,17 +79,40 @@ export class MobileAppController {
       throw new BadRequestException(`No deviceId in auth request`);
     }
     if (driver.deviceId !== deviceId) {
-      await this.driverService.setDeviceId(driver.id, deviceId);
+      await this.driverService.setAuthData(driver.id, authDto);
     }
     return driver;
   }
 
-  @Get('driver')
-  async driver(@Req() request: Request): Promise<DriverResultDto> {
+  @Patch('checkAuth')
+  async checkAuth(
+    @Req() request: Request,
+    @Body(new BodyValidationPipe(MobileAuthValidation))
+    authDto: AuthDto,
+  ): Promise<DriverResultDto> {
+    // Update permissions, get mobile user, including person type, isAppInDebugMode, device id
+    // If device id does not match - throw error
+    // Add last login
     const { user: driver } = request as unknown as {
       user: DriverResultDto;
     };
+    const { deviceId } = authDto;
+    if (!deviceId) {
+      throw new BadRequestException(`No deviceId in auth request`);
+    }
+    if (driver.deviceId !== deviceId) {
+      throw new PreconditionFailedException('Logged from other device');
+    }
+    await this.driverService.setAuthData(driver.id, authDto);
     return driver;
+  }
+*/
+  @Get('driver')
+  async driver(@Req() request: Request): Promise<DriverResultDto> {
+    const { user: person } = request as unknown as {
+      user: PersonResultDto;
+    };
+    return this.driverService.findDriverById(person.id);
   }
 
   @Get('getLoad')
@@ -77,9 +123,10 @@ export class MobileAppController {
     )
     loadQuery: MobileLoadQuery,
   ): Promise<PaginatedLoadResultDto> {
-    const { user: driver } = request as unknown as {
-      user: DriverResultDto;
+    const { user: person } = request as unknown as {
+      user: PersonResultDto;
     };
+    const driver = await this.driverService.findDriverById(person.id);
     if (!driver.driveTrucks || driver.driveTrucks.length !== 1) {
       throw new PreconditionFailedException(
         `Driver ${driver.fullName} have no trucks`,
@@ -99,9 +146,10 @@ export class MobileAppController {
     @Body(new BodyValidationPipe(MobileUpdateTruckValidation))
     updateTruckBodyDto: UpdateTruckDto,
   ): Promise<UpdateTruckDto> {
-    const { user: driver } = request as unknown as {
-      user: DriverResultDto;
+    const { user: person } = request as unknown as {
+      user: PersonResultDto;
     };
+    const driver = await this.driverService.findDriverById(person.id);
     if (!driver.driveTrucks || driver.driveTrucks.length !== 1) {
       throw new PreconditionFailedException(
         `Driver ${driver.fullName} have no trucks`,
@@ -124,14 +172,15 @@ export class MobileAppController {
       location: { coords: { latitude: number; longitude: number } };
     },
   ): Promise<string> {
-    const driver = await this.driverService.getDriverByDeviceId(
+    const person = await this.personService.getPersonByDeviceId(
       updateTruckLocationBodyDto.deviceId,
     );
-    if (!driver) {
+    if (!person) {
       throw new PreconditionFailedException(
         `Driver with deviceId ${updateTruckLocationBodyDto.deviceId} does not found`,
       );
     }
+    const driver = await this.driverService.findDriverById(person.id);
     if (!driver.driveTrucks || driver.driveTrucks.length !== 1) {
       throw new PreconditionFailedException(
         `Driver ${driver.fullName} have no trucks`,

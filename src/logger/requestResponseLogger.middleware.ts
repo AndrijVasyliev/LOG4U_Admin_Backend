@@ -2,6 +2,7 @@ import { Injectable, NestMiddleware } from '@nestjs/common';
 import { Request, Response, Send } from 'express';
 
 import { LoggerService } from './logger.service';
+
 // ToDo Refactor response body logger
 const resDotSendInterceptor = (res: Response, send: Send) => {
   return (content: any) => {
@@ -14,7 +15,7 @@ const resDotSendInterceptor = (res: Response, send: Send) => {
 };
 
 @Injectable()
-export class LoggerMiddleware implements NestMiddleware {
+export class RequestResponseLoggerMiddleware implements NestMiddleware {
   constructor(private readonly logger: LoggerService) {}
 
   public use(req: Request, res: Response, next: () => void) {

@@ -18,7 +18,7 @@ import {
 } from './ownerDriver.dto';
 import { BodyValidationPipe } from '../utils/bodyValidate.pipe';
 import { OwnerDriverService } from './ownerDriver.service';
-import { LoggerService } from '../logger/logger.service';
+import { LoggerService } from '../logger';
 import {
   CreateOwnerDriverValidation,
   UpdateOwnerDriverValidation,

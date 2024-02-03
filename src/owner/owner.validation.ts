@@ -22,6 +22,8 @@ export const CreateOwnerValidation = Joi.object({
   emergencyContactRel: Joi.string().allow('').optional(),
   emergencyContactPhone: Joi.string().allow('').optional(),
   notes: Joi.string().allow('').optional(),
+  appLogin: Joi.string().allow('').optional(),
+  appPass: Joi.string().allow('').optional(),
 });
 
 export const UpdateOwnerValidation = Joi.object({
@@ -45,6 +47,8 @@ export const UpdateOwnerValidation = Joi.object({
   emergencyContactRel: Joi.string().allow('').optional(),
   emergencyContactPhone: Joi.string().allow('').optional(),
   notes: Joi.string().allow('').optional(),
+  appLogin: Joi.string().allow('').optional(),
+  appPass: Joi.string().allow('').optional(),
 });
 
 export const OwnerQueryParamsSchema = Joi.object({
@@ -67,6 +71,7 @@ export const OwnerQueryParamsSchema = Joi.object({
   emergencyContactName: Joi.string().optional(),
   emergencyContactRel: Joi.string().optional(),
   emergencyContactPhone: Joi.string().optional(),
+  appLogin: Joi.string().optional(),
   truckNumber: Joi.number().optional(),
 })
   .keys({
@@ -88,6 +93,7 @@ export const OwnerQueryParamsSchema = Joi.object({
       'emergencyContactName',
       'emergencyContactRel',
       'emergencyContactPhone',
+      'appLogin',
     ),
     direction: Joi.string().valid('asc', 'desc'),
   })

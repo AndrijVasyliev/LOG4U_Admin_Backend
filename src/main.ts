@@ -1,15 +1,16 @@
 import { NestFactory } from '@nestjs/core';
+import { RequestMethod } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import helmet from 'helmet';
 import * as compression from 'compression';
 import { AppModule } from './app.module';
-import { LoggerService } from './logger/logger.service';
+import { LoggerService, NestLoggerService } from './logger';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
     bufferLogs: true,
   });
-  app.useLogger(app.get(LoggerService));
+  app.useLogger(app.get(NestLoggerService));
 
   const configService = app.get(ConfigService);
   const logger: LoggerService = app.get(LoggerService);
@@ -51,13 +52,12 @@ async function bootstrap() {
   app.enableShutdownHooks();
   app.setGlobalPrefix('api', {
     exclude: [
+      { path: 'mobileApp/(.*)', method: RequestMethod.ALL },
+      'metrics',
       'status',
       'health',
       'readiness',
       'liveness',
-      'metrics',
-      'main',
-      'mobileApp/*',
     ],
   });
 

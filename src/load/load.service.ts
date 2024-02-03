@@ -15,7 +15,7 @@ import {
   PaginatedLoadResultDto,
   UpdateLoadDto,
 } from './load.dto';
-import { LoggerService } from '../logger/logger.service';
+import { LoggerService } from '../logger';
 import {
   MONGO_CONNECTION_NAME,
   MONGO_UNIQUE_INDEX_CONFLICT,

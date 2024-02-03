@@ -8,10 +8,10 @@ import { ConfigModule } from '@nestjs/config';
 import { APP_GUARD } from '@nestjs/core';
 import { AdminAuthBasicGuard, MobileAuthBasicGuard } from './auth.guard';
 import { UserModule } from '../user/user.module';
-import { DriverModule } from '../driver/driver.module';
+import { PersonModule } from '../person/person.module';
 
 @Module({
-  imports: [PassportModule, ConfigModule, UserModule, DriverModule],
+  imports: [PassportModule, ConfigModule, UserModule, PersonModule],
   providers: [
     AdminAuthBasicStrategy,
     MobileAuthBasicStrategy,

@@ -7,9 +7,11 @@ import {
   DRIVER_TYPES,
 } from '../utils/constants';
 import { LangPriority, PersonType } from '../utils/general.dto';
+import { hash } from '../utils/hash';
 import { Truck } from '../truck/truck.schema';
 import { Driver } from '../driver/driver.schema';
 import { Coordinator } from '../coordinator/coordinator.schema';
+import { OwnerDriverSchema } from '../ownerDriver/ownerDriver.schema';
 
 export type OwnerDocument = Owner & Document;
 
@@ -81,6 +83,15 @@ export class Owner {
   @Prop({ required: false })
   notes?: string;
 
+  @Prop({ required: false })
+  appLogin?: string;
+
+  @Prop({
+    required: false,
+    set: hash,
+  })
+  appPass?: string;
+
   readonly ownTrucks?: Truck[];
   readonly coordinators?: Coordinator[];
   readonly drivers?: Driver[];
@@ -113,3 +124,5 @@ OwnerSchema.virtual('drivers', {
   foreignField: 'owner',
   match: { type: { $in: DRIVER_TYPES } },
 });
+
+OwnerDriverSchema.index({ appLogin: 1 }, { unique: true, sparse: true });

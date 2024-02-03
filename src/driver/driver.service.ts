@@ -6,7 +6,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { LoggerService } from '../logger/logger.service';
+import { LoggerService } from '../logger';
 import {
   DRIVER_TYPES,
   MONGO_CONNECTION_NAME,
@@ -48,42 +48,6 @@ export class DriverService {
     }
     this.log.debug(`Driver ${driver._id}`);
     return driver;
-  }
-
-  async getDriverByCredentials(
-    username: string,
-    password: string,
-  ): Promise<DriverResultDto | null> {
-    this.log.debug(`Searching for Driver by App credentials ${username}`);
-    const driver = await this.driverModel
-      .findOne({
-        appLogin: username,
-        appPass: password,
-        type: { $in: DRIVER_TYPES },
-      })
-      .populate('driveTrucks');
-    if (!driver) {
-      this.log.debug(`Driver with App login ${username} was not found`);
-      return null;
-    }
-    this.log.debug(`Driver ${driver._id}`);
-    return DriverResultDto.fromDriverModel(driver);
-  }
-
-  async getDriverByDeviceId(deviceId: string): Promise<DriverResultDto | null> {
-    this.log.debug(`Searching for Driver by device Id ${deviceId}`);
-    const driver = await this.driverModel
-      .findOne({
-        deviceId,
-        type: { $in: DRIVER_TYPES },
-      })
-      .populate('driveTrucks');
-    if (!driver) {
-      this.log.debug(`Driver with deviceId ${deviceId} was not found`);
-      return null;
-    }
-    this.log.debug(`Driver ${driver._id}`);
-    return DriverResultDto.fromDriverModel(driver);
   }
 
   async findDriverById(id: string): Promise<DriverResultDto> {
@@ -195,33 +159,6 @@ export class DriverService {
     const driver = await this.findDriverDocumentById(id);
     this.log.debug(`Setting new values: ${JSON.stringify(updateDriverDto)}`);
     Object.assign(driver, updateDriverDto);
-    try {
-      this.log.debug('Saving Driver');
-      const savedDriver = await driver.save();
-      this.log.debug(`Driver ${savedDriver._id} saved`);
-      return DriverResultDto.fromDriverModel(driver);
-    } catch (e) {
-      if (!(e instanceof Error)) {
-        throw new InternalServerErrorException(JSON.stringify(e));
-      }
-      if (e instanceof MongoError && e.code === MONGO_UNIQUE_INDEX_CONFLICT) {
-        throw new ConflictException({ type: UNIQUE_CONSTRAIN_ERROR, e });
-      }
-      throw new InternalServerErrorException(e.message);
-    }
-  }
-
-  async setDeviceId(id: string, deviceId: string): Promise<DriverResultDto> {
-    this.log.debug(`Clearing existing deviceId: ${deviceId}`);
-    await this.driverModel.updateMany(
-      { deviceId },
-      { $unset: { deviceId: 1 } },
-    );
-    this.log.debug(
-      `Setting new deviceId: ${deviceId} for driver with id: ${id}`,
-    );
-    const driver = await this.findDriverDocumentById(id);
-    driver.set('deviceId', deviceId);
     try {
       this.log.debug('Saving Driver');
       const savedDriver = await driver.save();

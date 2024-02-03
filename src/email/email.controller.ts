@@ -1,7 +1,7 @@
 import { Controller, Body, Post } from '@nestjs/common';
 import { SendEmailDto } from './email.dto';
 import { BodyValidationPipe } from '../utils/bodyValidate.pipe';
-import { LoggerService } from '../logger/logger.service';
+import { LoggerService } from '../logger';
 import { SendEmailValidation } from './email.validation';
 import { Public } from '../auth/auth.decorator';
 import { EmailService } from './email.service';

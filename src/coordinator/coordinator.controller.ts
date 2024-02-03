@@ -18,7 +18,7 @@ import {
 } from './coordinator.dto';
 import { BodyValidationPipe } from '../utils/bodyValidate.pipe';
 import { CoordinatorService } from './coordinator.service';
-import { LoggerService } from '../logger/logger.service';
+import { LoggerService } from '../logger';
 import {
   CreateCoordinatorValidation,
   UpdateCoordinatorValidation,
