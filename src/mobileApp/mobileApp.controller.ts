@@ -63,25 +63,29 @@ export class MobileAppController {
     }
     return this.driverService.findDriverById(person.id);
   }
-  /*
+
   @Patch('setAuth')
   async setAuth(
     @Req() request: Request,
     @Body(new BodyValidationPipe(MobileAuthValidation))
     authDto: AuthDto,
-  ): Promise<DriverResultDto> {
-    // Set
-    const { user: driver } = request as unknown as {
-      user: DriverResultDto;
+  ): Promise<PersonResultDto> {
+    const { user: person } = request as unknown as {
+      user: PersonResultDto;
     };
-    const { deviceId } = authDto;
+    const { deviceId, appPermissions } = authDto;
     if (!deviceId) {
       throw new BadRequestException(`No deviceId in auth request`);
     }
-    if (driver.deviceId !== deviceId) {
-      await this.driverService.setAuthData(driver.id, authDto);
+    if (person.deviceId === deviceId) {
+      throw new PreconditionFailedException('Logged from this device already');
     }
-    return driver;
+    return this.personService.setAuthData(person.id, {
+      deviceId,
+      deviceIdLastChange: new Date(),
+      appPermissions,
+      appLastLogin: new Date(),
+    });
   }
 
   @Patch('checkAuth')
@@ -89,24 +93,23 @@ export class MobileAppController {
     @Req() request: Request,
     @Body(new BodyValidationPipe(MobileAuthValidation))
     authDto: AuthDto,
-  ): Promise<DriverResultDto> {
-    // Update permissions, get mobile user, including person type, isAppInDebugMode, device id
-    // If device id does not match - throw error
-    // Add last login
-    const { user: driver } = request as unknown as {
-      user: DriverResultDto;
+  ): Promise<PersonResultDto> {
+    const { user: person } = request as unknown as {
+      user: PersonResultDto;
     };
-    const { deviceId } = authDto;
+    const { deviceId, appPermissions } = authDto;
     if (!deviceId) {
       throw new BadRequestException(`No deviceId in auth request`);
     }
-    if (driver.deviceId !== deviceId) {
+    if (person.deviceId !== deviceId) {
       throw new PreconditionFailedException('Logged from other device');
     }
-    await this.driverService.setAuthData(driver.id, authDto);
-    return driver;
+    return this.personService.setAuthData(person.id, {
+      appPermissions,
+      appLastLogin: new Date(),
+    });
   }
-*/
+
   @Get('driver')
   async driver(@Req() request: Request): Promise<DriverResultDto> {
     const { user: person } = request as unknown as {

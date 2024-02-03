@@ -13,8 +13,7 @@ import {
   UNIQUE_CONSTRAIN_ERROR,
 } from '../utils/constants';
 import { Person, PersonDocument } from './person.schema';
-import { PersonResultDto } from './person.dto';
-import { AuthDto } from '../mobileApp/mobileApp.dto';
+import { PersonResultDto, UpdatePersonAuthDto } from './person.dto';
 
 const { MongoError } = mongo;
 
@@ -95,19 +94,22 @@ export class PersonService {
     }
   }
 
-  async setAuthData(id: string, authData: AuthDto): Promise<PersonResultDto> {
-    const { deviceId, userPermissions } = authData;
-    this.log.debug(`Clearing existing deviceId: ${deviceId}`);
-    await this.personModel.updateMany(
-      { deviceId },
-      { $unset: { deviceId: 1 } },
-    );
-    this.log.debug(
-      `Setting new deviceId: ${deviceId} for driver with id: ${id}`,
-    );
+  async setAuthData(
+    id: string,
+    updatePersonAuthDto: UpdatePersonAuthDto,
+  ): Promise<PersonResultDto> {
+    const { deviceId } = updatePersonAuthDto;
+    if (deviceId) {
+      this.log.debug(`Clearing existing deviceId: ${deviceId}`);
+      await this.personModel.updateMany(
+        { deviceId },
+        { $unset: { deviceId: 1 } },
+      );
+    }
+
     const person = await this.findPersonDocumentById(id);
-    person.set('deviceId', deviceId);
-    person.set('appPermisions', userPermissions);
+    Object.assign(person, updatePersonAuthDto);
+
     try {
       this.log.debug('Saving Person');
       const savedPerson = await person.save();

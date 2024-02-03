@@ -1,13 +1,14 @@
 import { Person } from './person.schema';
 import { PersonType } from '../utils/general.dto';
 
-export class UpdatePersonDto {
-  readonly fullName?: string;
+export class UpdatePersonAuthDto {
+  // readonly fullName?: string;
+  // readonly appLogin?: string;
   readonly appPermissions?: Record<string, string>;
   readonly appLastLogin?: Date;
-  readonly appLogin?: string;
   readonly deviceId?: string;
-  readonly appPass?: string;
+  readonly deviceIdLastChange?: Date;
+  // readonly appPass?: string;
 }
 
 export class PersonResultDto {
@@ -16,20 +17,22 @@ export class PersonResultDto {
       id: person._id.toString(),
       type: person.type,
       fullName: person.fullName,
-      appPermissions: person.appPermissions,
-      appLastLogin: person.appLastLogin,
+      isAppInDebugMode: person.isAppInDebugMode,
       appLogin: person.appLogin,
-      deviceId: person.deviceId,
-      appPass: person.appPass,
+      // appPermissions: person.appPermissions,
+      // appLastLogin: person.appLastLogin,
+      // deviceId: person.deviceId,
+      // deviceIdLastChange: person.deviceIdLastChange,
     };
   }
 
   readonly id: string;
   readonly type: PersonType;
   readonly fullName: string;
-  readonly appPermissions?: Record<string, string>;
-  readonly appLastLogin?: Date;
+  readonly isAppInDebugMode?: boolean;
   readonly appLogin?: string;
-  readonly deviceId?: string;
-  readonly appPass?: string;
+  // readonly appPermissions?: Record<string, string>;
+  // readonly appLastLogin?: Date;
+  // readonly deviceId?: string;
+  // readonly deviceIdLastChange?: Date;
 }

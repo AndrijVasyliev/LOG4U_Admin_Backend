@@ -20,6 +20,12 @@ export class Person {
   @Prop({ required: true })
   fullName: string;
 
+  @Prop({ required: false })
+  isAppInDebugMode?: boolean;
+
+  @Prop({ required: false })
+  appLogin?: string;
+
   @Prop({ required: false, type: Object })
   appPermissions?: Record<string, string>;
 
@@ -27,10 +33,10 @@ export class Person {
   appLastLogin?: Date;
 
   @Prop({ required: false })
-  appLogin?: string;
+  deviceId?: string;
 
   @Prop({ required: false })
-  deviceId?: string;
+  deviceIdLastChange?: Date;
 
   @Prop({
     required: false,
