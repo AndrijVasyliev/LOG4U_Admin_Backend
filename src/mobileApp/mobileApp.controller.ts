@@ -73,38 +73,20 @@ export class MobileAppController {
     const { user: person } = request as unknown as {
       user: PersonResultDto;
     };
-    const { deviceId, appPermissions } = authDto;
-    if (!deviceId) {
-      throw new BadRequestException(`No deviceId in auth request`);
-    }
-    if (person.deviceId === deviceId) {
+    const { force, deviceId, appPermissions } = authDto;
+    if (force && person.deviceId === deviceId) {
       throw new PreconditionFailedException('Logged from this device already');
+    } else if (!force && person.deviceId !== deviceId) {
+      throw new PreconditionFailedException('Logged from other device');
+    } else if (person.deviceId === deviceId) {
+      return this.personService.setAuthData(person.id, {
+        appPermissions,
+        appLastLogin: new Date(),
+      });
     }
     return this.personService.setAuthData(person.id, {
       deviceId,
       deviceIdLastChange: new Date(),
-      appPermissions,
-      appLastLogin: new Date(),
-    });
-  }
-
-  @Patch('checkAuth')
-  async checkAuth(
-    @Req() request: Request,
-    @Body(new BodyValidationPipe(MobileAuthValidation))
-    authDto: AuthDto,
-  ): Promise<PersonResultDto> {
-    const { user: person } = request as unknown as {
-      user: PersonResultDto;
-    };
-    const { deviceId, appPermissions } = authDto;
-    if (!deviceId) {
-      throw new BadRequestException(`No deviceId in auth request`);
-    }
-    if (person.deviceId !== deviceId) {
-      throw new PreconditionFailedException('Logged from other device');
-    }
-    return this.personService.setAuthData(person.id, {
       appPermissions,
       appLastLogin: new Date(),
     });

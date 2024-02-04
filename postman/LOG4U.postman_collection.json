@@ -2366,7 +2366,7 @@
 			"name": "Mobile",
 			"item": [
 				{
-					"name": "Auth",
+					"name": "Auth (Will be removed soon)",
 					"request": {
 						"method": "PATCH",
 						"header": [],
@@ -2399,7 +2399,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"deviceId\": \"mego_device\",\r\n    \"appPermissions\": {\r\n      \"Geo\": \"granted\",\r\n      \"Push\": \"granted\"\r\n    }\r\n}",
+							"raw": "{\r\n    \"force\": true,\r\n    \"deviceId\": \"mego_device\",\r\n    \"appPermissions\": {\r\n      \"Geo\": \"granted\",\r\n      \"Push\": \"granted\"\r\n    }\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -2414,33 +2414,6 @@
 							"path": [
 								"mobileApp",
 								"setAuth"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Check Auth",
-					"request": {
-						"method": "PATCH",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"deviceId\": \"mego_device\",\r\n    \"appPermissions\": {\r\n      \"Geo\": \"granted\",\r\n      \"Push\": \"granted\"\r\n    }\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{origin}}/mobileApp/checkAuth",
-							"host": [
-								"{{origin}}"
-							],
-							"path": [
-								"mobileApp",
-								"checkAuth"
 							]
 						}
 					},

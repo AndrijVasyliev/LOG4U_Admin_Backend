@@ -2,6 +2,7 @@ import * as Joi from 'joi';
 import { TRUCK_STATUSES } from '../utils/constants';
 
 export const MobileAuthValidation = Joi.object({
+  force: Joi.boolean().optional(),
   deviceId: Joi.string().required(),
   appPermissions: Joi.object().optional(),
 });
