@@ -4,7 +4,7 @@ import { PassportStrategy } from '@nestjs/passport';
 import { UserService } from '../user/user.service';
 import { UserResultDto } from '../user/user.dto';
 import { PersonService } from '../person/person.service';
-import { PersonResultDto } from '../person/person.dto';
+import { PersonAuthResultDto } from '../person/person.dto';
 import { LoggerService } from '../logger';
 import {
   ADMIN_BASIC_STRATEGY,
@@ -47,7 +47,7 @@ export class MobileAuthBasicStrategy extends PassportStrategy(
   public validate = async (
     username: string,
     password: string,
-  ): Promise<PersonResultDto | null> => {
+  ): Promise<PersonAuthResultDto | null> => {
     this.log.debug('In Mobile Basic Auth strategy');
     return await this.personService.getPersonByCredentials(username, password);
   };

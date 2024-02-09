@@ -267,6 +267,82 @@
 			]
 		},
 		{
+			"name": "Person",
+			"item": [
+				{
+					"name": "Get Person",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{origin}}/api/person/:personId",
+							"host": [
+								"{{origin}}"
+							],
+							"path": [
+								"api",
+								"person",
+								":personId"
+							],
+							"variable": [
+								{
+									"key": "personId",
+									"value": "64dcb747db730feec83a7a8c"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Person (same as setAuth from mobile)",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"force\": true,\r\n    \"deviceId\": \"mego_device\",\r\n    \"appPermissions\": {\r\n      \"Geo\": \"granted\",\r\n      \"Push\": \"granted\"\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{origin}}/api/person/:personId",
+							"host": [
+								"{{origin}}"
+							],
+							"path": [
+								"api",
+								"person",
+								":personId"
+							],
+							"variable": [
+								{
+									"key": "personId",
+									"value": "64dcb747db730feec83a7a8c"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
 			"name": "Owner-Driver",
 			"item": [
 				{

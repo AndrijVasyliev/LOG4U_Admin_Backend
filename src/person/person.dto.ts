@@ -11,18 +11,15 @@ export class UpdatePersonAuthDto {
   // readonly appPass?: string;
 }
 
-export class PersonResultDto {
-  static fromPersonModel(person: Person): PersonResultDto {
+export class PersonAuthResultDto {
+  static fromPersonModel(person: Person): PersonAuthResultDto {
     return {
       id: person._id.toString(),
       type: person.type,
       fullName: person.fullName,
       isAppInDebugMode: person.isAppInDebugMode,
       appLogin: person.appLogin,
-      // appPermissions: person.appPermissions,
-      // appLastLogin: person.appLastLogin,
       deviceId: person.deviceId,
-      // deviceIdLastChange: person.deviceIdLastChange,
     };
   }
 
@@ -31,8 +28,31 @@ export class PersonResultDto {
   readonly fullName: string;
   readonly isAppInDebugMode?: boolean;
   readonly appLogin?: string;
-  // readonly appPermissions?: Record<string, any>;
-  // readonly appLastLogin?: Date;
   readonly deviceId?: string;
-  // readonly deviceIdLastChange?: Date;
+}
+
+export class PersonResultDto {
+  static fromPersonModel(person: Person): PersonResultDto {
+    return {
+      id: person._id.toString(),
+      type: person.type,
+      fullName: person.fullName,
+      isAppInDebugMode: person.isAppInDebugMode,
+      appLogin: person.appLogin,
+      appPermissions: person.appPermissions,
+      appLastLogin: person.appLastLogin,
+      deviceId: person.deviceId,
+      deviceIdLastChange: person.deviceIdLastChange,
+    };
+  }
+
+  readonly id: string;
+  readonly type: PersonType;
+  readonly fullName: string;
+  readonly isAppInDebugMode?: boolean;
+  readonly appLogin?: string;
+  readonly appPermissions?: Record<string, any>;
+  readonly appLastLogin?: Date;
+  readonly deviceId?: string;
+  readonly deviceIdLastChange?: Date;
 }

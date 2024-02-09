@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
+import { PersonController } from './person.controller';
 import { Person, PersonSchema } from './person.schema';
 import { PersonService } from './person.service';
 import { MONGO_CONNECTION_NAME } from '../utils/constants';
@@ -12,6 +13,7 @@ import { MONGO_CONNECTION_NAME } from '../utils/constants';
     ),
   ],
   exports: [PersonService],
+  controllers: [PersonController],
   providers: [PersonService],
 })
 export class PersonModule {}

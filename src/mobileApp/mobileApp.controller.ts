@@ -17,7 +17,7 @@ import {
   MobileLoadQuery,
   MobileLoadQuerySearch,
 } from './mobileApp.dto';
-import { PersonResultDto } from '../person/person.dto';
+import { PersonAuthResultDto } from '../person/person.dto';
 import { DriverResultDto } from '../driver/driver.dto';
 import { PaginatedLoadResultDto } from '../load/load.dto';
 import { UpdateTruckDto } from '../truck/truck.dto';
@@ -52,7 +52,7 @@ export class MobileAppController {
     authDto: AuthDto,
   ): Promise<DriverResultDto> {
     const { user: person } = request as unknown as {
-      user: PersonResultDto;
+      user: PersonAuthResultDto;
     };
     const { deviceId } = authDto;
     if (!deviceId) {
@@ -69,9 +69,9 @@ export class MobileAppController {
     @Req() request: Request,
     @Body(new BodyValidationPipe(MobileAuthValidation))
     authDto: AuthDto,
-  ): Promise<PersonResultDto> {
+  ): Promise<PersonAuthResultDto> {
     const { user: person } = request as unknown as {
-      user: PersonResultDto;
+      user: PersonAuthResultDto;
     };
     const { force, deviceId, appPermissions } = authDto;
     if (force && person.deviceId === deviceId) {
@@ -95,7 +95,7 @@ export class MobileAppController {
   @Get('driver')
   async driver(@Req() request: Request): Promise<DriverResultDto> {
     const { user: person } = request as unknown as {
-      user: PersonResultDto;
+      user: PersonAuthResultDto;
     };
     return this.driverService.findDriverById(person.id);
   }
@@ -109,7 +109,7 @@ export class MobileAppController {
     loadQuery: MobileLoadQuery,
   ): Promise<PaginatedLoadResultDto> {
     const { user: person } = request as unknown as {
-      user: PersonResultDto;
+      user: PersonAuthResultDto;
     };
     const driver = await this.driverService.findDriverById(person.id);
     if (!driver.driveTrucks || driver.driveTrucks.length !== 1) {
@@ -132,7 +132,7 @@ export class MobileAppController {
     updateTruckBodyDto: UpdateTruckDto,
   ): Promise<UpdateTruckDto> {
     const { user: person } = request as unknown as {
-      user: PersonResultDto;
+      user: PersonAuthResultDto;
     };
     const driver = await this.driverService.findDriverById(person.id);
     if (!driver.driveTrucks || driver.driveTrucks.length !== 1) {

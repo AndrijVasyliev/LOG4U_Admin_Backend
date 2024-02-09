@@ -3,11 +3,11 @@ import { SendEmailDto } from './email.dto';
 import { BodyValidationPipe } from '../utils/bodyValidate.pipe';
 import { LoggerService } from '../logger';
 import { SendEmailValidation } from './email.validation';
-import { Public } from '../auth/auth.decorator';
+import { Public, Roles } from '../auth/auth.decorator';
 import { EmailService } from './email.service';
 
 @Controller('testEmail')
-@Public()
+@Roles('Admin', 'Super Admin')
 export class EmailController {
   constructor(
     private readonly log: LoggerService,

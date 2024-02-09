@@ -12,7 +12,7 @@ import {
 import { LoggerService } from '../logger';
 import { UserRole } from '../utils/general.dto';
 import { UserResultDto } from '../user/user.dto';
-import { PersonResultDto } from '../person/person.dto';
+import { PersonAuthResultDto } from '../person/person.dto';
 
 @Injectable()
 export class AdminAuthBasicGuard extends AuthGuard(ADMIN_BASIC_STRATEGY) {
@@ -99,7 +99,7 @@ export class MobileAuthBasicGuard extends AuthGuard(MOBILE_BASIC_STRATEGY) {
     }
     await super.canActivate(context);
     const { user } = context.switchToHttp().getRequest() as {
-      user: PersonResultDto | Record<string, never>;
+      user: PersonAuthResultDto | Record<string, never>;
     };
     this.log.debug(`Person ${JSON.stringify(user)}`);
     return true;

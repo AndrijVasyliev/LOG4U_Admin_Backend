@@ -1,6 +1,5 @@
 import {
   Controller,
-  Header,
   Get,
   Param,
   Query,

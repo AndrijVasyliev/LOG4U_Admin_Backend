@@ -13,7 +13,11 @@ import {
   UNIQUE_CONSTRAIN_ERROR,
 } from '../utils/constants';
 import { Person, PersonDocument } from './person.schema';
-import { PersonResultDto, UpdatePersonAuthDto } from './person.dto';
+import {
+  PersonAuthResultDto,
+  PersonResultDto,
+  UpdatePersonAuthDto,
+} from './person.dto';
 
 const { MongoError } = mongo;
 
@@ -37,10 +41,15 @@ export class PersonService {
     return person;
   }
 
+  async findPersonById(id: string): Promise<PersonResultDto> {
+    const person = await this.findPersonDocumentById(id);
+    return PersonResultDto.fromPersonModel(person);
+  }
+
   async getPersonByCredentials(
     username: string,
     password: string,
-  ): Promise<PersonResultDto | null> {
+  ): Promise<PersonAuthResultDto | null> {
     this.log.debug(`Searching for Person by App credentials ${username}`);
     const person = await this.personModel.findOne({
       appLogin: username,
@@ -51,10 +60,12 @@ export class PersonService {
       return null;
     }
     this.log.debug(`Person ${person._id}`);
-    return PersonResultDto.fromPersonModel(person);
+    return PersonAuthResultDto.fromPersonModel(person);
   }
 
-  async getPersonByDeviceId(deviceId: string): Promise<PersonResultDto | null> {
+  async getPersonByDeviceId(
+    deviceId: string,
+  ): Promise<PersonAuthResultDto | null> {
     this.log.debug(`Searching for Person by device Id ${deviceId}`);
     const person = await this.personModel.findOne({
       deviceId,
@@ -64,10 +75,13 @@ export class PersonService {
       return null;
     }
     this.log.debug(`Person ${person._id}`);
-    return PersonResultDto.fromPersonModel(person);
+    return PersonAuthResultDto.fromPersonModel(person);
   }
 
-  async setDeviceId(id: string, deviceId: string): Promise<PersonResultDto> {
+  async setDeviceId(
+    id: string,
+    deviceId: string,
+  ): Promise<PersonAuthResultDto> {
     this.log.debug(`Clearing existing deviceId: ${deviceId}`);
     await this.personModel.updateMany(
       { deviceId },
@@ -82,7 +96,7 @@ export class PersonService {
       this.log.debug('Saving Person');
       const savedPerson = await person.save();
       this.log.debug(`Driver ${savedPerson._id} saved`);
-      return PersonResultDto.fromPersonModel(person);
+      return PersonAuthResultDto.fromPersonModel(person);
     } catch (e) {
       if (!(e instanceof Error)) {
         throw new InternalServerErrorException(JSON.stringify(e));
@@ -97,7 +111,7 @@ export class PersonService {
   async setAuthData(
     id: string,
     updatePersonAuthDto: UpdatePersonAuthDto,
-  ): Promise<PersonResultDto> {
+  ): Promise<PersonAuthResultDto> {
     const { deviceId } = updatePersonAuthDto;
     if (deviceId) {
       this.log.debug(`Clearing existing deviceId: ${deviceId}`);
@@ -114,7 +128,7 @@ export class PersonService {
       this.log.debug('Saving Person');
       const savedPerson = await person.save();
       this.log.debug(`Person ${savedPerson._id} saved`);
-      return PersonResultDto.fromPersonModel(person);
+      return PersonAuthResultDto.fromPersonModel(person);
     } catch (e) {
       if (!(e instanceof Error)) {
         throw new InternalServerErrorException(JSON.stringify(e));
