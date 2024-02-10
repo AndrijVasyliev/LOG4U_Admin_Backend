@@ -102,6 +102,9 @@ export class MobileAuthBasicGuard extends AuthGuard(MOBILE_BASIC_STRATEGY) {
       user: PersonAuthResultDto | Record<string, never>;
     };
     this.log.debug(`Person ${JSON.stringify(user)}`);
-    return true;
+    if (requiredRoles.some((requiredRole) => requiredRole === user?.type)) {
+      return true;
+    }
+    return false;
   }
 }

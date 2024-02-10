@@ -305,40 +305,6 @@
 						}
 					},
 					"response": []
-				},
-				{
-					"name": "Update Person (same as setAuth from mobile)",
-					"request": {
-						"method": "PATCH",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"force\": true,\r\n    \"deviceId\": \"mego_device\",\r\n    \"appPermissions\": {\r\n      \"Geo\": \"granted\",\r\n      \"Push\": \"granted\"\r\n    }\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{origin}}/api/person/:personId",
-							"host": [
-								"{{origin}}"
-							],
-							"path": [
-								"api",
-								"person",
-								":personId"
-							],
-							"variable": [
-								{
-									"key": "personId",
-									"value": "64dcb747db730feec83a7a8c"
-								}
-							]
-						}
-					},
-					"response": []
 				}
 			]
 		},
@@ -2475,7 +2441,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"force\": true,\r\n    \"deviceId\": \"mego_device\",\r\n    \"appPermissions\": {\r\n      \"Geo\": \"granted\",\r\n      \"Push\": \"granted\"\r\n    }\r\n}",
+							"raw": "{\r\n    \"force\": true,\r\n    \"deviceId\": \"mego_device\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -2490,6 +2456,33 @@
 							"path": [
 								"mobileApp",
 								"setAuth"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Set App Data",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"token\": \"ExponentPushToken[_hcNcXNFTEX_d8a36vse1T]\",\r\n    \"appPermissions\": {\r\n      \"Geo\": \"granted\",\r\n      \"Push\": \"granted\"\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{origin}}/mobileApp/setAppData",
+							"host": [
+								"{{origin}}"
+							],
+							"path": [
+								"mobileApp",
+								"setAppData"
 							]
 						}
 					},
@@ -2672,6 +2665,38 @@
 							"path": [
 								"api",
 								"testEmail"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "SendPush (For Service test only)",
+			"item": [
+				{
+					"name": "SendPush",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"to\": \"ExponentPushToken[_hcNcXNFTEX_d8a36vse1T]\",\r\n    \"sound\": \"default\",\r\n    \"body\": \"Hello world\",\r\n    \"data\": {\"someData\": \"Yes\"} \r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{origin}}/api/testPush",
+							"host": [
+								"{{origin}}"
+							],
+							"path": [
+								"api",
+								"testPush"
 							]
 						}
 					},

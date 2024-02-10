@@ -13,6 +13,7 @@ import { Request } from 'express';
 import { LoggerService } from '../logger';
 import { Public, Roles } from '../auth/auth.decorator';
 import {
+  AuthDataDto,
   AuthDto,
   MobileLoadQuery,
   MobileLoadQuerySearch,
@@ -31,11 +32,12 @@ import {
   MobileLoadQueryParamsSchema,
   MobileUpdateTruckValidation,
   MobileUpdateTruckLocationValidation,
+  MobileAuthDataValidation,
 } from './mobileApp.validation';
 import { BodyValidationPipe } from '../utils/bodyValidate.pipe';
 
 @Controller('mobileApp')
-@Roles('Driver')
+// @Roles('Driver', 'Owner', 'OwnerDriver')
 export class MobileAppController {
   constructor(
     private readonly log: LoggerService,
@@ -46,6 +48,7 @@ export class MobileAppController {
   ) {}
   // ToDo remove after switching to new auth schema
   @Patch('auth')
+  @Roles('Driver', 'Owner', 'OwnerDriver')
   async auth(
     @Req() request: Request,
     @Body(new BodyValidationPipe(MobileAuthValidation))
@@ -65,6 +68,7 @@ export class MobileAppController {
   }
 
   @Patch('setAuth')
+  @Roles('Driver', 'Owner', 'OwnerDriver')
   async setAuth(
     @Req() request: Request,
     @Body(new BodyValidationPipe(MobileAuthValidation))
@@ -73,26 +77,33 @@ export class MobileAppController {
     const { user: person } = request as unknown as {
       user: PersonAuthResultDto;
     };
-    const { force, deviceId, appPermissions } = authDto;
+    const { force, deviceId } = authDto;
     if (force && person.deviceId === deviceId) {
       throw new PreconditionFailedException('Logged from this device already');
     } else if (!force && person.deviceId !== deviceId) {
       throw new PreconditionFailedException('Logged from other device');
     } else if (person.deviceId === deviceId) {
-      return this.personService.setAuthData(person.id, {
-        appPermissions,
-        appLastLogin: new Date(),
-      });
+      return person;
     }
-    return this.personService.setAuthData(person.id, {
-      deviceId,
-      deviceIdLastChange: new Date(),
-      appPermissions,
-      appLastLogin: new Date(),
-    });
+    return await this.personService.setDeviceId(person.id, deviceId);
+  }
+
+  @Patch('setAppData')
+  @Roles('Driver', 'Owner', 'OwnerDriver')
+  async setAppData(
+    @Req() request: Request,
+    @Body(new BodyValidationPipe(MobileAuthDataValidation))
+    authDataDto: AuthDataDto,
+  ): Promise<void> {
+    const { user: person } = request as unknown as {
+      user: PersonAuthResultDto;
+    };
+    await this.personService.setAppData(person.id, authDataDto);
+    return;
   }
 
   @Get('driver')
+  @Roles('Driver', 'OwnerDriver')
   async driver(@Req() request: Request): Promise<DriverResultDto> {
     const { user: person } = request as unknown as {
       user: PersonAuthResultDto;
@@ -101,6 +112,7 @@ export class MobileAppController {
   }
 
   @Get('getLoad')
+  @Roles('Driver', 'Owner', 'OwnerDriver')
   async getLoad(
     @Req() request: Request,
     @Query(
@@ -126,6 +138,7 @@ export class MobileAppController {
   }
 
   @Patch('updateTruck')
+  @Roles('Driver', 'Owner', 'OwnerDriver')
   async updateTruck(
     @Req() request: Request,
     @Body(new BodyValidationPipe(MobileUpdateTruckValidation))
@@ -149,6 +162,7 @@ export class MobileAppController {
 
   @Public()
   @Post('setTruckLocation')
+  @Roles('Driver', 'OwnerDriver')
   async setTruckLocation(
     @Req() request: Request,
     @Body(new BodyValidationPipe(MobileUpdateTruckLocationValidation))
@@ -156,7 +170,7 @@ export class MobileAppController {
       deviceId: string;
       location: { coords: { latitude: number; longitude: number } };
     },
-  ): Promise<string> {
+  ): Promise<void> {
     const person = await this.personService.getPersonByDeviceId(
       updateTruckLocationBodyDto.deviceId,
     );
@@ -177,6 +191,6 @@ export class MobileAppController {
         updateTruckLocationBodyDto.location.coords.longitude,
       ],
     });
-    return 'Location Accepted';
+    return;
   }
 }

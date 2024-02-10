@@ -11,6 +11,7 @@ export default (): {
   db: MongooseModuleFactoryOptions;
   google: any;
   email: any;
+  push: { accessToken: string };
 } => ({
   app: {
     port: +(process.env.PORT || 8181),
@@ -60,5 +61,10 @@ export default (): {
     secure: process.env.EMAIL_SMTP_SECURE === 'true',
     user: process.env.EMAIL_SMTP_USER || 'api',
     pass: process.env.EMAIL_SMTP_PASS || '367e9ba82fd085e4d27af71efc765c63',
+  },
+  push: {
+    accessToken:
+      process.env.EXPO_ACCESS_TOKEN ||
+      'ne-3gfv9eGhxucqmB6qIoQcaF4S_QvBrSv23FWR7',
   },
 });

@@ -38,6 +38,7 @@ import { MobileAppModule } from './mobileApp/mobileApp.module';
 import { MobileAppController } from './mobileApp/mobileApp.controller';
 import { AuthModule } from './auth/auth.module';
 import { EmailModule } from './email/email.module';
+import { PushModule } from './push/push.module';
 import { MONGO_CONNECTION_NAME } from './utils/constants';
 
 @Module({
@@ -106,6 +107,7 @@ import { MONGO_CONNECTION_NAME } from './utils/constants';
     TruckModule,
     MobileAppModule,
     EmailModule,
+    PushModule,
   ],
 })
 export class AppModule implements NestModule {

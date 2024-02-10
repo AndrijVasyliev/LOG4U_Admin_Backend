@@ -46,7 +46,7 @@ export const DRIVER_TYPES: PersonType[] = [
 ];
 
 export const ADMIN_ROLES = ['Admin', 'Super Admin'] as const;
-export const MOBILE_ROLES = ['Driver', 'Owner'] as const;
+export const MOBILE_ROLES = ['Driver', 'Owner', 'OwnerDriver'] as const;
 export const USER_ROLES = [...ADMIN_ROLES, ...MOBILE_ROLES] as const;
 
 export const TRUCK_TYPES = [

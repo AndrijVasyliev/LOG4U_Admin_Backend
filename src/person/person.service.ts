@@ -16,8 +16,8 @@ import { Person, PersonDocument } from './person.schema';
 import {
   PersonAuthResultDto,
   PersonResultDto,
-  UpdatePersonAuthDto,
 } from './person.dto';
+import { AuthDataDto } from '../mobileApp/mobileApp.dto';
 
 const { MongoError } = mongo;
 
@@ -92,6 +92,7 @@ export class PersonService {
     );
     const person = await this.findPersonDocumentById(id);
     person.set('deviceId', deviceId);
+    person.set('deviceIdLastChange', new Date());
     try {
       this.log.debug('Saving Person');
       const savedPerson = await person.save();
@@ -108,21 +109,21 @@ export class PersonService {
     }
   }
 
-  async setAuthData(
+  async setAppData(
     id: string,
-    updatePersonAuthDto: UpdatePersonAuthDto,
+    authDataDto: AuthDataDto,
   ): Promise<PersonAuthResultDto> {
-    const { deviceId } = updatePersonAuthDto;
-    if (deviceId) {
-      this.log.debug(`Clearing existing deviceId: ${deviceId}`);
-      await this.personModel.updateMany(
-        { deviceId },
-        { $unset: { deviceId: 1 } },
-      );
-    }
+    const { token, appPermissions } = authDataDto;
 
     const person = await this.findPersonDocumentById(id);
-    Object.assign(person, updatePersonAuthDto);
+    if (token && person.pushToken !== token) {
+      person.set('pushToken', token);
+      person.set('pushTokenLastChange', new Date());
+    }
+    if (appPermissions) {
+      person.set('appPermissions', appPermissions);
+      person.set('appPermissionsLastChange', new Date());
+    }
 
     try {
       this.log.debug('Saving Person');
@@ -132,9 +133,6 @@ export class PersonService {
     } catch (e) {
       if (!(e instanceof Error)) {
         throw new InternalServerErrorException(JSON.stringify(e));
-      }
-      if (e instanceof MongoError && e.code === MONGO_UNIQUE_INDEX_CONFLICT) {
-        throw new ConflictException({ type: UNIQUE_CONSTRAIN_ERROR, e });
       }
       throw new InternalServerErrorException(e.message);
     }

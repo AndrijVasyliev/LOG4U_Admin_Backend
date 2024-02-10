@@ -1,10 +1,25 @@
 import * as Joi from 'joi';
+import { Expo } from 'expo-server-sdk';
 import { TRUCK_STATUSES } from '../utils/constants';
 
 export const MobileAuthValidation = Joi.object({
   force: Joi.boolean().optional(),
   deviceId: Joi.string().required(),
+});
+
+export const MobileAuthDataValidation = Joi.object({
   appPermissions: Joi.object().optional(),
+  token: Joi.string()
+    .messages({
+      'custom.token': 'Not valid token format',
+    })
+    .custom((value: string, helper) => {
+      if (!Expo.isExpoPushToken(value)) {
+        return helper.error('custom.token');
+      }
+      return value;
+    })
+    .optional(),
 });
 
 export const MobileUpdateTruckValidation = Joi.object({

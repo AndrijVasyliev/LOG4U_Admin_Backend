@@ -3,7 +3,7 @@ import { SendEmailDto } from './email.dto';
 import { BodyValidationPipe } from '../utils/bodyValidate.pipe';
 import { LoggerService } from '../logger';
 import { SendEmailValidation } from './email.validation';
-import { Public, Roles } from '../auth/auth.decorator';
+import { Roles } from '../auth/auth.decorator';
 import { EmailService } from './email.service';
 
 @Controller('testEmail')

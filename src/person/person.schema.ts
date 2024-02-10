@@ -30,13 +30,19 @@ export class Person {
   appPermissions?: Record<string, any>;
 
   @Prop({ required: false })
-  appLastLogin?: Date;
+  appPermissionsLastChange?: Date;
 
   @Prop({ required: false })
   deviceId?: string;
 
   @Prop({ required: false })
   deviceIdLastChange?: Date;
+
+  @Prop({ required: false })
+  pushToken?: string;
+
+  @Prop({ required: false })
+  pushTokenLastChange?: Date;
 
   @Prop({
     required: false,

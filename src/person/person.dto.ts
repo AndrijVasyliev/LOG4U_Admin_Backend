@@ -1,7 +1,7 @@
 import { Person } from './person.schema';
 import { PersonType } from '../utils/general.dto';
 
-export class UpdatePersonAuthDto {
+/*export class UpdatePersonAuthDto {
   // readonly fullName?: string;
   // readonly appLogin?: string;
   readonly appPermissions?: Record<string, any>;
@@ -9,7 +9,7 @@ export class UpdatePersonAuthDto {
   readonly deviceId?: string;
   readonly deviceIdLastChange?: Date;
   // readonly appPass?: string;
-}
+}*/
 
 export class PersonAuthResultDto {
   static fromPersonModel(person: Person): PersonAuthResultDto {
@@ -40,9 +40,11 @@ export class PersonResultDto {
       isAppInDebugMode: person.isAppInDebugMode,
       appLogin: person.appLogin,
       appPermissions: person.appPermissions,
-      appLastLogin: person.appLastLogin,
+      appPermissionsLastChange: person.appPermissionsLastChange,
       deviceId: person.deviceId,
       deviceIdLastChange: person.deviceIdLastChange,
+      pushToken: person.pushToken,
+      pushTokenLastChange: person.pushTokenLastChange,
     };
   }
 
@@ -52,7 +54,9 @@ export class PersonResultDto {
   readonly isAppInDebugMode?: boolean;
   readonly appLogin?: string;
   readonly appPermissions?: Record<string, any>;
-  readonly appLastLogin?: Date;
+  readonly appPermissionsLastChange?: Date;
   readonly deviceId?: string;
   readonly deviceIdLastChange?: Date;
+  readonly pushToken?: string;
+  readonly pushTokenLastChange?: Date;
 }
