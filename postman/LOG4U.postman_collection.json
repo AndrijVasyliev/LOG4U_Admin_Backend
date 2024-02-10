@@ -2676,13 +2676,13 @@
 			"name": "SendPush (For Service test only)",
 			"item": [
 				{
-					"name": "SendPush",
+					"name": "Send Push",
 					"request": {
 						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"to\": \"ExponentPushToken[_hcNcXNFTEX_d8a36vse1T]\",\r\n    \"sound\": \"default\",\r\n    \"body\": \"Hello world\",\r\n    \"data\": {\"someData\": \"Yes\"} \r\n}",
+							"raw": "{\r\n    \"to\": \"ExponentPushToken[PiSZJwAWgI_3-Y_KdCtnrl]\",\r\n    \"sound\": \"default\",\r\n    \"title\": \"LOG4U\",\r\n    \"body\": \"Hello world\",\r\n    \"data\": {\"trouteTo\": \"/home/loads\"},\r\n    \"badge\": 3\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -2697,6 +2697,43 @@
 							"path": [
 								"api",
 								"testPush"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Receipt",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"to\": \"ExponentPushToken[_hcNcXNFTEX_d8a36vse1T]\",\r\n    \"sound\": \"default\",\r\n    \"title\": \"LOG4U\",\r\n    \"subtitle\": \"Yo\",\r\n    \"body\": \"Hello world\",\r\n    \"data\": {\"someData\": \"Yes\"},\r\n    \"badge\": 3\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{origin}}/api/testPush/:receiptId",
+							"host": [
+								"{{origin}}"
+							],
+							"path": [
+								"api",
+								"testPush",
+								":receiptId"
+							],
+							"variable": [
+								{
+									"key": "receiptId",
+									"value": "631e207d-0cd2-4b9d-ace4-1b1b40c5f41f"
+								}
 							]
 						}
 					},

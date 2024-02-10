@@ -1,11 +1,15 @@
-import { Controller, Body, Post } from '@nestjs/common';
+import { Controller, Body, Post, Get, Param } from '@nestjs/common';
+import {
+  ExpoPushMessage,
+  ExpoPushReceipt,
+  ExpoPushTicket,
+} from 'expo-server-sdk';
 //import { SendPushDto } from './push.dto';
 import { BodyValidationPipe } from '../utils/bodyValidate.pipe';
 import { LoggerService } from '../logger';
 import { SendPushValidation } from './push.validation';
 import { Roles } from '../auth/auth.decorator';
 import { PushService } from './push.service';
-import { ExpoPushMessage, ExpoPushTicket } from 'expo-server-sdk';
 
 @Controller('testPush')
 @Roles('Admin', 'Super Admin')
@@ -21,5 +25,11 @@ export class PushController {
     sendPushBodyDto: ExpoPushMessage,
   ): Promise<ExpoPushTicket[]> {
     return this.pushService.sendPush(sendPushBodyDto);
+  }
+  @Get(':receiptId')
+  async getReceipt(@Param('receiptId') receiptId: string): Promise<{
+    [id: string]: ExpoPushReceipt;
+  }> {
+    return this.pushService.getReceipt(receiptId);
   }
 }
