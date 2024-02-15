@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { HttpService } from '@nestjs/axios';
-import { LoggerService } from '../logger/logger.service';
+import { LoggerService } from '../logger';
 import { MILES_IN_KM } from '../utils/constants';
 
 @Injectable()
@@ -10,7 +10,7 @@ export class GoogleGeoApiService {
   private readonly apiKey?: string;
   constructor(
     private readonly httpService: HttpService,
-    private configService: ConfigService,
+    private readonly configService: ConfigService,
     private readonly log: LoggerService,
   ) {
     this.matrixUri = this.configService.get<string>(

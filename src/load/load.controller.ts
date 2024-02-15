@@ -18,7 +18,7 @@ import {
 } from './load.dto';
 import { BodyValidationPipe } from '../utils/bodyValidate.pipe';
 import { LoadService } from './load.service';
-import { LoggerService } from '../logger/logger.service';
+import { LoggerService } from '../logger';
 import {
   CreateLoadValidation,
   UpdateLoadValidation,

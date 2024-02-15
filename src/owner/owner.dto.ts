@@ -29,6 +29,8 @@ export class CreateOwnerDto {
   readonly emergencyContactRel?: string;
   readonly emergencyContactPhone: string;
   readonly notes?: string;
+  readonly appLogin?: string;
+  readonly appPass?: string;
 }
 
 export class UpdateOwnerDto {
@@ -50,6 +52,8 @@ export class UpdateOwnerDto {
   readonly emergencyContactRel?: string;
   readonly emergencyContactPhone?: string;
   readonly notes?: string;
+  readonly appLogin?: string;
+  readonly appPass?: string;
 }
 
 export class OwnerQuerySearch {
@@ -68,6 +72,7 @@ export class OwnerQuerySearch {
   readonly emergencyContactName?: string;
   readonly emergencyContactRel?: string;
   readonly emergencyContactPhone?: string;
+  readonly appLogin?: string;
   readonly truckNumber?: number;
 }
 
@@ -110,6 +115,7 @@ export class OwnerResultDto {
       emergencyContactRel: owner.emergencyContactRel,
       emergencyContactPhone: owner.emergencyContactPhone,
       notes: owner.notes,
+      appLogin: owner.appLogin,
     };
     if (ownTrucks) {
       result = { ...result, ownTrucks };
@@ -143,6 +149,7 @@ export class OwnerResultDto {
   readonly emergencyContactRel?: string;
   readonly emergencyContactPhone: string;
   readonly notes?: string;
+  readonly appLogin?: string;
   readonly ownTrucks?: TruckResultDto[];
   readonly coordinators?: CoordinatorResultDto[];
   readonly drivers?: DriverResultDto[];

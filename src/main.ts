@@ -1,15 +1,16 @@
 import { NestFactory } from '@nestjs/core';
+import { RequestMethod } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import helmet from 'helmet';
 import * as compression from 'compression';
 import { AppModule } from './app.module';
-import { LoggerService } from './logger/logger.service';
+import { LoggerService, NestLoggerService } from './logger';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
     bufferLogs: true,
   });
-  app.useLogger(app.get(LoggerService));
+  app.useLogger(app.get(NestLoggerService));
 
   const configService = app.get(ConfigService);
   const logger: LoggerService = app.get(LoggerService);
@@ -21,12 +22,25 @@ async function bootstrap() {
       crossOriginEmbedderPolicy: false,
       contentSecurityPolicy: {
         directives: {
-          defaultSrc: ["'self'", 'maps.googleapis.com'],
+          defaultSrc: [
+            "'self'",
+            '*.googleapis.com',
+            // 'fonts.gstatic.com',
+            '*.gstatic.com',
+            // '*',
+          ],
+          fontSrc: [
+            "'self'",
+            'fonts.googleapis.com',
+            'fonts.gstatic.com',
+            // 'maps.gstatic.com',
+          ],
           scriptSrc: ["'self'", 'maps.googleapis.com'],
+          workerSrc: ["'self'", 'blob:'],
           imgSrc: [
             "'self'",
             'data:',
-            'maps.gstatic.com',
+            '*.gstatic.com',
             '*.googleapis.com',
             '*.ggpht.com',
           ],
@@ -36,6 +50,16 @@ async function bootstrap() {
   );
   app.use(compression());
   app.enableShutdownHooks();
+  app.setGlobalPrefix('api', {
+    exclude: [
+      { path: 'mobileApp/(.*)', method: RequestMethod.ALL },
+      'metrics',
+      'status',
+      'health',
+      'readiness',
+      'liveness',
+    ],
+  });
 
   await app.listen(port);
 

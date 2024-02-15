@@ -21,7 +21,7 @@ import {
 } from './truck.dto';
 import { BodyValidationPipe } from '../utils/bodyValidate.pipe';
 import { TruckService } from './truck.service';
-import { LoggerService } from '../logger/logger.service';
+import { LoggerService } from '../logger';
 import {
   CreateTruckValidation,
   UpdateTruckValidation,

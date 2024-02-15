@@ -35,7 +35,6 @@ export class CreateCoordinatorDriverDto {
   readonly emergencyContactPhone: string;
   readonly notes?: string;
   readonly appLogin?: string;
-  readonly deviceId?: string;
   readonly appPass?: string;
   readonly owner: string;
 }
@@ -66,7 +65,6 @@ export class UpdateCoordinatorDriverDto {
   readonly emergencyContactPhone?: string;
   readonly notes?: string;
   readonly appLogin?: string;
-  readonly deviceId?: string;
   readonly appPass?: string;
   readonly owner?: string;
 }
@@ -92,7 +90,6 @@ export class CoordinatorDriverQuerySearch {
   readonly emergencyContactRel?: string;
   readonly emergencyContactPhone?: string;
   readonly appLogin?: string;
-  readonly deviceId?: string;
   readonly truckNumber?: number;
   readonly owner?: string;
 }
@@ -146,7 +143,6 @@ export class CoordinatorDriverResultDto {
       emergencyContactPhone: coordinatorDriver.emergencyContactPhone,
       notes: coordinatorDriver.notes,
       appLogin: coordinatorDriver.appLogin,
-      deviceId: coordinatorDriver.deviceId,
     };
     if (owner) {
       result = { ...result, owner };
@@ -187,7 +183,6 @@ export class CoordinatorDriverResultDto {
   readonly emergencyContactPhone: string;
   readonly notes?: string;
   readonly appLogin?: string;
-  readonly deviceId?: string;
   readonly owner?: OwnerResultDto;
   readonly coordinateTrucks?: TruckResultDto[];
   readonly driveTrucks?: TruckResultDto[];

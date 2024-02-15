@@ -7,8 +7,11 @@ import { MongooseModuleFactoryOptions } from '@nestjs/mongoose';
 export default (): {
   app: any;
   log: any;
+  trucks: { nearByRedundancyFactor: number };
   db: MongooseModuleFactoryOptions;
   google: any;
+  email: any;
+  push: { accessToken: string };
 } => ({
   app: {
     port: +(process.env.PORT || 8181),
@@ -27,6 +30,9 @@ export default (): {
   log: {
     level: process.env.LOG_LEVEL || 'silly',
     format: process.env.NODE_ENV === 'development' ? 'string' : 'json',
+  },
+  trucks: {
+    nearByRedundancyFactor: +(process.env.NEARBY_REDUNDANCY_FACTOR || 20),
   },
   db: {
     uri: process.env.MONGO_DSN || 'mongodb://localhost:27017/log4u',
@@ -48,5 +54,17 @@ export default (): {
     distanceMatrixBaseUri:
       process.env.GOOGLE_MAPS_DISTANCE_MATRIX_URI ||
       'https://maps.googleapis.com/maps/api/distancematrix/json',
+  },
+  email: {
+    host: process.env.EMAIL_SMTP_HOST || 'live.smtp.mailtrap.io',
+    port: +(process.env.EMAIL_SMTP_PORT || 587),
+    secure: process.env.EMAIL_SMTP_SECURE === 'true',
+    user: process.env.EMAIL_SMTP_USER || 'api',
+    pass: process.env.EMAIL_SMTP_PASS || '367e9ba82fd085e4d27af71efc765c63',
+  },
+  push: {
+    accessToken:
+      process.env.EXPO_ACCESS_TOKEN ||
+      'ne-3gfv9eGhxucqmB6qIoQcaF4S_QvBrSv23FWR7',
   },
 });

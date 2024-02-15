@@ -6,7 +6,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { LoggerService } from '../logger/logger.service';
+import { LoggerService } from '../logger';
 import {
   EARTH_RADIUS_MILES,
   MONGO_CONNECTION_NAME,
@@ -28,18 +28,24 @@ import { GoogleGeoApiService } from '../googleGeoApi/googleGeoApi.service';
 import { LocationService } from '../location/location.service';
 import { escapeForRegExp } from '../utils/escapeForRegExp';
 import { UserResultDto } from '../user/user.dto';
+import { ConfigService } from '@nestjs/config';
 
 const { MongoError } = mongo;
 
 @Injectable()
 export class TruckService {
+  private readonly nearByRedundancyFactor: number;
   constructor(
     @InjectModel(Truck.name, MONGO_CONNECTION_NAME)
     private readonly truckModel: PaginateModel<TruckDocument>,
     private readonly locationService: LocationService,
     private readonly geoApiService: GoogleGeoApiService,
     private readonly log: LoggerService,
-  ) {}
+    private readonly configService: ConfigService,
+  ) {
+    this.nearByRedundancyFactor =
+      this.configService.get<number>('trucks.nearByRedundancyFactor') || 0;
+  }
 
   private async findTruckDocumentById(id: string): Promise<TruckDocument> {
     this.log.debug(`Searching for Truck ${id}`);
@@ -130,8 +136,23 @@ export class TruckService {
       offset: query.offset,
       forceCountFn: true,
     };
+
     if (query.direction && query.orderby) {
       options.sort = { [query.orderby]: query.direction };
+    } else if (
+      documentQuery.lastLocation &&
+      options.limit !== undefined &&
+      options.offset !== undefined &&
+      this.nearByRedundancyFactor > 0
+    ) {
+      const addNum = Math.ceil(
+        (options.limit * this.nearByRedundancyFactor) / 100,
+      );
+      const oldOffset = options.offset;
+      const newOffset = oldOffset - addNum;
+      options.offset = newOffset >= 0 ? newOffset : 0;
+      options.limit =
+        options.limit + (options.offset ? addNum : oldOffset) + addNum;
     }
 
     this.log.debug('Requesting paginated trucks');
@@ -161,12 +182,35 @@ export class TruckService {
       );
     }
 
-    this.log.debug('Returning results');
-    return PaginatedTruckResultDto.from(
+    let result = PaginatedTruckResultDto.from(
       res,
       haversineDistances,
       roadsDistances,
     );
+    if (!options.sort && query?.search?.lastLocation) {
+      this.log.debug('Sorting result items');
+      result.items.sort(
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-expect-error
+        (itemA, itemB) => itemA.milesByRoads - itemB.milesByRoads,
+      );
+    }
+    if (
+      (query.limit < result.limit && query.offset >= result.offset) ||
+      (query.offset > result.offset && query.limit <= result.limit)
+    ) {
+      const newOffset = query.offset;
+      const newLimit = query.limit;
+      const offsetDiff = query.offset - result.offset;
+      if (offsetDiff > 0) {
+        result.items.splice(0, offsetDiff);
+      }
+      result.items.length =
+        result.items.length < query.limit ? result.items.length : query.limit;
+      result = { ...result, offset: newOffset, limit: newLimit };
+    }
+    this.log.debug('Returning results');
+    return result;
   }
 
   async getTrucksForMap(): Promise<TruckResultForMapDto[]> {

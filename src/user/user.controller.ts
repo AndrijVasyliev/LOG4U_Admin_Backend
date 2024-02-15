@@ -20,7 +20,7 @@ import {
 } from './user.dto';
 import { BodyValidationPipe } from '../utils/bodyValidate.pipe';
 import { UserService } from './user.service';
-import { LoggerService } from '../logger/logger.service';
+import { LoggerService } from '../logger';
 import {
   CreateUserValidation,
   UpdateUserValidation,

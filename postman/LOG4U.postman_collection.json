@@ -15,11 +15,12 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{origin}}/owner?limit=30&offset=0&orderby=fullName&direction=asc",
+							"raw": "{{origin}}/api/owner?limit=30&offset=0&orderby=fullName&direction=asc",
 							"host": [
 								"{{origin}}"
 							],
 							"path": [
+								"api",
 								"owner"
 							],
 							"query": [
@@ -34,7 +35,7 @@
 								{
 									"key": "orderby",
 									"value": "fullName",
-									"description": "'fullName', 'birthDate', 'citizenship', 'languagePriority', 'hiredBy', 'hireDate', 'snn', 'company', 'insurancePolicy', 'insurancePolicyExp', 'address', 'phone', 'phone2', 'email', 'emergencyContactName', 'emergencyContactRel', 'emergencyContactPhone'"
+									"description": "'fullName', 'birthDate', 'citizenship', 'languagePriority', 'hiredBy', 'hireDate', 'snn', 'company', 'insurancePolicy', 'insurancePolicyExp', 'address', 'phone', 'phone2', 'email', 'emergencyContactName', 'emergencyContactRel', 'emergencyContactPhone','appLogin'"
 								},
 								{
 									"key": "direction",
@@ -117,6 +118,11 @@
 									"disabled": true
 								},
 								{
+									"key": "appLogin",
+									"value": "",
+									"disabled": true
+								},
+								{
 									"key": "truckNumber",
 									"value": "7731",
 									"disabled": true
@@ -144,11 +150,12 @@
 							}
 						},
 						"url": {
-							"raw": "{{origin}}/owner/:ownerId",
+							"raw": "{{origin}}/api/owner/:ownerId",
 							"host": [
 								"{{origin}}"
 							],
 							"path": [
+								"api",
 								"owner",
 								":ownerId"
 							],
@@ -169,7 +176,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"fullName\":\"Ivo Bobul\",\r\n    \"birthDate\":\"2001-07-24T20:33:52.147Z\",\r\n    \"citizenship\":\"USA\",\r\n    \"languagePriority\":\"EN\",\r\n    \"hiredBy\":\"Pavlo Zibrov\",\r\n    \"hireDate\":\"2020-07-24T20:33:52.147Z\",\r\n    \"snn\":\"6661313\",\r\n    \"company\":\"Horns&Hufs\",\r\n    \"insurancePolicy\":\"SomeData\",\r\n    \"insurancePolicyExp\":\"2024-07-24T20:33:52.147Z\",\r\n    \"address\":\"Pupkina, 25-a, 6\",\r\n    \"phone\":\"0989809898\",\r\n    \"phone2\":\"0565605656\",\r\n    \"email\":\"ivo.bobul@gmail.com\",\r\n    \"emergencyContactName\":\"Maryna\",\r\n    \"emergencyContactRel\": \"Lubov moja edyna\",\r\n    \"emergencyContactPhone\":\"0666606666\",\r\n    \"notes\":\"Bla bla bla\"\r\n}",
+							"raw": "{\r\n    \"fullName\":\"Ivo Bobul\",\r\n    \"birthDate\":\"2001-07-24T20:33:52.147Z\",\r\n    \"citizenship\":\"USA\",\r\n    \"languagePriority\":\"EN\",\r\n    \"hiredBy\":\"Pavlo Zibrov\",\r\n    \"hireDate\":\"2020-07-24T20:33:52.147Z\",\r\n    \"snn\":\"6661313\",\r\n    \"company\":\"Horns&Hufs\",\r\n    \"insurancePolicy\":\"SomeData\",\r\n    \"insurancePolicyExp\":\"2024-07-24T20:33:52.147Z\",\r\n    \"address\":\"Pupkina, 25-a, 6\",\r\n    \"phone\":\"0989809898\",\r\n    \"phone2\":\"0565605656\",\r\n    \"email\":\"ivo.bobul@gmail.com\",\r\n    \"emergencyContactName\":\"Maryna\",\r\n    \"emergencyContactRel\": \"Lubov moja edyna\",\r\n    \"emergencyContactPhone\":\"0666606666\",\r\n    \"notes\":\"Bla bla bla\",\r\n    \"appLogin\":\"MegoMan\",\r\n    \"appPass\":\"SecretPass\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -177,11 +184,12 @@
 							}
 						},
 						"url": {
-							"raw": "{{origin}}/owner",
+							"raw": "{{origin}}/api/owner",
 							"host": [
 								"{{origin}}"
 							],
 							"path": [
+								"api",
 								"owner"
 							]
 						}
@@ -195,7 +203,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"fullName\":\"Ivo Bobul\",\r\n    \"birthDate\":\"2001-07-24T20:33:52.147Z\",\r\n    \"citizenship\":\"USA\",\r\n    \"languagePriority\":\"EN\",\r\n    \"hiredBy\":\"Pavlo Zibrov\",\r\n    \"hireDate\":\"2020-07-24T20:33:52.147Z\",\r\n    \"snn\":\"6661313\",\r\n    \"company\":\"Horns&Hufs\",\r\n    \"insurancePolicy\":\"SomeData\",\r\n    \"insurancePolicyExp\":\"2024-07-24T20:33:52.147Z\",\r\n    \"address\":\"Pupkina, 25-a, 6\",\r\n    \"phone\":\"0989809898\",\r\n    \"email\":\"ivo.bobul@gmail.com\",\r\n    \"emergencyContactName\":\"Maryna\",\r\n    \"emergencyContactPhone\":\"0666606666\"\r\n}",
+							"raw": "{\r\n    \"fullName\":\"Ivo Bobul\",\r\n    \"birthDate\":\"2001-07-24T20:33:52.147Z\",\r\n    \"citizenship\":\"USA\",\r\n    \"languagePriority\":\"EN\",\r\n    \"hiredBy\":\"Pavlo Zibrov\",\r\n    \"hireDate\":\"2020-07-24T20:33:52.147Z\",\r\n    \"snn\":\"6661313\",\r\n    \"company\":\"Horns&Hufs\",\r\n    \"insurancePolicy\":\"SomeData\",\r\n    \"insurancePolicyExp\":\"2024-07-24T20:33:52.147Z\",\r\n    \"address\":\"Pupkina, 25-a, 6\",\r\n    \"phone\":\"0989809898\",\r\n    \"email\":\"ivo.bobul@gmail.com\",\r\n    \"emergencyContactName\":\"Maryna\",\r\n    \"emergencyContactPhone\":\"0666606666\",\r\n    \"notes\":\"Bla bla bla\",\r\n    \"appLogin\":\"MegoMan\",\r\n    \"appPass\":\"SecretPass\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -203,11 +211,12 @@
 							}
 						},
 						"url": {
-							"raw": "{{origin}}/owner/:ownerId",
+							"raw": "{{origin}}/api/owner/:ownerId",
 							"host": [
 								"{{origin}}"
 							],
 							"path": [
+								"api",
 								"owner",
 								":ownerId"
 							],
@@ -236,11 +245,12 @@
 							}
 						},
 						"url": {
-							"raw": "{{origin}}/owner/:ownerId",
+							"raw": "{{origin}}/api/owner/:ownerId",
 							"host": [
 								"{{origin}}"
 							],
 							"path": [
+								"api",
 								"owner",
 								":ownerId"
 							],
@@ -248,6 +258,48 @@
 								{
 									"key": "ownerId",
 									"value": "64bee343e50d281f7d7a4596"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Person",
+			"item": [
+				{
+					"name": "Get Person",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{origin}}/api/person/:personId",
+							"host": [
+								"{{origin}}"
+							],
+							"path": [
+								"api",
+								"person",
+								":personId"
+							],
+							"variable": [
+								{
+									"key": "personId",
+									"value": "64dcb747db730feec83a7a8c"
 								}
 							]
 						}
@@ -265,11 +317,12 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{origin}}/ownerDriver?limit=30&offset=0&orderby=fullName&direction=asc",
+							"raw": "{{origin}}/api/ownerDriver?limit=30&offset=0&orderby=fullName&direction=asc",
 							"host": [
 								"{{origin}}"
 							],
 							"path": [
+								"api",
 								"ownerDriver"
 							],
 							"query": [
@@ -392,6 +445,11 @@
 									"disabled": true
 								},
 								{
+									"key": "truckNumber",
+									"value": null,
+									"disabled": true
+								},
+								{
 									"key": "owner",
 									"value": "651d219d53b771a645c703c9",
 									"disabled": true
@@ -419,11 +477,12 @@
 							}
 						},
 						"url": {
-							"raw": "{{origin}}/ownerDriver/:ownerDriverId",
+							"raw": "{{origin}}/api/ownerDriver/:ownerDriverId",
 							"host": [
 								"{{origin}}"
 							],
 							"path": [
+								"api",
 								"ownerDriver",
 								":ownerDriverId"
 							],
@@ -452,11 +511,12 @@
 							}
 						},
 						"url": {
-							"raw": "{{origin}}/ownerDriver",
+							"raw": "{{origin}}/api/ownerDriver",
 							"host": [
 								"{{origin}}"
 							],
 							"path": [
+								"api",
 								"ownerDriver"
 							]
 						}
@@ -478,11 +538,12 @@
 							}
 						},
 						"url": {
-							"raw": "{{origin}}/ownerDriver/:ownerDriverId",
+							"raw": "{{origin}}/api/ownerDriver/:ownerDriverId",
 							"host": [
 								"{{origin}}"
 							],
 							"path": [
+								"api",
 								"ownerDriver",
 								":ownerDriverId"
 							],
@@ -511,11 +572,12 @@
 							}
 						},
 						"url": {
-							"raw": "{{origin}}/ownerDriver/:ownerDriverId",
+							"raw": "{{origin}}/api/ownerDriver/:ownerDriverId",
 							"host": [
 								"{{origin}}"
 							],
 							"path": [
+								"api",
 								"ownerDriver",
 								":ownerDriverId"
 							],
@@ -540,11 +602,12 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{origin}}/coordinator?limit=30&offset=0&orderby=fullName&direction=asc",
+							"raw": "{{origin}}/api/coordinator?limit=30&offset=0&orderby=fullName&direction=asc",
 							"host": [
 								"{{origin}}"
 							],
 							"path": [
+								"api",
 								"coordinator"
 							],
 							"query": [
@@ -674,11 +737,12 @@
 							}
 						},
 						"url": {
-							"raw": "{{origin}}/coordinator/:coordinatorId",
+							"raw": "{{origin}}/api/coordinator/:coordinatorId",
 							"host": [
 								"{{origin}}"
 							],
 							"path": [
+								"api",
 								"coordinator",
 								":coordinatorId"
 							],
@@ -707,11 +771,12 @@
 							}
 						},
 						"url": {
-							"raw": "{{origin}}/coordinator",
+							"raw": "{{origin}}/api/coordinator",
 							"host": [
 								"{{origin}}"
 							],
 							"path": [
+								"api",
 								"coordinator"
 							]
 						}
@@ -733,11 +798,12 @@
 							}
 						},
 						"url": {
-							"raw": "{{origin}}/coordinator/:coordinatorId",
+							"raw": "{{origin}}/api/coordinator/:coordinatorId",
 							"host": [
 								"{{origin}}"
 							],
 							"path": [
+								"api",
 								"coordinator",
 								":coordinatorId"
 							],
@@ -766,11 +832,12 @@
 							}
 						},
 						"url": {
-							"raw": "{{origin}}/coordinator/:coordinatorId",
+							"raw": "{{origin}}/api/coordinator/:coordinatorId",
 							"host": [
 								"{{origin}}"
 							],
 							"path": [
+								"api",
 								"coordinator",
 								":coordinatorId"
 							],
@@ -795,11 +862,12 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{origin}}/coordinatorDriver?limit=30&offset=0&orderby=fullName&direction=asc",
+							"raw": "{{origin}}/api/coordinatorDriver?limit=30&offset=0&orderby=fullName&direction=asc",
 							"host": [
 								"{{origin}}"
 							],
 							"path": [
+								"api",
 								"coordinatorDriver"
 							],
 							"query": [
@@ -954,11 +1022,12 @@
 							}
 						},
 						"url": {
-							"raw": "{{origin}}/coordinatorDriver/:coordinatorId",
+							"raw": "{{origin}}/api/coordinatorDriver/:coordinatorId",
 							"host": [
 								"{{origin}}"
 							],
 							"path": [
+								"api",
 								"coordinatorDriver",
 								":coordinatorId"
 							],
@@ -987,11 +1056,12 @@
 							}
 						},
 						"url": {
-							"raw": "{{origin}}/coordinatorDriver",
+							"raw": "{{origin}}/api/coordinatorDriver",
 							"host": [
 								"{{origin}}"
 							],
 							"path": [
+								"api",
 								"coordinatorDriver"
 							]
 						}
@@ -1013,11 +1083,12 @@
 							}
 						},
 						"url": {
-							"raw": "{{origin}}/coordinatorDriver/:coordinatorId",
+							"raw": "{{origin}}/api/coordinatorDriver/:coordinatorId",
 							"host": [
 								"{{origin}}"
 							],
 							"path": [
+								"api",
 								"coordinatorDriver",
 								":coordinatorId"
 							],
@@ -1046,11 +1117,12 @@
 							}
 						},
 						"url": {
-							"raw": "{{origin}}/coordinatorDriver/:coordinatorId",
+							"raw": "{{origin}}/api/coordinatorDriver/:coordinatorId",
 							"host": [
 								"{{origin}}"
 							],
 							"path": [
+								"api",
 								"coordinatorDriver",
 								":coordinatorId"
 							],
@@ -1075,11 +1147,12 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{origin}}/driver?limit=30&offset=0&orderby=fullName&direction=asc",
+							"raw": "{{origin}}/api/driver?limit=30&offset=0&orderby=fullName&direction=asc",
 							"host": [
 								"{{origin}}"
 							],
 							"path": [
+								"api",
 								"driver"
 							],
 							"query": [
@@ -1152,6 +1225,11 @@
 									"disabled": true
 								},
 								{
+									"key": "allPhone",
+									"value": "+1 2323 32323",
+									"disabled": true
+								},
+								{
 									"key": "phone",
 									"value": "",
 									"disabled": true
@@ -1219,11 +1297,12 @@
 							}
 						},
 						"url": {
-							"raw": "{{origin}}/driver/:driverId",
+							"raw": "{{origin}}/api/driver/:driverId",
 							"host": [
 								"{{origin}}"
 							],
 							"path": [
+								"api",
 								"driver",
 								":driverId"
 							],
@@ -1252,11 +1331,12 @@
 							}
 						},
 						"url": {
-							"raw": "{{origin}}/driver",
+							"raw": "{{origin}}/api/driver",
 							"host": [
 								"{{origin}}"
 							],
 							"path": [
+								"api",
 								"driver"
 							]
 						}
@@ -1278,11 +1358,12 @@
 							}
 						},
 						"url": {
-							"raw": "{{origin}}/driver/:driverId",
+							"raw": "{{origin}}/api/driver/:driverId",
 							"host": [
 								"{{origin}}"
 							],
 							"path": [
+								"api",
 								"driver",
 								":driverId"
 							],
@@ -1311,11 +1392,12 @@
 							}
 						},
 						"url": {
-							"raw": "{{origin}}/driver/:driverId",
+							"raw": "{{origin}}/api/driver/:driverId",
 							"host": [
 								"{{origin}}"
 							],
 							"path": [
+								"api",
 								"driver",
 								":driverId"
 							],
@@ -1340,11 +1422,12 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{origin}}/truck",
+							"raw": "{{origin}}/api/truck",
 							"host": [
 								"{{origin}}"
 							],
 							"path": [
+								"api",
 								"truck"
 							],
 							"query": [
@@ -1453,6 +1536,25 @@
 					"response": []
 				},
 				{
+					"name": "List Trucks For Map",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{origin}}/api/truck/forMap",
+							"host": [
+								"{{origin}}"
+							],
+							"path": [
+								"api",
+								"truck",
+								"forMap"
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "Get Truck",
 					"protocolProfileBehavior": {
 						"disableBodyPruning": true
@@ -1470,11 +1572,12 @@
 							}
 						},
 						"url": {
-							"raw": "{{origin}}/truck/:truckId",
+							"raw": "{{origin}}/api/truck/:truckId",
 							"host": [
 								"{{origin}}"
 							],
 							"path": [
+								"api",
 								"truck",
 								":truckId"
 							],
@@ -1503,11 +1606,12 @@
 							}
 						},
 						"url": {
-							"raw": "{{origin}}/truck",
+							"raw": "{{origin}}/api/truck",
 							"host": [
 								"{{origin}}"
 							],
 							"path": [
+								"api",
 								"truck"
 							]
 						}
@@ -1529,11 +1633,46 @@
 							}
 						},
 						"url": {
-							"raw": "{{origin}}/truck/:truckId",
+							"raw": "{{origin}}/api/truck/:truckId",
 							"host": [
 								"{{origin}}"
 							],
 							"path": [
+								"api",
+								"truck",
+								":truckId"
+							],
+							"variable": [
+								{
+									"key": "truckId",
+									"value": "64f0e49d5c57ad86d6d62ec8"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Reserve Truck",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"truckNumber\":\"7731\",\r\n    \"status\":\"Available\",\r\n    \"lastLocation\":[33.0219,-117.2735],\r\n    \"crossborder\":\"Yes\",\r\n    \"certificate\":\"Hazmat\",\r\n    \"type\":\"Box truck\",\r\n    \"equipment\":[\r\n        \"Dock height risers\",\r\n        \"Air ride\",\r\n        \"Lift gate\",\r\n        \"Keep from freezing\",\r\n        \"ICC bar\",\r\n        \"Vertical E-track\",\r\n        \"Horizontal E-track\",\r\n        \"Pallet jack\",\r\n        \"PPE\",\r\n        \"Ramps\",\r\n        \"Straps\",\r\n        \"Loads bars\",\r\n        \"Blankets\",\r\n        \"Pads\",\r\n        \"Fire extinguisher\"\r\n    ],\r\n    \"payload\":100500,\r\n    \"grossWeight\":\"150 ton\",\r\n    \"make\":\"Mercedes\",\r\n    \"model\":\"Sprinter\",\r\n    \"year\":1967,\r\n    \"color\":\"Yello\",\r\n    \"vinCode\":\"vf938749843\",\r\n    \"licencePlate\":\"AA7676BK\",\r\n    \"insideDims\":\"100 x 200\",\r\n    \"doorDims\":\"20 x 20\",\r\n    \"owner\":\"64dcb842db730feec83a7ac5\",\r\n    \"coordinator\":\"64dcc026f4a06e8814ae8894\",\r\n    \"driver\":\"64dcb747db730feec83a7a8c\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{origin}}/api/truck/:truckId",
+							"host": [
+								"{{origin}}"
+							],
+							"path": [
+								"api",
 								"truck",
 								":truckId"
 							],
@@ -1562,11 +1701,12 @@
 							}
 						},
 						"url": {
-							"raw": "{{origin}}/truck/:truckId",
+							"raw": "{{origin}}/api/truck/:truckId",
 							"host": [
 								"{{origin}}"
 							],
 							"path": [
+								"api",
 								"truck",
 								":truckId"
 							],
@@ -1591,11 +1731,12 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{origin}}/load?limit=30&offset=0&orderby=loadNumber&direction=asc",
+							"raw": "{{origin}}/api/load?limit=30&offset=0&orderby=loadNumber&direction=asc",
 							"host": [
 								"{{origin}}"
 							],
 							"path": [
+								"api",
 								"load"
 							],
 							"query": [
@@ -1675,11 +1816,12 @@
 							}
 						},
 						"url": {
-							"raw": "{{origin}}/load/:loadId",
+							"raw": "{{origin}}/api/load/:loadId",
 							"host": [
 								"{{origin}}"
 							],
 							"path": [
+								"api",
 								"load",
 								":loadId"
 							],
@@ -1708,11 +1850,12 @@
 							}
 						},
 						"url": {
-							"raw": "{{origin}}/load",
+							"raw": "{{origin}}/api/load",
 							"host": [
 								"{{origin}}"
 							],
 							"path": [
+								"api",
 								"load"
 							]
 						}
@@ -1734,11 +1877,12 @@
 							}
 						},
 						"url": {
-							"raw": "{{origin}}/load/:loadId",
+							"raw": "{{origin}}/api/load/:loadId",
 							"host": [
 								"{{origin}}"
 							],
 							"path": [
+								"api",
 								"load",
 								":loadId"
 							],
@@ -1767,11 +1911,12 @@
 							}
 						},
 						"url": {
-							"raw": "{{origin}}/load/:loadId",
+							"raw": "{{origin}}/api/load/:loadId",
 							"host": [
 								"{{origin}}"
 							],
 							"path": [
+								"api",
 								"load",
 								":loadId"
 							],
@@ -1796,11 +1941,12 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{origin}}/user/auth",
+							"raw": "{{origin}}/api/user/auth",
 							"host": [
 								"{{origin}}"
 							],
 							"path": [
+								"api",
 								"user",
 								"auth"
 							]
@@ -1814,11 +1960,12 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{origin}}/user?limit=30&offset=0&orderby=fullName&direction=asc",
+							"raw": "{{origin}}/api/user?limit=30&offset=0&orderby=fullName&direction=asc",
 							"host": [
 								"{{origin}}"
 							],
 							"path": [
+								"api",
 								"user"
 							],
 							"query": [
@@ -1893,11 +2040,12 @@
 							}
 						},
 						"url": {
-							"raw": "{{origin}}/user/:userId",
+							"raw": "{{origin}}/api/user/:userId",
 							"host": [
 								"{{origin}}"
 							],
 							"path": [
+								"api",
 								"user",
 								":userId"
 							],
@@ -1926,11 +2074,12 @@
 							}
 						},
 						"url": {
-							"raw": "{{origin}}/user",
+							"raw": "{{origin}}/api/user",
 							"host": [
 								"{{origin}}"
 							],
 							"path": [
+								"api",
 								"user"
 							]
 						}
@@ -1952,11 +2101,12 @@
 							}
 						},
 						"url": {
-							"raw": "{{origin}}/user/:userId",
+							"raw": "{{origin}}/api/user/:userId",
 							"host": [
 								"{{origin}}"
 							],
 							"path": [
+								"api",
 								"user",
 								":userId"
 							],
@@ -1985,11 +2135,12 @@
 							}
 						},
 						"url": {
-							"raw": "{{origin}}/user/:userId",
+							"raw": "{{origin}}/api/user/:userId",
 							"host": [
 								"{{origin}}"
 							],
 							"path": [
+								"api",
 								"user",
 								":userId"
 							],
@@ -2014,11 +2165,12 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{origin}}/location?limit=30&offset=0&orderby=name&direction=asc",
+							"raw": "{{origin}}/api/location?limit=30&offset=0&orderby=name&direction=asc",
 							"host": [
 								"{{origin}}"
 							],
 							"path": [
+								"api",
 								"location"
 							],
 							"query": [
@@ -2107,11 +2259,12 @@
 							}
 						},
 						"url": {
-							"raw": "{{origin}}/location/:locationId",
+							"raw": "{{origin}}/api/location/:locationId",
 							"host": [
 								"{{origin}}"
 							],
 							"path": [
+								"api",
 								"location",
 								":locationId"
 							],
@@ -2140,11 +2293,12 @@
 							}
 						},
 						"url": {
-							"raw": "{{origin}}/location",
+							"raw": "{{origin}}/api/location",
 							"host": [
 								"{{origin}}"
 							],
 							"path": [
+								"api",
 								"location"
 							]
 						}
@@ -2166,11 +2320,12 @@
 							}
 						},
 						"url": {
-							"raw": "{{origin}}/location/:locationId",
+							"raw": "{{origin}}/api/location/:locationId",
 							"host": [
 								"{{origin}}"
 							],
 							"path": [
+								"api",
 								"location",
 								":locationId"
 							],
@@ -2199,11 +2354,12 @@
 							}
 						},
 						"url": {
-							"raw": "{{origin}}/location/:locationId",
+							"raw": "{{origin}}/api/location/:locationId",
 							"host": [
 								"{{origin}}"
 							],
 							"path": [
+								"api",
 								"location",
 								":locationId"
 							],
@@ -2233,11 +2389,12 @@
 							]
 						},
 						"url": {
-							"raw": "{{origin}}/location/fromCsv",
+							"raw": "{{origin}}/api/location/fromCsv",
 							"host": [
 								"{{origin}}"
 							],
 							"path": [
+								"api",
 								"location",
 								"fromCsv"
 							]
@@ -2251,7 +2408,7 @@
 			"name": "Mobile",
 			"item": [
 				{
-					"name": "Auth",
+					"name": "Auth (Will be removed soon)",
 					"request": {
 						"method": "PATCH",
 						"header": [],
@@ -2272,6 +2429,60 @@
 							"path": [
 								"mobileApp",
 								"auth"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Set Auth",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"force\": true,\r\n    \"deviceId\": \"mego_device\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{origin}}/mobileApp/setAuth",
+							"host": [
+								"{{origin}}"
+							],
+							"path": [
+								"mobileApp",
+								"setAuth"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Set App Data",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"token\": \"ExponentPushToken[_hcNcXNFTEX_d8a36vse1T]\",\r\n    \"appPermissions\": {\r\n      \"Geo\": \"granted\",\r\n      \"Push\": \"granted\"\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{origin}}/mobileApp/setAppData",
+							"host": [
+								"{{origin}}"
+							],
+							"path": [
+								"mobileApp",
+								"setAppData"
 							]
 						}
 					},
@@ -2397,13 +2608,13 @@
 				"type": "basic",
 				"basic": [
 					{
-						"key": "username",
-						"value": "Mego2Man",
+						"key": "password",
+						"value": "superpass",
 						"type": "string"
 					},
 					{
-						"key": "password",
-						"value": "superpass",
+						"key": "username",
+						"value": "MegoMan",
 						"type": "string"
 					}
 				]
@@ -2426,6 +2637,107 @@
 							""
 						]
 					}
+				}
+			]
+		},
+		{
+			"name": "SendMail (For Service test only)",
+			"item": [
+				{
+					"name": "SendMail",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"from\": \"Fred Foo 👻<test@@4u-logistics.com>\",\r\n    \"to\": \"aa5856bk@gmail.com\",\r\n    \"subject\": \"Hello ✔\",\r\n    \"text\": \"Hello world? (plain)\",\r\n    \"html\": \"<b>Hello world? (html)</b>\" \r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{origin}}/api/testEmail",
+							"host": [
+								"{{origin}}"
+							],
+							"path": [
+								"api",
+								"testEmail"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "SendPush (For Service test only)",
+			"item": [
+				{
+					"name": "Send Push",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"to\": \"ExponentPushToken[PiSZJwAWgI_3-Y_KdCtnrl]\",\r\n    \"sound\": \"default\",\r\n    \"title\": \"LOG4U\",\r\n    \"body\": \"Hello world\",\r\n    \"data\": {\"trouteTo\": \"/home/loads\"},\r\n    \"badge\": 3\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{origin}}/api/testPush",
+							"host": [
+								"{{origin}}"
+							],
+							"path": [
+								"api",
+								"testPush"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Receipt",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"to\": \"ExponentPushToken[_hcNcXNFTEX_d8a36vse1T]\",\r\n    \"sound\": \"default\",\r\n    \"title\": \"LOG4U\",\r\n    \"subtitle\": \"Yo\",\r\n    \"body\": \"Hello world\",\r\n    \"data\": {\"someData\": \"Yes\"},\r\n    \"badge\": 3\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{origin}}/api/testPush/:receiptId",
+							"host": [
+								"{{origin}}"
+							],
+							"path": [
+								"api",
+								"testPush",
+								":receiptId"
+							],
+							"variable": [
+								{
+									"key": "receiptId",
+									"value": "631e207d-0cd2-4b9d-ace4-1b1b40c5f41f"
+								}
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},
@@ -2555,7 +2867,7 @@
 		"basic": [
 			{
 				"key": "username",
-				"value": "4ulogisticsllc@gmail.com",
+				"value": "ivo.bobul@gmail.com",
 				"type": "string"
 			},
 			{
@@ -2589,8 +2901,7 @@
 		{
 			"key": "origin",
 			"value": "http://localhost:8181",
-			"type": "string",
-			"disabled": true
+			"type": "string"
 		},
 		{
 			"key": "origin",
@@ -2607,7 +2918,8 @@
 		{
 			"key": "origin",
 			"value": "https://admin.4u-logistics.com",
-			"type": "string"
+			"type": "string",
+			"disabled": true
 		}
 	]
 }

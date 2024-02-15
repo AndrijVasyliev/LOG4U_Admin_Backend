@@ -2,6 +2,8 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, ObjectId } from 'mongoose';
 import { PERSON_TYPES } from '../utils/constants';
 import { PersonType } from '../utils/general.dto';
+import { hash } from '../utils/hash';
+import { CoordinatorDriverSchema } from '../coordinatorDriver/coordinatorDriver.schema';
 
 export type PersonDocument = Person & Document;
 
@@ -19,7 +21,34 @@ export class Person {
   fullName: string;
 
   @Prop({ required: false })
-  notes?: string;
+  isAppInDebugMode?: boolean;
+
+  @Prop({ required: false })
+  appLogin?: string;
+
+  @Prop({ required: false, type: Object })
+  appPermissions?: Record<string, any>;
+
+  @Prop({ required: false })
+  appPermissionsLastChange?: Date;
+
+  @Prop({ required: false })
+  deviceId?: string;
+
+  @Prop({ required: false })
+  deviceIdLastChange?: Date;
+
+  @Prop({ required: false })
+  pushToken?: string;
+
+  @Prop({ required: false })
+  pushTokenLastChange?: Date;
+
+  @Prop({
+    required: false,
+    set: hash,
+  })
+  appPass?: string;
 
   created_at: Date;
 
@@ -29,3 +58,6 @@ export class Person {
 }
 
 export const PersonSchema = SchemaFactory.createForClass(Person);
+
+CoordinatorDriverSchema.index({ appLogin: 1 }, { unique: true, sparse: true });
+CoordinatorDriverSchema.index({ deviceId: 1 }, { unique: true, sparse: true });

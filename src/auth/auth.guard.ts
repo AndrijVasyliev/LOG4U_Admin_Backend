@@ -6,11 +6,13 @@ import {
   MOBILE_BASIC_STRATEGY,
   IS_PUBLIC_KEY,
   USER_ROLES_KEY,
+  ADMIN_ROLES,
+  MOBILE_ROLES,
 } from '../utils/constants';
-import { LoggerService } from '../logger/logger.service';
+import { LoggerService } from '../logger';
 import { UserRole } from '../utils/general.dto';
 import { UserResultDto } from '../user/user.dto';
-import { DriverResultDto } from '../driver/driver.dto';
+import { PersonAuthResultDto } from '../person/person.dto';
 
 @Injectable()
 export class AdminAuthBasicGuard extends AuthGuard(ADMIN_BASIC_STRATEGY) {
@@ -39,7 +41,11 @@ export class AdminAuthBasicGuard extends AuthGuard(ADMIN_BASIC_STRATEGY) {
       this.log.debug('Admin: Not Public End empty roles');
       return false;
     }
-    if (requiredRoles.includes('Driver')) {
+    if (
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-expect-error
+      requiredRoles.every((requiredRole) => MOBILE_ROLES.includes(requiredRole))
+    ) {
       this.log.debug('Mobile endpoint');
       return true;
     }
@@ -84,17 +90,21 @@ export class MobileAuthBasicGuard extends AuthGuard(MOBILE_BASIC_STRATEGY) {
       return false;
     }
     if (
-      requiredRoles.includes('Admin') ||
-      requiredRoles.includes('Super Admin')
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-expect-error
+      requiredRoles.every((requiredRole) => ADMIN_ROLES.includes(requiredRole))
     ) {
       this.log.debug('Admin endpoint');
       return true;
     }
     await super.canActivate(context);
     const { user } = context.switchToHttp().getRequest() as {
-      user: DriverResultDto | Record<string, never>;
+      user: PersonAuthResultDto | Record<string, never>;
     };
-    this.log.debug(`Driver ${JSON.stringify(user)}`);
-    return true;
+    this.log.debug(`Person ${JSON.stringify(user)}`);
+    if (requiredRoles.some((requiredRole) => requiredRole === user?.type)) {
+      return true;
+    }
+    return false;
   }
 }

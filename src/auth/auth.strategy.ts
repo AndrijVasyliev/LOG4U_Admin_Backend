@@ -3,9 +3,9 @@ import { Injectable } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import { UserService } from '../user/user.service';
 import { UserResultDto } from '../user/user.dto';
-import { DriverService } from '../driver/driver.service';
-import { DriverResultDto } from '../driver/driver.dto';
-import { LoggerService } from '../logger/logger.service';
+import { PersonService } from '../person/person.service';
+import { PersonAuthResultDto } from '../person/person.dto';
+import { LoggerService } from '../logger';
 import {
   ADMIN_BASIC_STRATEGY,
   MOBILE_BASIC_STRATEGY,
@@ -39,7 +39,7 @@ export class MobileAuthBasicStrategy extends PassportStrategy(
 ) {
   constructor(
     private readonly log: LoggerService,
-    private readonly driverService: DriverService,
+    private readonly personService: PersonService,
   ) {
     super();
   }
@@ -47,8 +47,8 @@ export class MobileAuthBasicStrategy extends PassportStrategy(
   public validate = async (
     username: string,
     password: string,
-  ): Promise<DriverResultDto | null> => {
+  ): Promise<PersonAuthResultDto | null> => {
     this.log.debug('In Mobile Basic Auth strategy');
-    return await this.driverService.getDriverByCredentials(username, password);
+    return await this.personService.getPersonByCredentials(username, password);
   };
 }

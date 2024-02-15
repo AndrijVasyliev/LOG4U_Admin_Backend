@@ -31,7 +31,6 @@ export class CreateDriverDto {
   readonly emergencyContactPhone?: string;
   readonly notes?: string;
   readonly appLogin?: string;
-  readonly deviceId?: string;
   readonly appPass?: string;
   readonly owner: string;
 }
@@ -58,7 +57,6 @@ export class UpdateDriverDto {
   readonly emergencyContactPhone?: string;
   readonly notes?: string;
   readonly appLogin?: string;
-  readonly deviceId?: string;
   readonly appPass?: string;
   readonly owner?: string;
 }
@@ -82,7 +80,6 @@ export class DriverQuerySearch {
   readonly emergencyContactRel?: string;
   readonly emergencyContactPhone?: string;
   readonly appLogin?: string;
-  readonly deviceId?: string;
   readonly truckNumber?: number;
   readonly owner?: string;
 }
@@ -120,7 +117,6 @@ export class DriverResultDto {
       emergencyContactPhone: driver.emergencyContactPhone,
       notes: driver.notes,
       appLogin: driver.appLogin,
-      deviceId: driver.deviceId,
     };
     if (owner) {
       result = { ...result, owner };
@@ -154,7 +150,6 @@ export class DriverResultDto {
   readonly emergencyContactPhone?: string;
   readonly notes?: string;
   readonly appLogin?: string;
-  readonly deviceId?: string;
   readonly owner?: OwnerResultDto;
   readonly driveTrucks?: TruckResultDto[];
 }

@@ -23,7 +23,7 @@ import {
 } from './location.dto';
 import { BodyValidationPipe } from '../utils/bodyValidate.pipe';
 import { LocationService } from './location.service';
-import { LoggerService } from '../logger/logger.service';
+import { LoggerService } from '../logger';
 import {
   CreateLocationValidation,
   UpdateLocationValidation,

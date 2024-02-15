@@ -1,6 +1,5 @@
 import {
   Controller,
-  Header,
   Get,
   Param,
   Query,
@@ -19,7 +18,7 @@ import {
 } from './owner.dto';
 import { BodyValidationPipe } from '../utils/bodyValidate.pipe';
 import { OwnerService } from './owner.service';
-import { LoggerService } from '../logger/logger.service';
+import { LoggerService } from '../logger';
 import {
   CreateOwnerValidation,
   UpdateOwnerValidation,

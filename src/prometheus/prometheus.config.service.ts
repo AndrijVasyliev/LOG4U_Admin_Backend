@@ -8,7 +8,7 @@ import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class PromConfigService implements PrometheusOptionsFactory {
-  constructor(private configService: ConfigService) {}
+  constructor(private readonly configService: ConfigService) {}
 
   createPrometheusOptions(): PrometheusOptions {
     return {

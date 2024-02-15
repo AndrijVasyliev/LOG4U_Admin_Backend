@@ -1,5 +1,10 @@
 import './utils/fixMongooseStringValidation';
-import { Module, NestModule, MiddlewareConsumer } from '@nestjs/common';
+import {
+  Module,
+  NestModule,
+  MiddlewareConsumer,
+  RequestMethod,
+} from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { PrometheusModule } from '@willsoto/nestjs-prometheus';
 import { PromConfigService } from './prometheus/prometheus.config.service';
@@ -11,18 +16,14 @@ import * as mongooseAutopopulate from 'mongoose-autopopulate';
 import { DeleteField } from './utils/mongooseDeleteField';
 import { join } from 'path';
 
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
-
 import configuration from '../config/configuration';
 
 import { MetricsController } from './metrics/metrics.controller';
 import { HealthModule } from './health/health.module';
-import { LoggerModule } from './logger/logger.module';
-import { LoggerMiddleware } from './logger/logger.middleware';
+import { LoggerModule, LogLevel, LogFormat } from './logger';
 import { ResponseTimeMiddleware } from './utils/responseTime.middleware';
-import { RequestIdMiddleware } from './utils/requestId.middleware';
 
+import { PersonModule } from './person/person.module';
 import { OwnerModule } from './owner/owner.module';
 import { OwnerDriverModule } from './ownerDriver/ownerDriver.module';
 import { CoordinatorModule } from './coordinator/coordinator.module';
@@ -34,7 +35,10 @@ import { LoadModule } from './load/load.module';
 import { TruckModule } from './truck/truck.module';
 import { GoogleGeoApiModule } from './googleGeoApi/googleGeoApi.module';
 import { MobileAppModule } from './mobileApp/mobileApp.module';
+import { MobileAppController } from './mobileApp/mobileApp.controller';
 import { AuthModule } from './auth/auth.module';
+import { EmailModule } from './email/email.module';
+import { PushModule } from './push/push.module';
 import { MONGO_CONNECTION_NAME } from './utils/constants';
 
 import { ChatModule } from './chat/chat.module';
@@ -42,7 +46,20 @@ import { ChatModule } from './chat/chat.module';
 @Module({
   imports: [
     AuthModule,
-    LoggerModule,
+    LoggerModule.registerAsync({
+      useFactory: async (config: ConfigService) => {
+        return {
+          level: config.get<LogLevel>('log.level') || 'verbose',
+          format: config.get<LogFormat>('log.format') || 'string',
+          serviceName: config.get<string>('app.serviceName') || '',
+          forRoutes: [
+            { path: '*', method: RequestMethod.ALL },
+            MobileAppController,
+          ],
+        };
+      },
+      inject: [ConfigService],
+    }),
     ConfigModule.forRoot({
       isGlobal: true,
       cache: true,
@@ -80,6 +97,7 @@ import { ChatModule } from './chat/chat.module';
       useClass: PromConfigService,
       inject: [ConfigService],
     }),
+    PersonModule,
     OwnerModule,
     OwnerDriverModule,
     CoordinatorModule,
@@ -90,15 +108,15 @@ import { ChatModule } from './chat/chat.module';
     LoadModule,
     TruckModule,
     MobileAppModule,
+    EmailModule,
+    PushModule,
     ChatModule,
   ],
-  controllers: [AppController],
-  providers: [AppService],
 })
 export class AppModule implements NestModule {
   public configure(consumer: MiddlewareConsumer) {
     consumer
-      .apply(RequestIdMiddleware, LoggerMiddleware, ResponseTimeMiddleware)
-      .forRoutes('*');
+      .apply(ResponseTimeMiddleware)
+      .forRoutes({ path: '*', method: RequestMethod.ALL }, MobileAppController);
   }
 }

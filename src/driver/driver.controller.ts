@@ -18,7 +18,7 @@ import {
 } from './driver.dto';
 import { BodyValidationPipe } from '../utils/bodyValidate.pipe';
 import { DriverService } from './driver.service';
-import { LoggerService } from '../logger/logger.service';
+import { LoggerService } from '../logger';
 import {
   CreateDriverValidation,
   UpdateDriverValidation,
