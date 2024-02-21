@@ -11,6 +11,7 @@ export default (): {
   db: MongooseModuleFactoryOptions;
   google: any;
   email: any;
+  emailQueue: { maxParallelTasks: number; taskTimeout: number };
   push: { accessToken: string };
 } => ({
   app: {
@@ -56,11 +57,15 @@ export default (): {
       'https://maps.googleapis.com/maps/api/distancematrix/json',
   },
   email: {
-    host: process.env.EMAIL_SMTP_HOST || 'live.smtp.mailtrap.io',
+    host: process.env.EMAIL_SMTP_HOST || 'smtp.gmail.com',
     port: +(process.env.EMAIL_SMTP_PORT || 587),
     secure: process.env.EMAIL_SMTP_SECURE === 'true',
-    user: process.env.EMAIL_SMTP_USER || 'api',
-    pass: process.env.EMAIL_SMTP_PASS || '367e9ba82fd085e4d27af71efc765c63',
+    user: process.env.EMAIL_SMTP_USER || 'aa5856bk@gmail.com',
+    pass: process.env.EMAIL_SMTP_PASS || 'cess ywcp klbc dalz',
+  },
+  emailQueue: {
+    maxParallelTasks: +(process.env.EMAIL_QUEUE_MAX_PARALEL_TSAKS || 10),
+    taskTimeout: +(process.env.EMAIL_QUEUE_TASK_TIMEOUT || 1000 * 60 * 5),
   },
   push: {
     accessToken:

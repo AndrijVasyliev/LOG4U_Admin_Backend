@@ -17,6 +17,7 @@ export class Driver {
   @Prop({
     required: true,
     immutable: true,
+    type: String,
     enum: PERSON_TYPES,
     default: 'Driver',
   })
@@ -31,7 +32,7 @@ export class Driver {
   @Prop({ required: false })
   citizenship?: string;
 
-  @Prop({ required: false, enum: LANG_PRIORITIES })
+  @Prop({ required: false, type: String, enum: LANG_PRIORITIES })
   languagePriority?: LangPriority;
 
   @Prop({ required: true })

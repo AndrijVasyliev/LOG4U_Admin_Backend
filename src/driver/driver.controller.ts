@@ -16,14 +16,14 @@ import {
   PaginatedDriverResultDto,
   UpdateDriverDto,
 } from './driver.dto';
-import { BodyValidationPipe } from '../utils/bodyValidate.pipe';
 import { DriverService } from './driver.service';
-import { LoggerService } from '../logger';
 import {
   CreateDriverValidation,
   UpdateDriverValidation,
   DriverQueryParamsSchema,
 } from './driver.validation';
+import { LoggerService } from '../logger';
+import { BodyValidationPipe } from '../utils/bodyValidate.pipe';
 import { MongoObjectIdPipe } from '../utils/idValidate.pipe';
 import { QueryParamsPipe } from '../utils/queryParamsValidate.pipe';
 import { Roles } from '../auth/auth.decorator';

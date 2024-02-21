@@ -70,7 +70,7 @@ export class HealthController {
     const healthCheckResult = await this.health.check([
       () => this.memory.checkHeap('memory_heap', this.heapLimit),
       () => this.memory.checkRSS('memory_rss', this.rssLimit),
-      async () => this.email.checkConnectivity('email'),
+      // async () => this.email.checkConnectivity('email'), Dont need service to be restarted, when it is not able to sent emails
       async () =>
         this.mongoose.pingCheck('mongoose', {
           connection: this.mongoConnection,

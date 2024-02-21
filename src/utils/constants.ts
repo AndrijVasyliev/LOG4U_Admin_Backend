@@ -9,6 +9,7 @@ export const MONGO_UNIQUE_INDEX_CONFLICT = 11000;
 export const UNIQUE_CONSTRAIN_ERROR = 'Unique constrain error';
 // Validation
 export const PATHPARAM_VALIDATION_ERROR = 'Pathparam validation error';
+export const WS_MESSAGE_VALIDATION_ERROR = 'Message validation error';
 export const BODY_VALIDATION_ERROR = 'Body validation error';
 // Auth
 export const IS_PUBLIC_KEY = 'isPublic';
@@ -48,6 +49,14 @@ export const DRIVER_TYPES: PersonType[] = [
 export const ADMIN_ROLES = ['Admin', 'Super Admin'] as const;
 export const MOBILE_ROLES = ['Driver', 'Owner', 'OwnerDriver'] as const;
 export const USER_ROLES = [...ADMIN_ROLES, ...MOBILE_ROLES] as const;
+export const EMAIL_STATES = [
+  'New',
+  'Ready',
+  'Processing',
+  'Sent',
+  'Error',
+] as const;
+export const EMAIL_TO_TYPES = ['User', 'Person'] as const;
 
 export const TRUCK_TYPES = [
   'Cargo van',

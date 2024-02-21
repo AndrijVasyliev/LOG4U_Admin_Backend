@@ -24,6 +24,7 @@ export class Owner {
   @Prop({
     required: true,
     immutable: true,
+    type: String,
     enum: PERSON_TYPES,
     default: 'Owner',
   })
@@ -38,7 +39,7 @@ export class Owner {
   @Prop({ required: true })
   citizenship: string;
 
-  @Prop({ required: true, enum: LANG_PRIORITIES })
+  @Prop({ required: true, type: String, enum: LANG_PRIORITIES })
   languagePriority: LangPriority;
 
   @Prop({ required: true })

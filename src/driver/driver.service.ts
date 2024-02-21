@@ -6,13 +6,6 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { LoggerService } from '../logger';
-import {
-  DRIVER_TYPES,
-  MONGO_CONNECTION_NAME,
-  MONGO_UNIQUE_INDEX_CONFLICT,
-  UNIQUE_CONSTRAIN_ERROR,
-} from '../utils/constants';
 import { Driver, DriverDocument } from './driver.schema';
 import {
   CreateDriverDto,
@@ -21,6 +14,13 @@ import {
   PaginatedDriverResultDto,
   UpdateDriverDto,
 } from './driver.dto';
+import { LoggerService } from '../logger';
+import {
+  DRIVER_TYPES,
+  MONGO_CONNECTION_NAME,
+  MONGO_UNIQUE_INDEX_CONFLICT,
+  UNIQUE_CONSTRAIN_ERROR,
+} from '../utils/constants';
 import { TruckService } from '../truck/truck.service';
 import { escapeForRegExp } from '../utils/escapeForRegExp';
 

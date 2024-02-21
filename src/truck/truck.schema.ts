@@ -35,7 +35,7 @@ export class Truck {
   @Prop({ required: true })
   truckNumber: number;
 
-  @Prop({ required: true, enum: TRUCK_STATUSES })
+  @Prop({ required: true, type: String, enum: TRUCK_STATUSES })
   status: TruckStatus;
 
   @Prop({
@@ -70,13 +70,13 @@ export class Truck {
   @Prop({ required: false })
   locationUpdatedAt: Date;
 
-  @Prop({ required: true, enum: TRUCK_CROSSBORDERS })
+  @Prop({ required: true, type: String, enum: TRUCK_CROSSBORDERS })
   crossborder: TruckCrossborder;
 
-  @Prop({ required: false, enum: TRUCK_CERTIFICATES })
+  @Prop({ required: false, type: String, enum: TRUCK_CERTIFICATES })
   certificate?: TruckCertificate;
 
-  @Prop({ required: true, enum: TRUCK_TYPES })
+  @Prop({ required: true, type: String, enum: TRUCK_TYPES })
   type: TruckType;
 
   @Prop({

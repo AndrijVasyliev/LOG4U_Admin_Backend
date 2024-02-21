@@ -299,7 +299,7 @@
 							"variable": [
 								{
 									"key": "personId",
-									"value": "64dcb747db730feec83a7a8c"
+									"value": "650356cd86534e10517a2475"
 								}
 							]
 						}
@@ -2658,6 +2658,131 @@
 							}
 						},
 						"url": {
+							"raw": "{{origin}}/api/testEmail/send",
+							"host": [
+								"{{origin}}"
+							],
+							"path": [
+								"api",
+								"testEmail",
+								"send"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "List Emails",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{origin}}/api/testEmail?limit=30&offset=0&orderby=createdAt&direction=asc",
+							"host": [
+								"{{origin}}"
+							],
+							"path": [
+								"api",
+								"testEmail"
+							],
+							"query": [
+								{
+									"key": "limit",
+									"value": "30"
+								},
+								{
+									"key": "offset",
+									"value": "0"
+								},
+								{
+									"key": "orderby",
+									"value": "createdAt",
+									"description": "'state', 'from', 'subject', 'createdAt', 'updatedAt'"
+								},
+								{
+									"key": "direction",
+									"value": "asc",
+									"description": "asc or desc"
+								},
+								{
+									"key": "state",
+									"value": "",
+									"description": "'New', 'Processing', 'Sent'",
+									"disabled": true
+								},
+								{
+									"key": "from",
+									"value": "",
+									"disabled": true
+								},
+								{
+									"key": "toType",
+									"value": "Ivo",
+									"description": "'User', 'Person'",
+									"disabled": true
+								},
+								{
+									"key": "subject",
+									"value": "",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Email",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{origin}}/api/testEmail/:emailId",
+							"host": [
+								"{{origin}}"
+							],
+							"path": [
+								"api",
+								"testEmail",
+								":emailId"
+							],
+							"variable": [
+								{
+									"key": "emailId",
+									"value": "65d102b6a3e7e6854f4749cb"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Email",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"from\": \"Fred Foo 👻<test@@4u-logistics.com>\",\r\n    \"to\": [\r\n        {\r\n            \"to\": \"64dcb747db730feec83a7a8c\",\r\n            \"toType\": \"Person\"\r\n        },\r\n        {\r\n            \"to\": \"650da9c408d55a210c24d820\",\r\n            \"toType\": \"User\"\r\n        }\r\n    ],\r\n    \"subject\": \"Hello ✔\",\r\n    \"text\": \"Hello world? (plain)\",\r\n    \"html\": \"<b>Hello world? (html)</b>\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
 							"raw": "{{origin}}/api/testEmail",
 							"host": [
 								"{{origin}}"
@@ -2665,6 +2790,74 @@
 							"path": [
 								"api",
 								"testEmail"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Email",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"state\": \"New\",\r\n    \"from\": \"Fred Foo 👻<test@@4u-logistics.com>\",\r\n    \"subject\": \"Hello ✔\",\r\n    \"text\": \"Hello world?1 (plain)\",\r\n    \"html\": \"<b>Hello world? (html)</b>\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{origin}}/api/testEmail/:emailId",
+							"host": [
+								"{{origin}}"
+							],
+							"path": [
+								"api",
+								"testEmail",
+								":emailId"
+							],
+							"variable": [
+								{
+									"key": "emailId",
+									"value": "65d27a7e905cde79941119a7"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Email",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{origin}}/api/testEmail/:emailId",
+							"host": [
+								"{{origin}}"
+							],
+							"path": [
+								"api",
+								"testEmail",
+								":emailId"
+							],
+							"variable": [
+								{
+									"key": "emailId",
+									"value": "65d1e0a89292d8255b714719"
+								}
 							]
 						}
 					},
@@ -2682,7 +2875,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"to\": \"ExponentPushToken[PiSZJwAWgI_3-Y_KdCtnrl]\",\r\n    \"sound\": \"default\",\r\n    \"title\": \"LOG4U\",\r\n    \"body\": \"Hello world\",\r\n    \"data\": {\"trouteTo\": \"/home/loads\"},\r\n    \"badge\": 3\r\n}",
+							"raw": "{\r\n    \"to\": \"ExponentPushToken[ZjBCKvFwJDJxfVbPdPF-LW]\",\r\n    \"sound\": \"default\",\r\n    \"title\": \"LOG4U\",\r\n    \"body\": \"Hello world\",\r\n    \"data\": {\"еrouteTo\": \"/home/loads\"},\r\n    \"badge\": 4\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -2732,7 +2925,7 @@
 							"variable": [
 								{
 									"key": "receiptId",
-									"value": "631e207d-0cd2-4b9d-ace4-1b1b40c5f41f"
+									"value": "8534d627-46b1-4e54-aa12-3f2adf26e5bc"
 								}
 							]
 						}

@@ -14,11 +14,14 @@ export type PersonDocument = Person & Document;
   collection: 'persons',
 })
 export class Person {
-  @Prop({ required: true, immutable: true, enum: PERSON_TYPES })
+  @Prop({ required: true, immutable: true, type: String, enum: PERSON_TYPES })
   type: PersonType;
 
   @Prop({ required: true })
   fullName: string;
+
+  @Prop({ required: false })
+  email?: string;
 
   @Prop({ required: false })
   isAppInDebugMode?: boolean;

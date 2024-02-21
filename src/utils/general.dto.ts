@@ -1,4 +1,6 @@
 import {
+  EMAIL_STATES,
+  EMAIL_TO_TYPES,
   LANG_PRIORITIES,
   PERSON_TYPES,
   TRUCK_CERTIFICATES,
@@ -19,6 +21,8 @@ export type TruckStatus = (typeof TRUCK_STATUSES)[number];
 export type TruckCrossborder = (typeof TRUCK_CROSSBORDERS)[number];
 export type TruckCertificate = (typeof TRUCK_CERTIFICATES)[number];
 export type TruckEquipment = (typeof TRUCK_EQUIPMENTS)[number];
+export type EmailState = (typeof EMAIL_STATES)[number];
+export type EmailToType = (typeof EMAIL_TO_TYPES)[number];
 
 export class Query<T> {
   readonly offset: number;
