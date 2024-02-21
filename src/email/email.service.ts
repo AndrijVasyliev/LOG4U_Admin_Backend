@@ -102,7 +102,6 @@ export class EmailService implements OnApplicationBootstrap, OnModuleDestroy {
   onApplicationBootstrap(): void {
     this.log.debug('Creating queue');
     const stream = this?.changeStream;
-    // const stream = false;
     if (stream) {
       this.queue = new Queue<ChangeDocument>(
         async (): Promise<ChangeDocument> => {
@@ -261,7 +260,18 @@ export class EmailService implements OnApplicationBootstrap, OnModuleDestroy {
       offset: query.offset,
     };
     if (query.direction && query.orderby) {
-      options.sort = { [query.orderby]: query.direction };
+      let newOrder: string;
+      switch (query.orderby) {
+        case 'createdAt':
+          newOrder = 'created_at';
+          break;
+        case 'updatedAt':
+          newOrder = 'updated_at';
+          break;
+        default:
+          newOrder = query.orderby;
+      }
+      options.sort = { [newOrder]: query.direction };
     }
     options.populate = ['to.to'];
     const res = await this.emailModel.paginate(documentQuery, options);
