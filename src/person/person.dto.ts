@@ -39,6 +39,8 @@ export class PersonResultDto {
       fullName: person.fullName,
       isAppInDebugMode: person.isAppInDebugMode,
       appLogin: person.appLogin,
+      deviceStatus: person.appPermissions,
+      deviceStatusLastChange: person.appPermissionsLastChange,
       appPermissions: person.appPermissions,
       appPermissionsLastChange: person.appPermissionsLastChange,
       deviceId: person.deviceId,
@@ -53,6 +55,8 @@ export class PersonResultDto {
   readonly fullName: string;
   readonly isAppInDebugMode?: boolean;
   readonly appLogin?: string;
+  readonly deviceStatus?: Record<string, any>;
+  readonly deviceStatusLastChange?: Date;
   readonly appPermissions?: Record<string, any>;
   readonly appPermissionsLastChange?: Date;
   readonly deviceId?: string;

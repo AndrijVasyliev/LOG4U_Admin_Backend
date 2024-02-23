@@ -6,6 +6,7 @@ export class AuthDto {
 }
 export class AuthDataDto {
   token?: string;
+  deviceStatus?: Record<string, any>;
   appPermissions?: Record<string, any>;
 }
 

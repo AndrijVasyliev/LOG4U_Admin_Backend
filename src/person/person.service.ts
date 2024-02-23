@@ -113,12 +113,16 @@ export class PersonService {
     id: string,
     authDataDto: AuthDataDto,
   ): Promise<PersonAuthResultDto> {
-    const { token, appPermissions } = authDataDto;
+    const { token, deviceStatus, appPermissions } = authDataDto;
 
     const person = await this.findPersonDocumentById(id);
     if (token && person.pushToken !== token) {
       person.set('pushToken', token);
       person.set('pushTokenLastChange', new Date());
+    }
+    if (deviceStatus) {
+      person.set('deviceStatus', deviceStatus);
+      person.set('deviceStatusLastChange', new Date());
     }
     if (appPermissions) {
       person.set('appPermissions', appPermissions);
