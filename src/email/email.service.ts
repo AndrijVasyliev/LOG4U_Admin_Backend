@@ -42,6 +42,7 @@ export class EmailService implements OnApplicationBootstrap, OnModuleDestroy {
   private readonly transporter?: Transporter;
   private readonly changeStream?: ChangeStream;
   private queue?: Queue<ChangeDocument>;
+  private restartInterval: any;
   constructor(
     @InjectModel(Email.name, MONGO_CONNECTION_NAME)
     private readonly emailModel: PaginateModel<EmailDocument>,
@@ -117,6 +118,11 @@ export class EmailService implements OnApplicationBootstrap, OnModuleDestroy {
         this.log || console.log,
       );
     }
+    console.log('*&^*&^*');
+    this.restartInterval = setInterval(() => {
+      console.log('$$$$$(&(*&(');
+      this.restartOrphaned.bind(this)();
+    }, 10000);
   }
 
   async onModuleDestroy(): Promise<void> {
@@ -185,6 +191,23 @@ export class EmailService implements OnApplicationBootstrap, OnModuleDestroy {
         }
       }
     }
+  }
+
+  private async restartOrphaned(): Promise<void> {
+    console.log('@@@@@####@@@@###');
+    const olderThenDate = new Date(
+      (Date.now() -
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-expect-error
+        this.configService.get<number>('emailQueue.taskTimeout')) as number,
+    );
+    this.log.info(`Try to restart items, older then ${olderThenDate}`);
+    const result = await this.emailModel.updateMany(
+      { state: { $eq: 'Processing' }, updated_at: { $lte: olderThenDate } },
+      { $set: { state: 'New' } },
+    );
+    this.log.info(`Restarted`);
+    return;
   }
 
   async sendMail(email: SendEmailDto): Promise<Record<string, any>> {
