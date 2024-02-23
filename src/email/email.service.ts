@@ -40,7 +40,7 @@ type ChangeDocument = {
 @Injectable()
 export class EmailService implements OnApplicationBootstrap, OnModuleDestroy {
   private readonly transporter?: Transporter;
-  private readonly changeStream?: ChangeStream;
+  private readonly changeStream?: any; // ChangeStream<any, any>;
   private queue?: Queue<ChangeDocument>;
   private restartInterval: any;
   constructor(
@@ -118,11 +118,12 @@ export class EmailService implements OnApplicationBootstrap, OnModuleDestroy {
         this.log || console.log,
       );
     }
-    console.log('*&^*&^*');
+    const timeout = this.configService.get<number>(
+      'emailQueue.taskTimeout',
+    ) as number;
     this.restartInterval = setInterval(() => {
-      console.log('$$$$$(&(*&(');
       this.restartOrphaned.bind(this)();
-    }, 10000);
+    }, 1.3 * timeout);
   }
 
   async onModuleDestroy(): Promise<void> {
@@ -194,19 +195,20 @@ export class EmailService implements OnApplicationBootstrap, OnModuleDestroy {
   }
 
   private async restartOrphaned(): Promise<void> {
-    console.log('@@@@@####@@@@###');
+    this.log.info('Restarting orphaned jobs');
     const olderThenDate = new Date(
       (Date.now() -
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-expect-error
-        this.configService.get<number>('emailQueue.taskTimeout')) as number,
+        1.3 *
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // @ts-expect-error
+          this.configService.get<number>('emailQueue.taskTimeout')) as number,
     );
     this.log.info(`Try to restart items, older then ${olderThenDate}`);
     const result = await this.emailModel.updateMany(
       { state: { $eq: 'Processing' }, updated_at: { $lte: olderThenDate } },
       { $set: { state: 'New' } },
     );
-    this.log.info(`Restarted`);
+    this.log.info(`Restarted ${result.modifiedCount}`);
     return;
   }
 
