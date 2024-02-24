@@ -1,4 +1,4 @@
-import * as Joi from 'joi';
+/*import * as Joi from 'joi';
 import { LANG_PRIORITIES } from '../utils/constants';
 
 export const UpdatePersonValidation = Joi.object({
@@ -72,4 +72,4 @@ export const PersonQueryParamsSchema = Joi.object({
     ),
     direction: Joi.string().valid('asc', 'desc'),
   })
-  .and('orderby', 'direction');
+  .and('orderby', 'direction');*/

@@ -8,6 +8,7 @@ export const MobileAuthValidation = Joi.object({
 });
 
 export const MobileAuthDataValidation = Joi.object({
+  deviceStatus: Joi.object().optional(),
   appPermissions: Joi.object().optional(),
   token: Joi.string()
     .messages({
