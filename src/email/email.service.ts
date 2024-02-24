@@ -40,9 +40,9 @@ type ChangeDocument = {
 @Injectable()
 export class EmailService implements OnApplicationBootstrap, OnModuleDestroy {
   private readonly transporter?: Transporter;
-  private readonly changeStream?: any; // ChangeStream<any, any>;
+  private readonly changeStream?: ChangeStream;
   private queue?: Queue<ChangeDocument>;
-  private restartInterval: any;
+  private restartInterval: ReturnType<typeof setInterval>;
   constructor(
     @InjectModel(Email.name, MONGO_CONNECTION_NAME)
     private readonly emailModel: PaginateModel<EmailDocument>,
@@ -89,6 +89,9 @@ export class EmailService implements OnApplicationBootstrap, OnModuleDestroy {
     };
 
     this.transporter = createTransport(options);
+    // ToDo remove next comments after mongoose update
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-expect-error
     this.changeStream = emailModel.watch([
       {
         $match: {
@@ -118,15 +121,17 @@ export class EmailService implements OnApplicationBootstrap, OnModuleDestroy {
         this.log || console.log,
       );
     }
-    const timeout = this.configService.get<number>(
-      'emailQueue.taskTimeout',
+    const interval = this.configService.get<number>(
+      'emailQueue.taskRestartInterval',
     ) as number;
     this.restartInterval = setInterval(() => {
       this.restartOrphaned.bind(this)();
-    }, 1.3 * timeout);
+    }, interval);
   }
 
   async onModuleDestroy(): Promise<void> {
+    this.log.debug('Stopping restart job');
+    clearInterval(this.restartInterval);
     this.log.debug('Stopping queue');
     await this?.queue?.stop();
     this.log.debug('Closing change stream');
@@ -198,10 +203,11 @@ export class EmailService implements OnApplicationBootstrap, OnModuleDestroy {
     this.log.info('Restarting orphaned jobs');
     const olderThenDate = new Date(
       (Date.now() -
-        1.3 *
-          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-          // @ts-expect-error
-          this.configService.get<number>('emailQueue.taskTimeout')) as number,
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-expect-error
+        this.configService.get<number>(
+          'emailQueue.restartTasksOlder',
+        )) as number,
     );
     this.log.info(`Try to restart items, older then ${olderThenDate}`);
     const result = await this.emailModel.updateMany(

@@ -68,7 +68,12 @@ export const TRUCK_TYPES = [
   'Tented box',
 ] as const;
 
-export const TRUCK_STATUSES = ['Available', 'Not Available'] as const;
+export const TRUCK_STATUSES = [
+  'Available',
+  'Not Available',
+  'Will be available',
+  'On route',
+] as const;
 
 export const TRUCK_CROSSBORDERS = ['Yes', 'No'] as const;
 
