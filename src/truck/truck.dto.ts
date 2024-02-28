@@ -1,6 +1,7 @@
 import { PaginateResult } from 'mongoose';
 import { Truck } from './truck.schema';
 import {
+  GeoPointType,
   PaginatedResultDto,
   Query,
   TruckCertificate,
@@ -18,9 +19,11 @@ import { UserResultDto } from '../user/user.dto';
 export class CreateTruckDto {
   readonly truckNumber: number;
   readonly status: TruckStatus;
-  readonly lastLocation?: [number, number];
-  readonly lastCity?: string;
-  readonly locationUpdatedAt?: Date;
+  readonly lastLocation?: GeoPointType;
+  // readonly lastCity?: string;
+  // readonly locationUpdatedAt?: Date;
+  readonly availabilityLocation?: GeoPointType;
+  readonly availabilityAt?: Date;
   readonly crossborder: TruckCrossborder;
   readonly certificate?: TruckCertificate;
   readonly type: TruckType;
@@ -45,9 +48,11 @@ export class CreateTruckDto {
 export class UpdateTruckDto {
   readonly truckNumber?: number;
   readonly status?: TruckStatus;
-  readonly lastLocation?: [number, number];
-  readonly lastCity?: string;
-  readonly locationUpdatedAt?: Date;
+  readonly lastLocation?: GeoPointType;
+  // readonly lastCity?: string;
+  // readonly locationUpdatedAt?: Date;
+  readonly availabilityLocation?: GeoPointType;
+  readonly availabilityAt?: Date;
   readonly crossborder?: TruckCrossborder;
   readonly certificate?: TruckCertificate;
   readonly type?: TruckType;
@@ -72,8 +77,9 @@ export class UpdateTruckDto {
 export class TruckQuerySearch {
   readonly search?: string;
   readonly truckNumber?: number;
-  readonly status?: TruckStatus;
-  readonly lastLocation?: [number, number];
+  readonly status?: TruckStatus[];
+  readonly lastLocation?: GeoPointType;
+  readonly availabilityCity?: GeoPointType;
   readonly distance?: number;
   readonly crossborder?: TruckCrossborder;
   readonly certificate?: TruckCertificate;
@@ -96,6 +102,9 @@ export class TruckResultDto {
   ): TruckResultDto {
     const lastCity =
       truck.lastCity && LocationResultDto.fromLocationModel(truck.lastCity);
+    const availabilityCity =
+      truck.availabilityCity &&
+      LocationResultDto.fromLocationModel(truck.availabilityCity);
     const owner = truck.owner && OwnerResultDto.fromOwnerModel(truck.owner);
     const coordinator =
       truck.coordinator &&
@@ -110,6 +119,8 @@ export class TruckResultDto {
       status: truck.status,
       lastLocation: truck.lastLocation,
       locationUpdatedAt: truck.locationUpdatedAt,
+      availabilityLocation: truck.availabilityLocation,
+      availabilityAt: truck.availabilityAt,
       crossborder: truck.crossborder,
       certificate: truck.certificate,
       type: truck.type,
@@ -128,6 +139,9 @@ export class TruckResultDto {
     };
     if (lastCity) {
       result = { ...result, lastCity };
+    }
+    if (availabilityCity) {
+      result = { ...result, availabilityCity };
     }
     if (owner) {
       result = { ...result, owner };
@@ -155,9 +169,12 @@ export class TruckResultDto {
   readonly status: TruckStatus;
   readonly milesByRoads?: number;
   readonly milesHaversine?: number;
-  readonly lastLocation?: [number, number];
+  readonly lastLocation?: GeoPointType;
   readonly lastCity?: LocationResultDto;
   readonly locationUpdatedAt?: Date;
+  readonly availabilityLocation?: GeoPointType;
+  readonly availabilityCity?: LocationResultDto;
+  readonly availabilityAt?: Date;
   readonly crossborder: TruckCrossborder;
   readonly certificate?: TruckCertificate;
   readonly type: TruckType;
@@ -224,5 +241,5 @@ export class TruckResultForMapDto {
   readonly id: string;
   readonly truckNumber: number;
   readonly status: TruckStatus;
-  readonly lastLocation?: [number, number];
+  readonly lastLocation?: GeoPointType;
 }

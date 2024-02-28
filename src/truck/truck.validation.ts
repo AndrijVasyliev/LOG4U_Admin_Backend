@@ -8,6 +8,7 @@ import {
   TRUCK_TYPES,
 } from '../utils/constants';
 import { MongoObjectIdValidation } from '../utils/idValidate.pipe';
+import { TruckStatus } from '../utils/general.dto';
 
 export const CreateTruckValidation = Joi.object({
   truckNumber: Joi.number().min(0).required(),
@@ -22,6 +23,15 @@ export const CreateTruckValidation = Joi.object({
       Joi.number().min(-180).max(180).required(),
     )
     .optional(),
+  availabilityLocation: Joi.array()
+    .min(2)
+    .max(2)
+    .items(
+      Joi.number().min(-90).max(90).required(),
+      Joi.number().min(-180).max(180).required(),
+    )
+    .optional(),
+  availabilityAt: Joi.date().iso().greater('now').optional(),
   crossborder: Joi.string()
     .valid(...TRUCK_CROSSBORDERS)
     .required(),
@@ -66,6 +76,15 @@ export const UpdateTruckValidation = Joi.object({
       Joi.number().min(-180).max(180).required(),
     )
     .optional(),
+  availabilityLocation: Joi.array()
+    .min(2)
+    .max(2)
+    .items(
+      Joi.number().min(-90).max(90).required(),
+      Joi.number().min(-180).max(180).required(),
+    )
+    .optional(),
+  availabilityAt: Joi.date().iso().greater('now').optional(),
   crossborder: Joi.string()
     .valid(...TRUCK_CROSSBORDERS)
     .optional(),
@@ -103,8 +122,25 @@ export const TruckQueryParamsSchema = Joi.object({
   limit: Joi.number().integer().min(1).optional(),
   search: Joi.string().optional(),
   truckNumber: Joi.number().min(0).optional(),
-  status: Joi.string()
-    .valid(...TRUCK_STATUSES)
+  status: Joi.alternatives(
+    Joi.string()
+      .valid(...TRUCK_STATUSES)
+      .required(),
+    Joi.array()
+      .items(
+        Joi.string()
+          .valid(...TRUCK_STATUSES)
+          .required(),
+      )
+      .min(1)
+      .required(),
+  )
+    .custom((value: string | string[]) => {
+      if (Array.isArray(value)) {
+        return value;
+      }
+      return value.split(',');
+    })
     .optional(),
   crossborder: Joi.string()
     .valid(...TRUCK_CROSSBORDERS)

@@ -1,12 +1,13 @@
 import { EARTH_RADIUS_MILES } from './constants';
+import { GeoPointType } from './general.dto';
 
 const toRadians = (degrees: number) => {
   return degrees * (Math.PI / 180);
 };
 
 export const calcDistance = (
-  point1: [number, number],
-  point2: [number, number],
+  point1: GeoPointType,
+  point2: GeoPointType,
 ): number => {
   const dLat = toRadians(point2[0] - point1[0]);
   const dLon = toRadians(point2[1] - point1[1]);

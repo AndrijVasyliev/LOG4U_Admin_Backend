@@ -3,6 +3,7 @@ import { ConfigService } from '@nestjs/config';
 import { HttpService } from '@nestjs/axios';
 import { LoggerService } from '../logger';
 import { MILES_IN_KM } from '../utils/constants';
+import { GeoPointType } from '../utils/general.dto';
 
 @Injectable()
 export class GoogleGeoApiService {
@@ -19,8 +20,8 @@ export class GoogleGeoApiService {
     this.apiKey = this.configService.get<string>('google.key');
   }
   public async getDistance(
-    source?: [number, number],
-    dest?: [number, number],
+    source?: GeoPointType,
+    dest?: GeoPointType,
   ): Promise<number | undefined> {
     this.log.info(
       `Calculating distance: ${JSON.stringify(source)} -> ${JSON.stringify(

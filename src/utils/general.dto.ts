@@ -11,7 +11,12 @@ import {
   USER_ROLES,
 } from './constants';
 
-export type GeoPointType = { type: 'Point'; coordinates: [number, number] };
+export type GeoPointType = [number, number];
+
+export type MongoGeoPointType = {
+  type: 'Point';
+  coordinates: GeoPointType;
+};
 
 export type PersonType = (typeof PERSON_TYPES)[number];
 export type LangPriority = (typeof LANG_PRIORITIES)[number];

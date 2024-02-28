@@ -62,10 +62,14 @@ export class TruckController {
 
   @Post()
   async createTruck(
+    @Req() request: Request,
     @Body(new BodyValidationPipe(CreateTruckValidation))
     createTruckBodyDto: CreateTruckDto,
   ): Promise<TruckResultDto> {
-    return this.truckService.createTruck(createTruckBodyDto);
+    const { user } = request as unknown as {
+      user: UserResultDto;
+    };
+    return this.truckService.createTruck(createTruckBodyDto, user);
   }
 
   @Patch(':truckId')

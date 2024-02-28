@@ -22,6 +22,7 @@ import {
   UpdateLocationDto,
 } from './location.dto';
 import { escapeForRegExp } from '../utils/escapeForRegExp';
+import { GeoPointType } from '../utils/general.dto';
 
 const { MongoError } = mongo;
 
@@ -52,7 +53,7 @@ export class LocationService {
   }
 
   async findNearestLocation(
-    location: [number, number],
+    location: GeoPointType,
   ): Promise<LocationResultDto> {
     this.log.debug(
       `Searching for Location, nearest to [${location.join(',')}]`,

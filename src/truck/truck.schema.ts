@@ -12,6 +12,7 @@ import {
 } from '../utils/constants';
 import {
   GeoPointType,
+  MongoGeoPointType,
   TruckCertificate,
   TruckCrossborder,
   TruckEquipment,
@@ -41,7 +42,7 @@ export class Truck {
   @Prop({
     required: false,
     type: GeoPointSchema,
-    set: (point?: [number, number]): GeoPointType | void => {
+    set: (point?: GeoPointType): MongoGeoPointType | void => {
       if (!point) {
         return;
       }
@@ -50,14 +51,14 @@ export class Truck {
         coordinates: [point[1], point[0]],
       };
     },
-    get: (point?: GeoPointType): [number, number] | void => {
+    get: (point?: MongoGeoPointType): GeoPointType | void => {
       if (!point) {
         return;
       }
       return [point.coordinates[1], point.coordinates[0]];
     },
   })
-  lastLocation?: [number, number];
+  lastLocation?: GeoPointType;
 
   @Prop({
     required: false,
@@ -69,6 +70,38 @@ export class Truck {
 
   @Prop({ required: false })
   locationUpdatedAt: Date;
+
+  @Prop({
+    required: false,
+    type: GeoPointSchema,
+    set: (point?: GeoPointType): MongoGeoPointType | void => {
+      if (!point) {
+        return;
+      }
+      return {
+        type: 'Point',
+        coordinates: [point[1], point[0]],
+      };
+    },
+    get: (point?: MongoGeoPointType): GeoPointType | void => {
+      if (!point) {
+        return;
+      }
+      return [point.coordinates[1], point.coordinates[0]];
+    },
+  })
+  availabilityLocation?: GeoPointType;
+
+  @Prop({
+    required: false,
+    type: MongooseSchema.Types.ObjectId,
+    ref: 'Location',
+    autopopulate: true,
+  })
+  availabilityCity?: Location;
+
+  @Prop({ required: false })
+  availabilityAt: Date;
 
   @Prop({ required: true, type: String, enum: TRUCK_CROSSBORDERS })
   crossborder: TruckCrossborder;

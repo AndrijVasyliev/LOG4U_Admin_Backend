@@ -6,7 +6,7 @@ import {
   GeometryLocationDto,
   LatLng,
 } from './location.dto';
-import { GeoPointType } from '../utils/general.dto';
+import { GeoPointType, MongoGeoPointType } from '../utils/general.dto';
 
 export type LocationDocument = Location & Document;
 
@@ -19,7 +19,7 @@ export class GeoPoint {
   type: 'Point';
 
   @Prop({ required: true, type: [Number, Number] })
-  coordinates: [number, number];
+  coordinates: GeoPointType;
 }
 
 export const GeoPointSchema = SchemaFactory.createForClass(GeoPoint);
@@ -32,13 +32,13 @@ export class GeometryLocation {
   @Prop({
     required: true,
     type: GeoPointSchema,
-    set: (point: LatLng): GeoPointType => {
+    set: (point: LatLng): MongoGeoPointType => {
       return {
         type: 'Point',
         coordinates: [point.lng, point.lat],
       };
     },
-    get: (point: GeoPointType): LatLng => {
+    get: (point: MongoGeoPointType): LatLng => {
       return { lat: point.coordinates[1], lng: point.coordinates[0] };
     },
   })
@@ -115,17 +115,17 @@ export class Location {
   @Prop({
     required: true,
     type: GeoPointSchema,
-    set: (point: [number, number]): GeoPointType => {
+    set: (point: GeoPointType): MongoGeoPointType => {
       return {
         type: 'Point',
         coordinates: [point[1], point[0]],
       };
     },
-    get: (point: GeoPointType): [number, number] => {
+    get: (point: MongoGeoPointType): GeoPointType => {
       return [point.coordinates[1], point.coordinates[0]];
     },
   })
-  location: [number, number];
+  location: GeoPointType;
 
   created_at: Date;
 

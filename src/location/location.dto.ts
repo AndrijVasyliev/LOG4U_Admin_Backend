@@ -1,6 +1,6 @@
 import { PaginateResult } from 'mongoose';
 import { GeoLocation, GeometryLocation, Location } from './location.schema';
-import { Query, PaginatedResultDto } from '../utils/general.dto';
+import { Query, PaginatedResultDto, GeoPointType } from '../utils/general.dto';
 
 export class AddressLocation {
   short_name: string;
@@ -69,7 +69,7 @@ export class CreateLocationDto {
   readonly name: string;
   readonly stateCode: string;
   readonly stateName: string;
-  readonly location: [number, number];
+  readonly location: GeoPointType;
 }
 
 export class UpdateLocationDto {
@@ -77,7 +77,7 @@ export class UpdateLocationDto {
   readonly name?: string;
   readonly stateCode?: string;
   readonly stateName?: string;
-  readonly location?: [number, number];
+  readonly location?: GeoPointType;
 }
 
 export class LocationQuerySearch {
@@ -87,7 +87,7 @@ export class LocationQuerySearch {
   readonly name?: string;
   readonly stateCode?: string;
   readonly stateName?: string;
-  readonly location?: [number, number];
+  readonly location?: GeoPointType;
   readonly distance?: number;
 }
 

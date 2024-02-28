@@ -52,6 +52,7 @@ export class Queue<T> {
         this.log.error(JSON.stringify(error));
       }
       await this.stop();
+      process.emit('SIGTERM');
       return;
     }
 

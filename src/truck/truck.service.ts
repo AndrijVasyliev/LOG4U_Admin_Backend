@@ -2,6 +2,7 @@ import { mongo, PaginateModel, PaginateOptions } from 'mongoose';
 import {
   ConflictException,
   Injectable,
+  PreconditionFailedException,
   InternalServerErrorException,
   NotFoundException,
 } from '@nestjs/common';
@@ -90,7 +91,8 @@ export class TruckService {
     if (query.search) {
       const searchParams = Object.entries(query.search);
       searchParams.forEach((entry) => {
-        entry[0] !== 'lastLocation' &&
+        entry[0] !== 'status' &&
+          entry[0] !== 'lastLocation' &&
           entry[0] !== 'distance' &&
           entry[0] !== 'truckNumber' &&
           entry[0] !== 'search' &&
@@ -98,6 +100,11 @@ export class TruckService {
             $regex: new RegExp(escapeForRegExp(entry[1]), 'i'),
           });
       });
+    }
+    if (query?.search?.status) {
+      documentQuery.$or = query.search.status.map((item) => ({
+        status: item,
+      }));
     }
     if (query?.search?.lastLocation && query?.search?.distance) {
       documentQuery.lastLocation = {
@@ -116,6 +123,9 @@ export class TruckService {
     if (query?.search?.search) {
       const search = escapeForRegExp(query?.search?.search);
       documentQuery.$or = [
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-expect-error
+        ...documentQuery.$or,
         { vinCode: { $regex: new RegExp(search, 'i') } },
         { licencePlate: { $regex: new RegExp(search, 'i') } },
       ];
@@ -242,8 +252,21 @@ export class TruckService {
     return res.map((truck) => TruckResultForMapDto.fromTruckForMapModel(truck));
   }
 
-  async createTruck(createTruckDto: CreateTruckDto): Promise<TruckResultDto> {
+  async createTruck(
+    createTruckDto: CreateTruckDto,
+    user?: UserResultDto,
+  ): Promise<TruckResultDto> {
     this.log.debug(`Creating new Truck: ${JSON.stringify(createTruckDto)}`);
+
+    if (
+      createTruckDto?.status === 'Will be available' &&
+      !(createTruckDto?.availabilityLocation && createTruckDto?.availabilityAt)
+    ) {
+      throw new PreconditionFailedException(
+        'Status must be "Will bw available" and fields "availabilityLocation" and "availabilityAt" must be present',
+      );
+    }
+
     let lastCity = '';
     if (createTruckDto.lastLocation) {
       try {
@@ -253,11 +276,30 @@ export class TruckService {
         lastCity = nearestCity.id;
       } catch {}
     }
-    const createdTruck = new this.truckModel(
-      lastCity
-        ? { ...createTruckDto, lastCity, locationUpdatedAt: new Date() }
-        : createTruckDto,
-    );
+    let availabilityCity = '';
+    if (createTruckDto.availabilityLocation) {
+      try {
+        const nearestCity = await this.locationService.findNearestLocation(
+          createTruckDto.availabilityLocation,
+        );
+        availabilityCity = nearestCity.id;
+      } catch {}
+    }
+
+    const createdTruck = new this.truckModel(createTruckDto);
+
+    if (lastCity) {
+      Object.assign(createdTruck, { lastCity, locationUpdatedAt: new Date() });
+    }
+    if (availabilityCity) {
+      Object.assign(createdTruck, { availabilityCity });
+    }
+    if (createTruckDto.reservedAt && user) {
+      Object.assign(createdTruck, { reservedBy: user.id });
+    }
+    if (createTruckDto.reservedAt === null || !user) {
+      Object.assign(createdTruck, { reservedAt: null, reservedBy: null });
+    }
 
     try {
       this.log.debug('Saving Truck');
@@ -279,6 +321,17 @@ export class TruckService {
     updateTruckDto: UpdateTruckDto,
     user?: UserResultDto,
   ): Promise<TruckResultDto> {
+    this.log.debug(`Setting new values: ${JSON.stringify(updateTruckDto)}`);
+
+    if (
+      updateTruckDto?.status === 'Will be available' &&
+      !(updateTruckDto?.availabilityLocation && updateTruckDto?.availabilityAt)
+    ) {
+      throw new PreconditionFailedException(
+        'Status must be "Will bw available" and fields "availabilityLocation" and "availabilityAt" must be present',
+      );
+    }
+
     const truck = await this.findTruckDocumentById(id);
     let lastCity = '';
     if (updateTruckDto.lastLocation) {
@@ -289,16 +342,29 @@ export class TruckService {
         lastCity = nearestCity.id;
       } catch {}
     }
-    this.log.debug(`Setting new values: ${JSON.stringify(updateTruckDto)}`);
+    let availabilityCity = '';
+    if (updateTruckDto.availabilityLocation) {
+      try {
+        const nearestCity = await this.locationService.findNearestLocation(
+          updateTruckDto.availabilityLocation,
+        );
+        availabilityCity = nearestCity.id;
+      } catch {}
+    }
+
     Object.assign(truck, updateTruckDto);
+
     if (lastCity) {
       Object.assign(truck, { lastCity, locationUpdatedAt: new Date() });
+    }
+    if (availabilityCity) {
+      Object.assign(truck, { availabilityCity });
     }
     if (updateTruckDto.reservedAt && user) {
       Object.assign(truck, { reservedBy: user.id });
     }
-    if (updateTruckDto.reservedAt === null) {
-      Object.assign(truck, { reservedBy: null });
+    if (updateTruckDto.reservedAt === null || !user) {
+      Object.assign(truck, { reservedAt: null, reservedBy: null });
     }
     try {
       this.log.debug('Saving Truck');

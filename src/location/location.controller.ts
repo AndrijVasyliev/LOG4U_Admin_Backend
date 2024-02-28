@@ -33,6 +33,7 @@ import { MongoObjectIdPipe } from '../utils/idValidate.pipe';
 import { QueryParamsPipe } from '../utils/queryParamsValidate.pipe';
 import { Readable } from 'node:stream';
 import { Roles } from '../auth/auth.decorator';
+import { GeoPointType } from '../utils/general.dto';
 
 @Controller('location')
 @Roles('Admin', 'Super Admin')
@@ -113,15 +114,20 @@ export class LocationController {
         });
 
         if (
-          // @ts-ignore
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // @ts-expect-error
           zipCodePos == undefined ||
-          // @ts-ignore
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // @ts-expect-error
           namePos == undefined ||
-          // @ts-ignore
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // @ts-expect-error
           stateCodePos == undefined ||
-          // @ts-ignore
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // @ts-expect-error
           stateNamePos == undefined ||
-          // @ts-ignore
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // @ts-expect-error
           stateLocationPos == undefined
         ) {
           throw new BadRequestException('Absent required field in file.');
@@ -131,30 +137,35 @@ export class LocationController {
 
         const lineParts = line.split(';');
 
-        // @ts-ignore
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-expect-error
         const zipCode = lineParts[zipCodePos];
         if (!zipCode)
           throw new BadRequestException(`No Zip Code in ${lineNumber} line`);
-        // @ts-ignore
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-expect-error
         const name = lineParts[namePos];
         if (!name)
           throw new BadRequestException(`No Name in ${lineNumber} line`);
-        // @ts-ignore
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-expect-error
         const stateCode = lineParts[stateCodePos];
         if (!stateCode)
           throw new BadRequestException(`No State Code in ${lineNumber} line`);
-        // @ts-ignore
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-expect-error
         const stateName = lineParts[stateNamePos];
         if (!stateName)
           throw new BadRequestException(`No State Name in ${lineNumber} line`);
-        // @ts-ignore
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-expect-error
         const locationPart = lineParts[stateLocationPos];
         if (!locationPart)
           throw new BadRequestException(`No Location in ${lineNumber} line`);
         const [latString, longString] = locationPart.split(',');
         const long = Number(longString);
         const lat = Number(latString);
-        const location: [number, number] = [lat, long];
+        const location: GeoPointType = [lat, long];
 
         result.push(
           await this.locationService.createLocation({
@@ -168,7 +179,6 @@ export class LocationController {
       }
       lineNumber += 1;
     }
-    // @ts-ignore
     //this.log.debug(`www ${zipCodePos} ${namePos} ${stateCodePos} ${stateNamePos} ${stateLocationPos}`);
     return result;
   }
