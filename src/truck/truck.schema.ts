@@ -103,6 +103,27 @@ export class Truck {
   @Prop({ required: false })
   availabilityAt: Date;
 
+  @Prop({
+    required: false,
+    type: GeoPointSchema,
+    set: (point?: GeoPointType): MongoGeoPointType | void => {
+      if (!point) {
+        return;
+      }
+      return {
+        type: 'Point',
+        coordinates: [point[1], point[0]],
+      };
+    },
+    get: (point?: MongoGeoPointType): GeoPointType | void => {
+      if (!point) {
+        return;
+      }
+      return [point.coordinates[1], point.coordinates[0]];
+    },
+  })
+  searchLocation?: GeoPointType;
+
   @Prop({ required: true, type: String, enum: TRUCK_CROSSBORDERS })
   crossborder: TruckCrossborder;
 
@@ -194,4 +215,6 @@ export const TruckSchema = SchemaFactory.createForClass(Truck);
 
 TruckSchema.index({ truckNumber: 1 }, { unique: true });
 TruckSchema.index({ driver: 1 }, { unique: true, sparse: true });
-TruckSchema.index({ lastLocation: '2dsphere' });
+TruckSchema.index({ searchLocation: '2dsphere' });
+TruckSchema.index({ status: 1 });
+TruckSchema.index({ availabilityAt: 1 }, { sparse: true });

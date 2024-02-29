@@ -79,7 +79,8 @@ export class TruckQuerySearch {
   readonly truckNumber?: number;
   readonly status?: TruckStatus[];
   readonly lastLocation?: GeoPointType;
-  readonly availabilityCity?: GeoPointType;
+  readonly availableBefore?: Date;
+  readonly availableAfter?: Date;
   readonly distance?: number;
   readonly crossborder?: TruckCrossborder;
   readonly certificate?: TruckCertificate;

@@ -160,6 +160,15 @@ export const TruckQueryParamsSchema = Joi.object({
   color: Joi.string().optional(),
   vinCode: Joi.string().optional(),
   licencePlate: Joi.string().optional(),
+  availableBefore: Joi.date()
+    .iso()
+    .when(Joi.ref('availableAfter'), {
+      not: Joi.exist(),
+      then: Joi.any(),
+      otherwise: Joi.date().iso().min(Joi.ref('availableAfter')),
+    })
+    .optional(),
+  availableAfter: Joi.date().iso().optional(),
 })
   .keys({
     orderby: Joi.string().valid(

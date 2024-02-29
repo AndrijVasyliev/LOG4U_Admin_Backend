@@ -57,7 +57,7 @@ export class GeometryLocation {
 export const GeometryLocationSchema =
   SchemaFactory.createForClass(GeometryLocation);
 
-GeometryLocationSchema.index({ location: '2dsphere' });
+// GeometryLocationSchema.index({ location: '2dsphere' });
 
 @Schema({
   _id: false,

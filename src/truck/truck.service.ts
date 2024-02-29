@@ -91,7 +91,9 @@ export class TruckService {
     if (query.search) {
       const searchParams = Object.entries(query.search);
       searchParams.forEach((entry) => {
-        entry[0] !== 'status' &&
+        entry[0] !== 'availableBefore' &&
+          entry[0] !== 'availableAfter' &&
+          entry[0] !== 'status' &&
           entry[0] !== 'lastLocation' &&
           entry[0] !== 'distance' &&
           entry[0] !== 'truckNumber' &&
@@ -101,11 +103,17 @@ export class TruckService {
           });
       });
     }
+    if (query?.search?.availableBefore) {
+      documentQuery.availabilityAt = { $lte: query.search.availableBefore };
+    }
+    if (query?.search?.availableAfter) {
+      documentQuery.availabilityAt = { $gte: query.search.availableAfter };
+    }
     if (query?.search?.status) {
       documentQuery.status = { $in: query.search.status };
     }
     if (query?.search?.lastLocation && query?.search?.distance) {
-      documentQuery.lastLocation = {
+      documentQuery.searchLocation = {
         $nearSphere: [
           query.search.lastLocation[1],
           query.search.lastLocation[0],
@@ -284,25 +292,33 @@ export class TruckService {
       } catch {}
     }
 
-    const createdTruck = new this.truckModel(createTruckDto);
+    const truck = new this.truckModel(createTruckDto);
 
     if (lastCity) {
-      Object.assign(createdTruck, { lastCity, locationUpdatedAt: new Date() });
+      Object.assign(truck, { lastCity, locationUpdatedAt: new Date() });
     }
     if (availabilityCity) {
-      Object.assign(createdTruck, { availabilityCity });
+      Object.assign(truck, { availabilityCity });
     }
     if (createTruckDto.reservedAt && user) {
-      Object.assign(createdTruck, { reservedBy: user.id });
+      Object.assign(truck, { reservedBy: user.id });
     }
     if (createTruckDto.reservedAt === null || !user) {
-      Object.assign(createdTruck, { reservedAt: null, reservedBy: null });
+      Object.assign(truck, { reservedAt: null, reservedBy: null });
+    }
+
+    if (truck.status === 'Will be available' && truck.availabilityLocation) {
+      Object.assign(truck, { searchLocation: truck.availabilityLocation });
+    } else if (truck.lastLocation) {
+      Object.assign(truck, { searchLocation: truck.lastLocation });
+    } else {
+      Object.assign(truck, { searchLocation: null });
     }
 
     try {
       this.log.debug('Saving Truck');
-      const truck = await createdTruck.save();
-      return TruckResultDto.fromTruckModel(truck);
+      const createdTruck = await truck.save();
+      return TruckResultDto.fromTruckModel(createdTruck);
     } catch (e) {
       if (!(e instanceof Error)) {
         throw new InternalServerErrorException(JSON.stringify(e));
@@ -364,6 +380,15 @@ export class TruckService {
     if (updateTruckDto.reservedAt === null || !user) {
       Object.assign(truck, { reservedAt: null, reservedBy: null });
     }
+
+    if (truck.status === 'Will be available' && truck.availabilityLocation) {
+      Object.assign(truck, { searchLocation: truck.availabilityLocation });
+    } else if (truck.lastLocation) {
+      Object.assign(truck, { searchLocation: truck.lastLocation });
+    } else {
+      Object.assign(truck, { searchLocation: null });
+    }
+
     try {
       this.log.debug('Saving Truck');
       const savedTruck = await truck.save();
