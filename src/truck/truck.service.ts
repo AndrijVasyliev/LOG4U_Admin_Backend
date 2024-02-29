@@ -102,9 +102,7 @@ export class TruckService {
       });
     }
     if (query?.search?.status) {
-      documentQuery.$or = query.search.status.map((item) => ({
-        status: item,
-      }));
+      documentQuery.status = { $in: query.search.status };
     }
     if (query?.search?.lastLocation && query?.search?.distance) {
       documentQuery.lastLocation = {
