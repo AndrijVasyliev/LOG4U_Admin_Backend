@@ -103,10 +103,14 @@ export class TruckService {
           });
       });
     }
-    if (query?.search?.availableBefore) {
+    if (query?.search?.availableBefore && query?.search?.availableAfter) {
+      documentQuery.$and = [
+        { availabilityAt: { $lte: query.search.availableBefore } },
+        { availabilityAt: { $gte: query.search.availableAfter } },
+      ];
+    } else if (query?.search?.availableBefore) {
       documentQuery.availabilityAt = { $lte: query.search.availableBefore };
-    }
-    if (query?.search?.availableAfter) {
+    } else if (query?.search?.availableAfter) {
       documentQuery.availabilityAt = { $gte: query.search.availableAfter };
     }
     if (query?.search?.status) {
