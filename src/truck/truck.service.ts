@@ -180,18 +180,18 @@ export class TruckService {
       this.log.debug('Calculating haversine distance');
       haversineDistances = res.docs.map(
         (truck) =>
-          truck.lastLocation &&
+          truck.searchLocation &&
           query?.search?.lastLocation &&
-          calcDistance(truck.lastLocation, query.search.lastLocation),
+          calcDistance(truck.searchLocation, query.search.lastLocation),
       );
       this.log.debug('Calculating distance by roads');
       roadsDistances = await Promise.all(
         res.docs.map(
           (truck) =>
-            truck.lastLocation &&
+            truck.searchLocation &&
             query?.search?.lastLocation &&
             this.geoApiService.getDistance(
-              truck.lastLocation,
+              truck.searchLocation,
               query.search.lastLocation,
             ),
         ),
