@@ -103,18 +103,56 @@ export class TruckService {
           });
       });
     }
-    if (query?.search?.availableBefore && query?.search?.availableAfter) {
-      documentQuery.$and = [
-        { availabilityAt: { $lte: query.search.availableBefore } },
-        { availabilityAt: { $gte: query.search.availableAfter } },
-      ];
-    } else if (query?.search?.availableBefore) {
-      documentQuery.availabilityAt = { $lte: query.search.availableBefore };
-    } else if (query?.search?.availableAfter) {
-      documentQuery.availabilityAt = { $gte: query.search.availableAfter };
+    const andParts = [];
+    let andAvailableDateQueryPart = null;
+    let otherStatusQueryPart = null;
+    if (
+      (query?.search?.availableBefore || query?.search?.availableAfter) &&
+      (!query?.search?.status ||
+        query?.search?.status.includes('Will be available'))
+    ) {
+      const andSubPart = [];
+      andSubPart.push({ status: 'Will be available' });
+      if (query?.search?.availableBefore) {
+        andSubPart.push({
+          availabilityAt: { $lte: query.search.availableBefore },
+        });
+      }
+      if (query?.search?.availableAfter) {
+        andSubPart.push({
+          availabilityAt: { $gte: query.search.availableAfter },
+        });
+      }
+      andAvailableDateQueryPart = {
+        $and: andSubPart,
+      };
     }
     if (query?.search?.status) {
-      documentQuery.status = { $in: query.search.status };
+      if (
+        andAvailableDateQueryPart &&
+        query.search.status.filter(
+          (statusItem) => statusItem !== 'Will be available',
+        ).length
+      ) {
+        otherStatusQueryPart = {
+          status: {
+            $in: query.search.status.filter(
+              (statusItem) => statusItem !== 'Will be available',
+            ),
+          },
+        };
+      } else if (!andAvailableDateQueryPart) {
+        otherStatusQueryPart = { status: { $in: query.search.status } };
+      }
+    } else if (andAvailableDateQueryPart) {
+      otherStatusQueryPart = { status: { $ne: 'Will be available' } };
+    }
+    if (andAvailableDateQueryPart && otherStatusQueryPart) {
+      andParts.push({ $or: [andAvailableDateQueryPart, otherStatusQueryPart] });
+    } else if (andAvailableDateQueryPart) {
+      andParts.push(andAvailableDateQueryPart);
+    } else if (otherStatusQueryPart) {
+      documentQuery.status = otherStatusQueryPart.status;
     }
     if (query?.search?.lastLocation && query?.search?.distance) {
       documentQuery.searchLocation = {
@@ -131,16 +169,14 @@ export class TruckService {
       };
     }
     if (query?.search?.search) {
+      const searchOrQueryPart = [];
       const search = escapeForRegExp(query?.search?.search);
-      documentQuery.$or = [
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-expect-error
-        ...documentQuery.$or,
-        { vinCode: { $regex: new RegExp(search, 'i') } },
-        { licencePlate: { $regex: new RegExp(search, 'i') } },
-      ];
+      searchOrQueryPart.push({ vinCode: { $regex: new RegExp(search, 'i') } });
+      searchOrQueryPart.push({
+        licencePlate: { $regex: new RegExp(search, 'i') },
+      });
       if (Number.isFinite(+search) && !Number.isNaN(+search)) {
-        documentQuery.$or.push({
+        searchOrQueryPart.push({
           $expr: {
             $regexMatch: {
               input: { $toString: '$truckNumber' },
@@ -149,8 +185,13 @@ export class TruckService {
           },
         });
       }
+      andParts.push({ $or: searchOrQueryPart });
     }
-
+    if (andParts.length > 1) {
+      documentQuery.$and = andParts;
+    } else if (andParts.length === 1) {
+      Object.assign(documentQuery, andParts[0]);
+    }
     const options: PaginateOptions = {
       limit: query.limit,
       offset: query.offset,
