@@ -314,7 +314,7 @@ export class TruckService {
       !(createTruckDto?.availabilityLocation && createTruckDto?.availabilityAt)
     ) {
       throw new PreconditionFailedException(
-        'Status must be "Will bw available" and fields "availabilityLocation" and "availabilityAt" must be present',
+        'Status must be "Will be available" and fields "availabilityLocation" and "availabilityAt" must be present',
       );
     }
 
@@ -382,16 +382,22 @@ export class TruckService {
   ): Promise<TruckResultDto> {
     this.log.debug(`Setting new values: ${JSON.stringify(updateTruckDto)}`);
 
+    const truck = await this.findTruckDocumentById(id);
+
     if (
       updateTruckDto?.status === 'Will be available' &&
-      !(updateTruckDto?.availabilityLocation && updateTruckDto?.availabilityAt)
+      !(
+        updateTruckDto?.availabilityLocation && updateTruckDto?.availabilityAt
+      ) &&
+      !(updateTruckDto?.status === truck.status)
     ) {
       throw new PreconditionFailedException(
-        'Status must be "Will bw available" and fields "availabilityLocation" and "availabilityAt" must be present',
+        'If new status is "Will be available" then there must be values for fields "availabilityLocation" and "availabilityAt"',
       );
     }
 
-    const truck = await this.findTruckDocumentById(id);
+    Object.assign(truck, updateTruckDto);
+
     let lastCity = '';
     if (updateTruckDto.lastLocation) {
       try {
@@ -410,8 +416,6 @@ export class TruckService {
         availabilityCity = nearestCity.id;
       } catch {}
     }
-
-    Object.assign(truck, updateTruckDto);
 
     if (lastCity) {
       Object.assign(truck, { lastCity, locationUpdatedAt: new Date() });
