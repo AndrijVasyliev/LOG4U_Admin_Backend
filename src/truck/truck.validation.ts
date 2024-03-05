@@ -8,7 +8,6 @@ import {
   TRUCK_TYPES,
 } from '../utils/constants';
 import { MongoObjectIdValidation } from '../utils/idValidate.pipe';
-import { TruckStatus } from '../utils/general.dto';
 
 export const CreateTruckValidation = Joi.object({
   truckNumber: Joi.number().min(0).required(),

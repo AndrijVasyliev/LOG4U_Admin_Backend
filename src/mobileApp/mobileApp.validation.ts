@@ -27,14 +27,15 @@ export const MobileUpdateTruckValidation = Joi.object({
   status: Joi.string()
     .valid(...TRUCK_STATUSES)
     .optional(),
-  //lastLocation: Joi.array()
-  //  .min(2)
-  //  .max(2)
-  //  .items(
-  //    Joi.number().min(-90).max(90).required(),
-  //    Joi.number().min(-180).max(180).required(),
-  //  )
-  //  .optional(),
+  availabilityLocation: Joi.array()
+    .min(2)
+    .max(2)
+    .items(
+      Joi.number().min(-90).max(90).required(),
+      Joi.number().min(-180).max(180).required(),
+    )
+    .optional(),
+  availabilityAt: Joi.date().iso().greater('now').optional(),
 });
 export const MobileUpdateTruckLocationValidation = Joi.object({
   deviceId: Joi.string().required(),
