@@ -11,6 +11,7 @@ export const MobileAuthDataValidation = Joi.object({
   deviceStatus: Joi.object().optional(),
   appPermissions: Joi.object().optional(),
   token: Joi.string()
+    .allow('')
     .messages({
       'custom.token': 'Not valid token format',
     })
