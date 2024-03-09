@@ -6,6 +6,7 @@ export interface LoggerModuleOptions {
   level: Level;
   format: LogFormat;
   serviceName: string;
+  requestIdFieldName?: string;
   forRoutes?: Parameters<ReturnType<MiddlewareConsumer['apply']>['forRoutes']>;
   exclude?: Parameters<ReturnType<MiddlewareConsumer['apply']>['exclude']>;
 }

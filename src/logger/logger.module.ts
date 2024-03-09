@@ -41,12 +41,13 @@ export class LoggerModule
   extends ConfigurableModuleClass
   implements NestModule
 {
+  private readonly requestIdFieldName: string = 'requestId';
   private logJsonFormat = printf(
     (info) =>
       stringify(
         {
           ...info,
-          requestId: info[REQUEST_ID],
+          [this.requestIdFieldName]: info[REQUEST_ID],
           context: info[CONTEXT] || info.context,
           stack: (info[STACK] || info.stack)?.split('\n'),
           hostName,
@@ -75,6 +76,9 @@ export class LoggerModule
     @Inject(MODULE_OPTIONS_TOKEN) private readonly options: LoggerModuleOptions,
   ) {
     super();
+    if (this.options.requestIdFieldName) {
+      this.requestIdFieldName = this.options.requestIdFieldName;
+    }
     DefaultLogger.configure({
       level: this.options.level,
       transports: [
