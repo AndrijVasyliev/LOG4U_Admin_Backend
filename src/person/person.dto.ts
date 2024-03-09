@@ -39,7 +39,7 @@ export class PersonResultDto {
       fullName: person.fullName,
       isAppInDebugMode: person.isAppInDebugMode,
       appLogin: person.appLogin,
-      deviceStatus: person.appPermissions,
+      deviceStatus: person.deviceStatus,
       deviceStatusLastChange: person.appPermissionsLastChange,
       appPermissions: person.appPermissions,
       appPermissionsLastChange: person.appPermissionsLastChange,
