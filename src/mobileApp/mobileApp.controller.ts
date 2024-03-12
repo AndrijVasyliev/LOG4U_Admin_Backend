@@ -48,7 +48,7 @@ export class MobileAppController {
   ) {}
   // ToDo remove after switching to new auth schema
   @Patch('auth')
-  @Roles('Driver', 'Owner', 'OwnerDriver')
+  @Roles('Driver', 'Owner', 'OwnerDriver', 'CoordinatorDriver')
   async auth(
     @Req() request: Request,
     @Body(new BodyValidationPipe(MobileAuthValidation))
@@ -68,7 +68,7 @@ export class MobileAppController {
   }
 
   @Patch('setAuth')
-  @Roles('Driver', 'Owner', 'OwnerDriver')
+  @Roles('Driver', 'Owner', 'OwnerDriver', 'CoordinatorDriver')
   async setAuth(
     @Req() request: Request,
     @Body(new BodyValidationPipe(MobileAuthValidation))
@@ -89,7 +89,7 @@ export class MobileAppController {
   }
 
   @Patch('setAppData')
-  @Roles('Driver', 'Owner', 'OwnerDriver')
+  @Roles('Driver', 'Owner', 'OwnerDriver', 'CoordinatorDriver')
   async setAppData(
     @Req() request: Request,
     @Body(new BodyValidationPipe(MobileAuthDataValidation))
@@ -103,7 +103,7 @@ export class MobileAppController {
   }
 
   @Get('driver')
-  @Roles('Driver', 'OwnerDriver')
+  @Roles('Driver', 'OwnerDriver', 'CoordinatorDriver')
   async driver(@Req() request: Request): Promise<DriverResultDto> {
     const { user: person } = request as unknown as {
       user: PersonAuthResultDto;
@@ -112,7 +112,7 @@ export class MobileAppController {
   }
 
   @Get('getLoad')
-  @Roles('Driver', 'Owner', 'OwnerDriver')
+  @Roles('Driver', 'Owner', 'OwnerDriver', 'CoordinatorDriver')
   async getLoad(
     @Req() request: Request,
     @Query(
@@ -138,7 +138,7 @@ export class MobileAppController {
   }
 
   @Patch('updateTruck')
-  @Roles('Driver', 'Owner', 'OwnerDriver')
+  @Roles('Driver', 'Owner', 'OwnerDriver', 'CoordinatorDriver')
   async updateTruck(
     @Req() request: Request,
     @Body(new BodyValidationPipe(MobileUpdateTruckValidation))
@@ -162,7 +162,7 @@ export class MobileAppController {
 
   @Public()
   @Post('setTruckLocation')
-  @Roles('Driver', 'OwnerDriver')
+  @Roles('Driver', 'Owner', 'OwnerDriver', 'CoordinatorDriver')
   async setTruckLocation(
     @Req() request: Request,
     @Body(new BodyValidationPipe(MobileUpdateTruckLocationValidation))

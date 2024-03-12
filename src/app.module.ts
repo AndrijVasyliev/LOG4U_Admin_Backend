@@ -52,7 +52,8 @@ import { ChatModule } from './chat/chat.module';
           level: config.get<LogLevel>('log.level') || 'verbose',
           format: config.get<LogFormat>('log.format') || 'string',
           serviceName: config.get<string>('app.serviceName') || '',
-          requestIdFieldName: config.get<string>('log.requestIdFieldName') || 'requestId',
+          requestIdFieldName:
+            config.get<string>('log.requestIdFieldName') || 'requestId',
           forRoutes: [
             { path: '*', method: RequestMethod.ALL },
             MobileAppController,
