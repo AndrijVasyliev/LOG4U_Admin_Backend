@@ -299,7 +299,7 @@
 							"variable": [
 								{
 									"key": "personId",
-									"value": "650356cd86534e10517a2475"
+									"value": "657e25869e04394b3780079c"
 								}
 							]
 						}
@@ -2736,7 +2736,7 @@
 								{
 									"key": "state",
 									"value": "",
-									"description": "'New', 'Processing', 'Sent'",
+									"description": "'New',  'Ready',  'Processing',  'Sent',  'Error'",
 									"disabled": true
 								},
 								{
@@ -2912,13 +2912,14 @@
 							}
 						},
 						"url": {
-							"raw": "{{origin}}/api/testPush",
+							"raw": "{{origin}}/api/testPush/send",
 							"host": [
 								"{{origin}}"
 							],
 							"path": [
 								"api",
-								"testPush"
+								"testPush",
+								"send"
 							]
 						}
 					},
@@ -2942,19 +2943,211 @@
 							}
 						},
 						"url": {
-							"raw": "{{origin}}/api/testPush/:receiptId",
+							"raw": "{{origin}}/api/testPush/receipt/:receiptId",
 							"host": [
 								"{{origin}}"
 							],
 							"path": [
 								"api",
 								"testPush",
+								"receipt",
 								":receiptId"
 							],
 							"variable": [
 								{
 									"key": "receiptId",
-									"value": "8534d627-46b1-4e54-aa12-3f2adf26e5bc"
+									"value": "77b3ae4e-a704-48d0-befa-9e0a5faf1751"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "List Pushs",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{origin}}/api/testPush?limit=30&offset=0&orderby=state&direction=asc",
+							"host": [
+								"{{origin}}"
+							],
+							"path": [
+								"api",
+								"testPush"
+							],
+							"query": [
+								{
+									"key": "limit",
+									"value": "30"
+								},
+								{
+									"key": "offset",
+									"value": "0"
+								},
+								{
+									"key": "orderby",
+									"value": "state",
+									"description": "'state', 'from', 'subject', 'createdAt', 'updatedAt'"
+								},
+								{
+									"key": "direction",
+									"value": "asc",
+									"description": "asc or desc"
+								},
+								{
+									"key": "state",
+									"value": "New",
+									"description": "'New',  'Ready',  'Processing',  'Sent for deliver',  'Sent to user',  'Error'",
+									"disabled": true
+								},
+								{
+									"key": "title",
+									"value": null,
+									"disabled": true
+								},
+								{
+									"key": "subtitle",
+									"value": null,
+									"disabled": true
+								},
+								{
+									"key": "body",
+									"value": null,
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Push",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{origin}}/api/testPush/:pushId",
+							"host": [
+								"{{origin}}"
+							],
+							"path": [
+								"api",
+								"testPush",
+								":pushId"
+							],
+							"variable": [
+								{
+									"key": "pushId",
+									"value": "65f4c63662626b41e2e6434b"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Push",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"to\": \"64dcb747db730feec83a7a8c\",\r\n    \"title\": \"LOG4U\",    \r\n    \"subtitle\": \"Hello ✔\",\r\n    \"body\": \"Hello world\",\r\n    \"data\": {\"еrouteTo\": \"/home/loads\"},\r\n    \"badge\": 4\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{origin}}/api/testPush",
+							"host": [
+								"{{origin}}"
+							],
+							"path": [
+								"api",
+								"testPush"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Push",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"state\": \"Ready\",\r\n    \"title\": \"LOG4U\",    \r\n    \"subtitle\": \"Hello ✔\",\r\n    \"body\": \"Hello world\",\r\n    \"data\": {\"еrouteTo\": \"/home/loads\"},\r\n    \"badge\": 4\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{origin}}/api/testPush/:pushId",
+							"host": [
+								"{{origin}}"
+							],
+							"path": [
+								"api",
+								"testPush",
+								":pushId"
+							],
+							"variable": [
+								{
+									"key": "pushId",
+									"value": "65f4c63662626b41e2e6434b"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Push",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{origin}}/api/testPush/:pushId",
+							"host": [
+								"{{origin}}"
+							],
+							"path": [
+								"api",
+								"testPush",
+								":pushId"
+							],
+							"variable": [
+								{
+									"key": "pushId",
+									"value": "65f4c63662626b41e2e6434b"
 								}
 							]
 						}

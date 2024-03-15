@@ -1,9 +1,4 @@
-import {
-  EmailState,
-  EmailToType,
-  PaginatedResultDto,
-  Query,
-} from '../utils/general.dto';
+import { EmailState, PaginatedResultDto, Query } from '../utils/general.dto';
 import { PaginateResult } from 'mongoose';
 import { Email, To } from './email.schema';
 

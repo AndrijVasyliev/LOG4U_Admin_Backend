@@ -1,4 +1,6 @@
 import * as Joi from 'joi';
+import { MongoObjectIdValidation } from '../utils/idValidate.pipe';
+import { PUSH_STATES } from '../utils/constants';
 
 export const SendPushValidation = Joi.object({
   to: Joi.string().required(),
@@ -15,3 +17,50 @@ export const SendPushValidation = Joi.object({
   categoryId: Joi.string().optional(),
   mutableContent: Joi.boolean().optional(),
 });
+
+export const CreatePushValidation = Joi.object({
+  to: MongoObjectIdValidation.required(),
+  title: Joi.string().optional(),
+  subtitle: Joi.string().optional(),
+  body: Joi.string().optional(),
+  data: Joi.object().optional(),
+  badge: Joi.number().optional(),
+});
+
+export const UpdatePushValidation = Joi.object({
+  state: Joi.string()
+    .valid(...PUSH_STATES)
+    .optional(),
+  title: Joi.string().optional(),
+  subtitle: Joi.string().optional(),
+  body: Joi.string().optional(),
+  data: Joi.object().optional(),
+  badge: Joi.number().optional(),
+});
+
+export const PushQueryParamsSchema = Joi.object({
+  offset: Joi.number().integer().min(0).optional(),
+  limit: Joi.number().integer().min(1).optional(),
+  // search: Joi.string().optional(),
+  state: Joi.string()
+    .valid(...PUSH_STATES)
+    .optional(),
+  title: Joi.string().optional(),
+  subtitle: Joi.string().optional(),
+  body: Joi.string().optional(),
+  data: Joi.object().optional(),
+})
+  .keys({
+    orderby: Joi.string().valid(
+      'state',
+      'title',
+      'subtitle',
+      'body',
+      'data',
+      'badge',
+      'createdAt',
+      'updatedAt',
+    ),
+    direction: Joi.string().valid('asc', 'desc'),
+  })
+  .and('orderby', 'direction');

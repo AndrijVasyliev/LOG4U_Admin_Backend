@@ -54,6 +54,14 @@ export const MOBILE_ROLES = [
   'CoordinatorDriver',
 ] as const;
 export const USER_ROLES = [...ADMIN_ROLES, ...MOBILE_ROLES] as const;
+export const PUSH_STATES = [
+  'New',
+  'Ready',
+  'Processing',
+  'Sent for deliver',
+  'Sent to user',
+  'Error',
+] as const;
 export const EMAIL_STATES = [
   'New',
   'Ready',

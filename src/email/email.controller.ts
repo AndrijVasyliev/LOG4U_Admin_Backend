@@ -17,7 +17,6 @@ import {
   SendEmailDto,
   UpdateEmailDto,
 } from './email.dto';
-import { BodyValidationPipe } from '../utils/bodyValidate.pipe';
 import { EmailService } from './email.service';
 import {
   CreateEmailValidation,
@@ -27,6 +26,7 @@ import {
 } from './email.validation';
 import { Roles } from '../auth/auth.decorator';
 import { LoggerService } from '../logger';
+import { BodyValidationPipe } from '../utils/bodyValidate.pipe';
 import { QueryParamsPipe } from '../utils/queryParamsValidate.pipe';
 import { MongoObjectIdPipe } from '../utils/idValidate.pipe';
 

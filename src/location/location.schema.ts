@@ -137,4 +137,6 @@ export class Location {
 export const LocationSchema = SchemaFactory.createForClass(Location);
 
 LocationSchema.index({ zipCode: 1 }, { unique: true });
+LocationSchema.index({ name: 1 });
+LocationSchema.index({ stateCode: 1 });
 LocationSchema.index({ location: '2dsphere' });
