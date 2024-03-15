@@ -28,14 +28,9 @@ import {
   UNIQUE_CONSTRAIN_ERROR,
 } from '../utils/constants';
 import { escapeForRegExp } from '../utils/escapeForRegExp';
-import { Queue } from '../utils/queue';
+import { ChangeDocument, Queue } from '../utils/queue';
 
 const { MongoError } = mongo;
-
-type ChangeDocument = {
-  _id: { data: string };
-  documentKey: { _id: string };
-};
 
 @Injectable()
 export class EmailService implements OnApplicationBootstrap, OnModuleDestroy {
@@ -212,7 +207,7 @@ export class EmailService implements OnApplicationBootstrap, OnModuleDestroy {
     this.log.info(`Try to restart items, older then ${olderThenDate}`);
     const result = await this.emailModel.updateMany(
       { state: { $eq: 'Processing' }, updated_at: { $lte: olderThenDate } },
-      { $set: { state: 'New' } },
+      { $set: { state: 'Ready' } },
     );
     this.log.info(`Restarted ${result.modifiedCount}`);
     return;

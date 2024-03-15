@@ -1,6 +1,11 @@
 import { runWithId } from 'cls-rtracer';
 import { LoggerService } from '../logger';
 
+export type ChangeDocument = {
+  _id: { data: string };
+  documentKey: { _id: string };
+};
+
 class TimeoutError extends Error {}
 
 export class Queue<T> {

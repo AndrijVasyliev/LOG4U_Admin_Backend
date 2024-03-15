@@ -39,6 +39,9 @@ export class Push {
   @Prop({ required: false })
   badge?: number;
 
+  @Prop({ required: false, type: Object })
+  sendResult?: Record<string, any>;
+
   created_at: Date;
 
   updated_at: Date;

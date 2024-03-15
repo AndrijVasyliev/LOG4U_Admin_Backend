@@ -49,6 +49,7 @@ export class PushResultDto {
       body: push.body,
       data: push.data,
       badge: push.badge,
+      sendResult: push.sendResult,
     };
   }
 
@@ -60,6 +61,7 @@ export class PushResultDto {
   readonly body?: string;
   readonly data?: Record<string, any>;
   readonly badge?: number;
+  readonly sendResult?: Record<string, any>;
 }
 
 export class PaginatedPushResultDto extends PaginatedResultDto<PushResultDto> {

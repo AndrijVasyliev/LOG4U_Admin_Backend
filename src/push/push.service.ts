@@ -33,13 +33,16 @@ import {
   UNIQUE_CONSTRAIN_ERROR,
 } from '../utils/constants';
 import { escapeForRegExp } from '../utils/escapeForRegExp';
-import { Queue } from '../utils/queue';
+import { ChangeDocument, Queue } from '../utils/queue';
 
 const { MongoError } = mongo;
 
 @Injectable()
 export class PushService {
   private readonly expo?: Expo;
+  private readonly changeStream?: ChangeStream;
+  private queue?: Queue<ChangeDocument>;
+  private restartInterval: ReturnType<typeof setInterval>;
   constructor(
     @InjectModel(Push.name, MONGO_CONNECTION_NAME)
     private readonly pushModel: PaginateModel<PushDocument>,
@@ -48,6 +51,117 @@ export class PushService {
   ) {
     const accessToken = this.configService.get<string>('push.accessToken');
     this.expo = new Expo({ accessToken });
+    // ToDo remove next comments after mongoose update
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-expect-error
+    this.changeStream = pushModel.watch([
+      {
+        $match: {
+          operationType: 'update',
+          'updateDescription.updatedFields.state': 'Ready',
+        },
+      },
+      { $project: { 'documentKey._id': 1 } },
+    ]);
+  }
+
+  onApplicationBootstrap(): void {
+    this.log.debug('Creating queue');
+    const stream = this?.changeStream;
+    if (stream) {
+      this.queue = new Queue<ChangeDocument>(
+        async (): Promise<ChangeDocument> => {
+          if (!this.changeStream) {
+            throw new Error('No stream');
+          }
+          await this?.changeStream?.hasNext();
+          return this?.changeStream?.next() as unknown as Promise<ChangeDocument>;
+        },
+        this.onNewPush.bind(this),
+        this.configService.get<number>('pushQueue.maxParallelTasks') as number,
+        this.configService.get<number>('pushQueue.taskTimeout') as number,
+        this.log || console.log,
+      );
+    }
+    const interval = this.configService.get<number>(
+      'pushQueue.taskRestartInterval',
+    ) as number;
+    this.restartInterval = setInterval(() => {
+      this.restartOrphaned.bind(this)();
+    }, interval);
+  }
+
+  async onModuleDestroy(): Promise<void> {
+    this.log.debug('Stopping restart job');
+    clearInterval(this.restartInterval);
+    this.log.debug('Stopping queue');
+    await this?.queue?.stop();
+    this.log.debug('Closing change stream');
+    await this?.changeStream?.close();
+    this.log.debug('Push change stream is closed');
+  }
+
+  async onNewPush(change: ChangeDocument) {
+    this.log.info(`Change ${JSON.stringify(change)}`);
+    const push = await this.pushModel.findOneAndUpdate(
+      { _id: change.documentKey._id, state: 'Ready' },
+      {
+        state: 'Processing',
+      },
+    );
+    this.log.info(`Doc ${push?._id}`);
+    if (push) {
+      try {
+        if (!push.to.pushToken) {
+          throw new Error('No destination push token');
+        }
+        const sendPushResult = await this.sendPush({
+          to: push.to.pushToken,
+          data: push.data,
+          title: push.title,
+          subtitle: push.subtitle,
+          body: push.body,
+          badge: push.badge,
+          sound: 'default',
+          priority: 'default',
+        });
+        push.set('sendResult', sendPushResult[0]);
+        push.set('state', 'Sent for deliver');
+      } catch (error) {
+        push.set('sendResult', error);
+        push.set('state', 'Error');
+      }
+      try {
+        this.log.debug('Saving Push');
+        await push.save();
+        this.log.debug('Push updated');
+      } catch (error) {
+        if (error instanceof Error) {
+          this.log.error(`Error sending push ${change.documentKey._id}`, error);
+        } else {
+          this.log.error(`Error sending push ${JSON.stringify(error)}`);
+        }
+      }
+    }
+  }
+
+  private async restartOrphaned(): Promise<void> {
+    this.log.info('Restarting orphaned jobs');
+    const olderThenDate = new Date(
+      (Date.now() -
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-expect-error
+        this.configService.get<number>(
+          'pushQueue.restartTasksOlder',
+        )) as number,
+    );
+    this.log.info(`Try to restart items, older then ${olderThenDate}`);
+    const result = await this.pushModel.updateMany(
+      { state: { $eq: 'Processing' }, updated_at: { $lte: olderThenDate } },
+      { $set: { state: 'Ready' } },
+    );
+    this.log.info(`Restarted ${result.modifiedCount}`);
+    return;
   }
 
   async sendPush(push: ExpoPushMessage): Promise<ExpoPushTicket[]> {
