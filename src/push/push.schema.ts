@@ -42,6 +42,9 @@ export class Push {
   @Prop({ required: false, type: Object })
   sendResult?: Record<string, any>;
 
+  @Prop({ required: false, type: Object })
+  receiptResult?: Record<string, any>;
+
   created_at: Date;
 
   updated_at: Date;

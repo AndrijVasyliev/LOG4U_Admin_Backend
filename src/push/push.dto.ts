@@ -50,6 +50,7 @@ export class PushResultDto {
       data: push.data,
       badge: push.badge,
       sendResult: push.sendResult,
+      receiptResult: push.receiptResult,
     };
   }
 
@@ -62,6 +63,7 @@ export class PushResultDto {
   readonly data?: Record<string, any>;
   readonly badge?: number;
   readonly sendResult?: Record<string, any>;
+  readonly receiptResult?: Record<string, any>;
 }
 
 export class PaginatedPushResultDto extends PaginatedResultDto<PushResultDto> {

@@ -56,11 +56,15 @@ export const MOBILE_ROLES = [
 export const USER_ROLES = [...ADMIN_ROLES, ...MOBILE_ROLES] as const;
 export const PUSH_STATES = [
   'New',
-  'Ready',
-  'Processing',
+  'Ready for send',
+  'Processing send',
   'Sent for deliver',
+  'Error sending',
+  'Ready for receiving receipt',
+  'Processing receiving receipt',
   'Sent to user',
-  'Error',
+  'Error from receipt',
+  'Error receiving receipt',
 ] as const;
 export const EMAIL_STATES = [
   'New',

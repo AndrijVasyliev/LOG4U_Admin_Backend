@@ -42,6 +42,7 @@ export class PushService {
   private readonly expo?: Expo;
   private readonly changeStream?: ChangeStream;
   private queue?: Queue<ChangeDocument>;
+  private startReceiptInterval: ReturnType<typeof setInterval>;
   private restartInterval: ReturnType<typeof setInterval>;
   constructor(
     @InjectModel(Push.name, MONGO_CONNECTION_NAME)
@@ -58,10 +59,21 @@ export class PushService {
       {
         $match: {
           operationType: 'update',
-          'updateDescription.updatedFields.state': 'Ready',
+          $or: [
+            { 'updateDescription.updatedFields.state': 'Ready for send' },
+            {
+              'updateDescription.updatedFields.state':
+                'Ready for receiving receipt',
+            },
+          ],
         },
       },
-      { $project: { 'documentKey._id': 1 } },
+      {
+        $project: {
+          'documentKey._id': 1,
+          'updateDescription.updatedFields.state': 1,
+        },
+      },
     ]);
   }
 
@@ -77,21 +89,40 @@ export class PushService {
           await this?.changeStream?.hasNext();
           return this?.changeStream?.next() as unknown as Promise<ChangeDocument>;
         },
-        this.onNewPush.bind(this),
+        (change: ChangeDocument) => {
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // @ts-expect-error
+          switch (change?.updateDescription?.updatedFields?.state) {
+            case 'Ready for send':
+              return this.onNewPush.call(this, change);
+            case 'Ready for receiving receipt':
+              return this.onGetReceipt.call(this, change);
+            default:
+              return Promise.resolve(undefined);
+          }
+        },
         this.configService.get<number>('pushQueue.maxParallelTasks') as number,
         this.configService.get<number>('pushQueue.taskTimeout') as number,
         this.log || console.log,
       );
     }
-    const interval = this.configService.get<number>(
+    const startReceiptInterval = this.configService.get<number>(
+      'pushQueue.taskStartReceiptInterval',
+    ) as number;
+    const restartInterval = this.configService.get<number>(
       'pushQueue.taskRestartInterval',
     ) as number;
+    this.startReceiptInterval = setInterval(() => {
+      this.startReceivingReceipt.bind(this)();
+    }, startReceiptInterval);
     this.restartInterval = setInterval(() => {
       this.restartOrphaned.bind(this)();
-    }, interval);
+    }, restartInterval);
   }
 
   async onModuleDestroy(): Promise<void> {
+    this.log.debug('Stopping start receipt job');
+    clearInterval(this.startReceiptInterval);
     this.log.debug('Stopping restart job');
     clearInterval(this.restartInterval);
     this.log.debug('Stopping queue');
@@ -104,15 +135,15 @@ export class PushService {
   async onNewPush(change: ChangeDocument) {
     this.log.info(`Change ${JSON.stringify(change)}`);
     const push = await this.pushModel.findOneAndUpdate(
-      { _id: change.documentKey._id, state: 'Ready' },
+      { _id: change.documentKey._id, state: 'Ready for send' },
       {
-        state: 'Processing',
+        state: 'Processing send',
       },
     );
     this.log.info(`Doc ${push?._id}`);
     if (push) {
       try {
-        if (!push.to.pushToken) {
+        if (!push?.to?.pushToken) {
           throw new Error('No destination push token');
         }
         const sendPushResult = await this.sendPush({
@@ -129,7 +160,52 @@ export class PushService {
         push.set('state', 'Sent for deliver');
       } catch (error) {
         push.set('sendResult', error);
-        push.set('state', 'Error');
+        push.set('state', 'Error sending');
+      }
+      try {
+        this.log.debug('Saving Push');
+        await push.save();
+        this.log.debug('Push updated');
+      } catch (error) {
+        if (error instanceof Error) {
+          this.log.error(`Error sending push ${change.documentKey._id}`, error);
+        } else {
+          this.log.error(`Error sending push ${JSON.stringify(error)}`);
+        }
+      }
+    }
+  }
+
+  async onGetReceipt(change: ChangeDocument) {
+    this.log.info(`Change ${JSON.stringify(change)}`);
+    const push = await this.pushModel.findOneAndUpdate(
+      { _id: change.documentKey._id, state: 'Ready for receiving receipt' },
+      {
+        state: 'Processing receiving receipt',
+      },
+    );
+    this.log.info(`Doc ${push?._id}`);
+    if (push) {
+      try {
+        if (!push?.sendResult?.id) {
+          throw new Error('No receipt id in send result');
+        }
+        const receiptResult = (await this.getReceipt(push.sendResult.id))[
+          push.sendResult.id
+        ];
+        if (receiptResult) {
+          push.set('receiptResult', receiptResult);
+          if (receiptResult.status === 'ok') {
+            push.set('state', 'Sent to user');
+          } else {
+            push.set('state', 'Error from receipt');
+          }
+        } else {
+          throw new Error('No receipt');
+        }
+      } catch (error) {
+        push.set('sendResult', error);
+        push.set('state', 'Error receiving receipt');
       }
       try {
         this.log.debug('Saving Push');
@@ -157,10 +233,59 @@ export class PushService {
     );
     this.log.info(`Try to restart items, older then ${olderThenDate}`);
     const result = await this.pushModel.updateMany(
-      { state: { $eq: 'Processing' }, updated_at: { $lte: olderThenDate } },
-      { $set: { state: 'Ready' } },
+      {
+        $or: [
+          { state: { $eq: 'Processing send' } },
+          { state: { $eq: 'Processing receiving receipt' } },
+        ],
+        updated_at: { $lte: olderThenDate },
+      },
+      [
+        {
+          $set: {
+            state: {
+              $switch: {
+                branches: [
+                  {
+                    case: { $eq: ['$state', 'Processing send'] },
+                    then: 'Ready for send',
+                  },
+                  {
+                    case: { $eq: ['$state', 'Processing receiving receipt'] },
+                    then: 'Ready for receiving receipt',
+                  },
+                ],
+              },
+            },
+          },
+        },
+      ],
     );
     this.log.info(`Restarted ${result.modifiedCount}`);
+    return;
+  }
+
+  private async startReceivingReceipt(): Promise<void> {
+    this.log.info('Starting to receive receipts');
+    const olderThenDate = new Date(
+      (Date.now() -
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-expect-error
+        this.configService.get<number>(
+          'pushQueue.startReceiptForTasksOlder',
+        )) as number,
+    );
+    this.log.info(
+      `Try to start to receive receipts for items, older then ${olderThenDate}`,
+    );
+    const result = await this.pushModel.updateMany(
+      {
+        state: { $eq: 'Sent for deliver' },
+        updated_at: { $lte: olderThenDate },
+      },
+      { $set: { state: 'Ready for receiving receipt' } },
+    );
+    this.log.info(`Started ${result.modifiedCount}`);
     return;
   }
 

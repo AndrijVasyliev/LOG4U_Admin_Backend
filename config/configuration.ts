@@ -21,6 +21,8 @@ export default (): {
   pushQueue: {
     maxParallelTasks: number;
     taskTimeout: number;
+    taskStartReceiptInterval: number;
+    startReceiptForTasksOlder: number;
     taskRestartInterval: number;
     restartTasksOlder: number;
   };
@@ -98,11 +100,17 @@ export default (): {
   pushQueue: {
     maxParallelTasks: +(process.env.PUSH_QUEUE_MAX_PARALEL_TSAKS || 10),
     taskTimeout: +(process.env.PUSH_QUEUE_TASK_TIMEOUT || 1000 * 60 * 5),
+    taskStartReceiptInterval: +(
+      process.env.PUSH_QUEUE_TASK_RESTART_INTERVAL || 1000 * 60 * 20
+    ),
+    startReceiptForTasksOlder: +(
+      process.env.PUSH_QUEUE_RESTART_TASKS_OLDER || 1000 * 60 * 15
+    ),
     taskRestartInterval: +(
-      process.env.PUSH_QUEUE_TASK_RESTART_INTERVAL || 1000 * 60 * 7
+      process.env.PUSH_QUEUE_TASK_RESTART_INTERVAL || 1000 * 60 * 0.7
     ),
     restartTasksOlder: +(
-      process.env.PUSH_QUEUE_RESTART_TASKS_OLDER || 1000 * 60 * 6
+      process.env.PUSH_QUEUE_RESTART_TASKS_OLDER || 1000 * 60 * 0.6
     ),
   },
 });
