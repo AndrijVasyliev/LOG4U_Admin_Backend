@@ -107,10 +107,10 @@ export default (): {
       process.env.PUSH_QUEUE_RESTART_TASKS_OLDER || 1000 * 60 * 15
     ),
     taskRestartInterval: +(
-      process.env.PUSH_QUEUE_TASK_RESTART_INTERVAL || 1000 * 60 * 0.7
+      process.env.PUSH_QUEUE_TASK_RESTART_INTERVAL || 1000 * 60 * 7
     ),
     restartTasksOlder: +(
-      process.env.PUSH_QUEUE_RESTART_TASKS_OLDER || 1000 * 60 * 0.6
+      process.env.PUSH_QUEUE_RESTART_TASKS_OLDER || 1000 * 60 * 6
     ),
   },
 });

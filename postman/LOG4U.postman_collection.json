@@ -2831,7 +2831,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"state\": \"Ready\"\r\n}",
+							"raw": "{\r\n    \"state\": \"Ready\",\r\n    \"from\": \"Fred Foo 👻<test@@4u-logistics.com>\",\r\n    \"subject\": \"Hello11 ✔\",\r\n    \"text\": \"Hello world11? (plain)\",\r\n    \"html\": \"<b>Hello world11? (html)</b>\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -2999,22 +2999,22 @@
 								{
 									"key": "state",
 									"value": "New",
-									"description": "'New',  'Ready',  'Processing',  'Sent for deliver',  'Sent to user',  'Error'",
+									"description": "'New',  'Ready for send',  'Processing send',  'Sent for deliver',  'Error sending',  'Ready for receiving receipt',  'Processing receiving receipt',  'Sent to user',  'Error from receipt',  'Error receiving receipt'",
 									"disabled": true
 								},
 								{
 									"key": "title",
-									"value": null,
+									"value": "",
 									"disabled": true
 								},
 								{
 									"key": "subtitle",
-									"value": null,
+									"value": "",
 									"disabled": true
 								},
 								{
 									"key": "body",
-									"value": null,
+									"value": "",
 									"disabled": true
 								}
 							]
@@ -3093,7 +3093,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"state\": \"Ready\",\r\n    \"title\": \"LOG4U\",    \r\n    \"subtitle\": \"Hello ✔\",\r\n    \"body\": \"Hello world\",\r\n    \"data\": {\"еrouteTo\": \"/home/loads\"},\r\n    \"badge\": 4\r\n}",
+							"raw": "{\r\n    \"state\": \"Ready for send\",\r\n    \"title\": \"LOG4U\",    \r\n    \"subtitle\": \"Hello ✔\",\r\n    \"body\": \"Hello world\",\r\n    \"data\": {\"еrouteTo\": \"/home/loads\"},\r\n    \"badge\": 4\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -3113,7 +3113,7 @@
 							"variable": [
 								{
 									"key": "pushId",
-									"value": "65f4c63662626b41e2e6434b"
+									"value": "65f4d55cf8fa7ece76cf8e91"
 								}
 							]
 						}
