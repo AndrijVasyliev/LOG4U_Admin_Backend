@@ -162,7 +162,7 @@ export class MobileAppController {
 
   @Public()
   @Post('setTruckLocation')
-  @Roles('Driver', 'Owner', 'OwnerDriver', 'CoordinatorDriver')
+  // @Roles('Driver', /*'Owner',*/ 'OwnerDriver', 'CoordinatorDriver')
   async setTruckLocation(
     @Req() request: Request,
     @Body(new BodyValidationPipe(MobileUpdateTruckLocationValidation))
