@@ -2536,6 +2536,24 @@
 					"response": []
 				},
 				{
+					"name": "Get Owner",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{origin}}/mobileApp/owner",
+							"host": [
+								"{{origin}}"
+							],
+							"path": [
+								"mobileApp",
+								"owner"
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "List Loads",
 					"request": {
 						"method": "GET",

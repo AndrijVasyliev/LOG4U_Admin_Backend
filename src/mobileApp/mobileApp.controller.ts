@@ -20,10 +20,12 @@ import {
 } from './mobileApp.dto';
 import { PersonAuthResultDto } from '../person/person.dto';
 import { DriverResultDto } from '../driver/driver.dto';
+import { OwnerResultDto } from '../owner/owner.dto';
 import { PaginatedLoadResultDto } from '../load/load.dto';
 import { UpdateTruckDto } from '../truck/truck.dto';
 import { PersonService } from '../person/person.service';
 import { DriverService } from '../driver/driver.service';
+import { OwnerService } from '../owner/owner.service';
 import { LoadService } from '../load/load.service';
 import { TruckService } from '../truck/truck.service';
 import { QueryParamsPipe } from '../utils/queryParamsValidate.pipe';
@@ -43,6 +45,7 @@ export class MobileAppController {
     private readonly log: LoggerService,
     private readonly personService: PersonService,
     private readonly driverService: DriverService,
+    private readonly ownerService: OwnerService,
     private readonly loadService: LoadService,
     private readonly truckService: TruckService,
   ) {}
@@ -109,6 +112,15 @@ export class MobileAppController {
       user: PersonAuthResultDto;
     };
     return this.driverService.findDriverById(person.id);
+  }
+
+  @Get('owner')
+  @Roles('Owner', 'OwnerDriver')
+  async owner(@Req() request: Request): Promise<OwnerResultDto> {
+    const { user: person } = request as unknown as {
+      user: PersonAuthResultDto;
+    };
+    return this.ownerService.findOwnerById(person.id);
   }
 
   @Get('getLoad')
