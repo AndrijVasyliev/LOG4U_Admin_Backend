@@ -5,6 +5,7 @@ import { LangPriority, PersonType } from '../utils/general.dto';
 import { Owner } from '../owner/owner.schema';
 import { Truck } from '../truck/truck.schema';
 import { hash } from '../utils/hash';
+import { DriverSchema } from '../driver/driver.schema';
 
 export type CoordinatorDriverDocument = CoordinatorDriver & Document;
 
@@ -138,3 +139,4 @@ CoordinatorDriverSchema.virtual('driveTrucks', {
 });
 
 CoordinatorDriverSchema.index({ appLogin: 1 }, { unique: true, sparse: true });
+CoordinatorDriverSchema.index({ owner: 1 }, { sparse: true });

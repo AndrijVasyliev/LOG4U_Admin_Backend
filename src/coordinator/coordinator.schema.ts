@@ -4,6 +4,7 @@ import { LANG_PRIORITIES, OWNER_TYPES, PERSON_TYPES } from '../utils/constants';
 import { LangPriority, PersonType } from '../utils/general.dto';
 import { Owner } from '../owner/owner.schema';
 import { Truck } from '../truck/truck.schema';
+import { DriverSchema } from '../driver/driver.schema';
 
 export type CoordinatorDocument = Coordinator & Document;
 
@@ -100,3 +101,5 @@ CoordinatorSchema.virtual('coordinateTrucks', {
   localField: '_id',
   foreignField: 'coordinator',
 });
+
+CoordinatorSchema.index({ owner: 1 }, { sparse: true });

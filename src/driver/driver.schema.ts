@@ -118,3 +118,4 @@ DriverSchema.virtual('driveTrucks', {
 });
 
 DriverSchema.index({ appLogin: 1 }, { unique: true, sparse: true });
+DriverSchema.index({ owner: 1 }, { sparse: true });

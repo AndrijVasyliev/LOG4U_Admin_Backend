@@ -2594,7 +2594,7 @@
 					"response": []
 				},
 				{
-					"name": "Update Truck Status",
+					"name": "Update Truck Status (Old)",
 					"request": {
 						"method": "PATCH",
 						"header": [],
@@ -2615,6 +2615,40 @@
 							"path": [
 								"mobileApp",
 								"updateTruck"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Truck Status (For Driver and Owner)",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"status\":\"Will be available\",\r\n    \"availabilityLocation\":[38.97704,-77.03195],\r\n    \"availabilityAt\":\"2024-07-24T20:33:52.147Z\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{origin}}/mobileApp/updateTruck/:truckId",
+							"host": [
+								"{{origin}}"
+							],
+							"path": [
+								"mobileApp",
+								"updateTruck",
+								":truckId"
+							],
+							"variable": [
+								{
+									"key": "truckId",
+									"value": "651c73bf30377698b0990335"
+								}
 							]
 						}
 					},

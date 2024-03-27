@@ -7,7 +7,7 @@ import {
   Query,
   Patch,
   Post,
-  Body,
+  Body, Param,
 } from '@nestjs/common';
 import { Request } from 'express';
 import { LoggerService } from '../logger';
@@ -37,6 +37,7 @@ import {
   MobileAuthDataValidation,
 } from './mobileApp.validation';
 import { BodyValidationPipe } from '../utils/bodyValidate.pipe';
+import { MongoObjectIdPipe } from '../utils/idValidate.pipe';
 
 @Controller('mobileApp')
 // @Roles('Driver', 'Owner', 'OwnerDriver')
@@ -148,7 +149,7 @@ export class MobileAppController {
       ...loadQuery,
     });
   }
-
+  // ToDo remove after app update
   @Patch('updateTruck')
   @Roles('Driver', 'Owner', 'OwnerDriver', 'CoordinatorDriver')
   async updateTruck(
@@ -169,6 +170,29 @@ export class MobileAppController {
       driver.driveTrucks[0].id,
       updateTruckBodyDto,
     );
+    return updateTruckBodyDto;
+  }
+
+  @Patch('updateTruck/:truckId')
+  @Roles('Driver', 'Owner', 'OwnerDriver', 'CoordinatorDriver')
+  async updateTrucks(
+    @Req() request: Request,
+    @Param('truckId', MongoObjectIdPipe) truckId: string,
+    @Body(new BodyValidationPipe(MobileUpdateTruckValidation))
+    updateTruckBodyDto: UpdateTruckDto,
+  ): Promise<UpdateTruckDto> {
+    const { user: person } = request as unknown as {
+      user: PersonAuthResultDto;
+    };
+    const truck = await this.truckService.findTruckById(truckId);
+    if (truck?.driver?.id !== person.id && truck?.owner?.id !== person.id) {
+      throw new PreconditionFailedException(
+        `Person ${person.fullName} not a driver and not an owner of truck ${
+          truck?.truckNumber ? truck.truckNumber : truckId
+        }`,
+      );
+    }
+    await this.truckService.updateTruck(truckId, updateTruckBodyDto);
     return updateTruckBodyDto;
   }
 
