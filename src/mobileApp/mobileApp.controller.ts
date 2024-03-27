@@ -7,7 +7,8 @@ import {
   Query,
   Patch,
   Post,
-  Body, Param,
+  Body,
+  Param,
 } from '@nestjs/common';
 import { Request } from 'express';
 import { LoggerService } from '../logger';
@@ -82,12 +83,16 @@ export class MobileAppController {
       user: PersonAuthResultDto;
     };
     const { force, deviceId } = authDto;
-    if (force && person.deviceId === deviceId) {
-      throw new PreconditionFailedException('Logged from this device already');
-    } else if (!force && person.deviceId !== deviceId) {
-      throw new PreconditionFailedException('Logged from other device');
-    } else if (person.deviceId === deviceId) {
-      return person;
+    if (person.deviceId) {
+      if (force && person.deviceId === deviceId) {
+        throw new PreconditionFailedException(
+          'Logged from this device already',
+        );
+      } else if (!force && person.deviceId !== deviceId) {
+        throw new PreconditionFailedException('Logged from other device');
+      } else if (person.deviceId === deviceId) {
+        return person;
+      }
     }
     return await this.personService.setDeviceId(person.id, deviceId);
   }
