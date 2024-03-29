@@ -1,0 +1,11 @@
+<svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128">
+    <circle cx="64" cy="75" r="45" fill="none" stroke-width="10" style="stroke: currentcolor;"/>
+    <path d="M 96.94 40.17 C 96.94 23.36 82.19 9.73 64 9.73 C 45.81 9.73 31.06 23.36 31.06 40.17" style="paint-order: fill; stroke-width: 6px; stroke: currentcolor; fill: rgba(255, 255, 255, 0);"/>
+    <polyline points="39.98 19.5 37.64 5.17 50.61 14.17" style="stroke: currentcolor; stroke-width: 4px; fill: rgba(0, 0, 0, 0);"/>
+    <polyline points="87.05 19.5 89.39 5.17 76.42 14.17" style="stroke: currentcolor; stroke-width: 4px; fill: rgba(0, 0, 0, 0);"/>
+    <path d="M 29.27 108.3 C 28.05 113.07 26.83 117.84 25.62 122.61" style="stroke: currentcolor; paint-order: stroke; stroke-linecap: round; stroke-width: 4px;"/>
+    <path d="M 25.72 122.61 C 38.31 122.83 50.91 123.05 63.5 123.28" style="stroke: currentcolor; stroke-width: 4px; stroke-linecap: round;"/>
+    <path d="M 98.96 108.3 C 100.18 113.07 101.4 117.84 102.61 122.61" style="stroke-linecap: round; stroke-width: 4px; stroke: currentcolor; paint-order: stroke;"/>
+    <path d="M 102.5 122.61 C 88.91 122.85 76.32 123.07 64.72 123.28" style="stroke-linecap: round; stroke: currentcolor; stroke-width: 4px;"/>
+    <polyline points="63 39.5 63 79.5 79.91 93.83" style="stroke: currentcolor; stroke-width: 6px; paint-order: fill; stroke-linecap: round; fill: rgba(255, 255, 255, 0);"/>
+</svg>
