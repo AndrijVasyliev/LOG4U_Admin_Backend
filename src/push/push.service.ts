@@ -38,7 +38,7 @@ import { ChangeDocument, Queue } from '../utils/queue';
 const { MongoError } = mongo;
 
 @Injectable()
-export class PushService {
+export class PushService implements OnApplicationBootstrap, OnModuleDestroy {
   private readonly expo?: Expo;
   private readonly changeStream?: ChangeStream;
   private queue?: Queue<ChangeDocument>;
@@ -132,7 +132,7 @@ export class PushService {
     this.log.debug('Push change stream is closed');
   }
 
-  async onNewPush(change: ChangeDocument) {
+  private async onNewPush(change: ChangeDocument) {
     this.log.info(`Change ${JSON.stringify(change)}`);
     const push = await this.pushModel.findOneAndUpdate(
       { _id: change.documentKey._id, state: 'Ready for send' },
@@ -176,7 +176,7 @@ export class PushService {
     }
   }
 
-  async onGetReceipt(change: ChangeDocument) {
+  private async onGetReceipt(change: ChangeDocument) {
     this.log.info(`Change ${JSON.stringify(change)}`);
     const push = await this.pushModel.findOneAndUpdate(
       { _id: change.documentKey._id, state: 'Ready for receiving receipt' },

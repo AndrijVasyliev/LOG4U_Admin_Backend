@@ -1,8 +1,10 @@
 import {
   EMAIL_STATES,
   EMAIL_TO_TYPES,
+  FILE_OF_TYPES,
   LANG_PRIORITIES,
-  PERSON_TYPES, PUSH_STATES,
+  PERSON_TYPES,
+  PUSH_STATES,
   TRUCK_CERTIFICATES,
   TRUCK_CROSSBORDERS,
   TRUCK_EQUIPMENTS,
@@ -29,6 +31,7 @@ export type TruckEquipment = (typeof TRUCK_EQUIPMENTS)[number];
 export type PushState = (typeof PUSH_STATES)[number];
 export type EmailState = (typeof EMAIL_STATES)[number];
 export type EmailToType = (typeof EMAIL_TO_TYPES)[number];
+export type FileOfType = (typeof FILE_OF_TYPES)[number];
 
 export class Query<T> {
   readonly offset: number;

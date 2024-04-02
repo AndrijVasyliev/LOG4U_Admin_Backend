@@ -3209,6 +3209,175 @@
 			]
 		},
 		{
+			"name": "File",
+			"item": [
+				{
+					"name": "List Files",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{origin}}/api/file?limit=30&offset=0",
+							"host": [
+								"{{origin}}"
+							],
+							"path": [
+								"api",
+								"file"
+							],
+							"query": [
+								{
+									"key": "limit",
+									"value": "30"
+								},
+								{
+									"key": "offset",
+									"value": "0"
+								},
+								{
+									"key": "orderby",
+									"value": "filename",
+									"description": "'filename', 'createdAt'",
+									"disabled": true
+								},
+								{
+									"key": "direction",
+									"value": "asc",
+									"description": "asc or desc",
+									"disabled": true
+								},
+								{
+									"key": "filename",
+									"value": "image.svg",
+									"disabled": true
+								},
+								{
+									"key": "truck",
+									"value": "64d27f673413a42712c69645",
+									"disabled": true
+								},
+								{
+									"key": "person",
+									"value": "657e25869e04394b3780079c",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get File",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{origin}}/api/file/:fileId",
+							"host": [
+								"{{origin}}"
+							],
+							"path": [
+								"api",
+								"file",
+								":fileId"
+							],
+							"variable": [
+								{
+									"key": "fileId",
+									"value": "660c7879a5f4bea629741218"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Upload file",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"type": "file",
+									"src": "/C:/Users/Andrey/Downloads/image.svg"
+								},
+								{
+									"key": "linkedTo",
+									"value": "657e25869e04394b3780079c",
+									"type": "text"
+								},
+								{
+									"key": "fileOf",
+									"value": "Person",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{origin}}/api/file",
+							"host": [
+								"{{origin}}"
+							],
+							"path": [
+								"api",
+								"file"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete FIle",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{origin}}/api/file/:fileId",
+							"host": [
+								"{{origin}}"
+							],
+							"path": [
+								"api",
+								"file",
+								":fileId"
+							],
+							"variable": [
+								{
+									"key": "fileId",
+									"value": "660c7879a5f4bea629741218"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
 			"name": "Get Status",
 			"request": {
 				"auth": {

@@ -1,6 +1,6 @@
-import { EmailState, PaginatedResultDto, Query } from '../utils/general.dto';
 import { PaginateResult } from 'mongoose';
 import { Email, To } from './email.schema';
+import { EmailState, PaginatedResultDto, Query } from '../utils/general.dto';
 
 export class SendEmailDto {
   readonly from: string;

@@ -39,6 +39,7 @@ import { MobileAppController } from './mobileApp/mobileApp.controller';
 import { AuthModule } from './auth/auth.module';
 import { EmailModule } from './email/email.module';
 import { PushModule } from './push/push.module';
+import { FileModule } from './file/file.module';
 import { MONGO_CONNECTION_NAME } from './utils/constants';
 
 import { ChatModule } from './chat/chat.module';
@@ -112,6 +113,7 @@ import { ChatModule } from './chat/chat.module';
     MobileAppModule,
     EmailModule,
     PushModule,
+    FileModule,
     ChatModule,
   ],
 })

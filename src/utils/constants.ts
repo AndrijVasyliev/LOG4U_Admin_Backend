@@ -7,6 +7,7 @@ export const MONGO_CONNECTION_NAME = 'Mongo_Connection';
 export const DB_CHECK_TIMEOUT = 500;
 export const MONGO_UNIQUE_INDEX_CONFLICT = 11000;
 export const UNIQUE_CONSTRAIN_ERROR = 'Unique constrain error';
+export const MONGO_FILE_BUCKET_NAME = 'fs';
 // Validation
 export const PATHPARAM_VALIDATION_ERROR = 'Pathparam validation error';
 export const WS_MESSAGE_VALIDATION_ERROR = 'Message validation error';
@@ -74,6 +75,8 @@ export const EMAIL_STATES = [
   'Error',
 ] as const;
 export const EMAIL_TO_TYPES = ['User', 'Person'] as const;
+
+export const FILE_OF_TYPES = ['Truck', 'Person'] as const;
 
 export const TRUCK_TYPES = [
   'Cargo van',

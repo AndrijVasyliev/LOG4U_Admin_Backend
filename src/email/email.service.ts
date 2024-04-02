@@ -134,7 +134,7 @@ export class EmailService implements OnApplicationBootstrap, OnModuleDestroy {
     this.log.debug('Email change stream is closed');
   }
 
-  async onNewEmail(change: ChangeDocument) {
+  private async onNewEmail(change: ChangeDocument) {
     this.log.info(`Change ${JSON.stringify(change)}`);
     const email = await this.emailModel
       .findOneAndUpdate(
