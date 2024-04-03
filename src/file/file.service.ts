@@ -1,3 +1,4 @@
+import { Readable } from 'node:stream';
 import {
   connection,
   mongo,
@@ -15,7 +16,7 @@ import { InjectConnection, InjectModel } from '@nestjs/mongoose';
 import { ConfigService } from '@nestjs/config';
 import { File, FileDocument } from './file.schema';
 import {
-  CreateFileDto,
+  CreateFileDto, DownloadFileResultDto,
   FileQuery,
   FileResultDto,
   PaginatedFileResultDto,
@@ -29,7 +30,12 @@ import {
 } from '../utils/constants';
 import { escapeForRegExp } from '../utils/escapeForRegExp';
 
-const { GridFSBucket, GridFSBucketWriteStream, MongoError } = mongo;
+const {
+  GridFSBucket,
+  GridFSBucketWriteStream,
+  GridFSBucketReadStream,
+  MongoError,
+} = mongo;
 
 @Injectable()
 export class FileService {
@@ -167,6 +173,16 @@ export class FileService {
     const res = await this.fileModel.paginate(documentQuery, options);
 
     return PaginatedFileResultDto.from(res);
+  }
+
+  async getFileStreamById(fileId: string): Promise<DownloadFileResultDto> {
+    this.log.debug(`Getting file stream by id: ${fileId}`);
+    const fileDocument = await this.findFileDocumentById(fileId);
+    const fileStream = this.fs.openDownloadStream(new Types.ObjectId(fileId));
+    return DownloadFileResultDto.fromFileModelAndStream(
+      fileDocument,
+      fileStream,
+    );
   }
 
   async createFile(

@@ -1,6 +1,8 @@
 import {
   Controller,
   Get,
+  StreamableFile,
+  Res,
   Param,
   Query,
   Body,
@@ -10,6 +12,7 @@ import {
   UploadedFile,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { Response } from 'express';
 import {
   CreateFileDto,
   FileQuery,
@@ -46,6 +49,19 @@ export class FileController {
     @Param('fileId', MongoObjectIdPipe) fileId: string,
   ): Promise<FileResultDto> {
     return this.fileService.findFileById(fileId);
+  }
+
+  @Get(':fileId/download')
+  async downloadFile(
+    @Param('fileId', MongoObjectIdPipe) fileId: string,
+    @Res({ passthrough: true }) res: Response,
+  ): Promise<StreamableFile> {
+    const file = await this.fileService.getFileStreamById(fileId);
+    res.set({
+      'Content-Type': file.contentType,
+      'Content-Disposition': `attachment; filename="${file.filename}"`,
+    });
+    return new StreamableFile(file.stream);
   }
 
   @Post()

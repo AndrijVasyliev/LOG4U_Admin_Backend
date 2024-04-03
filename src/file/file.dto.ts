@@ -1,3 +1,4 @@
+import { Readable } from 'node:stream';
 import { PaginateResult } from 'mongoose';
 import { File } from './file.schema';
 import { FileOfType, PaginatedResultDto, Query } from '../utils/general.dto';
@@ -29,6 +30,21 @@ export class FileResultDto {
   readonly filename: string;
   readonly contentType: string;
   readonly contentLength: number;
+}
+
+export class DownloadFileResultDto extends FileResultDto {
+  static fromFileModelAndStream(
+    file: File,
+    stream: Readable,
+  ): DownloadFileResultDto {
+    const fileDto = super.fromFileModel(file);
+    return {
+      ...fileDto,
+      stream,
+    };
+  }
+
+  readonly stream: Readable;
 }
 
 export class PaginatedFileResultDto extends PaginatedResultDto<FileResultDto> {

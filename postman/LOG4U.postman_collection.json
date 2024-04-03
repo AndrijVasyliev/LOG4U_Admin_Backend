@@ -3304,6 +3304,44 @@
 					"response": []
 				},
 				{
+					"name": "Download File",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{origin}}/api/file/:fileId/download",
+							"host": [
+								"{{origin}}"
+							],
+							"path": [
+								"api",
+								"file",
+								":fileId",
+								"download"
+							],
+							"variable": [
+								{
+									"key": "fileId",
+									"value": "660c800b779419ff4c618756"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "Upload file",
 					"request": {
 						"method": "POST",
