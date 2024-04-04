@@ -4,7 +4,7 @@ import { LANG_PRIORITIES, OWNER_TYPES, PERSON_TYPES } from '../utils/constants';
 import { LangPriority, PersonType } from '../utils/general.dto';
 import { Owner } from '../owner/owner.schema';
 import { Truck } from '../truck/truck.schema';
-import { DriverSchema } from '../driver/driver.schema';
+import { hash } from '../utils/hash';
 
 export type CoordinatorDocument = Coordinator & Document;
 
@@ -77,6 +77,15 @@ export class Coordinator {
   @Prop({ required: false })
   notes?: string;
 
+  @Prop({ required: false })
+  appLogin?: string;
+
+  @Prop({
+    required: false,
+    set: hash,
+  })
+  appPass?: string;
+
   @Prop({
     required: true,
     type: MongooseSchema.Types.ObjectId,
@@ -102,4 +111,5 @@ CoordinatorSchema.virtual('coordinateTrucks', {
   foreignField: 'coordinator',
 });
 
+CoordinatorSchema.index({ appLogin: 1 }, { unique: true, sparse: true });
 CoordinatorSchema.index({ owner: 1 }, { sparse: true });

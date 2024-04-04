@@ -74,6 +74,7 @@ export const CoordinatorQueryParamsSchema = Joi.object({
   emergencyContactName: Joi.string().optional(),
   emergencyContactRel: Joi.string().optional(),
   emergencyContactPhone: Joi.string().optional(),
+  appLogin: Joi.string().optional(),
   truckNumber: Joi.number().optional(),
   owner: Joi.string().optional(),
 })
