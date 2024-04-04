@@ -1,4 +1,3 @@
-import { Readable } from 'node:stream';
 import {
   connection,
   mongo,
@@ -16,7 +15,8 @@ import { InjectConnection, InjectModel } from '@nestjs/mongoose';
 import { ConfigService } from '@nestjs/config';
 import { File, FileDocument } from './file.schema';
 import {
-  CreateFileDto, DownloadFileResultDto,
+  CreateFileDto,
+  DownloadFileResultDto,
   FileQuery,
   FileResultDto,
   PaginatedFileResultDto,
@@ -33,7 +33,7 @@ import { escapeForRegExp } from '../utils/escapeForRegExp';
 const {
   GridFSBucket,
   GridFSBucketWriteStream,
-  GridFSBucketReadStream,
+  // GridFSBucketReadStream,
   MongoError,
 } = mongo;
 

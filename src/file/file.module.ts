@@ -1,4 +1,5 @@
 import { Module } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
 import { MulterModule } from '@nestjs/platform-express';
 import { FileController } from './file.controller';
@@ -14,10 +15,17 @@ import { MONGO_CONNECTION_NAME } from '../utils/constants';
     ),
     MulterModule.registerAsync({
       imports: [FileModule],
-      useFactory: async (fileService: FileService) => {
-        return { storage: fileService };
+      useFactory: async (
+        fileService: FileService,
+        configService: ConfigService,
+      ) => {
+        const maxFileSize = configService.get<number>('file.maxFileSize');
+        return {
+          storage: fileService,
+          limits: { fileSize: maxFileSize },
+        };
       },
-      inject: [FileService],
+      inject: [FileService, ConfigService],
     }),
   ],
   exports: [FileService],

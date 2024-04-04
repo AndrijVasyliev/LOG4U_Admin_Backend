@@ -23,6 +23,8 @@ export const CreateCoordinatorValidation = Joi.object({
   emergencyContactRel: Joi.string().allow('').optional(),
   emergencyContactPhone: Joi.string().allow('').optional(),
   notes: Joi.string().allow('').optional(),
+  appLogin: Joi.string().allow('').optional(),
+  appPass: Joi.string().allow('').optional(),
   owner: MongoObjectIdValidation.required(),
 });
 
@@ -47,6 +49,8 @@ export const UpdateCoordinatorValidation = Joi.object({
   emergencyContactRel: Joi.string().allow('').optional(),
   emergencyContactPhone: Joi.string().allow('').optional(),
   notes: Joi.string().allow('').optional(),
+  appLogin: Joi.string().allow('').optional(),
+  appPass: Joi.string().allow('').optional(),
   owner: MongoObjectIdValidation.optional(),
 });
 

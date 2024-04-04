@@ -26,6 +26,7 @@ export default (): {
     taskRestartInterval: number;
     restartTasksOlder: number;
   };
+  file: { maxFileSize: number };
 } => ({
   app: {
     port: +(process.env.PORT || 8181),
@@ -113,4 +114,5 @@ export default (): {
       process.env.PUSH_QUEUE_RESTART_TASKS_OLDER || 1000 * 60 * 6
     ),
   },
+  file: { maxFileSize: +(process.env.FILE_MAX_SIZE || Infinity) },
 });
