@@ -22,11 +22,13 @@ import {
 import { PersonAuthResultDto } from '../person/person.dto';
 import { DriverResultDto } from '../driver/driver.dto';
 import { OwnerResultDto } from '../owner/owner.dto';
+import { CoordinatorResultDto } from '../coordinator/coordinator.dto';
 import { PaginatedLoadResultDto } from '../load/load.dto';
 import { UpdateTruckDto } from '../truck/truck.dto';
 import { PersonService } from '../person/person.service';
 import { DriverService } from '../driver/driver.service';
 import { OwnerService } from '../owner/owner.service';
+import { CoordinatorService } from '../coordinator/coordinator.service';
 import { LoadService } from '../load/load.service';
 import { TruckService } from '../truck/truck.service';
 import { QueryParamsPipe } from '../utils/queryParamsValidate.pipe';
@@ -48,12 +50,13 @@ export class MobileAppController {
     private readonly personService: PersonService,
     private readonly driverService: DriverService,
     private readonly ownerService: OwnerService,
+    private readonly coordinatorService: CoordinatorService,
     private readonly loadService: LoadService,
     private readonly truckService: TruckService,
   ) {}
   // ToDo remove after switching to new auth schema
   @Patch('auth')
-  @Roles('Driver', 'Owner', 'OwnerDriver', 'CoordinatorDriver')
+  @Roles('Driver', 'Owner', 'OwnerDriver', 'Coordinator', 'CoordinatorDriver')
   async auth(
     @Req() request: Request,
     @Body(new BodyValidationPipe(MobileAuthValidation))
@@ -73,7 +76,7 @@ export class MobileAppController {
   }
 
   @Patch('setAuth')
-  @Roles('Driver', 'Owner', 'OwnerDriver', 'CoordinatorDriver')
+  @Roles('Driver', 'Owner', 'OwnerDriver', 'Coordinator', 'CoordinatorDriver')
   async setAuth(
     @Req() request: Request,
     @Body(new BodyValidationPipe(MobileAuthValidation))
@@ -98,7 +101,7 @@ export class MobileAppController {
   }
 
   @Patch('setAppData')
-  @Roles('Driver', 'Owner', 'OwnerDriver', 'CoordinatorDriver')
+  @Roles('Driver', 'Owner', 'OwnerDriver', 'Coordinator', 'CoordinatorDriver')
   async setAppData(
     @Req() request: Request,
     @Body(new BodyValidationPipe(MobileAuthDataValidation))
@@ -127,6 +130,15 @@ export class MobileAppController {
       user: PersonAuthResultDto;
     };
     return this.ownerService.findOwnerById(person.id);
+  }
+
+  @Get('coordinator')
+  @Roles('Coordinator', 'CoordinatorDriver')
+  async coordinator(@Req() request: Request): Promise<CoordinatorResultDto> {
+    const { user: person } = request as unknown as {
+      user: PersonAuthResultDto;
+    };
+    return this.coordinatorService.findCoordinatorById(person.id);
   }
 
   @Get('getLoad')

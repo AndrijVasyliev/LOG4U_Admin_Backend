@@ -2554,6 +2554,24 @@
 					"response": []
 				},
 				{
+					"name": "Get Coordinator",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{origin}}/mobileApp/coordinator",
+							"host": [
+								"{{origin}}"
+							],
+							"path": [
+								"mobileApp",
+								"coordinator"
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "List Loads",
 					"request": {
 						"method": "GET",
@@ -3334,7 +3352,7 @@
 							"variable": [
 								{
 									"key": "fileId",
-									"value": "660c800b779419ff4c618756"
+									"value": "660c885b1dc66f093ba7c3db"
 								}
 							]
 						}

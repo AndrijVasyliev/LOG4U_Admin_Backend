@@ -52,6 +52,7 @@ export const MOBILE_ROLES = [
   'Driver',
   'Owner',
   'OwnerDriver',
+  'Coordinator',
   'CoordinatorDriver',
 ] as const;
 export const USER_ROLES = [...ADMIN_ROLES, ...MOBILE_ROLES] as const;
