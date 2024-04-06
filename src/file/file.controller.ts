@@ -26,10 +26,19 @@ import { LoggerService } from '../logger';
 import { CreateFileValidation, FileQueryParamsSchema } from './file.validation';
 import { MongoObjectIdPipe } from '../utils/idValidate.pipe';
 import { QueryParamsPipe } from '../utils/queryParamsValidate.pipe';
-import { Roles } from '../auth/auth.decorator';
+import { Public, Roles } from '../auth/auth.decorator';
 
-@Controller('file')
-@Roles('Admin', 'Super Admin')
+@Controller(['file', 'mobileApp/file'])
+/*@Roles(
+  'Admin',
+  'Super Admin',
+  'Driver',
+  'Owner',
+  'OwnerDriver',
+  'Coordinator',
+  'CoordinatorDriver',
+)*/
+@Public()
 export class FileController {
   constructor(
     private readonly log: LoggerService,

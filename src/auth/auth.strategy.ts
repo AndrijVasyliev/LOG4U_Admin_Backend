@@ -23,13 +23,13 @@ export class AdminAuthBasicStrategy extends PassportStrategy(
     super();
   }
 
-  public validate = async (
+  public async validate(
     username: string,
     password: string,
-  ): Promise<UserResultDto | null> => {
+  ): Promise<UserResultDto | null> {
     this.log.debug('In Admin Basic Auth strategy');
     return this.userService.getUserByCredentials(username, password);
-  };
+  }
 }
 
 @Injectable()
@@ -44,11 +44,11 @@ export class MobileAuthBasicStrategy extends PassportStrategy(
     super();
   }
 
-  public validate = async (
+  public async validate(
     username: string,
     password: string,
-  ): Promise<PersonAuthResultDto | null> => {
+  ): Promise<PersonAuthResultDto | null> {
     this.log.debug('In Mobile Basic Auth strategy');
     return await this.personService.getPersonByCredentials(username, password);
-  };
+  }
 }

@@ -31,6 +31,7 @@ import { OwnerService } from '../owner/owner.service';
 import { CoordinatorService } from '../coordinator/coordinator.service';
 import { LoadService } from '../load/load.service';
 import { TruckService } from '../truck/truck.service';
+import { FileService } from '../file/file.service';
 import { QueryParamsPipe } from '../utils/queryParamsValidate.pipe';
 import {
   MobileAuthValidation,
@@ -53,6 +54,7 @@ export class MobileAppController {
     private readonly coordinatorService: CoordinatorService,
     private readonly loadService: LoadService,
     private readonly truckService: TruckService,
+    private readonly fileService: FileService,
   ) {}
   // ToDo remove after switching to new auth schema
   @Patch('auth')
@@ -201,6 +203,7 @@ export class MobileAppController {
     const { user: person } = request as unknown as {
       user: PersonAuthResultDto;
     };
+    // ToDo move to auth guard
     const truck = await this.truckService.findTruckById(truckId);
     if (truck?.driver?.id !== person.id && truck?.owner?.id !== person.id) {
       throw new PreconditionFailedException(

@@ -18,7 +18,6 @@ import { join } from 'path';
 
 import configuration from '../config/configuration';
 
-import { MetricsController } from './metrics/metrics.controller';
 import { HealthModule } from './health/health.module';
 import { LoggerModule, LogLevel, LogFormat } from './logger';
 import { ResponseTimeMiddleware } from './utils/responseTime.middleware';
@@ -35,11 +34,28 @@ import { LoadModule } from './load/load.module';
 import { TruckModule } from './truck/truck.module';
 import { GoogleGeoApiModule } from './googleGeoApi/googleGeoApi.module';
 import { MobileAppModule } from './mobileApp/mobileApp.module';
-import { MobileAppController } from './mobileApp/mobileApp.controller';
 import { AuthModule } from './auth/auth.module';
 import { EmailModule } from './email/email.module';
 import { PushModule } from './push/push.module';
 import { FileModule } from './file/file.module';
+
+import { CoordinatorController } from './coordinator/coordinator.controller';
+import { CoordinatorDriverController } from './coordinatorDriver/coordinatorDriver.controller';
+import { DriverController } from './driver/driver.controller';
+import { EmailController } from './email/email.controller';
+import { FileController } from './file/file.controller';
+import { HealthController } from './health/health.controller';
+import { LoadController } from './load/load.controller';
+import { LocationController } from './location/location.controller';
+import { MetricsController } from './metrics/metrics.controller';
+import { MobileAppController } from './mobileApp/mobileApp.controller';
+import { OwnerController } from './owner/owner.controller';
+import { OwnerDriverController } from './ownerDriver/ownerDriver.controller';
+import { PersonController } from './person/person.controller';
+import { PushController } from './push/push.controller';
+import { TruckController } from './truck/truck.controller';
+import { UserController } from './user/user.controller';
+
 import { MONGO_CONNECTION_NAME } from './utils/constants';
 
 import { ChatModule } from './chat/chat.module';
@@ -56,9 +72,25 @@ import { ChatModule } from './chat/chat.module';
           requestIdFieldName:
             config.get<string>('log.requestIdFieldName') || 'requestId',
           forRoutes: [
-            { path: '*', method: RequestMethod.ALL },
+            // { path: '*', method: RequestMethod.ALL },
+            CoordinatorController,
+            CoordinatorDriverController,
+            DriverController,
+            EmailController,
+            FileController,
+            HealthController,
+            LoadController,
+            MetricsController,
+            LocationController,
             MobileAppController,
+            OwnerController,
+            OwnerDriverController,
+            PersonController,
+            PushController,
+            TruckController,
+            UserController,
           ],
+          // exclude: ['file*'],
         };
       },
       inject: [ConfigService],
@@ -119,8 +151,24 @@ import { ChatModule } from './chat/chat.module';
 })
 export class AppModule implements NestModule {
   public configure(consumer: MiddlewareConsumer) {
-    consumer
-      .apply(ResponseTimeMiddleware)
-      .forRoutes({ path: '*', method: RequestMethod.ALL }, MobileAppController);
+    consumer.apply(ResponseTimeMiddleware).forRoutes(
+      // { path: '*', method: RequestMethod.ALL },
+      CoordinatorController,
+      CoordinatorDriverController,
+      DriverController,
+      EmailController,
+      FileController,
+      HealthController,
+      LoadController,
+      MetricsController,
+      LocationController,
+      MobileAppController,
+      OwnerController,
+      OwnerDriverController,
+      PersonController,
+      PushController,
+      TruckController,
+      UserController,
+    );
   }
 }
