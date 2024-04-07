@@ -33,15 +33,13 @@ import { escapeForRegExp } from '../utils/escapeForRegExp';
 const {
   GridFSBucket,
   GridFSBucketWriteStream,
-  // GridFSBucketReadStream,
+  GridFSBucketReadStream,
   MongoError,
 } = mongo;
 
 @Injectable()
 export class FileService {
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  //@ts-expect-error
-  private readonly fs: GridFSBucket;
+  private readonly fs: InstanceType<typeof GridFSBucket>;
   constructor(
     @InjectModel(File.name, MONGO_CONNECTION_NAME)
     private readonly fileModel: PaginateModel<FileDocument>,
@@ -62,14 +60,10 @@ export class FileService {
   ) {
     this.log.debug(`Creating new File: ${file.originalname}`);
     try {
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      //@ts-expect-error
-      const ws: GridFSBucketWriteStream = this.fs.openUploadStream(
-        file.originalname,
-        {
+      const ws: InstanceType<typeof GridFSBucketWriteStream> =
+        this.fs.openUploadStream(file.originalname, {
           metadata: { contentType: file.mimetype },
-        },
-      );
+        });
       this.log.debug(`File is created: ${ws.id.toString()}`);
       file.stream.pipe(ws);
       ws.on('error', cb);
@@ -178,7 +172,8 @@ export class FileService {
   async getFileStreamById(fileId: string): Promise<DownloadFileResultDto> {
     this.log.debug(`Getting file stream by id: ${fileId}`);
     const fileDocument = await this.findFileDocumentById(fileId);
-    const fileStream = this.fs.openDownloadStream(new Types.ObjectId(fileId));
+    const fileStream: InstanceType<typeof GridFSBucketReadStream> =
+      this.fs.openDownloadStream(new Types.ObjectId(fileId));
     return DownloadFileResultDto.fromFileModelAndStream(
       fileDocument,
       fileStream,

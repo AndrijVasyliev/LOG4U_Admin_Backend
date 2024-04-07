@@ -6,7 +6,6 @@ import {
   ExpoPushTicket,
 } from 'expo-server-sdk';
 import { mongo, PaginateModel, PaginateOptions } from 'mongoose';
-import { ChangeStream } from 'mongodb';
 import {
   OnApplicationBootstrap,
   OnModuleDestroy,
@@ -35,12 +34,12 @@ import {
 import { escapeForRegExp } from '../utils/escapeForRegExp';
 import { ChangeDocument, Queue } from '../utils/queue';
 
-const { MongoError } = mongo;
+const { MongoError, ChangeStream } = mongo;
 
 @Injectable()
 export class PushService implements OnApplicationBootstrap, OnModuleDestroy {
   private readonly expo?: Expo;
-  private readonly changeStream?: ChangeStream;
+  private readonly changeStream?: InstanceType<typeof ChangeStream>;
   private queue?: Queue<ChangeDocument>;
   private startReceiptInterval: ReturnType<typeof setInterval>;
   private restartInterval: ReturnType<typeof setInterval>;
@@ -52,9 +51,6 @@ export class PushService implements OnApplicationBootstrap, OnModuleDestroy {
   ) {
     const accessToken = this.configService.get<string>('push.accessToken');
     this.expo = new Expo({ accessToken });
-    // ToDo remove next comments after mongoose update
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-expect-error
     this.changeStream = pushModel.watch([
       {
         $match: {

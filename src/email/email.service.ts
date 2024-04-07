@@ -1,6 +1,5 @@
 import { Transporter, createTransport } from 'nodemailer';
 import { mongo, PaginateModel, PaginateOptions } from 'mongoose';
-import { ChangeStream } from 'mongodb';
 import {
   OnApplicationBootstrap,
   OnModuleDestroy,
@@ -30,12 +29,12 @@ import {
 import { escapeForRegExp } from '../utils/escapeForRegExp';
 import { ChangeDocument, Queue } from '../utils/queue';
 
-const { MongoError } = mongo;
+const { MongoError, ChangeStream } = mongo;
 
 @Injectable()
 export class EmailService implements OnApplicationBootstrap, OnModuleDestroy {
   private readonly transporter?: Transporter;
-  private readonly changeStream?: ChangeStream;
+  private readonly changeStream?: InstanceType<typeof ChangeStream>;
   private queue?: Queue<ChangeDocument>;
   private restartInterval: ReturnType<typeof setInterval>;
   constructor(
@@ -84,9 +83,6 @@ export class EmailService implements OnApplicationBootstrap, OnModuleDestroy {
     };
 
     this.transporter = createTransport(options);
-    // ToDo remove next comments after mongoose update
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-expect-error
     this.changeStream = emailModel.watch([
       {
         $match: {
