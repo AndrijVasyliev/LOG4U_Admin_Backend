@@ -1,4 +1,7 @@
 import { PersonType } from './general.dto';
+
+export const API_PATH_PREFIX = 'api';
+export const MOBILE_PATH_PREFIX = 'mobileApp';
 // Health
 export const HEALTH_MEMORY_HEAP_LIMIT = 150 * 1024 * 1024;
 export const HEALTH_MEMORY_RSS_LIMIT = 250 * 1024 * 1024;

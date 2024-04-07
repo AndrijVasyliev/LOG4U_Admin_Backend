@@ -26,10 +26,11 @@ import { LoggerService } from '../logger';
 import { CreateFileValidation, FileQueryParamsSchema } from './file.validation';
 import { MongoObjectIdPipe } from '../utils/idValidate.pipe';
 import { QueryParamsPipe } from '../utils/queryParamsValidate.pipe';
-import { Public, Roles } from '../auth/auth.decorator';
+import { Roles } from '../auth/auth.decorator';
+import { MOBILE_PATH_PREFIX } from '../utils/constants';
 
-@Controller(['file', 'mobileApp/file'])
-/*@Roles(
+@Controller(['file', `${MOBILE_PATH_PREFIX}/file`])
+@Roles(
   'Admin',
   'Super Admin',
   'Driver',
@@ -37,8 +38,7 @@ import { Public, Roles } from '../auth/auth.decorator';
   'OwnerDriver',
   'Coordinator',
   'CoordinatorDriver',
-)*/
-@Public()
+)
 export class FileController {
   constructor(
     private readonly log: LoggerService,

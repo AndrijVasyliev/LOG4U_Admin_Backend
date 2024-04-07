@@ -42,9 +42,9 @@ import {
 } from './mobileApp.validation';
 import { BodyValidationPipe } from '../utils/bodyValidate.pipe';
 import { MongoObjectIdPipe } from '../utils/idValidate.pipe';
+import { MOBILE_PATH_PREFIX } from '../utils/constants';
 
-@Controller('mobileApp')
-// @Roles('Driver', 'Owner', 'OwnerDriver')
+@Controller(`${MOBILE_PATH_PREFIX}`)
 export class MobileAppController {
   constructor(
     private readonly log: LoggerService,

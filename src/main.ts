@@ -5,6 +5,7 @@ import helmet from 'helmet';
 import * as compression from 'compression';
 import { AppModule } from './app.module';
 import { LoggerService, NestLoggerService } from './logger';
+import { API_PATH_PREFIX, MOBILE_PATH_PREFIX } from './utils/constants';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
@@ -50,9 +51,9 @@ async function bootstrap() {
   );
   app.use(compression());
   app.enableShutdownHooks();
-  app.setGlobalPrefix('api', {
+  app.setGlobalPrefix(API_PATH_PREFIX, {
     exclude: [
-      { path: 'mobileApp/(.*)', method: RequestMethod.ALL },
+      { path: `${MOBILE_PATH_PREFIX}/(.*)`, method: RequestMethod.ALL },
       'metrics',
       'status',
       'health',

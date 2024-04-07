@@ -2701,6 +2701,208 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "List Files",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{origin}}/mobileApp/file?limit=30&offset=0",
+							"host": [
+								"{{origin}}"
+							],
+							"path": [
+								"mobileApp",
+								"file"
+							],
+							"query": [
+								{
+									"key": "limit",
+									"value": "30"
+								},
+								{
+									"key": "offset",
+									"value": "0"
+								},
+								{
+									"key": "orderby",
+									"value": "filename",
+									"description": "'filename', 'createdAt'",
+									"disabled": true
+								},
+								{
+									"key": "direction",
+									"value": "asc",
+									"description": "asc or desc",
+									"disabled": true
+								},
+								{
+									"key": "filename",
+									"value": "image.svg",
+									"disabled": true
+								},
+								{
+									"key": "truck",
+									"value": "64d27f673413a42712c69645",
+									"disabled": true
+								},
+								{
+									"key": "person",
+									"value": "657e25869e04394b3780079c",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get File",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{origin}}/mobileApp/file/:fileId",
+							"host": [
+								"{{origin}}"
+							],
+							"path": [
+								"mobileApp",
+								"file",
+								":fileId"
+							],
+							"variable": [
+								{
+									"key": "fileId",
+									"value": "6612cb0e49188f67c6dac9ce"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Download File",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{origin}}/mobileApp/file/:fileId/download",
+							"host": [
+								"{{origin}}"
+							],
+							"path": [
+								"mobileApp",
+								"file",
+								":fileId",
+								"download"
+							],
+							"variable": [
+								{
+									"key": "fileId",
+									"value": "6612cb0e49188f67c6dac9ce"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Upload file",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"type": "file",
+									"src": "/C:/Users/Andrey/Documents/LOG/LOG4U_Admin_Backend/postman/LOG4U.postman_collection.json"
+								},
+								{
+									"key": "linkedTo",
+									"value": "657e25869e04394b3780079c",
+									"type": "text"
+								},
+								{
+									"key": "fileOf",
+									"value": "Person",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{origin}}/mobileApp/file",
+							"host": [
+								"{{origin}}"
+							],
+							"path": [
+								"mobileApp",
+								"file"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete FIle",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{origin}}/mobileApp/file/:fileId",
+							"host": [
+								"{{origin}}"
+							],
+							"path": [
+								"mobileApp",
+								"file",
+								":fileId"
+							],
+							"variable": [
+								{
+									"key": "fileId",
+									"value": "6612cb0e49188f67c6dac9ce"
+								}
+							]
+						}
+					},
+					"response": []
 				}
 			],
 			"auth": {
@@ -3370,7 +3572,7 @@
 								{
 									"key": "file",
 									"type": "file",
-									"src": "/C:/Users/Andrey/Downloads/image.svg"
+									"src": "/C:/Users/Andrey/Downloads/Mediamodifier-Design (1).svg"
 								},
 								{
 									"key": "linkedTo",
@@ -3528,26 +3730,6 @@
 					],
 					"path": [
 						"metrics"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Main",
-			"request": {
-				"auth": {
-					"type": "noauth"
-				},
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "{{origin}}/main",
-					"host": [
-						"{{origin}}"
-					],
-					"path": [
-						"main"
 					]
 				}
 			},
