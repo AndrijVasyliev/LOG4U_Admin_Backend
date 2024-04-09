@@ -19,6 +19,7 @@ import {
 import { LoggerService } from '../logger';
 import { EmailService } from '../email/email.service';
 import { Public } from '../auth/auth.decorator';
+import * as pjs from '../../package.json';
 
 function getVersionFromStatusFile() {
   try {
@@ -27,15 +28,7 @@ function getVersionFromStatusFile() {
   } catch (e) {}
 }
 
-function getVersionFromPackageJson() {
-  try {
-    const file = fs.readFileSync('package.json');
-    return JSON.parse(file.toString())['version'];
-  } catch (e) {}
-}
-
 const fileVersion = getVersionFromStatusFile();
-const defaultVersion = getVersionFromPackageJson();
 
 @Controller()
 @Public()
@@ -90,7 +83,7 @@ export class HealthController {
     if (fileVersion) {
       result += fileVersion;
     } else {
-      result += `{version=${defaultVersion}}`;
+      result += `{version=${pjs.version}}`;
     }
     this.log.silly(`Status ${result}`);
     return result;

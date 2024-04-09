@@ -2843,16 +2843,21 @@
 								{
 									"key": "file",
 									"type": "file",
-									"src": "/C:/Users/Andrey/Documents/LOG/LOG4U_Admin_Backend/postman/LOG4U.postman_collection.json"
+									"src": "/C:/Users/Andrey/Downloads/107enV5public.zip"
 								},
 								{
 									"key": "linkedTo",
-									"value": "657e25869e04394b3780079c",
+									"value": "6505cd91c8506650905f4544",
 									"type": "text"
 								},
 								{
 									"key": "fileOf",
 									"value": "Person",
+									"type": "text"
+								},
+								{
+									"key": "comment",
+									"value": "Drivers licence",
 									"type": "text"
 								}
 							]

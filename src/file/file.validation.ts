@@ -7,12 +7,14 @@ export const CreateFileValidation = Joi.object({
   fileOf: Joi.string()
     .valid(...FILE_OF_TYPES)
     .required(),
+  comment: Joi.string().optional(),
 });
 
 export const FileQueryParamsSchema = Joi.object({
   offset: Joi.number().integer().min(0).optional(),
   limit: Joi.number().integer().min(1).optional(),
   filename: Joi.string().optional(),
+  comment: Joi.string().optional(),
 })
   .keys({
     orderby: Joi.string().valid('filename', 'createdAt'),

@@ -6,10 +6,12 @@ import { FileOfType, PaginatedResultDto, Query } from '../utils/general.dto';
 export class CreateFileDto {
   readonly linkedTo: string;
   readonly fileOf: FileOfType;
+  readonly comment?: string;
 }
 
 export class FileQuerySearch {
   readonly filename?: string;
+  readonly comment?: string;
   readonly truck?: string;
   readonly person?: string;
 }
@@ -23,6 +25,7 @@ export class FileResultDto {
       filename: file.filename,
       contentType: file.metadata.contentType,
       contentLength: file.length,
+      comment: file.metadata.comment,
     };
   }
 
@@ -30,6 +33,7 @@ export class FileResultDto {
   readonly filename: string;
   readonly contentType: string;
   readonly contentLength: number;
+  readonly comment?: string;
 }
 
 export class DownloadFileResultDto extends FileResultDto {

@@ -31,6 +31,9 @@ export class Metadata {
 
   @Prop({ required: true, immutable: true })
   contentType: string;
+
+  @Prop({ required: false })
+  comment: string;
 }
 
 export const MetadataSchema = SchemaFactory.createForClass(Metadata);
