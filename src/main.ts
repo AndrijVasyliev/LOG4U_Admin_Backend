@@ -25,6 +25,7 @@ async function bootstrap() {
         directives: {
           defaultSrc: [
             "'self'",
+            'maps.googleapis.com',
             // '*.googleapis.com',
             // 'fonts.gstatic.com',
             // '*.gstatic.com',
