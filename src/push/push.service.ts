@@ -16,6 +16,7 @@ import {
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { ConfigService } from '@nestjs/config';
+import { SchedulerRegistry } from '@nestjs/schedule';
 // import { HealthIndicatorResult } from '@nestjs/terminus';
 import { Push, PushDocument } from './push.schema';
 import {
@@ -29,6 +30,8 @@ import { LoggerService } from '../logger';
 import {
   MONGO_CONNECTION_NAME,
   MONGO_UNIQUE_INDEX_CONFLICT,
+  PUSH_QUEUE_ORPHANED_JOB,
+  PUSH_QUEUE_START_RECEIPT_JOB,
   UNIQUE_CONSTRAIN_ERROR,
 } from '../utils/constants';
 import { escapeForRegExp } from '../utils/escapeForRegExp';
@@ -41,15 +44,23 @@ export class PushService implements OnApplicationBootstrap, OnModuleDestroy {
   private readonly expo?: Expo;
   private readonly changeStream?: InstanceType<typeof ChangeStream>;
   private queue?: Queue<ChangeDocument>;
-  private startReceiptInterval: ReturnType<typeof setInterval>;
-  private restartInterval: ReturnType<typeof setInterval>;
+  private readonly restartTasksOlder: number;
+  private readonly getReceiptForTasksOlder: number;
   constructor(
     @InjectModel(Push.name, MONGO_CONNECTION_NAME)
     private readonly pushModel: PaginateModel<PushDocument>,
     private readonly configService: ConfigService,
     private readonly log: LoggerService,
+    private schedulerRegistry: SchedulerRegistry,
   ) {
     const accessToken = this.configService.get<string>('push.accessToken');
+    this.restartTasksOlder = configService.get<number>(
+      'pushQueue.restartTasksOlder',
+    ) as number;
+    this.getReceiptForTasksOlder = this.configService.get<number>(
+      'pushQueue.startReceiptForTasksOlder',
+    ) as number;
+
     this.expo = new Expo({ accessToken });
     this.changeStream = pushModel.watch([
       {
@@ -102,25 +113,36 @@ export class PushService implements OnApplicationBootstrap, OnModuleDestroy {
         this.log || console.log,
       );
     }
-    const startReceiptInterval = this.configService.get<number>(
+    this.log.debug('Starting jobs');
+    const startReceiptIntervalValue = this.configService.get<number>(
       'pushQueue.taskStartReceiptInterval',
     ) as number;
-    const restartInterval = this.configService.get<number>(
+    const restartIntervalValue = this.configService.get<number>(
       'pushQueue.taskRestartInterval',
     ) as number;
-    this.startReceiptInterval = setInterval(() => {
+    const startReceiptInterval = setInterval(() => {
       this.startReceivingReceipt.bind(this)();
-    }, startReceiptInterval);
-    this.restartInterval = setInterval(() => {
+    }, startReceiptIntervalValue);
+    this.schedulerRegistry.addInterval(
+      PUSH_QUEUE_START_RECEIPT_JOB,
+      startReceiptInterval,
+    );
+    const restartInterval = setInterval(() => {
       this.restartOrphaned.bind(this)();
-    }, restartInterval);
+    }, restartIntervalValue);
+    this.schedulerRegistry.addInterval(
+      PUSH_QUEUE_ORPHANED_JOB,
+      restartInterval,
+    );
   }
 
   async onModuleDestroy(): Promise<void> {
     this.log.debug('Stopping start receipt job');
-    clearInterval(this.startReceiptInterval);
+    clearInterval(
+      this.schedulerRegistry.getInterval(PUSH_QUEUE_START_RECEIPT_JOB),
+    );
     this.log.debug('Stopping restart job');
-    clearInterval(this.restartInterval);
+    clearInterval(this.schedulerRegistry.getInterval(PUSH_QUEUE_ORPHANED_JOB));
     this.log.debug('Stopping queue');
     await this?.queue?.stop();
     this.log.debug('Closing change stream');
@@ -219,14 +241,7 @@ export class PushService implements OnApplicationBootstrap, OnModuleDestroy {
 
   private async restartOrphaned(): Promise<void> {
     this.log.info('Restarting orphaned jobs');
-    const olderThenDate = new Date(
-      (Date.now() -
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-expect-error
-        this.configService.get<number>(
-          'pushQueue.restartTasksOlder',
-        )) as number,
-    );
+    const olderThenDate = new Date(Date.now() - this.restartTasksOlder);
     this.log.info(`Try to restart items, older then ${olderThenDate}`);
     const result = await this.pushModel.updateMany(
       {
@@ -263,14 +278,7 @@ export class PushService implements OnApplicationBootstrap, OnModuleDestroy {
 
   private async startReceivingReceipt(): Promise<void> {
     this.log.info('Starting to receive receipts');
-    const olderThenDate = new Date(
-      (Date.now() -
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-expect-error
-        this.configService.get<number>(
-          'pushQueue.startReceiptForTasksOlder',
-        )) as number,
-    );
+    const olderThenDate = new Date(Date.now() - this.getReceiptForTasksOlder);
     this.log.info(
       `Try to start to receive receipts for items, older then ${olderThenDate}`,
     );

@@ -1,6 +1,11 @@
 import { ExecutionContext, Injectable } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
-import { ADMIN_ROLES, IS_PUBLIC_KEY, MOBILE_BASIC_STRATEGY, USER_ROLES_KEY } from '../utils/constants';
+import {
+  ADMIN_ROLES,
+  IS_PUBLIC_KEY,
+  MOBILE_BASIC_STRATEGY,
+  USER_ROLES_KEY,
+} from '../utils/constants';
 import { Reflector } from '@nestjs/core';
 import { LoggerService } from '../logger';
 import { UserRole } from '../utils/general.dto';

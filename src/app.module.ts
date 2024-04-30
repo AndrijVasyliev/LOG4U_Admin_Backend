@@ -1,5 +1,6 @@
 import './utils/fixMongooseStringValidation';
 import { Module, NestModule, MiddlewareConsumer } from '@nestjs/common';
+import { ScheduleModule } from '@nestjs/schedule';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { PrometheusModule } from '@willsoto/nestjs-prometheus';
 import { PromConfigService } from './prometheus/prometheus.config.service';
@@ -27,6 +28,7 @@ import { UserModule } from './user/user.module';
 import { LocationModule } from './location/location.module';
 import { LoadModule } from './load/load.module';
 import { TruckModule } from './truck/truck.module';
+import { JobModule } from './job/job.module';
 import { GoogleGeoApiModule } from './googleGeoApi/googleGeoApi.module';
 import { MobileAppModule } from './mobileApp/mobileApp.module';
 import { AuthModule } from './auth/auth.module';
@@ -57,7 +59,6 @@ import { ChatModule } from './chat/chat.module';
 
 @Module({
   imports: [
-    AuthModule,
     LoggerModule.registerAsync({
       useFactory: async (config: ConfigService) => {
         return {
@@ -98,7 +99,10 @@ import { ChatModule } from './chat/chat.module';
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, '..', '..', 'static'),
     }),
+    ScheduleModule.forRoot(),
+    AuthModule,
     HealthModule,
+    JobModule,
     GoogleGeoApiModule,
     MongooseModule.forRootAsync({
       imports: [ConfigModule],

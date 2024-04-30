@@ -3577,7 +3577,7 @@
 								{
 									"key": "file",
 									"type": "file",
-									"src": "/C:/Users/Andrey/Downloads/Mediamodifier-Design (1).svg"
+									"src": "/C:/Users/Andrey/Downloads/truck.svg"
 								},
 								{
 									"key": "linkedTo",
@@ -3633,6 +3633,68 @@
 									"key": "fileId",
 									"value": "660c7879a5f4bea629741218"
 								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Job",
+			"item": [
+				{
+					"name": "Cron",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{origin}}/api/job/cron",
+							"host": [
+								"{{origin}}"
+							],
+							"path": [
+								"api",
+								"job",
+								"cron"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Interval",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{origin}}/api/job/interval",
+							"host": [
+								"{{origin}}"
+							],
+							"path": [
+								"api",
+								"job",
+								"interval"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Timeout",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{origin}}/api/job/timeout",
+							"host": [
+								"{{origin}}"
+							],
+							"path": [
+								"api",
+								"job",
+								"timeout"
 							]
 						}
 					},

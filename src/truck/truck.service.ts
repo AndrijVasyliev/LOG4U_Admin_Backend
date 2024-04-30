@@ -5,13 +5,17 @@ import {
   PreconditionFailedException,
   InternalServerErrorException,
   NotFoundException,
+  OnApplicationBootstrap,
+  OnModuleDestroy,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
+import { SchedulerRegistry } from '@nestjs/schedule';
 import { LoggerService } from '../logger';
 import {
   EARTH_RADIUS_MILES,
   MONGO_CONNECTION_NAME,
   MONGO_UNIQUE_INDEX_CONFLICT,
+  TRUCK_SET_AVAIL_STATUS_JOB,
   UNIQUE_CONSTRAIN_ERROR,
 } from '../utils/constants';
 import { calcDistance } from '../utils/haversine.distance';
@@ -34,18 +38,74 @@ import { ConfigService } from '@nestjs/config';
 const { MongoError } = mongo;
 
 @Injectable()
-export class TruckService {
+export class TruckService implements OnApplicationBootstrap, OnModuleDestroy {
   private readonly nearByRedundancyFactor: number;
+  private readonly resetToAvailableOlderThen: number;
   constructor(
     @InjectModel(Truck.name, MONGO_CONNECTION_NAME)
     private readonly truckModel: PaginateModel<TruckDocument>,
     private readonly locationService: LocationService,
     private readonly geoApiService: GoogleGeoApiService,
-    private readonly log: LoggerService,
     private readonly configService: ConfigService,
+    private readonly log: LoggerService,
+    private schedulerRegistry: SchedulerRegistry,
   ) {
     this.nearByRedundancyFactor =
       this.configService.get<number>('trucks.nearByRedundancyFactor') || 0;
+    this.resetToAvailableOlderThen = configService.get<number>(
+      'trucks.resetToAvailableWillBeOlderThen',
+    ) as number;
+  }
+
+  onApplicationBootstrap(): void {
+    this.log.debug('Starting set "Available" job');
+    const restartIntervalValue = this.configService.get<number>(
+      'trucks.taskSetAvailableInterval',
+    ) as number;
+    const setAvailInterval = setInterval(() => {
+      this.resetToAvailableStatus.bind(this)();
+    }, restartIntervalValue);
+    this.schedulerRegistry.addInterval(
+      TRUCK_SET_AVAIL_STATUS_JOB,
+      setAvailInterval,
+    );
+  }
+
+  async onModuleDestroy(): Promise<void> {
+    this.log.debug('Stopping set "Available" status job');
+    clearInterval(
+      this.schedulerRegistry.getInterval(TRUCK_SET_AVAIL_STATUS_JOB),
+    );
+  }
+
+  private async resetToAvailableStatus(): Promise<void> {
+    this.log.info(
+      'Setting "Available" status to "Will be available" from past',
+    );
+    const willBeAvailableLaterThenDate = new Date(
+      Date.now() - this.resetToAvailableOlderThen,
+    );
+    this.log.info(
+      `Try to set "Available" to trucks "Will be available" later then ${willBeAvailableLaterThenDate}`,
+    );
+    const result = await this.truckModel.updateMany(
+      {
+        status: { $eq: 'Will be available' },
+        availabilityAt: { $lte: willBeAvailableLaterThenDate },
+      },
+      [
+        {
+          $set: {
+            status: 'Available',
+            searchLocation: '$lastLocation',
+          },
+        },
+      ],
+    );
+    this.log.info(
+      `Updated ${result.modifiedCount === 1 ? '1 truck' : result.modifiedCount + ' trucks'} status`,
+    );
+    return;
   }
 
   private async findTruckDocumentById(id: string): Promise<TruckDocument> {

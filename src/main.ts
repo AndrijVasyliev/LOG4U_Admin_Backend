@@ -1,5 +1,6 @@
 import { NestFactory } from '@nestjs/core';
 import { RequestMethod } from '@nestjs/common';
+import { NestExpressApplication } from '@nestjs/platform-express';
 import { ConfigService } from '@nestjs/config';
 import helmet from 'helmet';
 import * as compression from 'compression';
@@ -8,8 +9,10 @@ import { LoggerService, NestLoggerService } from './logger';
 import { API_PATH_PREFIX, MOBILE_PATH_PREFIX } from './utils/constants';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule, {
+  const app = await NestFactory.create<NestExpressApplication>(AppModule, {
     bufferLogs: true,
+    autoFlushLogs: true,
+    snapshot: true,
   });
   app.useLogger(app.get(NestLoggerService));
 

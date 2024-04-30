@@ -10,6 +10,7 @@ import {
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { ConfigService } from '@nestjs/config';
+import { SchedulerRegistry } from '@nestjs/schedule';
 import { HealthIndicatorResult } from '@nestjs/terminus';
 import { Email, EmailDocument } from './email.schema';
 import {
@@ -22,6 +23,7 @@ import {
 } from './email.dto';
 import { LoggerService } from '../logger';
 import {
+  EMAIL_QUEUE_ORPHANED_JOB,
   MONGO_CONNECTION_NAME,
   MONGO_UNIQUE_INDEX_CONFLICT,
   UNIQUE_CONSTRAIN_ERROR,
@@ -36,18 +38,22 @@ export class EmailService implements OnApplicationBootstrap, OnModuleDestroy {
   private readonly transporter?: Transporter;
   private readonly changeStream?: InstanceType<typeof ChangeStream>;
   private queue?: Queue<ChangeDocument>;
-  private restartInterval: ReturnType<typeof setInterval>;
+  private readonly restartTasksOlder: number;
   constructor(
     @InjectModel(Email.name, MONGO_CONNECTION_NAME)
     private readonly emailModel: PaginateModel<EmailDocument>,
     private readonly configService: ConfigService,
     private readonly log: LoggerService,
+    private schedulerRegistry: SchedulerRegistry,
   ) {
     const host = this.configService.get<string>('email.host');
     const port = this.configService.get<number>('email.port');
     const secure = this.configService.get<boolean>('email.secure');
     const user = this.configService.get<string>('email.user');
     const pass = this.configService.get<string>('email.pass');
+    this.restartTasksOlder = configService.get<number>(
+      'emailQueue.restartTasksOlder',
+    ) as number;
 
     const options: any = {
       // ToDo refactor next after app logger refactor and if needed
@@ -112,17 +118,22 @@ export class EmailService implements OnApplicationBootstrap, OnModuleDestroy {
         this.log || console.log,
       );
     }
-    const interval = this.configService.get<number>(
+    this.log.debug('Starting jobs');
+    const restartIntervalValue = this.configService.get<number>(
       'emailQueue.taskRestartInterval',
     ) as number;
-    this.restartInterval = setInterval(() => {
+    const restartInterval = setInterval(() => {
       this.restartOrphaned.bind(this)();
-    }, interval);
+    }, restartIntervalValue);
+    this.schedulerRegistry.addInterval(
+      EMAIL_QUEUE_ORPHANED_JOB,
+      restartInterval,
+    );
   }
 
   async onModuleDestroy(): Promise<void> {
     this.log.debug('Stopping restart job');
-    clearInterval(this.restartInterval);
+    clearInterval(this.schedulerRegistry.getInterval(EMAIL_QUEUE_ORPHANED_JOB));
     this.log.debug('Stopping queue');
     await this?.queue?.stop();
     this.log.debug('Closing change stream');
@@ -192,14 +203,7 @@ export class EmailService implements OnApplicationBootstrap, OnModuleDestroy {
 
   private async restartOrphaned(): Promise<void> {
     this.log.info('Restarting orphaned jobs');
-    const olderThenDate = new Date(
-      (Date.now() -
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-expect-error
-        this.configService.get<number>(
-          'emailQueue.restartTasksOlder',
-        )) as number,
-    );
+    const olderThenDate = new Date(Date.now() - this.restartTasksOlder);
     this.log.info(`Try to restart items, older then ${olderThenDate}`);
     const result = await this.emailModel.updateMany(
       { state: { $eq: 'Processing' }, updated_at: { $lte: olderThenDate } },

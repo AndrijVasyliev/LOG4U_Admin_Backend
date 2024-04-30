@@ -3,6 +3,8 @@ import {
   WebSocketGateway,
   OnGatewayInit,
   OnGatewayConnection,
+  OnGatewayDisconnect,
+  WebSocketServer,
   SubscribeMessage,
   MessageBody,
   ConnectedSocket,
@@ -25,20 +27,29 @@ import { WsMobileAuthBasicGuard } from './wsAuth.guard';
   pingInterval: 25000,
   pingTimeout: 20000,
 })
-// @UseGuards(WsMobileAuthBasicGuard)
+@UseGuards(WsMobileAuthBasicGuard)
 @UseFilters(WsExceptionFilter)
-export class ChatGateway implements OnGatewayInit, OnGatewayConnection {
+export class ChatGateway
+  implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect
+{
   constructor(private readonly log: LoggerService) {}
+  @WebSocketServer() private server: Server;
 
+  // Method from OnGatewayInit
   afterInit(io: Server): any {
+    this.server = io;
     io.engine.use(helmet());
     io.engine.use(compression());
   }
 
+  // Method from OnGatewayConnection
   handleConnection(socket: Socket, ...args: any[]): any {
     this.log.info(JSON.stringify(socket.handshake));
     this.log.info(JSON.stringify(args));
   }
+
+  // Method from OnGatewayDisconnect
+  handleDisconnect(client: Socket): any {}
 
   @SubscribeMessage('events')
   handleEventsMessage(
