@@ -1,7 +1,10 @@
 import {
   Injectable,
+  Inject,
+  Scope,
   LoggerService as LoggerServiceInterface,
 } from '@nestjs/common';
+import { INQUIRER } from '@nestjs/core';
 import * as rTracer from 'cls-rtracer';
 import * as DefaultLogger from 'winston';
 import { stringify } from 'safe-stable-stringify';
@@ -21,12 +24,14 @@ const isString = (val: any): val is string => typeof val === 'string';
 export const isUndefined = (obj: any): obj is undefined =>
   typeof obj === 'undefined';
 
-@Injectable()
+@Injectable({ scope: Scope.TRANSIENT })
 export class LoggerService implements LoggerServiceInterface {
   private readonly logger: typeof DefaultLogger;
+  private readonly context: string;
 
-  constructor() {
+  constructor(@Inject(INQUIRER) private parentClass: object) {
     this.logger = DefaultLogger;
+    this.context = parentClass?.constructor?.name || '';
   }
   public error(message: string, ...optionalParams: any[]): void;
   public error(message: Error): void;
@@ -34,19 +39,26 @@ export class LoggerService implements LoggerServiceInterface {
     if (message instanceof Error)
       return void this.logger.error(
         message as unknown as string,
+        { [CONTEXT]: this.context },
         injectRequestId(),
       );
     return void this.logger.error(
       message,
-      ...[...optionalParams, injectRequestId()],
+      ...[...optionalParams, { [CONTEXT]: this.context }, injectRequestId()],
     );
   }
   public warn(message: string, ...optionalParams: any[]): void;
   public warn(message: Error): void;
   public warn(message: any, ...optionalParams: any[]): void {
+    if (message instanceof Error)
+      return void this.logger.warn(
+        message as unknown as string,
+        { [CONTEXT]: this.context },
+        injectRequestId(),
+      );
     return void this.logger.warn(
       message,
-      ...[...optionalParams, injectRequestId()],
+      ...[...optionalParams, { [CONTEXT]: this.context }, injectRequestId()],
     );
   }
   public info(message: string, ...optionalParams: any[]): void;
@@ -55,11 +67,12 @@ export class LoggerService implements LoggerServiceInterface {
     if (message instanceof Error)
       return void this.logger.info(
         message as unknown as string,
+        { [CONTEXT]: this.context },
         injectRequestId(),
       );
     return void this.logger.info(
       message,
-      ...[...optionalParams, injectRequestId()],
+      ...[...optionalParams, { [CONTEXT]: this.context }, injectRequestId()],
     );
   }
   public http(message: string, ...optionalParams: any[]): void;
@@ -68,25 +81,26 @@ export class LoggerService implements LoggerServiceInterface {
     if (message instanceof Error)
       return void this.logger.http(
         message as unknown as string,
+        { [CONTEXT]: this.context },
         injectRequestId(),
       );
     return void this.logger.http(
       message,
-      ...[...optionalParams, injectRequestId()],
+      ...[...optionalParams, { [CONTEXT]: this.context }, injectRequestId()],
     );
   }
   public verbose(message: string, ...optionalParams: any[]): void;
   public verbose(message: Error): void;
   public verbose(message: any, ...optionalParams: any[]): void {
     if (message instanceof Error)
-      // ToDO is it needed?
       return void this.logger.verbose(
         message as unknown as string,
+        { [CONTEXT]: this.context },
         injectRequestId(),
       );
     return void this.logger.verbose(
       message,
-      ...[...optionalParams, injectRequestId()],
+      ...[...optionalParams, { [CONTEXT]: this.context }, injectRequestId()],
     );
   }
   public debug(message: string, ...optionalParams: any[]): void;
@@ -95,11 +109,12 @@ export class LoggerService implements LoggerServiceInterface {
     if (message instanceof Error)
       return void this.logger.debug(
         message as unknown as string,
+        { [CONTEXT]: this.context },
         injectRequestId(),
       );
     return void this.logger.debug(
       message,
-      ...[...optionalParams, injectRequestId()],
+      ...[...optionalParams, { [CONTEXT]: this.context }, injectRequestId()],
     );
   }
   public silly(message: string, ...optionalParams: any[]): void;
@@ -108,11 +123,12 @@ export class LoggerService implements LoggerServiceInterface {
     if (message instanceof Error)
       return void this.logger.silly(
         message as unknown as string,
+        { [CONTEXT]: this.context },
         injectRequestId(),
       );
     return void this.logger.silly(
       message,
-      ...[...optionalParams, injectRequestId()],
+      ...[...optionalParams, { [CONTEXT]: this.context }, injectRequestId()],
     );
   }
 
@@ -127,7 +143,7 @@ export class LoggerService implements LoggerServiceInterface {
     return void this.logger.log(
       'info',
       message,
-      ...[...optionalParams, injectRequestId()],
+      ...[...optionalParams, { [CONTEXT]: this.context }, injectRequestId()],
     );
   }
 }

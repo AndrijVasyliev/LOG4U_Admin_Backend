@@ -14,10 +14,10 @@ async function bootstrap() {
     autoFlushLogs: true,
     snapshot: true,
   });
-  app.useLogger(app.get(NestLoggerService));
+  const appLogger: NestLoggerService = app.get(NestLoggerService);
+  app.useLogger(appLogger);
 
   const configService = app.get(ConfigService);
-  const logger: LoggerService = app.get(LoggerService);
 
   const port = configService.get<number>('app.port') as number;
 
@@ -69,6 +69,6 @@ async function bootstrap() {
 
   await app.listen(port);
 
-  logger.info(`Started App on port: ${port}`);
+  appLogger.debug(`Started App on port: ${port}`);
 }
 bootstrap();

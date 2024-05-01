@@ -9,6 +9,7 @@ import {
 import { APP_FILTER } from '@nestjs/core';
 import * as DefaultLogger from 'winston';
 import { stringify } from 'safe-stable-stringify';
+import { cyan, grey } from 'colors/safe';
 import { LoggerService, NestLoggerService } from './logger.service';
 import {
   ConfigurableModuleClass,
@@ -61,9 +62,10 @@ export class LoggerModule
     const { level, message, timestamp, ...metadata } = info;
     let log = `${(timestamp || new Date().toJSON())
       .replace('T', ' ')
-      .substring(0, 19)} [${level}]${
-      info[CONTEXT] ? ' (' + info[CONTEXT] + ')' : ''
-    } ${info[REQUEST_ID] || ''}: ${message}`;
+      .substring(
+        0,
+        19,
+      )} [${level}]${grey(info[CONTEXT] ? ' (' + info[CONTEXT] + ')' : '')} ${cyan(info[REQUEST_ID] || '')}: ${message}`;
     if (Object.keys(metadata).length) {
       log += ` ${stringify(metadata, replacer)}`;
     }
