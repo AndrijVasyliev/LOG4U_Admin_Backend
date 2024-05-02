@@ -19,6 +19,7 @@ import {
 import { LoggerService } from '../logger';
 import { EmailService } from '../email/email.service';
 import { Public } from '../auth/auth.decorator';
+import { DoNotCollectMetrics } from '../metrics/metrics.decorator';
 import * as pjs from '../../package.json';
 
 function getVersionFromStatusFile() {
@@ -32,6 +33,7 @@ const fileVersion = getVersionFromStatusFile();
 
 @Controller()
 @Public()
+@DoNotCollectMetrics()
 export class HealthController {
   readonly heapLimit: number;
   readonly rssLimit: number;

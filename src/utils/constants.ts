@@ -5,6 +5,8 @@ export const MOBILE_PATH_PREFIX = 'mobileApp';
 // Health
 export const HEALTH_MEMORY_HEAP_LIMIT = 150 * 1024 * 1024;
 export const HEALTH_MEMORY_RSS_LIMIT = 250 * 1024 * 1024;
+// Metrics
+export const DO_NOT_COLLECT_METRICS_KEY = 'doNotCollectMetrics';
 // Mongo
 export const MONGO_CONNECTION_NAME = 'Mongo_Connection';
 export const DB_CHECK_TIMEOUT = 500;

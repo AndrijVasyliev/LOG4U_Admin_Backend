@@ -6,9 +6,8 @@ import {
   MOBILE_BASIC_STRATEGY,
   IS_PUBLIC_KEY,
   USER_ROLES_KEY,
-  ADMIN_ROLES,
-  MOBILE_ROLES,
-  API_PATH_PREFIX, MOBILE_PATH_PREFIX,
+  API_PATH_PREFIX,
+  MOBILE_PATH_PREFIX,
 } from '../utils/constants';
 import { LoggerService } from '../logger';
 import { UserRole } from '../utils/general.dto';

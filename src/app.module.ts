@@ -2,8 +2,7 @@ import './utils/fixMongooseStringValidation';
 import { Module, NestModule, MiddlewareConsumer } from '@nestjs/common';
 import { ScheduleModule } from '@nestjs/schedule';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { PrometheusModule } from '@willsoto/nestjs-prometheus';
-import { PromConfigService } from './prometheus/prometheus.config.service';
+import { MetricsModule } from './metrics/metrics.module';
 import { MongooseModule, MongooseModuleFactoryOptions } from '@nestjs/mongoose';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { Connection, Schema as MongooseSchema } from 'mongoose';
@@ -125,12 +124,7 @@ import { ChatModule } from './chat/chat.module';
       },
       inject: [ConfigService],
     }),
-    PrometheusModule.registerAsync({
-      controller: MetricsController,
-      imports: [ConfigModule],
-      useClass: PromConfigService,
-      inject: [ConfigService],
-    }),
+    MetricsModule,
     PersonModule,
     OwnerModule,
     OwnerDriverModule,

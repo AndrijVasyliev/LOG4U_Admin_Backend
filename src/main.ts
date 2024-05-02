@@ -5,7 +5,7 @@ import { ConfigService } from '@nestjs/config';
 import helmet from 'helmet';
 import * as compression from 'compression';
 import { AppModule } from './app.module';
-import { LoggerService, NestLoggerService } from './logger';
+import { NestLoggerService } from './logger';
 import { API_PATH_PREFIX, MOBILE_PATH_PREFIX } from './utils/constants';
 
 async function bootstrap() {

@@ -3841,18 +3841,7 @@
 	"variable": [
 		{
 			"key": "origin",
-			"value": "http://localhost:8181",
-			"type": "string"
-		},
-		{
-			"key": "origin",
 			"value": "https://admin-test-lt5d.onrender.com",
-			"type": "string",
-			"disabled": true
-		},
-		{
-			"key": "origin",
-			"value": "https://log4u.onrender.com",
 			"type": "string",
 			"disabled": true
 		},
@@ -3861,6 +3850,11 @@
 			"value": "https://admin.4u-logistics.com",
 			"type": "string",
 			"disabled": true
+		},
+		{
+			"key": "origin",
+			"value": "http://localhost:8181",
+			"type": "string"
 		}
 	]
 }
