@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { TerminusModule } from '@nestjs/terminus';
 import { HealthController } from './health.controller';
+import { MongooseHealthIndicator } from './mongoose.healthIndicator';
 import { LoggerService } from '../logger';
 import { EmailModule } from '../email/email.module';
 
@@ -12,5 +13,6 @@ import { EmailModule } from '../email/email.module';
     EmailModule,
   ],
   controllers: [HealthController],
+  providers: [MongooseHealthIndicator],
 })
 export class HealthModule {}

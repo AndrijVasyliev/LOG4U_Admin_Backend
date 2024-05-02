@@ -7,8 +7,8 @@ import {
   HealthCheck,
   HealthCheckService,
   MemoryHealthIndicator,
-  MongooseHealthIndicator,
 } from '@nestjs/terminus';
+import { MongooseHealthIndicator } from './mongoose.healthIndicator';
 import {
   HEALTH_MEMORY_HEAP_LIMIT,
   HEALTH_MEMORY_RSS_LIMIT,
