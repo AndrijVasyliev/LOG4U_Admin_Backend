@@ -23,6 +23,7 @@ import { OwnerDriverModule } from './ownerDriver/ownerDriver.module';
 import { CoordinatorModule } from './coordinator/coordinator.module';
 import { CoordinatorDriverModule } from './coordinatorDriver/coordinatorDriver.module';
 import { DriverModule } from './driver/driver.module';
+import { FacilityModule } from './facility/facility.module';
 import { UserModule } from './user/user.module';
 import { LocationModule } from './location/location.module';
 import { LoadModule } from './load/load.module';
@@ -47,6 +48,7 @@ import { MetricsController } from './metrics/metrics.controller';
 import { MobileAppController } from './mobileApp/mobileApp.controller';
 import { OwnerController } from './owner/owner.controller';
 import { OwnerDriverController } from './ownerDriver/ownerDriver.controller';
+import { FacilityController } from './facility/facility.controller';
 import { PersonController } from './person/person.controller';
 import { PushController } from './push/push.controller';
 import { TruckController } from './truck/truck.controller';
@@ -80,6 +82,7 @@ import { ChatModule } from './chat/chat.module';
             MobileAppController,
             OwnerController,
             OwnerDriverController,
+            FacilityController,
             PersonController,
             PushController,
             TruckController,
@@ -131,6 +134,7 @@ import { ChatModule } from './chat/chat.module';
     CoordinatorModule,
     CoordinatorDriverModule,
     DriverModule,
+    FacilityModule,
     UserModule,
     LocationModule,
     LoadModule,
@@ -158,6 +162,7 @@ export class AppModule implements NestModule {
       MobileAppController,
       OwnerController,
       OwnerDriverController,
+      FacilityController,
       PersonController,
       PushController,
       TruckController,

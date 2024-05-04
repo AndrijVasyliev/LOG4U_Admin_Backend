@@ -1,6 +1,35 @@
 import * as Joi from 'joi';
 import { EARTH_RADIUS_MILES } from '../utils/constants';
 
+export const GeoPointQueryParamValidation = Joi.string()
+  .regex(/^-?\d+\.?\d*,-?\d+\.?\d*$/)
+  .messages({
+    'custom.long': 'Longitude must be between -180 and 180',
+    'custom.lat': 'Latitude must be between -90 and 90',
+  })
+  .custom((value: string, helper) => {
+    const parsed = value.split(',');
+    const lat = +parsed[0];
+    const long = +parsed[1];
+    if (-180 > long || 180 < long) {
+      return helper.error('custom.long');
+    }
+    if (-90 > lat || 90 < lat) {
+      return helper.error('custom.lat');
+    }
+    return [lat, long];
+  });
+export const DistanceQueryParamValidation = Joi.number()
+  .min(0)
+  .max(EARTH_RADIUS_MILES);
+
+export const LatitudeValidation = Joi.number().min(-90).max(90).required();
+export const LongitudeValidation = Joi.number().min(-180).max(180).required();
+export const GeoPointBodyValidation = Joi.array()
+  .min(2)
+  .max(2)
+  .items(LatitudeValidation, LongitudeValidation);
+
 export const GeoLocation = Joi.object({
   types: Joi.array().items(Joi.string()),
   formatted_address: Joi.string().required(),
@@ -20,10 +49,7 @@ export const GeoLocation = Joi.object({
   }),
   postcode_localities: Joi.array().items(Joi.string()),
   geometry: Joi.object({
-    location: Joi.object({
-      lat: Joi.number().min(-90).max(90).required(),
-      lng: Joi.number().min(-180).max(180).required(),
-    }).required(),
+    location: GeoPointBodyValidation.required(),
     location_type: Joi.string(),
     viewport: Joi.object(),
     bounds: Joi.object(),
@@ -35,14 +61,7 @@ export const CreateLocationValidation = Joi.object({
   name: Joi.string().required(),
   stateCode: Joi.string().required(),
   stateName: Joi.string().required(),
-  location: Joi.array()
-    .min(2)
-    .max(2)
-    .items(
-      Joi.number().min(-90).max(90).required(),
-      Joi.number().min(-180).max(180).required(),
-    )
-    .required(),
+  location: GeoPointBodyValidation.required(),
 });
 
 export const UpdateLocationValidation = Joi.object({
@@ -50,13 +69,7 @@ export const UpdateLocationValidation = Joi.object({
   name: Joi.string().optional(),
   stateCode: Joi.string().optional(),
   stateName: Joi.string().optional(),
-  location: Joi.array()
-    .min(2)
-    .max(2)
-    .items(
-      Joi.number().min(-90).max(90).required(),
-      Joi.number().min(-180).max(180).required(),
-    ),
+  location: GeoPointBodyValidation,
 });
 
 export const LocationQueryParamsSchema = Joi.object({
@@ -75,24 +88,7 @@ export const LocationQueryParamsSchema = Joi.object({
   })
   .and('orderby', 'direction')
   .keys({
-    location: Joi.string()
-      .regex(/^-?\d+\.?\d*,-?\d+\.?\d*$/)
-      .messages({
-        'custom.long': 'Longitude must be between -180 and 180',
-        'custom.lat': 'Latitude must be between -90 and 90',
-      })
-      .custom((value: string, helper) => {
-        const parsed = value.split(',');
-        const lat = +parsed[0];
-        const long = +parsed[1];
-        if (-180 > long || 180 < long) {
-          return helper.error('custom.long');
-        }
-        if (-90 > lat || 90 < lat) {
-          return helper.error('custom.lat');
-        }
-        return [lat, long];
-      }),
-    distance: Joi.number().min(0).max(EARTH_RADIUS_MILES),
+    location: GeoPointQueryParamValidation,
+    distance: DistanceQueryParamValidation,
   })
   .and('location', 'distance');

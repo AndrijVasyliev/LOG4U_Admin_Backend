@@ -9,7 +9,7 @@ import { DoNotCollectMetrics } from './metrics.decorator';
 @Public()
 @DoNotCollectMetrics()
 export class MetricsController extends PrometheusController {
-  constructor(private readonly log: LoggerService,) {
+  constructor(private readonly log: LoggerService) {
     super();
   }
   @Get()

@@ -1,6 +1,11 @@
 import * as Joi from 'joi';
 import { Expo } from 'expo-server-sdk';
 import { TRUCK_STATUSES } from '../utils/constants';
+import {
+  GeoPointBodyValidation,
+  LatitudeValidation,
+  LongitudeValidation,
+} from '../location/location.validation';
 
 export const MobileAuthValidation = Joi.object({
   force: Joi.boolean().optional(),
@@ -28,22 +33,15 @@ export const MobileUpdateTruckValidation = Joi.object({
   status: Joi.string()
     .valid(...TRUCK_STATUSES)
     .optional(),
-  availabilityLocation: Joi.array()
-    .min(2)
-    .max(2)
-    .items(
-      Joi.number().min(-90).max(90).required(),
-      Joi.number().min(-180).max(180).required(),
-    )
-    .optional(),
+  availabilityLocation: GeoPointBodyValidation.optional(),
   availabilityAt: Joi.date().iso().greater('now').optional(),
 });
 export const MobileUpdateTruckLocationValidation = Joi.object({
   deviceId: Joi.string().required(),
   location: Joi.object({
     coords: Joi.object({
-      latitude: Joi.number().min(-90).max(90).required(),
-      longitude: Joi.number().min(-180).max(180).required(),
+      latitude: LatitudeValidation,
+      longitude: LongitudeValidation,
     })
       .unknown(true)
       .required(),
