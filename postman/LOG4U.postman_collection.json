@@ -7,6 +7,48 @@
 	},
 	"item": [
 		{
+			"name": "Person",
+			"item": [
+				{
+					"name": "Get Person",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{origin}}/api/person/:personId",
+							"host": [
+								"{{origin}}"
+							],
+							"path": [
+								"api",
+								"person",
+								":personId"
+							],
+							"variable": [
+								{
+									"key": "personId",
+									"value": "657e25869e04394b3780079c"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
 			"name": "Owner",
 			"item": [
 				{
@@ -60,6 +102,7 @@
 								{
 									"key": "languagePriority",
 									"value": "EN",
+									"description": "'EN', 'UA', 'ES', 'RU'",
 									"disabled": true
 								},
 								{
@@ -267,48 +310,6 @@
 			]
 		},
 		{
-			"name": "Person",
-			"item": [
-				{
-					"name": "Get Person",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
-					"request": {
-						"method": "GET",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{origin}}/api/person/:personId",
-							"host": [
-								"{{origin}}"
-							],
-							"path": [
-								"api",
-								"person",
-								":personId"
-							],
-							"variable": [
-								{
-									"key": "personId",
-									"value": "657e25869e04394b3780079c"
-								}
-							]
-						}
-					},
-					"response": []
-				}
-			]
-		},
-		{
 			"name": "Owner-Driver",
 			"item": [
 				{
@@ -362,6 +363,7 @@
 								{
 									"key": "languagePriority",
 									"value": "EN",
+									"description": "'EN', 'UA', 'ES', 'RU'",
 									"disabled": true
 								},
 								{
@@ -446,7 +448,7 @@
 								},
 								{
 									"key": "truckNumber",
-									"value": null,
+									"value": "",
 									"disabled": true
 								},
 								{
@@ -647,6 +649,7 @@
 								{
 									"key": "languagePriority",
 									"value": "EN",
+									"description": "'EN', 'UA', 'ES', 'RU'",
 									"disabled": true
 								},
 								{
@@ -857,7 +860,7 @@
 			"name": "Coordinator-Driver",
 			"item": [
 				{
-					"name": "List Coordinators-Driver",
+					"name": "List Coordinators-Drivers",
 					"request": {
 						"method": "GET",
 						"header": [],
@@ -907,6 +910,7 @@
 								{
 									"key": "languagePriority",
 									"value": "EN",
+									"description": "'EN', 'UA', 'ES', 'RU'",
 									"disabled": true
 								},
 								{
@@ -1192,6 +1196,7 @@
 								{
 									"key": "languagePriority",
 									"value": "EN",
+									"description": "'EN', 'UA', 'ES', 'RU'",
 									"disabled": true
 								},
 								{
@@ -1490,21 +1495,25 @@
 								{
 									"key": "crossborder",
 									"value": "Yes",
+									"description": "'Yes', 'No'",
 									"disabled": true
 								},
 								{
 									"key": "certificate",
 									"value": "Hazmat",
+									"description": "'Hazmat', 'Tsa', 'TWIC', 'Tanker Endorsement'",
 									"disabled": true
 								},
 								{
 									"key": "type",
 									"value": "Box truck",
+									"description": "'Cargo van', 'Reefer van', 'Box truck', 'Box truck Reefer', 'Straight truck', 'Hotshot', 'Tented box'",
 									"disabled": true
 								},
 								{
 									"key": "equipment",
 									"value": "Lift gate",
+									"description": "'Dock height risers', 'Air ride', 'Lift gate', 'Keep from freezing', 'ICC bar', 'Vertical E-track', 'Horizontal E-track', 'Pallet jack', 'PPE', 'Ramps', 'Straps', 'Loads bars', 'Blankets', 'Pads', 'Fire extinguisher', 'Metal hooks', 'Reefer', 'Heater'",
 									"disabled": true
 								},
 								{
@@ -2018,7 +2027,7 @@
 								},
 								{
 									"key": "search",
-									"value": null,
+									"value": "",
 									"disabled": true
 								},
 								{
@@ -2034,6 +2043,7 @@
 								{
 									"key": "userRole",
 									"value": "",
+									"description": "'Admin', 'Super Admin'",
 									"disabled": true
 								},
 								{
@@ -2189,7 +2199,7 @@
 			"name": "Location",
 			"item": [
 				{
-					"name": "List Location",
+					"name": "List Locations",
 					"request": {
 						"method": "GET",
 						"header": [],
@@ -2426,6 +2436,1200 @@
 								"api",
 								"location",
 								"fromCsv"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Customer",
+			"item": [
+				{
+					"name": "List Customers",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{origin}}/api/customer?limit=30&offset=0&orderby=name&direction=asc",
+							"host": [
+								"{{origin}}"
+							],
+							"path": [
+								"api",
+								"customer"
+							],
+							"query": [
+								{
+									"key": "limit",
+									"value": "30"
+								},
+								{
+									"key": "offset",
+									"value": "0"
+								},
+								{
+									"key": "orderby",
+									"value": "name",
+									"description": "'name', 'customerRole', 'address1', 'city', 'state', 'zipCode', 'phone', 'email'"
+								},
+								{
+									"key": "direction",
+									"value": "asc",
+									"description": "asc or desc"
+								},
+								{
+									"key": "search",
+									"value": "hoofs",
+									"disabled": true
+								},
+								{
+									"key": "name",
+									"value": "Horns and Hoofs",
+									"disabled": true
+								},
+								{
+									"key": "type",
+									"value": "FREIGHT FORWARDER INTERNATIONAL",
+									"description": "'BROKER DOMESTIC', 'BROKER INTERNATIONAL', 'FREIGHT FORWARDER DOMESTIC', 'FREIGHT FORWARDER INTERNATIONAL', 'SHIPPER/CONSIGNEE DOMESTIC', 'SHIPPER/CONSIGNEE INTERNATIONAL', 'OTHER'",
+									"disabled": true
+								},
+								{
+									"key": "address1",
+									"value": "",
+									"disabled": true
+								},
+								{
+									"key": "address2",
+									"value": "",
+									"disabled": true
+								},
+								{
+									"key": "city",
+									"value": "",
+									"disabled": true
+								},
+								{
+									"key": "state",
+									"value": null,
+									"disabled": true
+								},
+								{
+									"key": "zipCode",
+									"value": null,
+									"disabled": true
+								},
+								{
+									"key": "phone",
+									"value": null,
+									"disabled": true
+								},
+								{
+									"key": "fax",
+									"value": null,
+									"disabled": true
+								},
+								{
+									"key": "email",
+									"value": null,
+									"disabled": true
+								},
+								{
+									"key": "website",
+									"value": null,
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Customer",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{origin}}/api/customer/:customerId",
+							"host": [
+								"{{origin}}"
+							],
+							"path": [
+								"api",
+								"customer",
+								":customerId"
+							],
+							"variable": [
+								{
+									"key": "customerId",
+									"value": "66367b9ba7d923452894b87d"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Customer",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\":\"Horns and Hoofs\",\r\n    \"type\":\"FREIGHT FORWARDER INTERNATIONAL\",\r\n    \"address1\":\"Some address here\",\r\n    \"address2\":\"Optional address\",\r\n    \"city\":\"New York\",\r\n    \"state\":\"Alaska\",\r\n    \"zipCode\":\"03142\",\r\n    \"phone\":\"0989809898\",\r\n    \"fax\":\"0676767676\",\r\n    \"email\":\"director@domain.com\",\r\n    \"website\":\"https://bla_bla.hub.com\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{origin}}/api/customer",
+							"host": [
+								"{{origin}}"
+							],
+							"path": [
+								"api",
+								"customer"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Customer",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\":\"Horns and Hoofs\",\r\n    \"type\":\"FREIGHT FORWARDER INTERNATIONAL\",\r\n    \"address1\":\"Some address here\",\r\n    \"address2\":\"Optional address\",\r\n    \"city\":\"New York\",\r\n    \"state\":\"Alaska\",\r\n    \"zipCode\":\"03142\",\r\n    \"phone\":\"0989809898\",\r\n    \"fax\":\"0676767676\",\r\n    \"email\":\"director@domain.com\",\r\n    \"website\":\"https://bla_bla.hub.com\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{origin}}/api/customer/:customerId",
+							"host": [
+								"{{origin}}"
+							],
+							"path": [
+								"api",
+								"customer",
+								":customerId"
+							],
+							"variable": [
+								{
+									"key": "customerId",
+									"value": "66367b9ba7d923452894b87d"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Customer",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{origin}}/api/customer/:customerId",
+							"host": [
+								"{{origin}}"
+							],
+							"path": [
+								"api",
+								"customer",
+								":customerId"
+							],
+							"variable": [
+								{
+									"key": "customerId",
+									"value": "66367b9ba7d923452894b87d"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Facility",
+			"item": [
+				{
+					"name": "List Facilities",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{origin}}/api/facility?limit=30&offset=0&orderby=name&direction=asc",
+							"host": [
+								"{{origin}}"
+							],
+							"path": [
+								"api",
+								"facility"
+							],
+							"query": [
+								{
+									"key": "limit",
+									"value": "30"
+								},
+								{
+									"key": "offset",
+									"value": "0"
+								},
+								{
+									"key": "orderby",
+									"value": "name",
+									"description": "'name'"
+								},
+								{
+									"key": "direction",
+									"value": "asc",
+									"description": "asc or desc"
+								},
+								{
+									"key": "name",
+									"value": "warehouse",
+									"disabled": true
+								},
+								{
+									"key": "address1",
+									"value": "",
+									"disabled": true
+								},
+								{
+									"key": "address2",
+									"value": "",
+									"disabled": true
+								},
+								{
+									"key": "facilityLocation",
+									"value": "50.45466,30.5238",
+									"description": "Latitude, Longitude",
+									"disabled": true
+								},
+								{
+									"key": "distance",
+									"value": "100",
+									"description": "miles",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Facility",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{origin}}/api/facility/:facilityId",
+							"host": [
+								"{{origin}}"
+							],
+							"path": [
+								"api",
+								"facility",
+								":facilityId"
+							],
+							"variable": [
+								{
+									"key": "facilityId",
+									"value": "66365650d546fb96617a5e51"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Facility",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\":\"warehouse 3\",\r\n    \"address1\":\"Some address here\",\r\n    \"address2\":\"bla-bla-bla\",\r\n    \"facilityLocation\":[50.45484,30.5263]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{origin}}/api/facility",
+							"host": [
+								"{{origin}}"
+							],
+							"path": [
+								"api",
+								"facility"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Facility",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\":\"warehouse 33\",\r\n    \"address1\":\"Some address here\",\r\n    \"address2\":\"bla-bla-bla\",\r\n    \"facilityLocation\":[50.45484,30.5263]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{origin}}/api/facility/:facilityId",
+							"host": [
+								"{{origin}}"
+							],
+							"path": [
+								"api",
+								"facility",
+								":facilityId"
+							],
+							"variable": [
+								{
+									"key": "facilityId",
+									"value": "66365650d546fb96617a5e51"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Facility",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{origin}}/api/facility/:facilityId",
+							"host": [
+								"{{origin}}"
+							],
+							"path": [
+								"api",
+								"facility",
+								":facilityId"
+							],
+							"variable": [
+								{
+									"key": "facilityId",
+									"value": "66365650d546fb96617a5e51"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "File",
+			"item": [
+				{
+					"name": "List Files",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{origin}}/api/file?limit=30&offset=0",
+							"host": [
+								"{{origin}}"
+							],
+							"path": [
+								"api",
+								"file"
+							],
+							"query": [
+								{
+									"key": "limit",
+									"value": "30"
+								},
+								{
+									"key": "offset",
+									"value": "0"
+								},
+								{
+									"key": "orderby",
+									"value": "filename",
+									"description": "'filename', 'createdAt'",
+									"disabled": true
+								},
+								{
+									"key": "direction",
+									"value": "asc",
+									"description": "asc or desc",
+									"disabled": true
+								},
+								{
+									"key": "filename",
+									"value": "image.svg",
+									"disabled": true
+								},
+								{
+									"key": "truck",
+									"value": "64d27f673413a42712c69645",
+									"disabled": true
+								},
+								{
+									"key": "person",
+									"value": "657e25869e04394b3780079c",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get File",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{origin}}/api/file/:fileId",
+							"host": [
+								"{{origin}}"
+							],
+							"path": [
+								"api",
+								"file",
+								":fileId"
+							],
+							"variable": [
+								{
+									"key": "fileId",
+									"value": "660c7879a5f4bea629741218"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Download File",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{origin}}/api/file/:fileId/download",
+							"host": [
+								"{{origin}}"
+							],
+							"path": [
+								"api",
+								"file",
+								":fileId",
+								"download"
+							],
+							"variable": [
+								{
+									"key": "fileId",
+									"value": "660c885b1dc66f093ba7c3db"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Upload file",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"type": "file",
+									"src": "/C:/Users/Andrey/Downloads/truck.svg"
+								},
+								{
+									"key": "linkedTo",
+									"value": "657e25869e04394b3780079c",
+									"type": "text"
+								},
+								{
+									"key": "fileOf",
+									"value": "Person",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{origin}}/api/file",
+							"host": [
+								"{{origin}}"
+							],
+							"path": [
+								"api",
+								"file"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete FIle",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{origin}}/api/file/:fileId",
+							"host": [
+								"{{origin}}"
+							],
+							"path": [
+								"api",
+								"file",
+								":fileId"
+							],
+							"variable": [
+								{
+									"key": "fileId",
+									"value": "660c7879a5f4bea629741218"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "SendMail (For Service test only)",
+			"item": [
+				{
+					"name": "SendMail",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"from\": \"Fred Foo 👻<test@@4u-logistics.com>\",\r\n    \"to\": \"aa5856bk@gmail.com\",\r\n    \"subject\": \"Hello ✔\",\r\n    \"text\": \"Hello world? (plain)\",\r\n    \"html\": \"<b>Hello world? (html)</b>\" \r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{origin}}/api/testEmail/send",
+							"host": [
+								"{{origin}}"
+							],
+							"path": [
+								"api",
+								"testEmail",
+								"send"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "List Emails",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{origin}}/api/testEmail?limit=30&offset=0&orderby=state&direction=asc",
+							"host": [
+								"{{origin}}"
+							],
+							"path": [
+								"api",
+								"testEmail"
+							],
+							"query": [
+								{
+									"key": "limit",
+									"value": "30"
+								},
+								{
+									"key": "offset",
+									"value": "0"
+								},
+								{
+									"key": "orderby",
+									"value": "state",
+									"description": "'state', 'from', 'subject', 'createdAt', 'updatedAt'"
+								},
+								{
+									"key": "direction",
+									"value": "asc",
+									"description": "asc or desc"
+								},
+								{
+									"key": "state",
+									"value": "",
+									"description": "'New',  'Ready',  'Processing',  'Sent',  'Error'",
+									"disabled": true
+								},
+								{
+									"key": "from",
+									"value": "",
+									"disabled": true
+								},
+								{
+									"key": "toType",
+									"value": "Ivo",
+									"description": "'User', 'Person'",
+									"disabled": true
+								},
+								{
+									"key": "subject",
+									"value": "",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Email",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{origin}}/api/testEmail/:emailId",
+							"host": [
+								"{{origin}}"
+							],
+							"path": [
+								"api",
+								"testEmail",
+								":emailId"
+							],
+							"variable": [
+								{
+									"key": "emailId",
+									"value": "65d27a7e905cde79941119a7"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Email",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"from\": \"Fred Foo 👻<test@@4u-logistics.com>\",\r\n    \"to\": [\r\n        {\r\n            \"to\": \"64dcb747db730feec83a7a8c\",\r\n            \"toType\": \"Person\"\r\n        },\r\n        {\r\n            \"to\": \"650da9c408d55a210c24d820\",\r\n            \"toType\": \"User\"\r\n        }\r\n    ],\r\n    \"subject\": \"Hello11 ✔\",\r\n    \"text\": \"Hello world11? (plain)\",\r\n    \"html\": \"<b>Hello world11? (html)</b>\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{origin}}/api/testEmail",
+							"host": [
+								"{{origin}}"
+							],
+							"path": [
+								"api",
+								"testEmail"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Email",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"state\": \"Ready\",\r\n    \"from\": \"Fred Foo 👻<test@@4u-logistics.com>\",\r\n    \"subject\": \"Hello11 ✔\",\r\n    \"text\": \"Hello world11? (plain)\",\r\n    \"html\": \"<b>Hello world11? (html)</b>\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{origin}}/api/testEmail/:emailId",
+							"host": [
+								"{{origin}}"
+							],
+							"path": [
+								"api",
+								"testEmail",
+								":emailId"
+							],
+							"variable": [
+								{
+									"key": "emailId",
+									"value": "65d27a7e905cde79941119a7"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Email",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{origin}}/api/testEmail/:emailId",
+							"host": [
+								"{{origin}}"
+							],
+							"path": [
+								"api",
+								"testEmail",
+								":emailId"
+							],
+							"variable": [
+								{
+									"key": "emailId",
+									"value": "65d1e0a89292d8255b714719"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "SendPush (For Service test only)",
+			"item": [
+				{
+					"name": "Send Push",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"to\": \"ExponentPushToken[ZjBCKvFwJDJxfVbPdPF-LW]\",\r\n    \"sound\": \"default\",\r\n    \"title\": \"LOG4U\",\r\n    \"body\": \"Hello world\",\r\n    \"data\": {\"еrouteTo\": \"/home/loads\"},\r\n    \"badge\": 4\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{origin}}/api/testPush/send",
+							"host": [
+								"{{origin}}"
+							],
+							"path": [
+								"api",
+								"testPush",
+								"send"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Receipt",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"to\": \"ExponentPushToken[_hcNcXNFTEX_d8a36vse1T]\",\r\n    \"sound\": \"default\",\r\n    \"title\": \"LOG4U\",\r\n    \"subtitle\": \"Yo\",\r\n    \"body\": \"Hello world\",\r\n    \"data\": {\"someData\": \"Yes\"},\r\n    \"badge\": 3\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{origin}}/api/testPush/receipt/:receiptId",
+							"host": [
+								"{{origin}}"
+							],
+							"path": [
+								"api",
+								"testPush",
+								"receipt",
+								":receiptId"
+							],
+							"variable": [
+								{
+									"key": "receiptId",
+									"value": "77b3ae4e-a704-48d0-befa-9e0a5faf1751"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "List Pushs",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{origin}}/api/testPush?limit=30&offset=0&orderby=state&direction=asc",
+							"host": [
+								"{{origin}}"
+							],
+							"path": [
+								"api",
+								"testPush"
+							],
+							"query": [
+								{
+									"key": "limit",
+									"value": "30"
+								},
+								{
+									"key": "offset",
+									"value": "0"
+								},
+								{
+									"key": "orderby",
+									"value": "state",
+									"description": "'state', 'from', 'subject', 'createdAt', 'updatedAt'"
+								},
+								{
+									"key": "direction",
+									"value": "asc",
+									"description": "asc or desc"
+								},
+								{
+									"key": "state",
+									"value": "New",
+									"description": "'New',  'Ready for send',  'Processing send',  'Sent for deliver',  'Error sending',  'Ready for receiving receipt',  'Processing receiving receipt',  'Sent to user',  'Error from receipt',  'Error receiving receipt'",
+									"disabled": true
+								},
+								{
+									"key": "title",
+									"value": "",
+									"disabled": true
+								},
+								{
+									"key": "subtitle",
+									"value": "",
+									"disabled": true
+								},
+								{
+									"key": "body",
+									"value": "",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Push",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{origin}}/api/testPush/:pushId",
+							"host": [
+								"{{origin}}"
+							],
+							"path": [
+								"api",
+								"testPush",
+								":pushId"
+							],
+							"variable": [
+								{
+									"key": "pushId",
+									"value": "65f4c63662626b41e2e6434b"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Push",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"to\": \"64dcb747db730feec83a7a8c\",\r\n    \"title\": \"LOG4U\",    \r\n    \"subtitle\": \"Hello ✔\",\r\n    \"body\": \"Hello world\",\r\n    \"data\": {\"еrouteTo\": \"/home/loads\"},\r\n    \"badge\": 4\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{origin}}/api/testPush",
+							"host": [
+								"{{origin}}"
+							],
+							"path": [
+								"api",
+								"testPush"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Push",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"state\": \"Ready for send\",\r\n    \"title\": \"LOG4U\",    \r\n    \"subtitle\": \"Hello ✔\",\r\n    \"body\": \"Hello world\",\r\n    \"data\": {\"еrouteTo\": \"/home/loads\"},\r\n    \"badge\": 4\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{origin}}/api/testPush/:pushId",
+							"host": [
+								"{{origin}}"
+							],
+							"path": [
+								"api",
+								"testPush",
+								":pushId"
+							],
+							"variable": [
+								{
+									"key": "pushId",
+									"value": "65f4d55cf8fa7ece76cf8e91"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Push",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{origin}}/api/testPush/:pushId",
+							"host": [
+								"{{origin}}"
+							],
+							"path": [
+								"api",
+								"testPush",
+								":pushId"
+							],
+							"variable": [
+								{
+									"key": "pushId",
+									"value": "65f4c63662626b41e2e6434b"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Job",
+			"item": [
+				{
+					"name": "Cron",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{origin}}/api/job/cron",
+							"host": [
+								"{{origin}}"
+							],
+							"path": [
+								"api",
+								"job",
+								"cron"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Interval",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{origin}}/api/job/interval",
+							"host": [
+								"{{origin}}"
+							],
+							"path": [
+								"api",
+								"job",
+								"interval"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Timeout",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{origin}}/api/job/timeout",
+							"host": [
+								"{{origin}}"
+							],
+							"path": [
+								"api",
+								"job",
+								"timeout"
 							]
 						}
 					},
@@ -2943,762 +4147,6 @@
 							""
 						]
 					}
-				}
-			]
-		},
-		{
-			"name": "SendMail (For Service test only)",
-			"item": [
-				{
-					"name": "SendMail",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"from\": \"Fred Foo 👻<test@@4u-logistics.com>\",\r\n    \"to\": \"aa5856bk@gmail.com\",\r\n    \"subject\": \"Hello ✔\",\r\n    \"text\": \"Hello world? (plain)\",\r\n    \"html\": \"<b>Hello world? (html)</b>\" \r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{origin}}/api/testEmail/send",
-							"host": [
-								"{{origin}}"
-							],
-							"path": [
-								"api",
-								"testEmail",
-								"send"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "List Emails",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{origin}}/api/testEmail?limit=30&offset=0&orderby=state&direction=asc",
-							"host": [
-								"{{origin}}"
-							],
-							"path": [
-								"api",
-								"testEmail"
-							],
-							"query": [
-								{
-									"key": "limit",
-									"value": "30"
-								},
-								{
-									"key": "offset",
-									"value": "0"
-								},
-								{
-									"key": "orderby",
-									"value": "state",
-									"description": "'state', 'from', 'subject', 'createdAt', 'updatedAt'"
-								},
-								{
-									"key": "direction",
-									"value": "asc",
-									"description": "asc or desc"
-								},
-								{
-									"key": "state",
-									"value": "",
-									"description": "'New',  'Ready',  'Processing',  'Sent',  'Error'",
-									"disabled": true
-								},
-								{
-									"key": "from",
-									"value": "",
-									"disabled": true
-								},
-								{
-									"key": "toType",
-									"value": "Ivo",
-									"description": "'User', 'Person'",
-									"disabled": true
-								},
-								{
-									"key": "subject",
-									"value": "",
-									"disabled": true
-								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Get Email",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
-					"request": {
-						"method": "GET",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{origin}}/api/testEmail/:emailId",
-							"host": [
-								"{{origin}}"
-							],
-							"path": [
-								"api",
-								"testEmail",
-								":emailId"
-							],
-							"variable": [
-								{
-									"key": "emailId",
-									"value": "65d27a7e905cde79941119a7"
-								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Create Email",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"from\": \"Fred Foo 👻<test@@4u-logistics.com>\",\r\n    \"to\": [\r\n        {\r\n            \"to\": \"64dcb747db730feec83a7a8c\",\r\n            \"toType\": \"Person\"\r\n        },\r\n        {\r\n            \"to\": \"650da9c408d55a210c24d820\",\r\n            \"toType\": \"User\"\r\n        }\r\n    ],\r\n    \"subject\": \"Hello11 ✔\",\r\n    \"text\": \"Hello world11? (plain)\",\r\n    \"html\": \"<b>Hello world11? (html)</b>\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{origin}}/api/testEmail",
-							"host": [
-								"{{origin}}"
-							],
-							"path": [
-								"api",
-								"testEmail"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Update Email",
-					"request": {
-						"method": "PATCH",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"state\": \"Ready\",\r\n    \"from\": \"Fred Foo 👻<test@@4u-logistics.com>\",\r\n    \"subject\": \"Hello11 ✔\",\r\n    \"text\": \"Hello world11? (plain)\",\r\n    \"html\": \"<b>Hello world11? (html)</b>\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{origin}}/api/testEmail/:emailId",
-							"host": [
-								"{{origin}}"
-							],
-							"path": [
-								"api",
-								"testEmail",
-								":emailId"
-							],
-							"variable": [
-								{
-									"key": "emailId",
-									"value": "65d27a7e905cde79941119a7"
-								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Delete Email",
-					"request": {
-						"method": "DELETE",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{origin}}/api/testEmail/:emailId",
-							"host": [
-								"{{origin}}"
-							],
-							"path": [
-								"api",
-								"testEmail",
-								":emailId"
-							],
-							"variable": [
-								{
-									"key": "emailId",
-									"value": "65d1e0a89292d8255b714719"
-								}
-							]
-						}
-					},
-					"response": []
-				}
-			]
-		},
-		{
-			"name": "SendPush (For Service test only)",
-			"item": [
-				{
-					"name": "Send Push",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"to\": \"ExponentPushToken[ZjBCKvFwJDJxfVbPdPF-LW]\",\r\n    \"sound\": \"default\",\r\n    \"title\": \"LOG4U\",\r\n    \"body\": \"Hello world\",\r\n    \"data\": {\"еrouteTo\": \"/home/loads\"},\r\n    \"badge\": 4\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{origin}}/api/testPush/send",
-							"host": [
-								"{{origin}}"
-							],
-							"path": [
-								"api",
-								"testPush",
-								"send"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Get Receipt",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
-					"request": {
-						"method": "GET",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"to\": \"ExponentPushToken[_hcNcXNFTEX_d8a36vse1T]\",\r\n    \"sound\": \"default\",\r\n    \"title\": \"LOG4U\",\r\n    \"subtitle\": \"Yo\",\r\n    \"body\": \"Hello world\",\r\n    \"data\": {\"someData\": \"Yes\"},\r\n    \"badge\": 3\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{origin}}/api/testPush/receipt/:receiptId",
-							"host": [
-								"{{origin}}"
-							],
-							"path": [
-								"api",
-								"testPush",
-								"receipt",
-								":receiptId"
-							],
-							"variable": [
-								{
-									"key": "receiptId",
-									"value": "77b3ae4e-a704-48d0-befa-9e0a5faf1751"
-								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "List Pushs",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{origin}}/api/testPush?limit=30&offset=0&orderby=state&direction=asc",
-							"host": [
-								"{{origin}}"
-							],
-							"path": [
-								"api",
-								"testPush"
-							],
-							"query": [
-								{
-									"key": "limit",
-									"value": "30"
-								},
-								{
-									"key": "offset",
-									"value": "0"
-								},
-								{
-									"key": "orderby",
-									"value": "state",
-									"description": "'state', 'from', 'subject', 'createdAt', 'updatedAt'"
-								},
-								{
-									"key": "direction",
-									"value": "asc",
-									"description": "asc or desc"
-								},
-								{
-									"key": "state",
-									"value": "New",
-									"description": "'New',  'Ready for send',  'Processing send',  'Sent for deliver',  'Error sending',  'Ready for receiving receipt',  'Processing receiving receipt',  'Sent to user',  'Error from receipt',  'Error receiving receipt'",
-									"disabled": true
-								},
-								{
-									"key": "title",
-									"value": "",
-									"disabled": true
-								},
-								{
-									"key": "subtitle",
-									"value": "",
-									"disabled": true
-								},
-								{
-									"key": "body",
-									"value": "",
-									"disabled": true
-								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Get Push",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
-					"request": {
-						"method": "GET",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{origin}}/api/testPush/:pushId",
-							"host": [
-								"{{origin}}"
-							],
-							"path": [
-								"api",
-								"testPush",
-								":pushId"
-							],
-							"variable": [
-								{
-									"key": "pushId",
-									"value": "65f4c63662626b41e2e6434b"
-								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Create Push",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"to\": \"64dcb747db730feec83a7a8c\",\r\n    \"title\": \"LOG4U\",    \r\n    \"subtitle\": \"Hello ✔\",\r\n    \"body\": \"Hello world\",\r\n    \"data\": {\"еrouteTo\": \"/home/loads\"},\r\n    \"badge\": 4\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{origin}}/api/testPush",
-							"host": [
-								"{{origin}}"
-							],
-							"path": [
-								"api",
-								"testPush"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Update Push",
-					"request": {
-						"method": "PATCH",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"state\": \"Ready for send\",\r\n    \"title\": \"LOG4U\",    \r\n    \"subtitle\": \"Hello ✔\",\r\n    \"body\": \"Hello world\",\r\n    \"data\": {\"еrouteTo\": \"/home/loads\"},\r\n    \"badge\": 4\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{origin}}/api/testPush/:pushId",
-							"host": [
-								"{{origin}}"
-							],
-							"path": [
-								"api",
-								"testPush",
-								":pushId"
-							],
-							"variable": [
-								{
-									"key": "pushId",
-									"value": "65f4d55cf8fa7ece76cf8e91"
-								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Delete Push",
-					"request": {
-						"method": "DELETE",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{origin}}/api/testPush/:pushId",
-							"host": [
-								"{{origin}}"
-							],
-							"path": [
-								"api",
-								"testPush",
-								":pushId"
-							],
-							"variable": [
-								{
-									"key": "pushId",
-									"value": "65f4c63662626b41e2e6434b"
-								}
-							]
-						}
-					},
-					"response": []
-				}
-			]
-		},
-		{
-			"name": "File",
-			"item": [
-				{
-					"name": "List Files",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{origin}}/api/file?limit=30&offset=0",
-							"host": [
-								"{{origin}}"
-							],
-							"path": [
-								"api",
-								"file"
-							],
-							"query": [
-								{
-									"key": "limit",
-									"value": "30"
-								},
-								{
-									"key": "offset",
-									"value": "0"
-								},
-								{
-									"key": "orderby",
-									"value": "filename",
-									"description": "'filename', 'createdAt'",
-									"disabled": true
-								},
-								{
-									"key": "direction",
-									"value": "asc",
-									"description": "asc or desc",
-									"disabled": true
-								},
-								{
-									"key": "filename",
-									"value": "image.svg",
-									"disabled": true
-								},
-								{
-									"key": "truck",
-									"value": "64d27f673413a42712c69645",
-									"disabled": true
-								},
-								{
-									"key": "person",
-									"value": "657e25869e04394b3780079c",
-									"disabled": true
-								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Get File",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
-					"request": {
-						"method": "GET",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{origin}}/api/file/:fileId",
-							"host": [
-								"{{origin}}"
-							],
-							"path": [
-								"api",
-								"file",
-								":fileId"
-							],
-							"variable": [
-								{
-									"key": "fileId",
-									"value": "660c7879a5f4bea629741218"
-								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Download File",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
-					"request": {
-						"method": "GET",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{origin}}/api/file/:fileId/download",
-							"host": [
-								"{{origin}}"
-							],
-							"path": [
-								"api",
-								"file",
-								":fileId",
-								"download"
-							],
-							"variable": [
-								{
-									"key": "fileId",
-									"value": "660c885b1dc66f093ba7c3db"
-								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Upload file",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "formdata",
-							"formdata": [
-								{
-									"key": "file",
-									"type": "file",
-									"src": "/C:/Users/Andrey/Downloads/truck.svg"
-								},
-								{
-									"key": "linkedTo",
-									"value": "657e25869e04394b3780079c",
-									"type": "text"
-								},
-								{
-									"key": "fileOf",
-									"value": "Person",
-									"type": "text"
-								}
-							]
-						},
-						"url": {
-							"raw": "{{origin}}/api/file",
-							"host": [
-								"{{origin}}"
-							],
-							"path": [
-								"api",
-								"file"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Delete FIle",
-					"request": {
-						"method": "DELETE",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{origin}}/api/file/:fileId",
-							"host": [
-								"{{origin}}"
-							],
-							"path": [
-								"api",
-								"file",
-								":fileId"
-							],
-							"variable": [
-								{
-									"key": "fileId",
-									"value": "660c7879a5f4bea629741218"
-								}
-							]
-						}
-					},
-					"response": []
-				}
-			]
-		},
-		{
-			"name": "Job",
-			"item": [
-				{
-					"name": "Cron",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{origin}}/api/job/cron",
-							"host": [
-								"{{origin}}"
-							],
-							"path": [
-								"api",
-								"job",
-								"cron"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Interval",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{origin}}/api/job/interval",
-							"host": [
-								"{{origin}}"
-							],
-							"path": [
-								"api",
-								"job",
-								"interval"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Timeout",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{origin}}/api/job/timeout",
-							"host": [
-								"{{origin}}"
-							],
-							"path": [
-								"api",
-								"job",
-								"timeout"
-							]
-						}
-					},
-					"response": []
 				}
 			]
 		},

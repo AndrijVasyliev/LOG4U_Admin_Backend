@@ -1,7 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, ObjectId } from 'mongoose';
-import { USER_ROLES } from '../utils/constants';
-import { UserRole } from '../utils/general.dto';
+import { ADMIN_ROLES } from '../utils/constants';
+import { AdminRole } from '../utils/general.dto';
 import { hash } from '../utils/hash';
 
 export type UserDocument = User & Document;
@@ -18,8 +18,8 @@ export class User {
   @Prop({ required: false })
   phone?: string;
 
-  @Prop({ required: true, type: String, enum: USER_ROLES })
-  userRole: UserRole;
+  @Prop({ required: true, type: String, enum: ADMIN_ROLES })
+  userRole: AdminRole;
 
   @Prop({ required: true })
   jobTitle: string;

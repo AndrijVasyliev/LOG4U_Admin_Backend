@@ -12,6 +12,8 @@ import {
   TRUCK_STATUSES,
   TRUCK_TYPES,
   USER_ROLES,
+  ADMIN_ROLES,
+  MOBILE_ROLES,
 } from './constants';
 
 export type GeoPointType = [number, number];
@@ -23,6 +25,8 @@ export type MongoGeoPointType = {
 
 export type PersonType = (typeof PERSON_TYPES)[number];
 export type LangPriority = (typeof LANG_PRIORITIES)[number];
+export type MobileRole = (typeof MOBILE_ROLES)[number];
+export type AdminRole = (typeof ADMIN_ROLES)[number];
 export type UserRole = (typeof USER_ROLES)[number];
 export type CustomerType = (typeof CUSTOMER_TYPES)[number];
 export type TruckType = (typeof TRUCK_TYPES)[number];

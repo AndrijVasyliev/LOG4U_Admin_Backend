@@ -1,11 +1,11 @@
 import * as Joi from 'joi';
-import { USER_ROLES } from '../utils/constants';
+import { ADMIN_ROLES } from '../utils/constants';
 
 export const CreateUserValidation = Joi.object({
   fullName: Joi.string().required(),
   phone: Joi.string().allow('').optional(),
   userRole: Joi.string()
-    .valid(...USER_ROLES)
+    .valid(...ADMIN_ROLES)
     .required(),
   jobTitle: Joi.string().required(),
   email: Joi.string().required(),
@@ -16,7 +16,7 @@ export const UpdateUserValidation = Joi.object({
   fullName: Joi.string().optional(),
   phone: Joi.string().allow('').optional(),
   userRole: Joi.string()
-    .valid(...USER_ROLES)
+    .valid(...ADMIN_ROLES)
     .optional(),
   jobTitle: Joi.string().optional(),
   email: Joi.string().optional(),
@@ -30,7 +30,7 @@ export const UserQueryParamsSchema = Joi.object({
   fullName: Joi.string().optional(),
   phone: Joi.string().optional(),
   userRole: Joi.string()
-    .valid(...USER_ROLES)
+    .valid(...ADMIN_ROLES)
     .optional(),
   jobTitle: Joi.string().optional(),
   email: Joi.string().optional(),

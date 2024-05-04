@@ -1,11 +1,11 @@
 import { PaginateResult } from 'mongoose';
 import { User } from './user.schema';
-import { Query, PaginatedResultDto, UserRole } from '../utils/general.dto';
+import { Query, PaginatedResultDto, AdminRole } from '../utils/general.dto';
 
 export class CreateUserDto {
   readonly fullName: string;
   readonly phone?: string;
-  readonly userRole: UserRole;
+  readonly userRole: AdminRole;
   readonly jobTitle: string;
   readonly email: string;
   readonly password: string;
@@ -14,7 +14,7 @@ export class CreateUserDto {
 export class UpdateUserDto {
   readonly fullName?: string;
   readonly phone?: string;
-  readonly userRole?: UserRole;
+  readonly userRole?: AdminRole;
   readonly jobTitle?: string;
   readonly email?: string;
   readonly password?: string;
@@ -24,7 +24,7 @@ export class UserQuerySearch {
   readonly search?: string;
   readonly fullName?: string;
   readonly phone?: string;
-  readonly userRole?: UserRole;
+  readonly userRole?: AdminRole;
   readonly jobTitle?: string;
   readonly email?: string;
   readonly password?: string;
@@ -47,7 +47,7 @@ export class UserResultDto {
   readonly id: string;
   readonly fullName: string;
   readonly phone?: string;
-  readonly userRole: UserRole;
+  readonly userRole: AdminRole;
   readonly jobTitle: string;
   readonly email: string;
 }
