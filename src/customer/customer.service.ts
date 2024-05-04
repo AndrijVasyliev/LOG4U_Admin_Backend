@@ -1,0 +1,171 @@
+import { mongo, PaginateModel, PaginateOptions } from 'mongoose';
+import {
+  ConflictException,
+  Injectable,
+  InternalServerErrorException,
+  NotFoundException,
+} from '@nestjs/common';
+import { InjectModel } from '@nestjs/mongoose';
+import { LoggerService } from '../logger';
+import {
+  MONGO_CONNECTION_NAME,
+  MONGO_UNIQUE_INDEX_CONFLICT,
+  UNIQUE_CONSTRAIN_ERROR,
+} from '../utils/constants';
+import { Customer, CustomerDocument } from './customer.schema';
+import {
+  CreateCustomerDto,
+  CustomerQuery,
+  CustomerResultDto,
+  PaginatedCustomerResultDto,
+  UpdateCustomerDto,
+} from './customer.dto';
+import { escapeForRegExp } from '../utils/escapeForRegExp';
+
+const { MongoError } = mongo;
+
+@Injectable()
+export class CustomerService {
+  constructor(
+    @InjectModel(Customer.name, MONGO_CONNECTION_NAME)
+    private readonly customerModel: PaginateModel<CustomerDocument>,
+    private readonly log: LoggerService,
+  ) {}
+
+  private async findCustomerDocumentById(
+    id: string,
+  ): Promise<CustomerDocument> {
+    this.log.debug(`Searching for Customer ${id}`);
+    const customer = await this.customerModel.findOne({ _id: id });
+    if (!customer) {
+      throw new NotFoundException(`Customer ${id} was not found`);
+    }
+    this.log.debug(`Customer ${customer._id}`);
+
+    return customer;
+  }
+
+  async getCustomerByCredentials(
+    email: string,
+    password: string,
+  ): Promise<CustomerResultDto | null> {
+    this.log.debug(`Searching for Customer by email ${email}`);
+    const customer = await this.customerModel.findOne({
+      email,
+      password,
+    });
+    if (!customer) {
+      this.log.debug(`Customer with email ${email} was not found`);
+      return null;
+    }
+    this.log.debug(`Customer ${customer._id}`);
+    return CustomerResultDto.fromCustomerModel(customer);
+  }
+
+  async findCustomerById(id: string): Promise<CustomerResultDto> {
+    const customer = await this.findCustomerDocumentById(id);
+    return CustomerResultDto.fromCustomerModel(customer);
+  }
+
+  async getCustomers(
+    query: CustomerQuery,
+  ): Promise<PaginatedCustomerResultDto> {
+    this.log.debug(`Searching for Customers: ${JSON.stringify(query)}`);
+
+    const documentQuery: Parameters<typeof this.customerModel.paginate>[0] = {};
+    if (query.search) {
+      const searchParams = Object.entries(query.search);
+      searchParams.forEach((entry) => {
+        entry[0] !== 'search' &&
+          (documentQuery[entry[0]] = {
+            $regex: new RegExp(escapeForRegExp(entry[1]), 'i'),
+          });
+      });
+    }
+    if (query?.search?.search) {
+      const search = escapeForRegExp(query?.search?.search);
+      documentQuery.$or = [
+        { name: { $regex: new RegExp(search, 'i') } },
+        { phone: { $regex: new RegExp(search, 'i') } },
+        { fax: { $regex: new RegExp(search, 'i') } },
+        { email: { $regex: new RegExp(search, 'i') } },
+        { website: { $regex: new RegExp(search, 'i') } },
+      ];
+    }
+
+    const options: PaginateOptions = {
+      limit: query.limit,
+      offset: query.offset,
+    };
+    if (query.direction && query.orderby) {
+      options.sort = { [query.orderby]: query.direction };
+    }
+
+    const res = await this.customerModel.paginate(documentQuery, options);
+
+    return PaginatedCustomerResultDto.from(res);
+  }
+
+  async createCustomer(
+    createCustomerDto: CreateCustomerDto,
+  ): Promise<CustomerResultDto> {
+    this.log.debug(
+      `Creating new Customer: ${JSON.stringify(createCustomerDto)}`,
+    );
+    const createdCustomer = new this.customerModel(createCustomerDto);
+
+    try {
+      this.log.debug('Saving Customer');
+      const customer = await createdCustomer.save();
+      return CustomerResultDto.fromCustomerModel(customer);
+    } catch (e) {
+      if (!(e instanceof Error)) {
+        throw new InternalServerErrorException(JSON.stringify(e));
+      }
+      if (e instanceof MongoError && e.code === MONGO_UNIQUE_INDEX_CONFLICT) {
+        throw new ConflictException({ type: UNIQUE_CONSTRAIN_ERROR, e });
+      }
+      throw new InternalServerErrorException(e.message);
+    }
+  }
+
+  async updateCustomer(
+    id: string,
+    updateCustomerDto: UpdateCustomerDto,
+  ): Promise<CustomerResultDto> {
+    const customer = await this.findCustomerDocumentById(id);
+    this.log.debug(`Setting new values: ${JSON.stringify(updateCustomerDto)}`);
+    Object.assign(customer, updateCustomerDto);
+    try {
+      this.log.debug('Saving Customer');
+      const savedCustomer = await customer.save();
+      this.log.debug(`Customer ${savedCustomer._id} saved`);
+      return CustomerResultDto.fromCustomerModel(customer);
+    } catch (e) {
+      if (!(e instanceof Error)) {
+        throw new InternalServerErrorException(JSON.stringify(e));
+      }
+      if (e instanceof MongoError && e.code === MONGO_UNIQUE_INDEX_CONFLICT) {
+        throw new ConflictException({ type: UNIQUE_CONSTRAIN_ERROR, e });
+      }
+      throw new InternalServerErrorException(e.message);
+    }
+  }
+
+  async deleteCustomer(id: string): Promise<CustomerResultDto> {
+    const customer = await this.findCustomerDocumentById(id);
+
+    this.log.debug(`Deleting Customer ${customer._id}`);
+
+    try {
+      await customer.deleteOne();
+      this.log.debug('Customer deleted');
+    } catch (e) {
+      if (!(e instanceof Error)) {
+        throw new InternalServerErrorException(JSON.stringify(e));
+      }
+      throw new InternalServerErrorException(e.message);
+    }
+    return CustomerResultDto.fromCustomerModel(customer);
+  }
+}

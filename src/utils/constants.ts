@@ -91,6 +91,16 @@ export const EMAIL_TO_TYPES = ['User', 'Person'] as const;
 
 export const FILE_OF_TYPES = ['Truck', 'Person'] as const;
 
+export const CUSTOMER_TYPES = [
+  'BROKER DOMESTIC',
+  'BROKER INTERNATIONAL',
+  'FREIGHT FORWARDER DOMESTIC',
+  'FREIGHT FORWARDER INTERNATIONAL',
+  'SHIPPER/CONSIGNEE DOMESTIC',
+  'SHIPPER/CONSIGNEE INTERNATIONAL',
+  'OTHER',
+] as const;
+
 export const TRUCK_TYPES = [
   'Cargo van',
   'Reefer van',

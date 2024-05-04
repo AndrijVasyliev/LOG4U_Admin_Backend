@@ -5,6 +5,7 @@ import {
   LANG_PRIORITIES,
   PERSON_TYPES,
   PUSH_STATES,
+  CUSTOMER_TYPES,
   TRUCK_CERTIFICATES,
   TRUCK_CROSSBORDERS,
   TRUCK_EQUIPMENTS,
@@ -23,6 +24,7 @@ export type MongoGeoPointType = {
 export type PersonType = (typeof PERSON_TYPES)[number];
 export type LangPriority = (typeof LANG_PRIORITIES)[number];
 export type UserRole = (typeof USER_ROLES)[number];
+export type CustomerType = (typeof CUSTOMER_TYPES)[number];
 export type TruckType = (typeof TRUCK_TYPES)[number];
 export type TruckStatus = (typeof TRUCK_STATUSES)[number];
 export type TruckCrossborder = (typeof TRUCK_CROSSBORDERS)[number];

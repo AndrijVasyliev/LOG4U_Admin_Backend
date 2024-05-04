@@ -38,14 +38,6 @@ export class FacilityController {
     private readonly facilityService: FacilityService,
   ) {}
 
-  @Get('auth')
-  async auth(@Req() request: Request): Promise<FacilityResultDto> {
-    const { facility } = request as unknown as {
-      facility: FacilityResultDto;
-    };
-    return facility;
-  }
-
   @Get()
   async getFacilities(
     @Query(new QueryParamsPipe<FacilityQuerySearch>(FacilityQueryParamsSchema))
