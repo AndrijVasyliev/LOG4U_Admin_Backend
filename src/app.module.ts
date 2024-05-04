@@ -2,21 +2,17 @@ import './utils/fixMongooseStringValidation';
 import { Module, NestModule, MiddlewareConsumer } from '@nestjs/common';
 import { ScheduleModule } from '@nestjs/schedule';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { MetricsModule } from './metrics/metrics.module';
-import { MongooseModule, MongooseModuleFactoryOptions } from '@nestjs/mongoose';
 import { ServeStaticModule } from '@nestjs/serve-static';
-import { Connection, Schema as MongooseSchema } from 'mongoose';
-import * as mongoosePaginate from 'mongoose-paginate-v2';
-import * as mongooseAutopopulate from 'mongoose-autopopulate';
-import { DeleteField } from './utils/mongooseDeleteField';
 import { join } from 'path';
 
 import configuration from '../config/configuration';
 
-import { HealthModule } from './health/health.module';
 import { LoggerModule, LogLevel, LogFormat } from './logger';
 import { ResponseTimeMiddleware } from './utils/responseTime.middleware';
 
+import { MongooseConnectionModule } from './mongoose/mongooseConnection.module';
+import { HealthModule } from './health/health.module';
+import { MetricsModule } from './metrics/metrics.module';
 import { PersonModule } from './person/person.module';
 import { OwnerModule } from './owner/owner.module';
 import { OwnerDriverModule } from './ownerDriver/ownerDriver.module';
@@ -36,6 +32,7 @@ import { AuthModule } from './auth/auth.module';
 import { EmailModule } from './email/email.module';
 import { PushModule } from './push/push.module';
 import { FileModule } from './file/file.module';
+import { ChatModule } from './chat/chat.module';
 
 import { CoordinatorController } from './coordinator/coordinator.controller';
 import { CoordinatorDriverController } from './coordinatorDriver/coordinatorDriver.controller';
@@ -55,10 +52,6 @@ import { PersonController } from './person/person.controller';
 import { PushController } from './push/push.controller';
 import { TruckController } from './truck/truck.controller';
 import { UserController } from './user/user.controller';
-
-import { MONGO_CONNECTION_NAME } from './utils/constants';
-
-import { ChatModule } from './chat/chat.module';
 
 @Module({
   imports: [
@@ -85,6 +78,7 @@ import { ChatModule } from './chat/chat.module';
             OwnerController,
             OwnerDriverController,
             FacilityController,
+            CustomerController,
             PersonController,
             PushController,
             TruckController,
@@ -103,33 +97,13 @@ import { ChatModule } from './chat/chat.module';
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, '..', '..', 'static'),
     }),
+    MongooseConnectionModule,
     ScheduleModule.forRoot(),
     AuthModule,
     HealthModule,
+    MetricsModule,
     JobModule,
     GoogleGeoApiModule,
-    MongooseModule.forRootAsync({
-      imports: [ConfigModule],
-      connectionName: MONGO_CONNECTION_NAME,
-      useFactory: async (configService: ConfigService) => {
-        return {
-          ...configService.get<MongooseModuleFactoryOptions>('db'),
-          connectionFactory: (connection: Connection): Connection => {
-            connection
-              .plugin(mongoosePaginate)
-              .plugin(
-                mongooseAutopopulate as unknown as (
-                  schema: MongooseSchema,
-                ) => void,
-              )
-              .plugin(DeleteField);
-            return connection;
-          },
-        };
-      },
-      inject: [ConfigService],
-    }),
-    MetricsModule,
     PersonModule,
     OwnerModule,
     OwnerDriverModule,

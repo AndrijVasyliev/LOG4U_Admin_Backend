@@ -1,12 +1,12 @@
 import { hostname } from 'node:os';
-import { Injectable } from '@nestjs/common';
+import { Injectable, Scope } from '@nestjs/common';
 import {
-  PrometheusOptionsFactory,
   PrometheusOptions,
+  PrometheusOptionsFactory,
 } from '@willsoto/nestjs-prometheus';
 import { ConfigService } from '@nestjs/config';
 
-@Injectable()
+@Injectable({ scope: Scope.TRANSIENT })
 export class PromConfigService implements PrometheusOptionsFactory {
   constructor(private readonly configService: ConfigService) {}
 

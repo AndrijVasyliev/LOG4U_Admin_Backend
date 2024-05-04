@@ -6,17 +6,14 @@ import {
   makeSummaryProvider,
 } from '@willsoto/nestjs-prometheus';
 import { MetricsController } from './metrics.controller';
-import { ConfigModule, ConfigService } from '@nestjs/config';
-import { PromConfigService } from '../prometheus/prometheus.config.service';
+import { PromConfigService } from '../prometheus/prometheus.configService';
 import { MetricsInterceptor } from './metrics.interceptor';
 
 @Module({
   imports: [
     PrometheusModule.registerAsync({
       controller: MetricsController,
-      imports: [ConfigModule],
       useClass: PromConfigService,
-      inject: [ConfigService],
     }),
   ],
   providers: [

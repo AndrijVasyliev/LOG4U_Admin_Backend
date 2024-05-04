@@ -29,7 +29,7 @@ export class LoggerService implements LoggerServiceInterface {
   private readonly logger: typeof DefaultLogger;
   private readonly context: string;
 
-  constructor(@Inject(INQUIRER) private parentClass: object) {
+  constructor(@Inject(INQUIRER) private readonly parentClass: object) {
     this.logger = DefaultLogger;
     this.context = parentClass?.constructor?.name || '';
   }

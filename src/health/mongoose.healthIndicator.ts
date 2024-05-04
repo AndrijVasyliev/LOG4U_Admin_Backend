@@ -1,10 +1,4 @@
-import {
-  ConflictException,
-  Injectable,
-  Scope,
-  InternalServerErrorException,
-  NotFoundException,
-} from '@nestjs/common';
+import { Injectable, Scope } from '@nestjs/common';
 import { ModuleRef } from '@nestjs/core';
 import { getConnectionToken } from '@nestjs/mongoose';
 import { connection as MongoConnection } from 'mongoose';
