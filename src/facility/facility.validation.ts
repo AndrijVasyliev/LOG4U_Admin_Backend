@@ -7,14 +7,14 @@ import {
 
 export const CreateFacilityValidation = Joi.object({
   name: Joi.string().required(),
-  address1: Joi.string().required(),
+  address: Joi.string().required(),
   address2: Joi.string().allow('').optional(),
   facilityLocation: GeoPointBodyValidation.required(),
 });
 
 export const UpdateFacilityValidation = Joi.object({
   name: Joi.string().optional(),
-  address1: Joi.string().optional(),
+  address: Joi.string().optional(),
   address2: Joi.string().allow('').optional(),
   facilityLocation: GeoPointBodyValidation.optional(),
 });
@@ -23,7 +23,7 @@ export const FacilityQueryParamsSchema = Joi.object({
   offset: Joi.number().integer().min(0).optional(),
   limit: Joi.number().integer().min(1).optional(),
   name: Joi.string().optional(),
-  address1: Joi.string().optional(),
+  address: Joi.string().optional(),
   address2: Joi.string().optional(),
 })
   .keys({

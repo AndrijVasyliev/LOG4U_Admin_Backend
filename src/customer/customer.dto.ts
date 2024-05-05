@@ -5,7 +5,7 @@ import { Query, PaginatedResultDto, CustomerType } from '../utils/general.dto';
 export class CreateCustomerDto {
   readonly name: string;
   readonly type: CustomerType;
-  readonly address1: string;
+  readonly address: string;
   readonly address2?: string;
   readonly city: string;
   readonly state: string;
@@ -19,7 +19,7 @@ export class CreateCustomerDto {
 export class UpdateCustomerDto {
   readonly name?: string;
   readonly type?: CustomerType;
-  readonly address1?: string;
+  readonly address?: string;
   readonly address2?: string;
   readonly city?: string;
   readonly state?: string;
@@ -34,7 +34,7 @@ export class CustomerQuerySearch {
   readonly search?: string;
   readonly name?: string;
   readonly type?: CustomerType;
-  readonly address1?: string;
+  readonly address?: string;
   readonly address2?: string;
   readonly city?: string;
   readonly state?: string;
@@ -53,7 +53,7 @@ export class CustomerResultDto {
       id: customer._id.toString(),
       name: customer.name,
       type: customer.type,
-      address1: customer.address1,
+      address: customer.address,
       address2: customer.address2,
       city: customer.city,
       state: customer.state,
@@ -68,7 +68,7 @@ export class CustomerResultDto {
   readonly id: string;
   readonly name: string;
   readonly type: CustomerType;
-  readonly address1: string;
+  readonly address: string;
   readonly address2?: string;
   readonly city: string;
   readonly state: string;

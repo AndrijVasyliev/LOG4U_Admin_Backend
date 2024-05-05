@@ -15,7 +15,7 @@ export class Facility {
   name: string;
 
   @Prop({ required: true })
-  address1: string;
+  address: string;
 
   @Prop({ required: false })
   address2?: string;

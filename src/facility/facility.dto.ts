@@ -4,21 +4,21 @@ import { Query, PaginatedResultDto, GeoPointType } from '../utils/general.dto';
 
 export class CreateFacilityDto {
   readonly name: string;
-  readonly address1: string;
+  readonly address: string;
   readonly address2?: string;
   readonly facilityLocation: GeoPointType;
 }
 
 export class UpdateFacilityDto {
   readonly name?: string;
-  readonly address1?: string;
+  readonly address?: string;
   readonly address2?: string;
   readonly facilityLocation?: GeoPointType;
 }
 
 export class FacilityQuerySearch {
   readonly name?: string;
-  readonly address1?: string;
+  readonly address?: string;
   readonly address2?: string;
   readonly facilityLocation?: GeoPointType;
   readonly distance?: number;
@@ -31,7 +31,7 @@ export class FacilityResultDto {
     return {
       id: facility._id.toString(),
       name: facility.name,
-      address1: facility.address1,
+      address: facility.address,
       address2: facility.address2,
       facilityLocation: facility.facilityLocation,
     };
@@ -39,7 +39,7 @@ export class FacilityResultDto {
 
   readonly id: string;
   readonly name: string;
-  readonly address1: string;
+  readonly address: string;
   readonly address2?: string;
   readonly facilityLocation: GeoPointType;
 }

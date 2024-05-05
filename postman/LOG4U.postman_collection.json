@@ -2472,7 +2472,7 @@
 								{
 									"key": "orderby",
 									"value": "name",
-									"description": "'name', 'customerRole', 'address1', 'city', 'state', 'zipCode', 'phone', 'email'"
+									"description": "'name', 'customerRole', 'address', 'city', 'state', 'zipCode', 'phone', 'email'"
 								},
 								{
 									"key": "direction",
@@ -2496,7 +2496,7 @@
 									"disabled": true
 								},
 								{
-									"key": "address1",
+									"key": "address",
 									"value": "",
 									"disabled": true
 								},
@@ -2589,7 +2589,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"name\":\"Horns and Hoofs\",\r\n    \"type\":\"FREIGHT FORWARDER INTERNATIONAL\",\r\n    \"address1\":\"Some address here\",\r\n    \"address2\":\"Optional address\",\r\n    \"city\":\"New York\",\r\n    \"state\":\"Alaska\",\r\n    \"zipCode\":\"03142\",\r\n    \"phone\":\"0989809898\",\r\n    \"fax\":\"0676767676\",\r\n    \"email\":\"director@domain.com\",\r\n    \"website\":\"https://bla_bla.hub.com\"\r\n}",
+							"raw": "{\r\n    \"name\":\"Horns and Hoofs\",\r\n    \"type\":\"FREIGHT FORWARDER INTERNATIONAL\",\r\n    \"address\":\"Some address here\",\r\n    \"address2\":\"Optional address\",\r\n    \"city\":\"New York\",\r\n    \"state\":\"Alaska\",\r\n    \"zipCode\":\"03142\",\r\n    \"phone\":\"0989809898\",\r\n    \"fax\":\"0676767676\",\r\n    \"email\":\"director@domain.com\",\r\n    \"website\":\"https://bla_bla.hub.com\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -2616,7 +2616,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"name\":\"Horns and Hoofs\",\r\n    \"type\":\"FREIGHT FORWARDER INTERNATIONAL\",\r\n    \"address1\":\"Some address here\",\r\n    \"address2\":\"Optional address\",\r\n    \"city\":\"New York\",\r\n    \"state\":\"Alaska\",\r\n    \"zipCode\":\"03142\",\r\n    \"phone\":\"0989809898\",\r\n    \"fax\":\"0676767676\",\r\n    \"email\":\"director@domain.com\",\r\n    \"website\":\"https://bla_bla.hub.com\"\r\n}",
+							"raw": "{\r\n    \"name\":\"Horns and Hoofs\",\r\n    \"type\":\"FREIGHT FORWARDER INTERNATIONAL\",\r\n    \"address\":\"Some address here\",\r\n    \"address2\":\"Optional address\",\r\n    \"city\":\"New York\",\r\n    \"state\":\"Alaska\",\r\n    \"zipCode\":\"03142\",\r\n    \"phone\":\"0989809898\",\r\n    \"fax\":\"0676767676\",\r\n    \"email\":\"director@domain.com\",\r\n    \"website\":\"https://bla_bla.hub.com\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -2721,7 +2721,7 @@
 									"disabled": true
 								},
 								{
-									"key": "address1",
+									"key": "address",
 									"value": "",
 									"disabled": true
 								},
@@ -2791,7 +2791,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"name\":\"warehouse 3\",\r\n    \"address1\":\"Some address here\",\r\n    \"address2\":\"bla-bla-bla\",\r\n    \"facilityLocation\":[50.45484,30.5263]\r\n}",
+							"raw": "{\r\n    \"name\":\"warehouse 3\",\r\n    \"address\":\"Some address here\",\r\n    \"address2\":\"bla-bla-bla\",\r\n    \"facilityLocation\":[50.45484,30.5263]\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -2818,7 +2818,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"name\":\"warehouse 33\",\r\n    \"address1\":\"Some address here\",\r\n    \"address2\":\"bla-bla-bla\",\r\n    \"facilityLocation\":[50.45484,30.5263]\r\n}",
+							"raw": "{\r\n    \"name\":\"warehouse 33\",\r\n    \"address\":\"Some address here\",\r\n    \"address2\":\"bla-bla-bla\",\r\n    \"facilityLocation\":[50.45484,30.5263]\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"

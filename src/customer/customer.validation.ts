@@ -6,7 +6,7 @@ export const CreateCustomerValidation = Joi.object({
   type: Joi.string()
     .valid(...CUSTOMER_TYPES)
     .required(),
-  address1: Joi.string().required(),
+  address: Joi.string().required(),
   address2: Joi.string().allow('').optional(),
   city: Joi.string().required(),
   state: Joi.string().required(),
@@ -22,7 +22,7 @@ export const UpdateCustomerValidation = Joi.object({
   type: Joi.string()
     .valid(...CUSTOMER_TYPES)
     .optional(),
-  address1: Joi.string().optional(),
+  address: Joi.string().optional(),
   address2: Joi.string().allow('').optional(),
   city: Joi.string().optional(),
   state: Joi.string().optional(),
@@ -41,7 +41,7 @@ export const CustomerQueryParamsSchema = Joi.object({
   type: Joi.string()
     .valid(...CUSTOMER_TYPES)
     .optional(),
-  address1: Joi.string().optional(),
+  address: Joi.string().optional(),
   address2: Joi.string().optional(),
   city: Joi.string().optional(),
   state: Joi.string().optional(),
@@ -54,8 +54,8 @@ export const CustomerQueryParamsSchema = Joi.object({
   .keys({
     orderby: Joi.string().valid(
       'name',
-      'customerRole',
-      'address1',
+      'type',
+      'address',
       'city',
       'state',
       'zipCode',
