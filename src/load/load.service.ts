@@ -121,7 +121,7 @@ export class LoadService {
     const lastLoadNumber = await this.loadModel
       .findOne({}, { loadNumber: 1 }, { sort: { loadNumber: -1 } })
       .lean();
-    const createdLoad = new this.loadModel({
+    let createdLoad = new this.loadModel({
       ...createLoadDto,
       pickLocation:
         pickLocationResult.status === 'fulfilled'
@@ -138,22 +138,36 @@ export class LoadService {
 
     try {
       this.log.debug('Saving Load');
-      let load = await createdLoad.save();
+      // let load = await createdLoad.save();
       this.log.debug('Calculating distance');
       const miles = await this.geoApiService.getDistance(
         [
-          load.get('pick.geometry.location')?.lat,
-          load.get('pick.geometry.location')?.lng,
+          createdLoad.get('pick.geometry.location')?.lat,
+          createdLoad.get('pick.geometry.location')?.lng,
         ],
         [
-          load.get('deliver.geometry.location')?.lat,
-          load.get('deliver.geometry.location')?.lng,
+          createdLoad.get('deliver.geometry.location')?.lat,
+          createdLoad.get('deliver.geometry.location')?.lng,
         ],
       );
       this.log.debug(`Updating Load: miles ${miles}`);
-      load = await createdLoad.set('miles', miles).save();
+      createdLoad = await createdLoad.set('miles', miles).save();
       this.log.debug('Load updated');
-      return LoadResultDto.fromLoadModel(load);
+
+      // Calculate Truck Id to update status
+      let truckIdToOnRoute: string | undefined;
+      if (createLoadDto.status === 'In Progress' && createLoadDto.truck) {
+        truckIdToOnRoute = createLoadDto.truck;
+      }
+      if (truckIdToOnRoute) {
+        this.truckService
+          .updateTruck(truckIdToOnRoute, { status: 'On route' })
+          .then(() =>
+            this.log.info(`Status "On route" set to truck ${truckIdToOnRoute}`),
+          );
+      }
+
+      return LoadResultDto.fromLoadModel(createdLoad);
     } catch (e) {
       if (!(e instanceof Error)) {
         throw new InternalServerErrorException(JSON.stringify(e));
@@ -170,6 +184,10 @@ export class LoadService {
     updateLoadDto: UpdateLoadDto,
   ): Promise<LoadResultDto> {
     let load = await this.findLoadDocumentById(id);
+    const currentLoadStatus = load.status;
+    const newLoadStatus = updateLoadDto.status;
+    const currentLoadTruckId = load.truck?._id.toString();
+    const newLoadTruckId = updateLoadDto.truck;
     const [pickLocationResult, deliverLocationResult] =
       await Promise.allSettled([
         updateLoadDto?.pick?.geometry?.location &&
@@ -197,7 +215,7 @@ export class LoadService {
     });
     try {
       this.log.debug('Saving Load');
-      load = await load.save();
+      // load = await load.save();
       this.log.debug('Calculating distance');
       const miles = await this.geoApiService.getDistance(
         [
@@ -212,6 +230,68 @@ export class LoadService {
       this.log.debug(`Updating Load: miles ${miles}`);
       load = await load.set('miles', miles).save();
       this.log.debug(`Load ${load._id} saved`);
+
+      // Calculate Truck Id to update status
+      let truckIdToOnRoute: string | undefined;
+      let truckIdToAvailable: string | undefined;
+      if (
+        newLoadStatus === 'In Progress' &&
+        newLoadStatus !== currentLoadStatus &&
+        (newLoadTruckId === undefined || newLoadTruckId === currentLoadTruckId)
+      ) {
+        truckIdToOnRoute = currentLoadTruckId;
+      }
+      if (
+        currentLoadStatus === 'In Progress' &&
+        newLoadStatus !== currentLoadStatus &&
+        (newLoadTruckId === undefined || newLoadTruckId === currentLoadTruckId)
+      ) {
+        truckIdToAvailable = currentLoadTruckId;
+      }
+      if (
+        newLoadTruckId !== currentLoadTruckId &&
+        (newLoadStatus === undefined || newLoadStatus === currentLoadStatus) &&
+        currentLoadStatus === 'In Progress'
+      ) {
+        truckIdToOnRoute = newLoadTruckId;
+        truckIdToAvailable = currentLoadTruckId;
+      }
+      if (
+        newLoadTruckId !== undefined &&
+        newLoadStatus !== undefined &&
+        newLoadTruckId !== currentLoadTruckId &&
+        newLoadStatus !== currentLoadStatus &&
+        currentLoadStatus === 'In Progress'
+      ) {
+        truckIdToAvailable = currentLoadTruckId;
+      }
+      if (
+        newLoadTruckId !== undefined &&
+        newLoadStatus !== undefined &&
+        newLoadTruckId !== currentLoadTruckId &&
+        newLoadStatus !== currentLoadStatus &&
+        newLoadStatus === 'In Progress'
+      ) {
+        truckIdToOnRoute = newLoadTruckId;
+      }
+
+      if (truckIdToOnRoute) {
+        this.truckService
+          .updateTruck(truckIdToOnRoute, { status: 'On route' })
+          .then(() =>
+            this.log.info(`Status "On route" set to truck ${truckIdToOnRoute}`),
+          );
+      }
+      if (truckIdToAvailable) {
+        this.truckService
+          .updateTruck(truckIdToAvailable, { status: 'Available' })
+          .then(() =>
+            this.log.info(
+              `Status "Available" set to truck ${truckIdToAvailable}`,
+            ),
+          );
+      }
+
       return LoadResultDto.fromLoadModel(load);
     } catch (e) {
       if (!(e instanceof Error)) {

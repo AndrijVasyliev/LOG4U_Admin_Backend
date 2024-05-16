@@ -14,6 +14,7 @@ import {
   USER_ROLES,
   ADMIN_ROLES,
   MOBILE_ROLES,
+  LOAD_STATUSES,
 } from './constants';
 
 export type GeoPointType = [number, number];
@@ -38,6 +39,7 @@ export type PushState = (typeof PUSH_STATES)[number];
 export type EmailState = (typeof EMAIL_STATES)[number];
 export type EmailToType = (typeof EMAIL_TO_TYPES)[number];
 export type FileOfType = (typeof FILE_OF_TYPES)[number];
+export type LoadStatus = (typeof LOAD_STATUSES)[number];
 
 export class Query<T> {
   readonly offset: number;

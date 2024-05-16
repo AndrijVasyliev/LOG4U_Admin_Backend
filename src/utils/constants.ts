@@ -147,3 +147,12 @@ export const TRUCK_EQUIPMENTS = [
   'Reefer',
   'Heater',
 ] as const;
+
+export const LOAD_STATUSES = [
+  'Available',
+  'Planned',
+  'In Progress',
+  'TONU',
+  'Cancelled',
+  'Completed',
+] as const;

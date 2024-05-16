@@ -1,9 +1,12 @@
 import * as Joi from 'joi';
-import { TRUCK_TYPES } from '../utils/constants';
+import { LOAD_STATUSES, TRUCK_TYPES } from '../utils/constants';
 import { MongoObjectIdValidation } from '../utils/idValidate.pipe';
 import { GeoLocation } from '../location/location.validation';
 
 export const CreateLoadValidation = Joi.object({
+  status: Joi.string()
+    .valid(...LOAD_STATUSES)
+    .required(),
   pick: GeoLocation.required(),
   pickDate: Joi.date().iso().required(),
   deliver: GeoLocation.required(),
@@ -26,6 +29,9 @@ export const CreateLoadValidation = Joi.object({
 });
 
 export const UpdateLoadValidation = Joi.object({
+  status: Joi.string()
+    .valid(...LOAD_STATUSES)
+    .optional(),
   pick: GeoLocation.optional(),
   pickDate: Joi.date().iso().optional(),
   deliver: GeoLocation.optional(),
@@ -55,6 +61,9 @@ export const LoadQueryParamsSchema = Joi.object({
   offset: Joi.number().integer().min(0).optional(),
   limit: Joi.number().integer().min(1).optional(),
   loadNumber: Joi.number().min(0).optional(),
+  status: Joi.string()
+    .valid(...LOAD_STATUSES)
+    .optional(),
   weight: Joi.string().optional(),
   truckType: Joi.string()
     .valid(...TRUCK_TYPES)
@@ -67,6 +76,7 @@ export const LoadQueryParamsSchema = Joi.object({
   .keys({
     orderby: Joi.string().valid(
       'loadNumber',
+      'status',
       'pickDate',
       'deliverDate',
       'weight',

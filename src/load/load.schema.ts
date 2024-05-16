@@ -1,7 +1,11 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, ObjectId, Schema as MongooseSchema } from 'mongoose';
-import { DEFAULT_CHECK_IN_AS, TRUCK_TYPES } from '../utils/constants';
-import { TruckType } from '../utils/general.dto';
+import {
+  DEFAULT_CHECK_IN_AS,
+  LOAD_STATUSES,
+  TRUCK_TYPES,
+} from '../utils/constants';
+import { LoadStatus, TruckType } from '../utils/general.dto';
 import { GeoLocationSchema, Location } from '../location/location.schema';
 import { User } from '../user/user.schema';
 import { Truck } from '../truck/truck.schema';
@@ -21,6 +25,13 @@ export class Load {
     type: Number,
   })
   loadNumber: number;
+
+  @Prop({
+    required: true,
+    type: String,
+    enum: LOAD_STATUSES,
+  })
+  status: LoadStatus;
 
   @Prop({
     required: true,
@@ -117,3 +128,11 @@ export class Load {
 export const LoadSchema = SchemaFactory.createForClass(Load);
 
 LoadSchema.index({ loadNumber: 1 }, { unique: true });
+LoadSchema.index(
+  { truck: 1, state: 1 },
+  {
+    unique: true,
+    hidden: true,
+    partialFilterExpression: { status: { $eq: 'In Progress' } },
+  },
+);

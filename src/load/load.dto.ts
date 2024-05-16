@@ -1,6 +1,11 @@
 import { PaginateResult } from 'mongoose';
 import { Load } from './load.schema';
-import { PaginatedResultDto, Query, TruckType } from '../utils/general.dto';
+import {
+  LoadStatus,
+  PaginatedResultDto,
+  Query,
+  TruckType,
+} from '../utils/general.dto';
 import { GeoLocationDto, LocationResultDto } from '../location/location.dto';
 import { calcDistance } from '../utils/haversine.distance';
 import { UserResultDto } from '../user/user.dto';
@@ -8,6 +13,7 @@ import { TruckResultDto } from '../truck/truck.dto';
 
 export class CreateLoadDto {
   readonly loadNumber: number;
+  readonly status: LoadStatus;
   readonly pick: GeoLocationDto;
   readonly pickDate: Date;
   readonly deliver: GeoLocationDto;
@@ -23,6 +29,7 @@ export class CreateLoadDto {
 }
 
 export class UpdateLoadDto {
+  readonly status?: LoadStatus;
   readonly pick?: GeoLocationDto;
   readonly pickDate?: Date;
   readonly deliver?: GeoLocationDto;
@@ -39,6 +46,7 @@ export class UpdateLoadDto {
 
 export class LoadQuerySearch {
   readonly loadNumber?: string;
+  readonly status?: LoadStatus;
   readonly weight?: string;
   readonly truckType?: TruckType;
   readonly bookedByCompany?: string;
@@ -72,6 +80,7 @@ export class LoadResultDto {
     let result: LoadResultDto = {
       id: load._id.toString(),
       loadNumber: load.loadNumber,
+      status: load.status,
       pick,
       pickLocation,
       pickDate: load.pickDate,
@@ -106,6 +115,7 @@ export class LoadResultDto {
 
   readonly id: string;
   readonly loadNumber: number;
+  readonly status: LoadStatus;
   readonly pick?: GeoLocationDto;
   readonly pickLocation?: LocationResultDto;
   readonly pickDate?: Date;

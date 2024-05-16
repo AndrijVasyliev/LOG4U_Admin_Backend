@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "4f03b237-9f95-47dc-a31d-965c4f2119e5",
+		"_postman_id": "e854dd8b-dc01-41de-9295-8327fe6e2879",
 		"name": "LOG4U",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "10622264"
@@ -39,7 +39,8 @@
 							"variable": [
 								{
 									"key": "personId",
-									"value": "657e25869e04394b3780079c"
+									"value": "662ab7ab86fd8809a84f6684",
+									"uuid": "bde32f99-85b0-425f-9048-118c04b39bab"
 								}
 							]
 						}
@@ -205,7 +206,8 @@
 							"variable": [
 								{
 									"key": "ownerId",
-									"value": "6505cd91c8506650905f4544"
+									"value": "6505cd91c8506650905f4544",
+									"uuid": "b5626e73-cc83-4b50-b720-48ba7bc044f5"
 								}
 							]
 						}
@@ -266,7 +268,8 @@
 							"variable": [
 								{
 									"key": "ownerId",
-									"value": "64bfe15af53ba92b31063acc"
+									"value": "64bfe15af53ba92b31063acc",
+									"uuid": "28036492-72b9-4780-9227-c652b65e60e1"
 								}
 							]
 						}
@@ -300,7 +303,8 @@
 							"variable": [
 								{
 									"key": "ownerId",
-									"value": "64bee343e50d281f7d7a4596"
+									"value": "64bee343e50d281f7d7a4596",
+									"uuid": "edb7d03d-ef25-43d9-8f54-2646c6620aa6"
 								}
 							]
 						}
@@ -491,7 +495,8 @@
 							"variable": [
 								{
 									"key": "ownerDriverId",
-									"value": "6505cd91c8506650905f4544"
+									"value": "6505cd91c8506650905f4544",
+									"uuid": "6aada456-0dd7-42a3-b61f-aaf926a18c37"
 								}
 							]
 						}
@@ -552,7 +557,8 @@
 							"variable": [
 								{
 									"key": "ownerDriverId",
-									"value": "64db8acc241114370218306d"
+									"value": "64db8acc241114370218306d",
+									"uuid": "cab4db94-828e-4227-81b0-843aa19867ad"
 								}
 							]
 						}
@@ -586,7 +592,8 @@
 							"variable": [
 								{
 									"key": "ownerDriverId",
-									"value": "64db8acc241114370218306d"
+									"value": "64db8acc241114370218306d",
+									"uuid": "03062e09-e711-43f3-8100-b8c8cf9edfa5"
 								}
 							]
 						}
@@ -752,7 +759,8 @@
 							"variable": [
 								{
 									"key": "coordinatorId",
-									"value": "6505e7d4187ddabdc941e8e5"
+									"value": "6505e7d4187ddabdc941e8e5",
+									"uuid": "dccf0677-ece1-477e-9512-95e7c4d6b210"
 								}
 							]
 						}
@@ -813,7 +821,8 @@
 							"variable": [
 								{
 									"key": "coordinatorId",
-									"value": "64dcb7d4db730feec83a7aa3"
+									"value": "64dcb7d4db730feec83a7aa3",
+									"uuid": "9517a6db-d6a8-452d-961e-17152b078da2"
 								}
 							]
 						}
@@ -847,7 +856,8 @@
 							"variable": [
 								{
 									"key": "coordinatorId",
-									"value": "64da90d391934a748bb574f0"
+									"value": "64da90d391934a748bb574f0",
+									"uuid": "cee6af17-027d-4607-87de-de82f61fa57c"
 								}
 							]
 						}
@@ -1038,7 +1048,8 @@
 							"variable": [
 								{
 									"key": "coordinatorId",
-									"value": "6505e7d4187ddabdc941e8e5"
+									"value": "6505e7d4187ddabdc941e8e5",
+									"uuid": "3de667b5-5e81-4f19-9dfa-8b3f2e5ae12a"
 								}
 							]
 						}
@@ -1099,7 +1110,8 @@
 							"variable": [
 								{
 									"key": "coordinatorId",
-									"value": "6505e7d4187ddabdc941e8e5"
+									"value": "6505e7d4187ddabdc941e8e5",
+									"uuid": "18a46d18-d42e-4991-8d3f-b3db6a356cf4"
 								}
 							]
 						}
@@ -1133,7 +1145,8 @@
 							"variable": [
 								{
 									"key": "coordinatorId",
-									"value": "6505eace187ddabdc941e9fa"
+									"value": "6505eace187ddabdc941e9fa",
+									"uuid": "31cc600e-b4ce-407e-b18e-0bdf5fc13d4d"
 								}
 							]
 						}
@@ -1314,7 +1327,8 @@
 							"variable": [
 								{
 									"key": "driverId",
-									"value": "6505e7d4187ddabdc941e8e5"
+									"value": "6505e7d4187ddabdc941e8e5",
+									"uuid": "1f12d2ba-cfb5-4d76-a46b-dc35806fc4cb"
 								}
 							]
 						}
@@ -1375,7 +1389,8 @@
 							"variable": [
 								{
 									"key": "driverId",
-									"value": "64da958cbc26bc49bb10c092"
+									"value": "64da958cbc26bc49bb10c092",
+									"uuid": "8f1b8fb0-4e9d-46f1-8fc0-88da1b016d83"
 								}
 							]
 						}
@@ -1409,7 +1424,8 @@
 							"variable": [
 								{
 									"key": "driverId",
-									"value": "64c92cec160c692399a5f78c"
+									"value": "64c92cec160c692399a5f78c",
+									"uuid": "97736d84-ac57-452b-957f-e39a560f6c6c"
 								}
 							]
 						}
@@ -1622,7 +1638,8 @@
 							"variable": [
 								{
 									"key": "truckId",
-									"value": "6505ce41c8506650905f455a"
+									"value": "6505ce41c8506650905f455a",
+									"uuid": "d111cdc3-84b9-46e5-a9c5-31407d8a269f"
 								}
 							]
 						}
@@ -1683,7 +1700,8 @@
 							"variable": [
 								{
 									"key": "truckId",
-									"value": "64f0e49d5c57ad86d6d62ec8"
+									"value": "64f0e49d5c57ad86d6d62ec8",
+									"uuid": "e3e0d3b9-c7e5-4643-94df-2e06305ab65c"
 								}
 							]
 						}
@@ -1717,7 +1735,8 @@
 							"variable": [
 								{
 									"key": "truckId",
-									"value": "64f0e49d5c57ad86d6d62ec8"
+									"value": "64f0e49d5c57ad86d6d62ec8",
+									"uuid": "b095f89c-11f0-4e9b-8c1c-3ed40fdd0b8d"
 								}
 							]
 						}
@@ -1751,7 +1770,8 @@
 							"variable": [
 								{
 									"key": "truckId",
-									"value": "64c977a2c068c72a3d5b4240"
+									"value": "64c977a2c068c72a3d5b4240",
+									"uuid": "fd09dcbf-a4ae-44c4-9ac8-f8c579a0e058"
 								}
 							]
 						}
@@ -1789,12 +1809,18 @@
 								{
 									"key": "orderby",
 									"value": "loadNumber",
-									"description": "'loadNumber','pickDate','deliverDate','weight','rate','bookedByCompany','checkInAs'"
+									"description": "'loadNumber','status','pickDate','deliverDate','weight','rate','bookedByCompany','checkInAs'"
 								},
 								{
 									"key": "direction",
 									"value": "asc",
 									"description": "asc or desc"
+								},
+								{
+									"key": "status",
+									"value": "In Progress",
+									"description": "'Available',  'Planned',  'In Progress',  'TONU',  'Cancelled',  'Completed'",
+									"disabled": true
 								},
 								{
 									"key": "loadNumber",
@@ -1866,7 +1892,8 @@
 							"variable": [
 								{
 									"key": "loadId",
-									"value": "64d920416ed68dcb405fe1b3"
+									"value": "64d920416ed68dcb405fe1b3",
+									"uuid": "18fde2e1-44a0-407f-b247-65c573338003"
 								}
 							]
 						}
@@ -1880,7 +1907,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"pick\":\"64d25b40887dce512691acc7\",\r\n    \"pickDate\":\"2001-07-24T20:33:52.147Z\",\r\n    \"deliver\":\"64d25c2f887dce512691d353\",\r\n    \"deliverDate\":\"2001-07-25T20:33:52.147Z\",\r\n    \"weight\":\"100 ton\",\r\n    \"truckType\":[\r\n        \"Cargo van\",\r\n        \"Reefer van\",\r\n        \"Box truck\",\r\n        \"Box truck Reefer\",\r\n        \"Straight truck\",\r\n        \"Hotshot\",\r\n        \"Tented box\"\r\n    ],\r\n    \"rate\":3.56,\r\n    \"bookedByUser\":\"64d254f5139acc9c42bf63bb\",\r\n    \"bookedByCompany\":\"Horns & Hoofs\",\r\n    \"dispatchers\":[\"64d254fc139acc9c42bf63bf\",\"64d254fd139acc9c42bf63c1\"],\r\n    \"checkInAs\":\"MegoCorp\",\r\n    \"truck\":\"64d28a394be7ed067d17b845\"\r\n}",
+							"raw": "{\r\n    \"status\": \"Available\",\r\n    \"pick\":\"64d25b40887dce512691acc7\",\r\n    \"pickDate\":\"2001-07-24T20:33:52.147Z\",\r\n    \"deliver\":\"64d25c2f887dce512691d353\",\r\n    \"deliverDate\":\"2001-07-25T20:33:52.147Z\",\r\n    \"weight\":\"100 ton\",\r\n    \"truckType\":[\r\n        \"Cargo van\",\r\n        \"Reefer van\",\r\n        \"Box truck\",\r\n        \"Box truck Reefer\",\r\n        \"Straight truck\",\r\n        \"Hotshot\",\r\n        \"Tented box\"\r\n    ],\r\n    \"rate\":3.56,\r\n    \"bookedByUser\":\"64d254f5139acc9c42bf63bb\",\r\n    \"bookedByCompany\":\"Horns & Hoofs\",\r\n    \"dispatchers\":[\"64d254fc139acc9c42bf63bf\",\"64d254fd139acc9c42bf63c1\"],\r\n    \"checkInAs\":\"MegoCorp\",\r\n    \"truck\":\"64d28a394be7ed067d17b845\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1907,7 +1934,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"pick\":\"64d25b40887dce512691acc7\",\r\n    \"pickDate\":\"2001-07-24T20:33:52.147Z\",\r\n    \"deliver\":\"64d25b60887dce512691b209\",\r\n    \"deliverDate\":\"2001-07-25T20:33:52.147Z\",\r\n    \"weight\":\"100 ton\",\r\n    \"truckType\":[\r\n        \"Cargo van\",\r\n        \"Reefer van\",\r\n        \"Box truck\",\r\n        \"Box truck Reefer\",\r\n        \"Straight truck\",\r\n        \"Hotshot\",\r\n        \"Tented box\"\r\n    ],\r\n    \"rate\":3.56,\r\n    \"bookedByUser\":\"64ccc832ede7c23ef9577259\",\r\n    \"bookedByCompany\":\"Horns & Hoofs\",\r\n    \"dispatchers\":[\"64cfdb212d6771ef7981f2de\",\"64cfdb492d6771ef7981f2e0\"],\r\n    \"checkInAs\":\"MegoCorp\",\r\n    \"truck\":null\r\n}",
+							"raw": "{\r\n    \"status\": \"Available\",\r\n    \"pick\":\"64d25b40887dce512691acc7\",\r\n    \"pickDate\":\"2001-07-24T20:33:52.147Z\",\r\n    \"deliver\":\"64d25b60887dce512691b209\",\r\n    \"deliverDate\":\"2001-07-25T20:33:52.147Z\",\r\n    \"weight\":\"100 ton\",\r\n    \"truckType\":[\r\n        \"Cargo van\",\r\n        \"Reefer van\",\r\n        \"Box truck\",\r\n        \"Box truck Reefer\",\r\n        \"Straight truck\",\r\n        \"Hotshot\",\r\n        \"Tented box\"\r\n    ],\r\n    \"rate\":3.56,\r\n    \"bookedByUser\":\"64ccc832ede7c23ef9577259\",\r\n    \"bookedByCompany\":\"Horns & Hoofs\",\r\n    \"dispatchers\":[\"64cfdb212d6771ef7981f2de\",\"64cfdb492d6771ef7981f2e0\"],\r\n    \"checkInAs\":\"MegoCorp\",\r\n    \"truck\":null\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1927,7 +1954,8 @@
 							"variable": [
 								{
 									"key": "loadId",
-									"value": "64d401f502631f8b338edf7f"
+									"value": "65f956b77c0c5db79a833c86",
+									"uuid": "d2f0327c-c895-4292-909a-afd7e2767628"
 								}
 							]
 						}
@@ -1961,7 +1989,8 @@
 							"variable": [
 								{
 									"key": "loadId",
-									"value": "64d0067e4cce3fc793e8fb28"
+									"value": "64d0067e4cce3fc793e8fb28",
+									"uuid": "e2f6ec8e-a178-46bc-abe5-f42140c183e8"
 								}
 							]
 						}
@@ -2091,7 +2120,8 @@
 							"variable": [
 								{
 									"key": "userId",
-									"value": "64c134d3abbd4c97d2a391d6"
+									"value": "64c134d3abbd4c97d2a391d6",
+									"uuid": "c6ae7ddb-83b3-4ddc-99ec-6fe434790b26"
 								}
 							]
 						}
@@ -2152,7 +2182,8 @@
 							"variable": [
 								{
 									"key": "userId",
-									"value": "64c1343eabbd4c97d2a391d0"
+									"value": "64c1343eabbd4c97d2a391d0",
+									"uuid": "fe4193d4-dd03-4775-bdeb-fed905175d60"
 								}
 							]
 						}
@@ -2186,7 +2217,8 @@
 							"variable": [
 								{
 									"key": "userId",
-									"value": "64d76fec1adf9d4fd287ae0e"
+									"value": "64d76fec1adf9d4fd287ae0e",
+									"uuid": "8ab85ac7-2c4b-43dc-aa8e-bab6a77dd353"
 								}
 							]
 						}
@@ -2310,7 +2342,8 @@
 							"variable": [
 								{
 									"key": "locationId",
-									"value": "64c1380eabbd4c97d2a391eb"
+									"value": "64c1380eabbd4c97d2a391eb",
+									"uuid": "25af426e-7260-43e5-aa5a-ea66e5bb766c"
 								}
 							]
 						}
@@ -2371,7 +2404,8 @@
 							"variable": [
 								{
 									"key": "locationId",
-									"value": "64c38c91de5fbc877c5428ea"
+									"value": "64c38c91de5fbc877c5428ea",
+									"uuid": "410c8f2a-076c-4587-8856-971cba33e3a7"
 								}
 							]
 						}
@@ -2405,7 +2439,8 @@
 							"variable": [
 								{
 									"key": "locationId",
-									"value": "64c1380eabbd4c97d2a391eb"
+									"value": "64c1380eabbd4c97d2a391eb",
+									"uuid": "83195066-2008-4220-ab2a-db5771b0f05d"
 								}
 							]
 						}
@@ -2575,7 +2610,8 @@
 							"variable": [
 								{
 									"key": "customerId",
-									"value": "66367b9ba7d923452894b87d"
+									"value": "66367b9ba7d923452894b87d",
+									"uuid": "4815b8ff-35c7-4ed2-9aea-d5a4aac1a5cb"
 								}
 							]
 						}
@@ -2636,7 +2672,8 @@
 							"variable": [
 								{
 									"key": "customerId",
-									"value": "66367b9ba7d923452894b87d"
+									"value": "66367b9ba7d923452894b87d",
+									"uuid": "d63236d0-64e4-484a-93a7-ad0c42beb0d6"
 								}
 							]
 						}
@@ -2670,7 +2707,8 @@
 							"variable": [
 								{
 									"key": "customerId",
-									"value": "66367b9ba7d923452894b87d"
+									"value": "66367b9ba7d923452894b87d",
+									"uuid": "5ca5fe2b-9386-45a6-b97e-f3541365257f"
 								}
 							]
 						}
@@ -2777,7 +2815,8 @@
 							"variable": [
 								{
 									"key": "facilityId",
-									"value": "66365650d546fb96617a5e51"
+									"value": "66365650d546fb96617a5e51",
+									"uuid": "6ee18207-6960-4f2f-b3d3-5e4e9b65d72e"
 								}
 							]
 						}
@@ -2838,7 +2877,8 @@
 							"variable": [
 								{
 									"key": "facilityId",
-									"value": "66365650d546fb96617a5e51"
+									"value": "66365650d546fb96617a5e51",
+									"uuid": "a6ea1c26-492b-4997-aecd-91a5f6210907"
 								}
 							]
 						}
@@ -2872,7 +2912,8 @@
 							"variable": [
 								{
 									"key": "facilityId",
-									"value": "66365650d546fb96617a5e51"
+									"value": "66365650d546fb96617a5e51",
+									"uuid": "a55a5750-107d-4b6d-8883-2cccc4c10c8e"
 								}
 							]
 						}
@@ -2969,7 +3010,8 @@
 							"variable": [
 								{
 									"key": "fileId",
-									"value": "660c7879a5f4bea629741218"
+									"value": "660c7879a5f4bea629741218",
+									"uuid": "5458567f-feba-4aa7-b77f-8f10001f2210"
 								}
 							]
 						}
@@ -3007,7 +3049,8 @@
 							"variable": [
 								{
 									"key": "fileId",
-									"value": "660c885b1dc66f093ba7c3db"
+									"value": "660c885b1dc66f093ba7c3db",
+									"uuid": "1f8b37c4-82f4-4bd8-bb76-941ee6bdf306"
 								}
 							]
 						}
@@ -3079,7 +3122,8 @@
 							"variable": [
 								{
 									"key": "fileId",
-									"value": "660c7879a5f4bea629741218"
+									"value": "660c7879a5f4bea629741218",
+									"uuid": "c403f9d9-2463-4265-87d4-ce15df21dc97"
 								}
 							]
 						}
@@ -3209,7 +3253,8 @@
 							"variable": [
 								{
 									"key": "emailId",
-									"value": "65d27a7e905cde79941119a7"
+									"value": "65d27a7e905cde79941119a7",
+									"uuid": "adb90007-8a90-4014-a41a-e3b562c3075d"
 								}
 							]
 						}
@@ -3270,7 +3315,8 @@
 							"variable": [
 								{
 									"key": "emailId",
-									"value": "65d27a7e905cde79941119a7"
+									"value": "65d27a7e905cde79941119a7",
+									"uuid": "c884e568-c176-43a3-aaad-d93f2983dddb"
 								}
 							]
 						}
@@ -3304,7 +3350,8 @@
 							"variable": [
 								{
 									"key": "emailId",
-									"value": "65d1e0a89292d8255b714719"
+									"value": "65d1e0a89292d8255b714719",
+									"uuid": "361b53f1-8e56-4cce-8d42-5a9cb8aa8f04"
 								}
 							]
 						}
@@ -3375,7 +3422,8 @@
 							"variable": [
 								{
 									"key": "receiptId",
-									"value": "77b3ae4e-a704-48d0-befa-9e0a5faf1751"
+									"value": "77b3ae4e-a704-48d0-befa-9e0a5faf1751",
+									"uuid": "b9ad41f5-1cd5-49e4-8ec7-ffebd6b47491"
 								}
 							]
 						}
@@ -3471,7 +3519,8 @@
 							"variable": [
 								{
 									"key": "pushId",
-									"value": "65f4c63662626b41e2e6434b"
+									"value": "65f4c63662626b41e2e6434b",
+									"uuid": "5a7ad2a9-d741-49b3-b36d-24e56c187548"
 								}
 							]
 						}
@@ -3532,7 +3581,8 @@
 							"variable": [
 								{
 									"key": "pushId",
-									"value": "65f4d55cf8fa7ece76cf8e91"
+									"value": "65f4d55cf8fa7ece76cf8e91",
+									"uuid": "fbca5186-0227-4531-b95e-5644b948be04"
 								}
 							]
 						}
@@ -3566,7 +3616,8 @@
 							"variable": [
 								{
 									"key": "pushId",
-									"value": "65f4c63662626b41e2e6434b"
+									"value": "65f4c63662626b41e2e6434b",
+									"uuid": "11502138-2d9b-4c6c-8383-551a2e253b5a"
 								}
 							]
 						}
@@ -3869,7 +3920,8 @@
 							"variable": [
 								{
 									"key": "truckId",
-									"value": "651c73bf30377698b0990335"
+									"value": "651c73bf30377698b0990335",
+									"uuid": "05f594c3-06df-41d6-8826-fe310f7ec0a1"
 								}
 							]
 						}
@@ -3991,7 +4043,8 @@
 							"variable": [
 								{
 									"key": "fileId",
-									"value": "6612cb0e49188f67c6dac9ce"
+									"value": "6612cb0e49188f67c6dac9ce",
+									"uuid": "644e397b-e641-4104-808f-87f9316c37f2"
 								}
 							]
 						}
@@ -4029,7 +4082,8 @@
 							"variable": [
 								{
 									"key": "fileId",
-									"value": "6612cb0e49188f67c6dac9ce"
+									"value": "6612cb0e49188f67c6dac9ce",
+									"uuid": "44ad4514-3942-4691-9d97-c757e27a0d7b"
 								}
 							]
 						}
@@ -4106,7 +4160,8 @@
 							"variable": [
 								{
 									"key": "fileId",
-									"value": "6612cb0e49188f67c6dac9ce"
+									"value": "6612cb0e49188f67c6dac9ce",
+									"uuid": "329bdae7-8184-4e36-aeeb-a3ee8d6bd65b"
 								}
 							]
 						}
