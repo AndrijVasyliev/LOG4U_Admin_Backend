@@ -19,7 +19,7 @@ import {
   TruckStatus,
   TruckType,
 } from '../utils/general.dto';
-import { GeoPointSchema, Location } from '../location/location.schema';
+import { GeoPointSchema /*, Location*/ } from '../location/location.schema';
 import { Owner } from '../owner/owner.schema';
 import { Coordinator } from '../coordinator/coordinator.schema';
 import { Driver } from '../driver/driver.schema';
