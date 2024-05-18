@@ -30,7 +30,7 @@ import {
   CalculatedDistances,
 } from './truck.dto';
 import { GoogleGeoApiService } from '../googleGeoApi/googleGeoApi.service';
-import { LocationService } from '../location/location.service';
+// import { LocationService } from '../location/location.service';
 import { escapeForRegExp } from '../utils/escapeForRegExp';
 import { UserResultDto } from '../user/user.dto';
 import { ConfigService } from '@nestjs/config';
@@ -44,7 +44,7 @@ export class TruckService implements OnApplicationBootstrap, OnModuleDestroy {
   constructor(
     @InjectModel(Truck.name, MONGO_CONNECTION_NAME)
     private readonly truckModel: PaginateModel<TruckDocument>,
-    private readonly locationService: LocationService,
+    // private readonly locationService: LocationService,
     private readonly geoApiService: GoogleGeoApiService,
     private readonly configService: ConfigService,
     private readonly log: LoggerService,
@@ -99,6 +99,9 @@ export class TruckService implements OnApplicationBootstrap, OnModuleDestroy {
             status: 'Available',
             searchLocation: '$lastLocation',
           },
+        },
+        {
+          $unset: ['availabilityLocation', 'availabilityAt'],
         },
       ],
     );
@@ -378,7 +381,7 @@ export class TruckService implements OnApplicationBootstrap, OnModuleDestroy {
       );
     }
 
-    let lastCity = '';
+    /*let lastCity = '';
     if (createTruckDto.lastLocation) {
       try {
         const nearestCity = await this.locationService.findNearestLocation(
@@ -395,16 +398,16 @@ export class TruckService implements OnApplicationBootstrap, OnModuleDestroy {
         );
         availabilityCity = nearestCity.id;
       } catch {}
-    }
+    }*/
 
     const truck = new this.truckModel(createTruckDto);
 
-    if (lastCity) {
+    /*if (lastCity) {
       Object.assign(truck, { lastCity, locationUpdatedAt: new Date() });
     }
     if (availabilityCity) {
       Object.assign(truck, { availabilityCity });
-    }
+    }*/
     if (createTruckDto.reservedAt && user) {
       Object.assign(truck, { reservedBy: user.id });
     }
@@ -458,7 +461,7 @@ export class TruckService implements OnApplicationBootstrap, OnModuleDestroy {
 
     Object.assign(truck, updateTruckDto);
 
-    let lastCity = '';
+    /*let lastCity = '';
     if (updateTruckDto.lastLocation) {
       try {
         const nearestCity = await this.locationService.findNearestLocation(
@@ -475,14 +478,14 @@ export class TruckService implements OnApplicationBootstrap, OnModuleDestroy {
         );
         availabilityCity = nearestCity.id;
       } catch {}
-    }
+    }*/
 
-    if (lastCity) {
+    /*if (lastCity) {
       Object.assign(truck, { lastCity, locationUpdatedAt: new Date() });
     }
     if (availabilityCity) {
       Object.assign(truck, { availabilityCity });
-    }
+    }*/
     if (updateTruckDto.reservedAt && user) {
       Object.assign(truck, { reservedBy: user.id });
     }

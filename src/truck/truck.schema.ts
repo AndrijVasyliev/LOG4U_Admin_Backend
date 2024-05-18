@@ -60,13 +60,13 @@ export class Truck {
   })
   lastLocation?: GeoPointType;
 
-  @Prop({
+  /*@Prop({
     required: false,
     type: MongooseSchema.Types.ObjectId,
     ref: 'Location',
     autopopulate: true,
   })
-  lastCity?: Location;
+  lastCity?: Location;*/
 
   @Prop({ required: false })
   locationUpdatedAt: Date;
@@ -92,13 +92,13 @@ export class Truck {
   })
   availabilityLocation?: GeoPointType;
 
-  @Prop({
+  /* @Prop({
     required: false,
     type: MongooseSchema.Types.ObjectId,
     ref: 'Location',
     autopopulate: true,
   })
-  availabilityCity?: Location;
+  availabilityCity?: Location;*/
 
   @Prop({ required: false })
   availabilityAt: Date;
