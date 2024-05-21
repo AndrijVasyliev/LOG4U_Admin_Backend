@@ -6,10 +6,11 @@ import {
   TRUCK_TYPES,
 } from '../utils/constants';
 import { LoadStatus, TruckType } from '../utils/general.dto';
-import { GeoLocationSchema, Location } from '../location/location.schema';
+// import { GeoLocationSchema, Location } from '../location/location.schema';
 import { User } from '../user/user.schema';
 import { Truck } from '../truck/truck.schema';
-import { GeoLocationDto } from '../location/location.dto';
+import { Customer } from '../customer/customer.schema';
+// import { GeoLocationDto } from '../location/location.dto';
 
 export type LoadDocument = Load & Document;
 
@@ -27,13 +28,19 @@ export class Load {
   loadNumber: number;
 
   @Prop({
+    required: false,
+    type: [String],
+  })
+  ref?: string[];
+
+  @Prop({
     required: true,
     type: String,
     enum: LOAD_STATUSES,
   })
   status: LoadStatus;
 
-  @Prop({
+  /*@Prop({
     required: true,
     type: GeoLocationSchema,
   })
@@ -65,7 +72,7 @@ export class Load {
   deliverLocation?: Location;
 
   @Prop({ required: false })
-  deliverDate?: Date;
+  deliverDate?: Date;*/
 
   @Prop({
     required: false,
@@ -88,6 +95,12 @@ export class Load {
   @Prop({ required: false })
   rate?: number;
 
+  @Prop({ required: false })
+  totalCharges?: number;
+
+  @Prop({ required: true })
+  currency: string;
+
   @Prop({
     required: false,
     type: MongooseSchema.Types.ObjectId,
@@ -105,7 +118,7 @@ export class Load {
     ref: 'User',
     autopopulate: true,
   })
-  dispatchers?: User[];
+  assignTo?: User[];
 
   @Prop({ required: false, default: DEFAULT_CHECK_IN_AS })
   checkInAs?: string;
@@ -117,6 +130,14 @@ export class Load {
     autopopulate: true,
   })
   truck?: Truck;
+
+  @Prop({
+    required: false,
+    type: MongooseSchema.Types.ObjectId,
+    ref: 'Customer',
+    autopopulate: true,
+  })
+  bookedWith?: Customer;
 
   created_at: Date;
 

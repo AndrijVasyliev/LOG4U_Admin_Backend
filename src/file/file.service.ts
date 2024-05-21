@@ -118,6 +118,7 @@ export class FileService {
         entry[0] !== 'search' &&
           entry[0] !== 'truck' &&
           entry[0] !== 'person' &&
+          entry[0] !== 'load' &&
           (documentQuery[entry[0]] = {
             $regex: new RegExp(escapeForRegExp(entry[1]), 'i'),
           });
@@ -134,6 +135,12 @@ export class FileService {
       const searchObj: Record<string, any> = {};
       searchObj['metadata.linkedTo'] = { $eq: query?.search?.truck };
       searchObj['metadata.fileOf'] = { $eq: 'Truck' };
+      metadataParts.push(searchObj);
+    }
+    if (query?.search?.load) {
+      const searchObj: Record<string, any> = {};
+      searchObj['metadata.linkedTo'] = { $eq: query?.search?.load };
+      searchObj['metadata.fileOf'] = { $eq: 'Load' };
       metadataParts.push(searchObj);
     }
     if (metadataParts.length > 1) {

@@ -34,5 +34,6 @@ export const FileQueryParamsSchema = Joi.object({
   .keys({
     truck: MongoObjectIdValidation.optional(),
     person: MongoObjectIdValidation.optional(),
+    load: MongoObjectIdValidation.optional(),
   })
-  .oxor('truck', 'person');
+  .oxor('truck', 'person', 'load');

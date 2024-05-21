@@ -14,6 +14,7 @@ export class FileQuerySearch {
   readonly comment?: string;
   readonly truck?: string;
   readonly person?: string;
+  readonly load?: string;
 }
 
 export class FileQuery extends Query<FileQuerySearch> {}

@@ -104,7 +104,7 @@ export class LoadService {
 
   async createLoad(createLoadDto: CreateLoadDto): Promise<LoadResultDto> {
     this.log.debug(`Creating new Load: ${JSON.stringify(createLoadDto)}`);
-    const [pickLocationResult, deliverLocationResult] =
+    /*const [pickLocationResult, deliverLocationResult] =
       await Promise.allSettled([
         createLoadDto?.pick?.geometry?.location &&
           this.locationService.findNearestLocation([
@@ -116,21 +116,21 @@ export class LoadService {
             createLoadDto.deliver.geometry.location.lat,
             createLoadDto.deliver.geometry.location.lng,
           ]),
-      ]);
+      ]);*/
 
     const lastLoadNumber = await this.loadModel
       .findOne({}, { loadNumber: 1 }, { sort: { loadNumber: -1 } })
       .lean();
     let createdLoad = new this.loadModel({
       ...createLoadDto,
-      pickLocation:
+      /*pickLocation:
         pickLocationResult.status === 'fulfilled'
           ? pickLocationResult.value?.id
           : undefined,
       deliverLocation:
         deliverLocationResult.status === 'fulfilled'
           ? deliverLocationResult.value?.id
-          : undefined,
+          : undefined,*/
       loadNumber: lastLoadNumber?.loadNumber
         ? lastLoadNumber.loadNumber + 1
         : 1,
@@ -188,7 +188,7 @@ export class LoadService {
     const newLoadStatus = updateLoadDto.status;
     const currentLoadTruckId = load.truck?._id.toString();
     const newLoadTruckId = updateLoadDto.truck;
-    const [pickLocationResult, deliverLocationResult] =
+    /*const [pickLocationResult, deliverLocationResult] =
       await Promise.allSettled([
         updateLoadDto?.pick?.geometry?.location &&
           this.locationService.findNearestLocation([
@@ -200,18 +200,18 @@ export class LoadService {
             updateLoadDto.deliver.geometry.location.lat,
             updateLoadDto.deliver.geometry.location.lng,
           ]),
-      ]);
+      ]);*/
     this.log.debug(`Setting new values: ${JSON.stringify(updateLoadDto)}`);
     Object.assign(load, {
       ...updateLoadDto,
-      pickLocation:
+      /*pickLocation:
         pickLocationResult.status === 'fulfilled'
           ? pickLocationResult.value?.id
           : undefined,
       deliverLocation:
         deliverLocationResult.status === 'fulfilled'
           ? deliverLocationResult.value?.id
-          : undefined,
+          : undefined,*/
     });
     try {
       this.log.debug('Saving Load');

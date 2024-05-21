@@ -1907,7 +1907,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"status\": \"Available\",\r\n    \"pick\":\"64d25b40887dce512691acc7\",\r\n    \"pickDate\":\"2001-07-24T20:33:52.147Z\",\r\n    \"deliver\":\"64d25c2f887dce512691d353\",\r\n    \"deliverDate\":\"2001-07-25T20:33:52.147Z\",\r\n    \"weight\":\"100 ton\",\r\n    \"truckType\":[\r\n        \"Cargo van\",\r\n        \"Reefer van\",\r\n        \"Box truck\",\r\n        \"Box truck Reefer\",\r\n        \"Straight truck\",\r\n        \"Hotshot\",\r\n        \"Tented box\"\r\n    ],\r\n    \"rate\":3.56,\r\n    \"bookedByUser\":\"64d254f5139acc9c42bf63bb\",\r\n    \"bookedByCompany\":\"Horns & Hoofs\",\r\n    \"dispatchers\":[\"64d254fc139acc9c42bf63bf\",\"64d254fd139acc9c42bf63c1\"],\r\n    \"checkInAs\":\"MegoCorp\",\r\n    \"truck\":\"64d28a394be7ed067d17b845\"\r\n}",
+							"raw": "{\r\n    \"status\": \"Available\",\r\n    \"pick\":\"64d25b40887dce512691acc7\",\r\n    \"pickDate\":\"2001-07-24T20:33:52.147Z\",\r\n    \"deliver\":\"64d25c2f887dce512691d353\",\r\n    \"deliverDate\":\"2001-07-25T20:33:52.147Z\",\r\n    \"weight\":\"100 ton\",\r\n    \"truckType\":[\r\n        \"Cargo van\",\r\n        \"Reefer van\",\r\n        \"Box truck\",\r\n        \"Box truck Reefer\",\r\n        \"Straight truck\",\r\n        \"Hotshot\",\r\n        \"Tented box\"\r\n    ],\r\n    \"rate\":3.56,\r\n    \"bookedByUser\":\"64d254f5139acc9c42bf63bb\",\r\n    \"bookedByCompany\":\"Horns & Hoofs\",\r\n    \"assignTo\":[\"64d254fc139acc9c42bf63bf\",\"64d254fd139acc9c42bf63c1\"],\r\n    \"checkInAs\":\"MegoCorp\",\r\n    \"truck\":\"64d28a394be7ed067d17b845\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1934,7 +1934,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"status\": \"Available\",\r\n    \"pick\":\"64d25b40887dce512691acc7\",\r\n    \"pickDate\":\"2001-07-24T20:33:52.147Z\",\r\n    \"deliver\":\"64d25b60887dce512691b209\",\r\n    \"deliverDate\":\"2001-07-25T20:33:52.147Z\",\r\n    \"weight\":\"100 ton\",\r\n    \"truckType\":[\r\n        \"Cargo van\",\r\n        \"Reefer van\",\r\n        \"Box truck\",\r\n        \"Box truck Reefer\",\r\n        \"Straight truck\",\r\n        \"Hotshot\",\r\n        \"Tented box\"\r\n    ],\r\n    \"rate\":3.56,\r\n    \"bookedByUser\":\"64ccc832ede7c23ef9577259\",\r\n    \"bookedByCompany\":\"Horns & Hoofs\",\r\n    \"dispatchers\":[\"64cfdb212d6771ef7981f2de\",\"64cfdb492d6771ef7981f2e0\"],\r\n    \"checkInAs\":\"MegoCorp\",\r\n    \"truck\":null\r\n}",
+							"raw": "{\r\n    \"status\": \"Available\",\r\n    \"pick\":\"64d25b40887dce512691acc7\",\r\n    \"pickDate\":\"2001-07-24T20:33:52.147Z\",\r\n    \"deliver\":\"64d25b60887dce512691b209\",\r\n    \"deliverDate\":\"2001-07-25T20:33:52.147Z\",\r\n    \"weight\":\"100 ton\",\r\n    \"truckType\":[\r\n        \"Cargo van\",\r\n        \"Reefer van\",\r\n        \"Box truck\",\r\n        \"Box truck Reefer\",\r\n        \"Straight truck\",\r\n        \"Hotshot\",\r\n        \"Tented box\"\r\n    ],\r\n    \"rate\":3.56,\r\n    \"bookedByUser\":\"64ccc832ede7c23ef9577259\",\r\n    \"bookedByCompany\":\"Horns & Hoofs\",\r\n    \"assignTo\":[\"64cfdb212d6771ef7981f2de\",\"64cfdb492d6771ef7981f2e0\"],\r\n    \"checkInAs\":\"MegoCorp\",\r\n    \"truck\":null\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
