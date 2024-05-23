@@ -460,6 +460,9 @@ export class TruckService implements OnApplicationBootstrap, OnModuleDestroy {
     }
 
     Object.assign(truck, updateTruckDto);
+    if (updateTruckDto.lastLocation) {
+      Object.assign(truck, { locationUpdatedAt: new Date() });
+    }
 
     /*let lastCity = '';
     if (updateTruckDto.lastLocation) {
