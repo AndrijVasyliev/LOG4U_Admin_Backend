@@ -10,10 +10,182 @@ import { LoadStatus, TruckType } from '../utils/general.dto';
 import { User } from '../user/user.schema';
 import { Truck } from '../truck/truck.schema';
 import { Customer } from '../customer/customer.schema';
+import { Facility } from '../facility/facility.schema';
 // import { GeoLocationDto } from '../location/location.dto';
 
+export enum TimeFramesType {
+  FCFS = 'FCFS',
+  APPT = 'APPT',
+  ASAP = 'ASAP',
+  Direct = 'Direct',
+}
+export enum StopType {
+  PickUp = 'PickUp',
+  Delivery = 'Delivery',
+}
 export type LoadDocument = Load & Document;
+// Time Frames: FCFS, APPT, ASAP, Direct
+@Schema({
+  discriminatorKey: 'type',
+  _id: false,
+  timestamps: false,
+})
+export class TimeFrame {
+  @Prop({
+    required: true,
+    type: String,
+    enum: Object.values(TimeFramesType),
+  })
+  type: TimeFramesType;
+}
+@Schema({
+  _id: false,
+  timestamps: false,
+})
+export class TimeFrameFCFS {
+  type = TimeFramesType.FCFS;
 
+  @Prop({
+    required: true,
+  })
+  from: Date;
+
+  @Prop({
+    required: true,
+  })
+  to: Date;
+}
+
+@Schema({
+  _id: false,
+  timestamps: false,
+})
+export class TimeFrameAPPT {
+  type = TimeFramesType.APPT;
+
+  @Prop({
+    required: true,
+  })
+  at: Date;
+}
+@Schema({
+  _id: false,
+  timestamps: false,
+})
+export class TimeFrameASAP {
+  type = TimeFramesType.ASAP;
+
+  @Prop({
+    required: true,
+  })
+  at: Date;
+}
+@Schema({
+  _id: false,
+  timestamps: false,
+})
+export class TimeFrameDirect {
+  type = TimeFramesType.Direct;
+
+  @Prop({
+    required: true,
+  })
+  at: Date;
+}
+const TimeFrameSchema = SchemaFactory.createForClass(TimeFrame);
+const TimeFrameFCFSSchema = SchemaFactory.createForClass(TimeFrameFCFS);
+const TimeFrameAPPTSchema = SchemaFactory.createForClass(TimeFrameAPPT);
+const TimeFrameASAPSchema = SchemaFactory.createForClass(TimeFrameASAP);
+const TimeFrameDirectSchema = SchemaFactory.createForClass(TimeFrameDirect);
+// Freight
+@Schema({
+  _id: false,
+  timestamps: false,
+})
+export class Freight {
+  @Prop({
+    required: true,
+  })
+  pieces: number;
+
+  @Prop({
+    required: true,
+  })
+  weight: number;
+}
+
+const FreightSchema = SchemaFactory.createForClass(Freight);
+// Stop
+@Schema({
+  discriminatorKey: 'type',
+  _id: false,
+  timestamps: false,
+})
+export class Stop {
+  @Prop({
+    required: true,
+    type: String,
+    enum: Object.values(StopType),
+  })
+  type: StopType;
+
+  @Prop({
+    required: true,
+    type: MongooseSchema.Types.ObjectId,
+    ref: 'Facility',
+    autopopulate: true,
+  })
+  facility: Facility;
+}
+
+@Schema({
+  _id: false,
+  timestamps: false,
+})
+export class StopPickUp {
+  type = StopType.PickUp;
+
+  @Prop({
+    required: true,
+    type: TimeFrameSchema,
+  })
+  timeFrame: TimeFrameFCFS | TimeFrameAPPT | TimeFrameASAP;
+
+  @Prop({
+    required: true,
+    type: [FreightSchema],
+  })
+  freightList: Freight[];
+}
+
+@Schema({
+  _id: false,
+  timestamps: false,
+})
+export class StopDelivery {
+  type = StopType.Delivery;
+
+  @Prop({
+    required: true,
+    type: TimeFrameSchema,
+  })
+  timeFrame: TimeFrameFCFS | TimeFrameAPPT | TimeFrameDirect;
+}
+
+const StopSchema = SchemaFactory.createForClass(Stop);
+const StopPickUpSchema = SchemaFactory.createForClass(StopPickUp);
+const timeFramePickUp =
+  StopPickUpSchema.path<MongooseSchema.Types.DocumentArray>('timeFrame');
+timeFramePickUp.discriminator(TimeFramesType.FCFS, TimeFrameFCFSSchema);
+timeFramePickUp.discriminator(TimeFramesType.APPT, TimeFrameAPPTSchema);
+timeFramePickUp.discriminator(TimeFramesType.ASAP, TimeFrameASAPSchema);
+const StopDeliverySchema = SchemaFactory.createForClass(StopDelivery);
+const timeFrameDelivery =
+  StopDeliverySchema.path<MongooseSchema.Types.DocumentArray>('timeFrame');
+timeFrameDelivery.discriminator(TimeFramesType.FCFS, TimeFrameFCFSSchema);
+timeFrameDelivery.discriminator(TimeFramesType.APPT, TimeFrameAPPTSchema);
+timeFrameDelivery.discriminator(TimeFramesType.Direct, TimeFrameDirectSchema);
+// Main entity
 @Schema({
   timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' },
   optimisticConcurrency: true,
@@ -40,39 +212,11 @@ export class Load {
   })
   status: LoadStatus;
 
-  /*@Prop({
-    required: true,
-    type: GeoLocationSchema,
-  })
-  pick: GeoLocationDto;
-
-  @Prop({
-    required: false,
-    type: MongooseSchema.Types.ObjectId,
-    ref: 'Location',
-    autopopulate: true,
-  })
-  pickLocation?: Location;
-
-  @Prop({ required: true })
-  pickDate: Date;
-
   @Prop({
     required: true,
-    type: GeoLocationSchema,
+    type: [StopSchema],
   })
-  deliver: GeoLocationDto;
-
-  @Prop({
-    required: false,
-    type: MongooseSchema.Types.ObjectId,
-    ref: 'Location',
-    autopopulate: true,
-  })
-  deliverLocation?: Location;
-
-  @Prop({ required: false })
-  deliverDate?: Date;*/
+  stops: (StopPickUp | StopDelivery)[];
 
   @Prop({
     required: false,
@@ -147,6 +291,9 @@ export class Load {
 }
 
 export const LoadSchema = SchemaFactory.createForClass(Load);
+const stopsArray = LoadSchema.path<MongooseSchema.Types.DocumentArray>('stops');
+stopsArray.discriminator(StopType.PickUp, StopPickUpSchema);
+stopsArray.discriminator(StopType.Delivery, StopDeliverySchema);
 
 LoadSchema.index({ loadNumber: 1 }, { unique: true });
 LoadSchema.index(
