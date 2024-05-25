@@ -3,9 +3,16 @@ import { Document, ObjectId, Schema as MongooseSchema } from 'mongoose';
 import {
   DEFAULT_CHECK_IN_AS,
   LOAD_STATUSES,
-  TRUCK_TYPES, UNITS_OF_LENGTH, UNITS_OF_WEIGHT,
+  TRUCK_TYPES,
+  UNITS_OF_LENGTH,
+  UNITS_OF_WEIGHT,
 } from '../utils/constants';
-import { LoadStatus, TruckType, UnitOfLength, UnitOfWeight } from '../utils/general.dto';
+import {
+  LoadStatus,
+  TruckType,
+  UnitOfLength,
+  UnitOfWeight,
+} from '../utils/general.dto';
 // import { GeoLocationSchema, Location } from '../location/location.schema';
 import { User } from '../user/user.schema';
 import { Truck } from '../truck/truck.schema';
@@ -157,6 +164,11 @@ export class Stop {
     autopopulate: true,
   })
   facility: Facility;
+
+  @Prop({
+    required: false,
+  })
+  addInfo?: string;
 }
 
 @Schema({
@@ -164,8 +176,6 @@ export class Stop {
   timestamps: false,
 })
 export class StopPickUp {
-  type = StopType.PickUp;
-
   @Prop({
     required: true,
     type: TimeFrameSchema,
@@ -178,20 +188,22 @@ export class StopPickUp {
   })
   freightList: Freight[];
 }
-
 @Schema({
   _id: false,
   timestamps: false,
 })
 export class StopDelivery {
-  type = StopType.Delivery;
-
   @Prop({
     required: true,
     type: TimeFrameSchema,
   })
   timeFrame: TimeFrameFCFS | TimeFrameAPPT | TimeFrameDirect;
 }
+export type StopPickUpType = Omit<InstanceType<typeof Stop>, 'type'> &
+  InstanceType<typeof StopPickUp> & { type: StopType.PickUp };
+export type StopDeliveryType = Omit<InstanceType<typeof Stop>, 'type'> &
+  InstanceType<typeof StopDelivery> & { type: StopType.Delivery };
+export type StopItemType = StopPickUpType | StopDeliveryType;
 
 const StopSchema = SchemaFactory.createForClass(Stop);
 const StopPickUpSchema = SchemaFactory.createForClass(StopPickUp);
@@ -237,7 +249,7 @@ export class Load {
     required: true,
     type: [StopSchema],
   })
-  stops: (StopPickUp | StopDelivery)[];
+  stops: StopItemType[];
 
   @Prop({
     required: false,

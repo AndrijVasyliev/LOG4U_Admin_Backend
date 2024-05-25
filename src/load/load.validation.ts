@@ -1,17 +1,75 @@
 import * as Joi from 'joi';
-import { LOAD_STATUSES, TRUCK_TYPES } from '../utils/constants';
+import { StopType, TimeFramesType } from './load.schema';
+import {
+  LOAD_STATUSES,
+  TRUCK_TYPES,
+  UNITS_OF_LENGTH,
+  UNITS_OF_WEIGHT,
+} from '../utils/constants';
 import { MongoObjectIdValidation } from '../utils/idValidate.pipe';
-// import { GeoLocation } from '../location/location.validation';
+
+const TimeFrameFCFSValidation = Joi.object({
+  type: Joi.string().valid(TimeFramesType.FCFS).required(),
+  from: Joi.date().iso().required(),
+  to: Joi.date().iso().min(Joi.ref('from')).required(),
+});
+const TimeFrameAPPTValidation = Joi.object({
+  type: Joi.string().valid(TimeFramesType.APPT).required(),
+  at: Joi.date().iso().required(),
+});
+const TimeFrameASAPValidation = Joi.object({
+  type: Joi.string().valid(TimeFramesType.ASAP).required(),
+  at: Joi.date().iso().required(),
+});
+const TimeFrameDirectValidation = Joi.object({
+  type: Joi.string().valid(TimeFramesType.Direct).required(),
+  at: Joi.date().iso().required(),
+});
+
+const FreightValidation = Joi.object({
+  pieces: Joi.number().integer().min(1).required(),
+  unitOfWeight: Joi.string()
+    .valid(...UNITS_OF_WEIGHT)
+    .required(),
+  weight: Joi.number().greater(0).required(),
+  unitOfLength: Joi.string()
+    .valid(...UNITS_OF_LENGTH)
+    .required(),
+  length: Joi.number().greater(0).required(),
+});
+
+const StopValidation = Joi.object({
+  facility: MongoObjectIdValidation.required(),
+  addInfo: Joi.string().optional(),
+});
+
+const StopPickUpValidation = StopValidation.append({
+  type: Joi.string().valid(StopType.PickUp).required(),
+  timeFrame: Joi.alternatives(
+    TimeFrameFCFSValidation,
+    TimeFrameAPPTValidation,
+    TimeFrameASAPValidation,
+  ).required(),
+  freightList: Joi.array().items(FreightValidation).min(1).required(),
+});
+const StopDeliveryValidation = StopValidation.append({
+  type: Joi.string().valid(StopType.Delivery).required(),
+  timeFrame: Joi.alternatives(
+    TimeFrameFCFSValidation,
+    TimeFrameAPPTValidation,
+    TimeFrameDirectValidation,
+  ).required(),
+});
 
 export const CreateLoadValidation = Joi.object({
   ref: Joi.array().items(Joi.string().required()).min(1).max(3).optional(),
   status: Joi.string()
     .valid(...LOAD_STATUSES)
     .required(),
-  /*pick: GeoLocation.required(),
-  pickDate: Joi.date().iso().required(),
-  deliver: GeoLocation.required(),
-  deliverDate: Joi.date().iso().min(Joi.ref('pickDate')).required(),*/
+  stops: Joi.array()
+    .ordered(StopPickUpValidation.required())
+    .items(StopPickUpValidation, StopDeliveryValidation.required())
+    .required(),
   weight: Joi.string().required(),
   truckType: Joi.array()
     .min(1)
@@ -37,14 +95,10 @@ export const UpdateLoadValidation = Joi.object({
   status: Joi.string()
     .valid(...LOAD_STATUSES)
     .optional(),
-  /*pick: GeoLocation.optional(),
-  pickDate: Joi.date().iso().optional(),
-  deliver: GeoLocation.optional(),
-  deliverDate: Joi.when('pickDate', {
-    is: Joi.exist(),
-    then: Joi.date().iso().min(Joi.ref('pickDate')),
-    otherwise: Joi.date().iso(),
-  }).optional(),*/
+  stops: Joi.array()
+    .ordered(StopPickUpValidation.required())
+    .items(StopPickUpValidation, StopDeliveryValidation.required())
+    .optional(),
   weight: Joi.string().optional(),
   truckType: Joi.array()
     .min(1)
