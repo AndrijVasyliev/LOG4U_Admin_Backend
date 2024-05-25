@@ -3,9 +3,9 @@ import { Document, ObjectId, Schema as MongooseSchema } from 'mongoose';
 import {
   DEFAULT_CHECK_IN_AS,
   LOAD_STATUSES,
-  TRUCK_TYPES,
+  TRUCK_TYPES, UNITS_OF_LENGTH, UNITS_OF_WEIGHT,
 } from '../utils/constants';
-import { LoadStatus, TruckType } from '../utils/general.dto';
+import { LoadStatus, TruckType, UnitOfLength, UnitOfWeight } from '../utils/general.dto';
 // import { GeoLocationSchema, Location } from '../location/location.schema';
 import { User } from '../user/user.schema';
 import { Truck } from '../truck/truck.schema';
@@ -33,6 +33,7 @@ export type LoadDocument = Load & Document;
 export class TimeFrame {
   @Prop({
     required: true,
+    immutable: true,
     type: String,
     enum: Object.values(TimeFramesType),
   })
@@ -110,8 +111,27 @@ export class Freight {
 
   @Prop({
     required: true,
+    type: String,
+    enum: UNITS_OF_WEIGHT,
+  })
+  unitOfWeight: UnitOfWeight;
+
+  @Prop({
+    required: true,
   })
   weight: number;
+
+  @Prop({
+    required: true,
+    type: String,
+    enum: UNITS_OF_LENGTH,
+  })
+  unitOfLength: UnitOfLength;
+
+  @Prop({
+    required: true,
+  })
+  length: number;
 }
 
 const FreightSchema = SchemaFactory.createForClass(Freight);
@@ -124,6 +144,7 @@ const FreightSchema = SchemaFactory.createForClass(Freight);
 export class Stop {
   @Prop({
     required: true,
+    immutable: true,
     type: String,
     enum: Object.values(StopType),
   })

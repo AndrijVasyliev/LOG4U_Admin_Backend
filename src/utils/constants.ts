@@ -156,3 +156,6 @@ export const LOAD_STATUSES = [
   'Cancelled',
   'Completed',
 ] as const;
+
+export const UNITS_OF_WEIGHT = ['LBS', 'KG', 'TON'] as const;
+export const UNITS_OF_LENGTH = ['FT', 'IN', 'M', 'CM'] as const;
