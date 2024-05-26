@@ -1,25 +1,83 @@
 import { PaginateResult } from 'mongoose';
-import { Load } from './load.schema';
+import {
+  Freight,
+  Load,
+  Stop,
+  StopDelivery,
+  StopPickUp,
+  StopType,
+  TimeFramesType,
+} from './load.schema';
 import {
   LoadStatus,
   PaginatedResultDto,
   Query,
   TruckType,
+  UnitOfLength,
+  UnitOfWeight,
 } from '../utils/general.dto';
 import { GeoLocationDto, LocationResultDto } from '../location/location.dto';
 import { calcDistance } from '../utils/haversine.distance';
 import { UserResultDto } from '../user/user.dto';
 import { TruckResultDto } from '../truck/truck.dto';
 import { CustomerResultDto } from '../customer/customer.dto';
+import { FacilityResultDto } from '../facility/facility.dto';
+
+class CreateTimeFrameFCFSDto {
+  type = TimeFramesType.FCFS;
+  from: Date;
+  to: Date;
+}
+
+class CreateTimeFrameAPPTDto {
+  type = TimeFramesType.APPT;
+  at: Date;
+}
+
+class CreateTimeFrameASAPDto {
+  type = TimeFramesType.ASAP;
+  at: Date;
+}
+
+class CreateTimeFrameDirectDto {
+  type = TimeFramesType.Direct;
+  at: Date;
+}
+
+class CreateFreightDto {
+  pieces: number;
+  unitOfWeight: UnitOfWeight;
+  weight: number;
+  unitOfLength: UnitOfLength;
+  length: number;
+}
+
+class CreateStopDto {
+  facility: string;
+  addInfo?: string;
+}
+class CreateStopPickUpDto extends CreateStopDto {
+  type = StopType.PickUp;
+  timeFrame:
+    | CreateTimeFrameFCFSDto
+    | CreateTimeFrameAPPTDto
+    | CreateTimeFrameASAPDto;
+  freightList: CreateFreightDto[];
+}
+
+class CreateStopDeliveryDto extends CreateStopDto {
+  type = StopType.Delivery;
+  timeFrame:
+    | CreateTimeFrameFCFSDto
+    | CreateTimeFrameAPPTDto
+    | CreateTimeFrameDirectDto;
+}
 
 export class CreateLoadDto {
   readonly loadNumber: number;
   readonly ref?: string[];
   readonly status: LoadStatus;
-  /*readonly pick: GeoLocationDto;
-  readonly pickDate: Date;
-  readonly deliver: GeoLocationDto;
-  readonly deliverDate?: Date;*/
+  readonly stops: (CreateStopPickUpDto | CreateStopDeliveryDto)[];
   readonly weight: string;
   readonly truckType: TruckType[];
   readonly rate?: number;
@@ -36,10 +94,7 @@ export class CreateLoadDto {
 export class UpdateLoadDto {
   readonly ref?: string[];
   readonly status?: LoadStatus;
-  /*readonly pick?: GeoLocationDto;
-  readonly pickDate?: Date;
-  readonly deliver?: GeoLocationDto;
-  readonly deliverDate?: Date;*/
+  readonly stops?: (CreateStopPickUpDto | CreateStopDeliveryDto)[];
   readonly weight?: string;
   readonly truckType?: TruckType[];
   readonly rate?: number;
@@ -65,6 +120,74 @@ export class LoadQuerySearch {
 
 export class LoadQuery extends Query<LoadQuerySearch> {}
 
+class FreightResultDto {
+  static fromStopModel(freight: Freight): FreightResultDto {
+    return {
+      pieces: freight.pieces,
+      unitOfWeight: freight.unitOfWeight,
+      weight: freight.weight,
+      unitOfLength: freight.unitOfLength,
+      length: freight.length,
+    };
+  }
+
+  readonly pieces: number;
+  readonly unitOfWeight: UnitOfWeight;
+  readonly weight: number;
+  readonly unitOfLength: UnitOfLength;
+  readonly length: number;
+}
+
+class StopResultDto {
+  static fromStopModel(stop: Stop): StopResultDto {
+    const facility =
+      stop.facility && FacilityResultDto.fromFacilityModel(stop.facility);
+    let result: StopResultDto = {
+      type: stop.type,
+      addInfo: stop.addInfo,
+    };
+    if (facility) {
+      result = { ...result, facility };
+    }
+    return result;
+  }
+
+  readonly type: StopType;
+  readonly facility?: FacilityResultDto;
+  readonly addInfo?: string;
+}
+
+class StopPickUpResultDto extends StopResultDto {
+  static fromStopPickUpModel(stop: Stop & StopPickUp): StopPickUpResultDto {
+    const stopResult = StopResultDto.fromStopModel(stop);
+    const freightList = stop.freightList.map((freight) =>
+      FreightResultDto.fromStopModel(freight),
+    );
+    return {
+      ...stopResult,
+      freightList,
+      timeFrame: stop.timeFrame,
+    };
+  }
+
+  readonly timeFrame: any;
+  readonly freightList: FreightResultDto[];
+}
+
+class StopDeliveryResultDto extends StopResultDto {
+  static fromStopDeliveryModel(
+    stop: Stop & StopDelivery,
+  ): StopDeliveryResultDto {
+    const stopResult = StopResultDto.fromStopModel(stop);
+    return {
+      ...stopResult,
+      timeFrame: stop.timeFrame,
+    };
+  }
+
+  readonly timeFrame: any;
+}
+
 export class LoadResultDto {
   static fromLoadModel(load: Load): LoadResultDto {
     /*const pick = load.pick && GeoLocationDto.fromGeoLocationModel(load.pick);
@@ -76,6 +199,14 @@ export class LoadResultDto {
     const deliverLocation =
       load.deliverLocation &&
       LocationResultDto.fromLocationModel(load.deliverLocation);*/
+    const stops = load.stops.map((stop) => {
+      switch (stop.type) {
+        case StopType.PickUp:
+          return StopPickUpResultDto.fromStopPickUpModel(stop);
+        case StopType.Delivery:
+          return StopDeliveryResultDto.fromStopDeliveryModel(stop);
+      }
+    });
     const bookedByUser =
       load.bookedByUser && UserResultDto.fromUserModel(load.bookedByUser);
     const assignTo =
@@ -93,13 +224,8 @@ export class LoadResultDto {
       loadNumber: load.loadNumber,
       ref: load.ref,
       status: load.status,
-      /*pick,
-      pickLocation,
-      pickDate: load.pickDate,
-      deliver,
-      deliverLocation,
-      deliverDate: load.deliverDate,*/
-      milesByRoads: load.miles,
+      stops,
+      // milesByRoads: load.miles,
       /*milesHaversine:
         pick?.geometry?.location &&
         deliver?.geometry?.location &&
@@ -134,14 +260,9 @@ export class LoadResultDto {
   readonly loadNumber: number;
   readonly ref?: string[];
   readonly status: LoadStatus;
-  readonly pick?: GeoLocationDto;
-  readonly pickLocation?: LocationResultDto;
-  readonly pickDate?: Date;
-  readonly deliver?: GeoLocationDto;
-  readonly deliverLocation?: LocationResultDto;
-  readonly deliverDate?: Date;
-  readonly milesByRoads?: number;
-  readonly milesHaversine?: number;
+  readonly stops: (StopPickUpResultDto | StopDeliveryResultDto)[];
+  // readonly milesByRoads?: number;
+  // readonly milesHaversine?: number;
   readonly weight: string;
   readonly truckType: TruckType[];
   readonly rate?: number;
