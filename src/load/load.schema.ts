@@ -37,14 +37,28 @@ export type LoadDocument = Load & Document;
   _id: false,
   timestamps: false,
 })
-export class TimeFrame {
+export class TimeFramePickUp {
   @Prop({
     required: true,
     immutable: true,
     type: String,
-    enum: Object.values(TimeFramesType),
+    enum: [TimeFramesType.FCFS, TimeFramesType.APPT, TimeFramesType.ASAP],
   })
-  type: TimeFramesType;
+  type: TimeFramesType.FCFS | TimeFramesType.APPT | TimeFramesType.ASAP;
+}
+@Schema({
+  discriminatorKey: 'type',
+  _id: false,
+  timestamps: false,
+})
+export class TimeFrameDelivery {
+  @Prop({
+    required: true,
+    immutable: true,
+    type: String,
+    enum: [TimeFramesType.FCFS, TimeFramesType.APPT, TimeFramesType.Direct],
+  })
+  type: TimeFramesType.FCFS | TimeFramesType.APPT | TimeFramesType.Direct;
 }
 @Schema({
   _id: false,
@@ -100,7 +114,8 @@ export class TimeFrameDirect {
   })
   at: Date;
 }
-const TimeFrameSchema = SchemaFactory.createForClass(TimeFrame);
+const TimeFramePickupSchema = SchemaFactory.createForClass(TimeFramePickUp);
+const TimeFrameDeliverySchema = SchemaFactory.createForClass(TimeFrameDelivery);
 const TimeFrameFCFSSchema = SchemaFactory.createForClass(TimeFrameFCFS);
 const TimeFrameAPPTSchema = SchemaFactory.createForClass(TimeFrameAPPT);
 const TimeFrameASAPSchema = SchemaFactory.createForClass(TimeFrameASAP);
@@ -178,7 +193,7 @@ export class Stop {
 export class StopPickUp {
   @Prop({
     required: true,
-    type: TimeFrameSchema,
+    type: TimeFramePickupSchema,
   })
   timeFrame: TimeFrameFCFS | TimeFrameAPPT | TimeFrameASAP;
 
@@ -195,7 +210,7 @@ export class StopPickUp {
 export class StopDelivery {
   @Prop({
     required: true,
-    type: TimeFrameSchema,
+    type: TimeFrameDeliverySchema,
   })
   timeFrame: TimeFrameFCFS | TimeFrameAPPT | TimeFrameDirect;
 }
