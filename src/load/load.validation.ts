@@ -1,5 +1,5 @@
 import * as Joi from 'joi';
-import { StopType, TimeFramesType } from './load.schema';
+import { StopType, TimeFrameType } from './load.schema';
 import {
   LOAD_STATUSES,
   TRUCK_TYPES,
@@ -9,20 +9,20 @@ import {
 import { MongoObjectIdValidation } from '../utils/idValidate.pipe';
 
 const TimeFrameFCFSValidation = Joi.object({
-  type: Joi.string().valid(TimeFramesType.FCFS).required(),
+  type: Joi.string().valid(TimeFrameType.FCFS).required(),
   from: Joi.date().iso().required(),
   to: Joi.date().iso().min(Joi.ref('from')).required(),
 });
 const TimeFrameAPPTValidation = Joi.object({
-  type: Joi.string().valid(TimeFramesType.APPT).required(),
+  type: Joi.string().valid(TimeFrameType.APPT).required(),
   at: Joi.date().iso().required(),
 });
 const TimeFrameASAPValidation = Joi.object({
-  type: Joi.string().valid(TimeFramesType.ASAP).required(),
+  type: Joi.string().valid(TimeFrameType.ASAP).required(),
   at: Joi.date().iso().required(),
 });
 const TimeFrameDirectValidation = Joi.object({
-  type: Joi.string().valid(TimeFramesType.Direct).required(),
+  type: Joi.string().valid(TimeFrameType.Direct).required(),
   at: Joi.date().iso().required(),
 });
 
@@ -69,6 +69,14 @@ export const CreateLoadValidation = Joi.object({
   stops: Joi.array()
     .ordered(StopPickUpValidation.required())
     .items(StopPickUpValidation, StopDeliveryValidation.required())
+    .custom((value: object[]) => {
+      const lastItem = value[value.length - 1];
+      const validationResult = StopDeliveryValidation.validate(lastItem);
+      if (validationResult.error) {
+        throw validationResult.error;
+      }
+      return value;
+    })
     .required(),
   weight: Joi.string().required(),
   truckType: Joi.array()

@@ -20,7 +20,7 @@ import { Customer } from '../customer/customer.schema';
 import { Facility } from '../facility/facility.schema';
 // import { GeoLocationDto } from '../location/location.dto';
 
-export enum TimeFramesType {
+export enum TimeFrameType {
   FCFS = 'FCFS',
   APPT = 'APPT',
   ASAP = 'ASAP',
@@ -42,9 +42,9 @@ export class TimeFramePickUp {
     required: true,
     immutable: true,
     type: String,
-    enum: [TimeFramesType.FCFS, TimeFramesType.APPT, TimeFramesType.ASAP],
+    enum: [TimeFrameType.FCFS, TimeFrameType.APPT, TimeFrameType.ASAP],
   })
-  type: TimeFramesType.FCFS | TimeFramesType.APPT | TimeFramesType.ASAP;
+  type: TimeFrameType.FCFS | TimeFrameType.APPT | TimeFrameType.ASAP;
 }
 @Schema({
   discriminatorKey: 'type',
@@ -56,16 +56,16 @@ export class TimeFrameDelivery {
     required: true,
     immutable: true,
     type: String,
-    enum: [TimeFramesType.FCFS, TimeFramesType.APPT, TimeFramesType.Direct],
+    enum: [TimeFrameType.FCFS, TimeFrameType.APPT, TimeFrameType.Direct],
   })
-  type: TimeFramesType.FCFS | TimeFramesType.APPT | TimeFramesType.Direct;
+  type: TimeFrameType.FCFS | TimeFrameType.APPT | TimeFrameType.Direct;
 }
 @Schema({
   _id: false,
   timestamps: false,
 })
 export class TimeFrameFCFS {
-  type = TimeFramesType.FCFS;
+  type = TimeFrameType.FCFS;
 
   @Prop({
     required: true,
@@ -83,7 +83,7 @@ export class TimeFrameFCFS {
   timestamps: false,
 })
 export class TimeFrameAPPT {
-  type = TimeFramesType.APPT;
+  type = TimeFrameType.APPT;
 
   @Prop({
     required: true,
@@ -95,7 +95,7 @@ export class TimeFrameAPPT {
   timestamps: false,
 })
 export class TimeFrameASAP {
-  type = TimeFramesType.ASAP;
+  type = TimeFrameType.ASAP;
 
   @Prop({
     required: true,
@@ -107,7 +107,7 @@ export class TimeFrameASAP {
   timestamps: false,
 })
 export class TimeFrameDirect {
-  type = TimeFramesType.Direct;
+  type = TimeFrameType.Direct;
 
   @Prop({
     required: true,
@@ -191,11 +191,16 @@ export class Stop {
   timestamps: false,
 })
 export class StopPickUp {
+  type = StopType.PickUp;
+
   @Prop({
     required: true,
     type: TimeFramePickupSchema,
   })
-  timeFrame: TimeFrameFCFS | TimeFrameAPPT | TimeFrameASAP;
+  timeFrame:
+    | (TimeFramePickUp & TimeFrameASAP & { type: TimeFrameType.ASAP })
+    | (TimeFramePickUp & TimeFrameFCFS & { type: TimeFrameType.FCFS })
+    | (TimeFramePickUp & TimeFrameAPPT & { type: TimeFrameType.APPT });
 
   @Prop({
     required: true,
@@ -208,31 +213,36 @@ export class StopPickUp {
   timestamps: false,
 })
 export class StopDelivery {
+  type = StopType.Delivery;
+
   @Prop({
     required: true,
     type: TimeFrameDeliverySchema,
   })
-  timeFrame: TimeFrameFCFS | TimeFrameAPPT | TimeFrameDirect;
+  timeFrame:
+    | (TimeFrameDelivery & TimeFrameDirect & { type: TimeFrameType.Direct })
+    | (TimeFrameDelivery & TimeFrameFCFS & { type: TimeFrameType.FCFS })
+    | (TimeFrameDelivery & TimeFrameAPPT & { type: TimeFrameType.APPT });
 }
-export type StopPickUpType = Omit<InstanceType<typeof Stop>, 'type'> &
+/*export type StopPickUpType = Omit<InstanceType<typeof Stop>, 'type'> &
   InstanceType<typeof StopPickUp> & { type: StopType.PickUp };
 export type StopDeliveryType = Omit<InstanceType<typeof Stop>, 'type'> &
   InstanceType<typeof StopDelivery> & { type: StopType.Delivery };
-export type StopItemType = StopPickUpType | StopDeliveryType;
+export type StopItemType = StopPickUpType | StopDeliveryType;*/
 
 const StopSchema = SchemaFactory.createForClass(Stop);
 const StopPickUpSchema = SchemaFactory.createForClass(StopPickUp);
 const timeFramePickUp =
   StopPickUpSchema.path<MongooseSchema.Types.DocumentArray>('timeFrame');
-timeFramePickUp.discriminator(TimeFramesType.FCFS, TimeFrameFCFSSchema);
-timeFramePickUp.discriminator(TimeFramesType.APPT, TimeFrameAPPTSchema);
-timeFramePickUp.discriminator(TimeFramesType.ASAP, TimeFrameASAPSchema);
+timeFramePickUp.discriminator(TimeFrameType.FCFS, TimeFrameFCFSSchema);
+timeFramePickUp.discriminator(TimeFrameType.APPT, TimeFrameAPPTSchema);
+timeFramePickUp.discriminator(TimeFrameType.ASAP, TimeFrameASAPSchema);
 const StopDeliverySchema = SchemaFactory.createForClass(StopDelivery);
 const timeFrameDelivery =
   StopDeliverySchema.path<MongooseSchema.Types.DocumentArray>('timeFrame');
-timeFrameDelivery.discriminator(TimeFramesType.FCFS, TimeFrameFCFSSchema);
-timeFrameDelivery.discriminator(TimeFramesType.APPT, TimeFrameAPPTSchema);
-timeFrameDelivery.discriminator(TimeFramesType.Direct, TimeFrameDirectSchema);
+timeFrameDelivery.discriminator(TimeFrameType.FCFS, TimeFrameFCFSSchema);
+timeFrameDelivery.discriminator(TimeFrameType.APPT, TimeFrameAPPTSchema);
+timeFrameDelivery.discriminator(TimeFrameType.Direct, TimeFrameDirectSchema);
 // Main entity
 @Schema({
   timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' },
@@ -264,7 +274,11 @@ export class Load {
     required: true,
     type: [StopSchema],
   })
-  stops: StopItemType[];
+  stops: (
+    | (Stop & StopPickUp & { type: StopType.PickUp })
+    | (Stop & StopDelivery & { type: StopType.Delivery })
+  )[];
+  // stops: StopItemType[];
 
   @Prop({
     required: false,

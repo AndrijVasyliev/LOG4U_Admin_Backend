@@ -6,7 +6,13 @@ import {
   StopDelivery,
   StopPickUp,
   StopType,
-  TimeFramesType,
+  TimeFrameAPPT,
+  TimeFrameASAP,
+  TimeFrameDelivery,
+  TimeFrameDirect,
+  TimeFrameFCFS,
+  TimeFramePickUp,
+  TimeFrameType,
 } from './load.schema';
 import {
   LoadStatus,
@@ -16,31 +22,31 @@ import {
   UnitOfLength,
   UnitOfWeight,
 } from '../utils/general.dto';
-import { GeoLocationDto, LocationResultDto } from '../location/location.dto';
-import { calcDistance } from '../utils/haversine.distance';
+// import { GeoLocationDto, LocationResultDto } from '../location/location.dto';
+// import { calcDistance } from '../utils/haversine.distance';
 import { UserResultDto } from '../user/user.dto';
 import { TruckResultDto } from '../truck/truck.dto';
 import { CustomerResultDto } from '../customer/customer.dto';
 import { FacilityResultDto } from '../facility/facility.dto';
 
 class CreateTimeFrameFCFSDto {
-  type = TimeFramesType.FCFS;
+  type = TimeFrameType.FCFS;
   from: Date;
   to: Date;
 }
 
 class CreateTimeFrameAPPTDto {
-  type = TimeFramesType.APPT;
+  type = TimeFrameType.APPT;
   at: Date;
 }
 
 class CreateTimeFrameASAPDto {
-  type = TimeFramesType.ASAP;
+  type = TimeFrameType.ASAP;
   at: Date;
 }
 
 class CreateTimeFrameDirectDto {
-  type = TimeFramesType.Direct;
+  type = TimeFrameType.Direct;
   at: Date;
 }
 
@@ -120,6 +126,60 @@ export class LoadQuerySearch {
 
 export class LoadQuery extends Query<LoadQuerySearch> {}
 
+/*class TimeFramePickUpResultDto {
+  static fromTimeFramePickUpModel(
+    timeFrame: TimeFramePickUp,
+  ): TimeFramePickUpResultDto {
+    return {
+      type: timeFrame.type,
+    };
+  }
+
+  readonly type: TimeFrameType;
+}
+
+class TimeFrameDeliveryResultDto {
+  static fromTimeFramePickUpModel(
+    timeFrame: TimeFrameDelivery,
+  ): TimeFrameDeliveryResultDto {
+    return {
+      type: timeFrame.type,
+    };
+  }
+
+  readonly type: TimeFrameType;
+}*/
+
+class TimeFrameFCFSResultDto {
+  static fromTimeFrameFCFSModel(
+    timeFrame: (TimeFramePickUp | TimeFrameDelivery) & TimeFrameFCFS,
+  ): TimeFrameFCFSResultDto {
+    return {
+      type: timeFrame.type,
+      from: timeFrame.from,
+      to: timeFrame.to,
+    };
+  }
+
+  readonly type: TimeFrameType;
+  readonly from: Date;
+  readonly to: Date;
+}
+class TimeFrameResultDto {
+  static fromTimeFrameModel(
+    timeFrame: (TimeFramePickUp | TimeFrameDelivery) &
+      (TimeFrameAPPT | TimeFrameASAP | TimeFrameDirect),
+  ): TimeFrameResultDto {
+    return {
+      type: timeFrame.type,
+      at: timeFrame.at,
+    };
+  }
+
+  readonly type: TimeFrameType;
+  readonly at: Date;
+}
+
 class FreightResultDto {
   static fromStopModel(freight: Freight): FreightResultDto {
     return {
@@ -163,14 +223,23 @@ class StopPickUpResultDto extends StopResultDto {
     const freightList = stop.freightList.map((freight) =>
       FreightResultDto.fromStopModel(freight),
     );
+    const timeFrame = ((timeFrame) => {
+      switch (timeFrame.type) {
+        case TimeFrameType.APPT:
+        case TimeFrameType.ASAP:
+          return TimeFrameResultDto.fromTimeFrameModel(timeFrame);
+        case TimeFrameType.FCFS:
+          return TimeFrameFCFSResultDto.fromTimeFrameFCFSModel(timeFrame);
+      }
+    })(stop.timeFrame);
     return {
       ...stopResult,
       freightList,
-      timeFrame: stop.timeFrame,
+      timeFrame,
     };
   }
 
-  readonly timeFrame: any;
+  readonly timeFrame: TimeFrameFCFSResultDto | TimeFrameResultDto;
   readonly freightList: FreightResultDto[];
 }
 
@@ -179,13 +248,22 @@ class StopDeliveryResultDto extends StopResultDto {
     stop: Stop & StopDelivery,
   ): StopDeliveryResultDto {
     const stopResult = StopResultDto.fromStopModel(stop);
+    const timeFrame = ((timeFrame) => {
+      switch (timeFrame.type) {
+        case TimeFrameType.APPT:
+        case TimeFrameType.Direct:
+          return TimeFrameResultDto.fromTimeFrameModel(timeFrame);
+        case TimeFrameType.FCFS:
+          return TimeFrameFCFSResultDto.fromTimeFrameFCFSModel(timeFrame);
+      }
+    })(stop.timeFrame);
     return {
       ...stopResult,
-      timeFrame: stop.timeFrame,
+      timeFrame,
     };
   }
 
-  readonly timeFrame: any;
+  readonly timeFrame: TimeFrameFCFSResultDto | TimeFrameResultDto;
 }
 
 export class LoadResultDto {
