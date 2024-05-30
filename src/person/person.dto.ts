@@ -20,6 +20,7 @@ export class PersonAuthResultDto {
       isAppInDebugMode: person.isAppInDebugMode,
       appLogin: person.appLogin,
       deviceId: person.deviceId,
+      useGoogleMaps: person.useGoogleMaps,
     };
   }
 
@@ -29,6 +30,7 @@ export class PersonAuthResultDto {
   readonly isAppInDebugMode?: boolean;
   readonly appLogin?: string;
   readonly deviceId?: string;
+  readonly useGoogleMaps?: boolean;
 }
 
 export class PersonResultDto {
@@ -38,6 +40,7 @@ export class PersonResultDto {
       type: person.type,
       fullName: person.fullName,
       isAppInDebugMode: person.isAppInDebugMode,
+      useGoogleMaps: person.useGoogleMaps,
       appLogin: person.appLogin,
       deviceStatus: person.deviceStatus,
       deviceStatusLastChange: person.appPermissionsLastChange,
@@ -54,6 +57,7 @@ export class PersonResultDto {
   readonly type: PersonType;
   readonly fullName: string;
   readonly isAppInDebugMode?: boolean;
+  readonly useGoogleMaps?: boolean;
   readonly appLogin?: string;
   readonly deviceStatus?: Record<string, any>;
   readonly deviceStatusLastChange?: Date;

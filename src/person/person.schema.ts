@@ -27,6 +27,9 @@ export class Person {
   isAppInDebugMode?: boolean;
 
   @Prop({ required: false })
+  useGoogleMaps?: boolean;
+
+  @Prop({ required: false })
   appLogin?: string;
 
   @Prop({ required: false, type: Object })

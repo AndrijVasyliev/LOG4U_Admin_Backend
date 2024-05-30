@@ -45,23 +45,6 @@ export class CustomerService {
     return customer;
   }
 
-  async getCustomerByCredentials(
-    email: string,
-    password: string,
-  ): Promise<CustomerResultDto | null> {
-    this.log.debug(`Searching for Customer by email ${email}`);
-    const customer = await this.customerModel.findOne({
-      email,
-      password,
-    });
-    if (!customer) {
-      this.log.debug(`Customer with email ${email} was not found`);
-      return null;
-    }
-    this.log.debug(`Customer ${customer._id}`);
-    return CustomerResultDto.fromCustomerModel(customer);
-  }
-
   async findCustomerById(id: string): Promise<CustomerResultDto> {
     const customer = await this.findCustomerDocumentById(id);
     return CustomerResultDto.fromCustomerModel(customer);

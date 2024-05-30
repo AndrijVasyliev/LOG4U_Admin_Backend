@@ -22,6 +22,7 @@ export const UpdateFacilityValidation = Joi.object({
 export const FacilityQueryParamsSchema = Joi.object({
   offset: Joi.number().integer().min(0).optional(),
   limit: Joi.number().integer().min(1).optional(),
+  search: Joi.string().optional(),
   name: Joi.string().optional(),
   address: Joi.string().optional(),
   address2: Joi.string().optional(),

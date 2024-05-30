@@ -46,23 +46,6 @@ export class FacilityService {
     return facility;
   }
 
-  async getFacilityByCredentials(
-    email: string,
-    password: string,
-  ): Promise<FacilityResultDto | null> {
-    this.log.debug(`Searching for Facility by email ${email}`);
-    const facility = await this.facilityModel.findOne({
-      email,
-      password,
-    });
-    if (!facility) {
-      this.log.debug(`Facility with email ${email} was not found`);
-      return null;
-    }
-    this.log.debug(`Facility ${facility._id}`);
-    return FacilityResultDto.fromFacilityModel(facility);
-  }
-
   async findFacilityById(id: string): Promise<FacilityResultDto> {
     const facility = await this.findFacilityDocumentById(id);
     return FacilityResultDto.fromFacilityModel(facility);
@@ -84,6 +67,10 @@ export class FacilityService {
             $regex: new RegExp(escapeForRegExp(entry[1]), 'i'),
           });
       });
+    }
+    if (query?.search?.search) {
+      const search = escapeForRegExp(query?.search?.search);
+      documentQuery.$or = [{ name: { $regex: new RegExp(search, 'i') } }];
     }
     if (query?.search?.facilityLocation && query?.search?.distance) {
       documentQuery.facilityLocation = {

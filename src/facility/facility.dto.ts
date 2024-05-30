@@ -17,6 +17,7 @@ export class UpdateFacilityDto {
 }
 
 export class FacilityQuerySearch {
+  readonly search?: string;
   readonly name?: string;
   readonly address?: string;
   readonly address2?: string;
