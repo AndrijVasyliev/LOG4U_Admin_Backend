@@ -126,30 +126,6 @@ export class LoadQuerySearch {
 
 export class LoadQuery extends Query<LoadQuerySearch> {}
 
-/*class TimeFramePickUpResultDto {
-  static fromTimeFramePickUpModel(
-    timeFrame: TimeFramePickUp,
-  ): TimeFramePickUpResultDto {
-    return {
-      type: timeFrame.type,
-    };
-  }
-
-  readonly type: TimeFrameType;
-}
-
-class TimeFrameDeliveryResultDto {
-  static fromTimeFramePickUpModel(
-    timeFrame: TimeFrameDelivery,
-  ): TimeFrameDeliveryResultDto {
-    return {
-      type: timeFrame.type,
-    };
-  }
-
-  readonly type: TimeFrameType;
-}*/
-
 class TimeFrameFCFSResultDto {
   static fromTimeFrameFCFSModel(
     timeFrame: (TimeFramePickUp | TimeFrameDelivery) & TimeFrameFCFS,
@@ -268,15 +244,6 @@ class StopDeliveryResultDto extends StopResultDto {
 
 export class LoadResultDto {
   static fromLoadModel(load: Load): LoadResultDto {
-    /*const pick = load.pick && GeoLocationDto.fromGeoLocationModel(load.pick);
-    const pickLocation =
-      load.pickLocation &&
-      LocationResultDto.fromLocationModel(load.pickLocation);
-    const deliver =
-      load.deliver && GeoLocationDto.fromGeoLocationModel(load.deliver);
-    const deliverLocation =
-      load.deliverLocation &&
-      LocationResultDto.fromLocationModel(load.deliverLocation);*/
     const stops = load.stops.map((stop) => {
       switch (stop.type) {
         case StopType.PickUp:
