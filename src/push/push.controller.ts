@@ -34,7 +34,7 @@ import { BodyValidationPipe } from '../utils/bodyValidate.pipe';
 import { QueryParamsPipe } from '../utils/queryParamsValidate.pipe';
 import { MongoObjectIdPipe } from '../utils/idValidate.pipe';
 
-@Controller('testPush')
+@Controller('push')
 @Roles('Admin', 'Super Admin')
 export class PushController {
   constructor(

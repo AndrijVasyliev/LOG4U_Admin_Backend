@@ -30,7 +30,7 @@ import { BodyValidationPipe } from '../utils/bodyValidate.pipe';
 import { QueryParamsPipe } from '../utils/queryParamsValidate.pipe';
 import { MongoObjectIdPipe } from '../utils/idValidate.pipe';
 
-@Controller('testEmail')
+@Controller('email')
 @Roles('Admin', 'Super Admin')
 export class EmailController {
   constructor(

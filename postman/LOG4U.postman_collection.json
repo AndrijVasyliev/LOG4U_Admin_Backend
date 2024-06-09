@@ -3121,13 +3121,13 @@
 							}
 						},
 						"url": {
-							"raw": "{{origin}}/api/testEmail/send",
+							"raw": "{{origin}}/api/email/send",
 							"host": [
 								"{{origin}}"
 							],
 							"path": [
 								"api",
-								"testEmail",
+								"email",
 								"send"
 							]
 						}
@@ -3140,13 +3140,13 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{origin}}/api/testEmail?limit=30&offset=0&orderby=state&direction=asc",
+							"raw": "{{origin}}/api/email?limit=30&offset=0&orderby=state&direction=asc",
 							"host": [
 								"{{origin}}"
 							],
 							"path": [
 								"api",
-								"testEmail"
+								"email"
 							],
 							"query": [
 								{
@@ -3212,13 +3212,13 @@
 							}
 						},
 						"url": {
-							"raw": "{{origin}}/api/testEmail/:emailId",
+							"raw": "{{origin}}/api/email/:emailId",
 							"host": [
 								"{{origin}}"
 							],
 							"path": [
 								"api",
-								"testEmail",
+								"email",
 								":emailId"
 							],
 							"variable": [
@@ -3246,13 +3246,13 @@
 							}
 						},
 						"url": {
-							"raw": "{{origin}}/api/testEmail",
+							"raw": "{{origin}}/api/email",
 							"host": [
 								"{{origin}}"
 							],
 							"path": [
 								"api",
-								"testEmail"
+								"email"
 							]
 						}
 					},
@@ -3273,13 +3273,13 @@
 							}
 						},
 						"url": {
-							"raw": "{{origin}}/api/testEmail/:emailId",
+							"raw": "{{origin}}/api/email/:emailId",
 							"host": [
 								"{{origin}}"
 							],
 							"path": [
 								"api",
-								"testEmail",
+								"email",
 								":emailId"
 							],
 							"variable": [
@@ -3307,13 +3307,13 @@
 							}
 						},
 						"url": {
-							"raw": "{{origin}}/api/testEmail/:emailId",
+							"raw": "{{origin}}/api/email/:emailId",
 							"host": [
 								"{{origin}}"
 							],
 							"path": [
 								"api",
-								"testEmail",
+								"email",
 								":emailId"
 							],
 							"variable": [
@@ -3346,13 +3346,13 @@
 							}
 						},
 						"url": {
-							"raw": "{{origin}}/api/testPush/send",
+							"raw": "{{origin}}/api/push/send",
 							"host": [
 								"{{origin}}"
 							],
 							"path": [
 								"api",
-								"testPush",
+								"push",
 								"send"
 							]
 						}
@@ -3377,13 +3377,13 @@
 							}
 						},
 						"url": {
-							"raw": "{{origin}}/api/testPush/receipt/:receiptId",
+							"raw": "{{origin}}/api/push/receipt/:receiptId",
 							"host": [
 								"{{origin}}"
 							],
 							"path": [
 								"api",
-								"testPush",
+								"push",
 								"receipt",
 								":receiptId"
 							],
@@ -3403,13 +3403,13 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{origin}}/api/testPush?limit=30&offset=0&orderby=state&direction=asc",
+							"raw": "{{origin}}/api/push?limit=30&offset=0&orderby=state&direction=asc",
 							"host": [
 								"{{origin}}"
 							],
 							"path": [
 								"api",
-								"testPush"
+								"push"
 							],
 							"query": [
 								{
@@ -3474,13 +3474,13 @@
 							}
 						},
 						"url": {
-							"raw": "{{origin}}/api/testPush/:pushId",
+							"raw": "{{origin}}/api/push/:pushId",
 							"host": [
 								"{{origin}}"
 							],
 							"path": [
 								"api",
-								"testPush",
+								"push",
 								":pushId"
 							],
 							"variable": [
@@ -3508,13 +3508,13 @@
 							}
 						},
 						"url": {
-							"raw": "{{origin}}/api/testPush",
+							"raw": "{{origin}}/api/push",
 							"host": [
 								"{{origin}}"
 							],
 							"path": [
 								"api",
-								"testPush"
+								"push"
 							]
 						}
 					},
@@ -3535,13 +3535,13 @@
 							}
 						},
 						"url": {
-							"raw": "{{origin}}/api/testPush/:pushId",
+							"raw": "{{origin}}/api/push/:pushId",
 							"host": [
 								"{{origin}}"
 							],
 							"path": [
 								"api",
-								"testPush",
+								"push",
 								":pushId"
 							],
 							"variable": [
@@ -3569,13 +3569,13 @@
 							}
 						},
 						"url": {
-							"raw": "{{origin}}/api/testPush/:pushId",
+							"raw": "{{origin}}/api/push/:pushId",
 							"host": [
 								"{{origin}}"
 							],
 							"path": [
 								"api",
-								"testPush",
+								"push",
 								":pushId"
 							],
 							"variable": [
