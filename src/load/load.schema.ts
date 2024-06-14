@@ -273,12 +273,18 @@ export class Load {
   @Prop({
     required: true,
     type: [StopSchema],
+    autopopulate: true,
   })
   stops: (
     | (Stop & StopPickUp & { type: StopType.PickUp })
     | (Stop & StopDelivery & { type: StopType.Delivery })
   )[];
-  // stops: StopItemType[];
+
+  @Prop({
+    required: false,
+    type: Number,
+  })
+  stopsVer?: number;
 
   @Prop({
     required: false,

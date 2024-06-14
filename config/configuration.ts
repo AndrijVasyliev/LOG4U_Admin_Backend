@@ -13,7 +13,7 @@ export default (): {
     taskSetAvailableInterval: number;
   };
   db: MongooseModuleFactoryOptions;
-  google: any;
+  google: { key: string };
   email: any;
   emailQueue: {
     maxParallelTasks: number;
@@ -29,6 +29,10 @@ export default (): {
     startReceiptForTasksOlder: number;
     taskRestartInterval: number;
     restartTasksOlder: number;
+  };
+  loadQueue: {
+    maxParallelTasks: number;
+    taskTimeout: number;
   };
   file: { maxFileSize: number };
 } => ({
@@ -82,10 +86,7 @@ export default (): {
     socketTimeoutMS: +(process.env.MONGO_SOCKET_TIMEOUT || 0),
   },
   google: {
-    key: process.env.GOOGLE_MAPS_API_KEY,
-    distanceMatrixBaseUri:
-      process.env.GOOGLE_MAPS_DISTANCE_MATRIX_URI ||
-      'https://maps.googleapis.com/maps/api/distancematrix/json',
+    key: process.env.GOOGLE_MAPS_API_KEY || '',
   },
   email: {
     host: process.env.EMAIL_SMTP_HOST || 'smtp.gmail.com',
@@ -124,6 +125,10 @@ export default (): {
     restartTasksOlder: +(
       process.env.PUSH_QUEUE_RESTART_TASKS_OLDER || 1000 * 60 * 6
     ),
+  },
+  loadQueue: {
+    maxParallelTasks: +(process.env.EMAIL_QUEUE_MAX_PARALEL_TSAKS || 10),
+    taskTimeout: +(process.env.EMAIL_QUEUE_TASK_TIMEOUT || 1000 * 60 * 5),
   },
   file: { maxFileSize: +(process.env.FILE_MAX_SIZE || Infinity) },
 });

@@ -106,11 +106,8 @@ export class EmailService implements OnApplicationBootstrap, OnModuleDestroy {
     if (stream) {
       this.queue = new Queue<ChangeDocument>(
         async (): Promise<ChangeDocument> => {
-          if (!this.changeStream) {
-            throw new Error('No stream');
-          }
-          await this?.changeStream?.hasNext();
-          return this?.changeStream?.next() as unknown as Promise<ChangeDocument>;
+          await stream.hasNext();
+          return stream.next() as unknown as Promise<ChangeDocument>;
         },
         this.onNewEmail.bind(this),
         this.configService.get<number>('emailQueue.maxParallelTasks') as number,

@@ -9,16 +9,8 @@ import {
   OnModuleDestroy,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
+import { ConfigService } from '@nestjs/config';
 import { SchedulerRegistry } from '@nestjs/schedule';
-import { LoggerService } from '../logger';
-import {
-  EARTH_RADIUS_MILES,
-  MONGO_CONNECTION_NAME,
-  MONGO_UNIQUE_INDEX_CONFLICT,
-  TRUCK_SET_AVAIL_STATUS_JOB,
-  UNIQUE_CONSTRAIN_ERROR,
-} from '../utils/constants';
-import { calcDistance } from '../utils/haversine.distance';
 import { Truck, TruckDocument } from './truck.schema';
 import {
   CreateTruckDto,
@@ -29,11 +21,18 @@ import {
   UpdateTruckDto,
   CalculatedDistances,
 } from './truck.dto';
+import { LoggerService } from '../logger';
 import { GoogleGeoApiService } from '../googleGeoApi/googleGeoApi.service';
-// import { LocationService } from '../location/location.service';
-import { escapeForRegExp } from '../utils/escapeForRegExp';
 import { UserResultDto } from '../user/user.dto';
-import { ConfigService } from '@nestjs/config';
+import {
+  EARTH_RADIUS_MILES,
+  MONGO_CONNECTION_NAME,
+  MONGO_UNIQUE_INDEX_CONFLICT,
+  TRUCK_SET_AVAIL_STATUS_JOB,
+  UNIQUE_CONSTRAIN_ERROR,
+} from '../utils/constants';
+import { escapeForRegExp } from '../utils/escapeForRegExp';
+import { calcDistance } from '../utils/haversine.distance';
 
 const { MongoError } = mongo;
 

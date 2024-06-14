@@ -1,3 +1,4 @@
+import { LatLngArray } from '@googlemaps/google-maps-services-js';
 import {
   EMAIL_STATES,
   EMAIL_TO_TYPES,
@@ -19,7 +20,7 @@ import {
   UNITS_OF_LENGTH,
 } from './constants';
 
-export type GeoPointType = [number, number];
+export type GeoPointType = LatLngArray;
 
 export type MongoGeoPointType = {
   type: 'Point';

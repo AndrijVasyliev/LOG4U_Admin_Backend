@@ -22,8 +22,7 @@ import {
   UnitOfLength,
   UnitOfWeight,
 } from '../utils/general.dto';
-// import { GeoLocationDto, LocationResultDto } from '../location/location.dto';
-// import { calcDistance } from '../utils/haversine.distance';
+import { calcDistance } from '../utils/haversine.distance';
 import { UserResultDto } from '../user/user.dto';
 import { TruckResultDto } from '../truck/truck.dto';
 import { CustomerResultDto } from '../customer/customer.dto';
@@ -96,6 +95,27 @@ export class CreateLoadDto {
   readonly truck?: string;
   readonly bookedWith?: string;
 }
+
+export class LoadChangeUpdateDocument {
+  readonly operationType: 'update';
+  readonly updateDescription: {
+    readonly updatedFields: {
+      readonly stops?: (CreateStopPickUpDto | CreateStopDeliveryDto)[];
+      readonly __v?: number;
+    };
+  };
+}
+export class LoadChangeInsertDocument {
+  readonly operationType: 'insert';
+  readonly fullDocument: {
+    readonly stops?: (CreateStopPickUpDto | CreateStopDeliveryDto)[];
+    readonly __v?: number;
+  };
+}
+
+export type LoadChangeDocument =
+  | LoadChangeUpdateDocument
+  | LoadChangeInsertDocument;
 
 export class UpdateLoadDto {
   readonly ref?: string[];
@@ -270,14 +290,22 @@ export class LoadResultDto {
       ref: load.ref,
       status: load.status,
       stops,
-      // milesByRoads: load.miles,
-      /*milesHaversine:
-        pick?.geometry?.location &&
-        deliver?.geometry?.location &&
-        calcDistance(
-          [pick?.geometry?.location?.lat, pick?.geometry?.location?.lng],
-          [deliver?.geometry?.location?.lat, deliver?.geometry?.location?.lng],
-        ),*/
+      milesByRoads: load.miles,
+      milesHaversine: stops.reduce(
+        (prev, stop, index) => {
+          if (index === 0 || prev === undefined) {
+            return prev;
+          }
+          const startCoords = stops[index - 1].facility?.facilityLocation;
+          const stopCoords = stop.facility?.facilityLocation;
+          if (startCoords && stopCoords) {
+            const partRouteLength = calcDistance(startCoords, stopCoords);
+            return prev + partRouteLength;
+          }
+          return;
+        },
+        0 as number | undefined,
+      ),
       weight: load.weight,
       truckType: load.truckType,
       rate: load.rate,
@@ -306,8 +334,8 @@ export class LoadResultDto {
   readonly ref?: string[];
   readonly status: LoadStatus;
   readonly stops: (StopPickUpResultDto | StopDeliveryResultDto)[];
-  // readonly milesByRoads?: number;
-  // readonly milesHaversine?: number;
+  readonly milesByRoads?: number;
+  readonly milesHaversine?: number;
   readonly weight: string;
   readonly truckType: TruckType[];
   readonly rate?: number;
