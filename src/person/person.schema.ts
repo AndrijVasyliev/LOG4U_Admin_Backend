@@ -29,6 +29,9 @@ export class Person {
   @Prop({ required: false })
   useGoogleMaps?: boolean;
 
+  @Prop({ required: false, type: Object })
+  locationOptions?: Record<string, any>;
+
   @Prop({ required: false })
   appLogin?: string;
 

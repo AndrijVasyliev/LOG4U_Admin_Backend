@@ -1,31 +1,11 @@
-/*import * as Joi from 'joi';
-import { LANG_PRIORITIES } from '../utils/constants';
+import * as Joi from 'joi';
 
-export const UpdatePersonValidation = Joi.object({
-  fullName: Joi.string().optional(),
-  birthDate: Joi.date().iso().optional(),
-  citizenship: Joi.string().optional(),
-  languagePriority: Joi.string()
-    .valid(...LANG_PRIORITIES)
-    .optional(),
-  hiredBy: Joi.string().optional(),
-  hireDate: Joi.date().iso().optional(),
-  snn: Joi.string().optional(),
-  company: Joi.string().allow('').optional(),
-  insurancePolicy: Joi.string().optional(),
-  insurancePolicyExp: Joi.date().iso().optional(),
-  address: Joi.string().optional(),
-  phone: Joi.string().optional(),
-  phone2: Joi.string().allow('').optional(),
-  email: Joi.string().optional(),
-  emergencyContactName: Joi.string().allow('').optional(),
-  emergencyContactRel: Joi.string().allow('').optional(),
-  emergencyContactPhone: Joi.string().allow('').optional(),
-  notes: Joi.string().allow('').optional(),
-  appLogin: Joi.string().allow('').optional(),
-  appPass: Joi.string().allow('').optional(),
+export const UpdatePersonSettingsValidation = Joi.object({
+  isAppInDebugMode: Joi.boolean().optional(),
+  useGoogleMaps: Joi.boolean().optional(),
+  locationOptions: Joi.object().optional(),
 });
-
+/*
 export const PersonQueryParamsSchema = Joi.object({
   offset: Joi.number().integer().min(0).optional(),
   limit: Joi.number().integer().min(1).optional(),

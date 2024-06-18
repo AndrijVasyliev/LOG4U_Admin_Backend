@@ -1,15 +1,16 @@
-import { Controller, Get, Param } from '@nestjs/common';
+import { Controller, Get, Patch, Param, Body } from '@nestjs/common';
 import {
   // PersonQuery,
   // PersonQuerySearch,
   PersonResultDto,
+  UpdatePersonSettingsDto,
   // PaginatedPersonResultDto,
   // UpdatePersonAuthDto,
 } from './person.dto';
-// import { BodyValidationPipe } from '../utils/bodyValidate.pipe';
+import { BodyValidationPipe } from '../utils/bodyValidate.pipe';
 import { PersonService } from './person.service';
 import { LoggerService } from '../logger';
-// import { UpdatePersonValidation, PersonQueryParamsSchema } from './person.validation';
+import { UpdatePersonSettingsValidation } from './person.validation';
 import { MongoObjectIdPipe } from '../utils/idValidate.pipe';
 import { Roles } from '../auth/auth.decorator';
 // import { QueryParamsPipe } from '../utils/queryParamsValidate.pipe';
@@ -36,12 +37,15 @@ export class PersonController {
     return this.personService.findPersonById(personId);
   }
 
-  /*@Patch(':personId')
+  @Patch(':personId')
   async updateOwner(
     @Param('personId', MongoObjectIdPipe) personId: string,
-    @Body(new BodyValidationPipe(UpdatePersonValidation))
-    updatePersonBodyDto: UpdatePersonAuthDto,
+    @Body(new BodyValidationPipe(UpdatePersonSettingsValidation))
+    updatePersonSettingsDto: UpdatePersonSettingsDto,
   ): Promise<PersonResultDto> {
-    return this.personService.setAuthData(personId, updatePersonBodyDto);
-  }*/
+    return this.personService.updatePersonSettings(
+      personId,
+      updatePersonSettingsDto,
+    );
+  }
 }

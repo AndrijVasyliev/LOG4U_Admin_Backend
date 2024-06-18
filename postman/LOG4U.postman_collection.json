@@ -39,7 +39,41 @@
 							"variable": [
 								{
 									"key": "personId",
-									"value": "662ab7ab86fd8809a84f6684"
+									"value": "6575ce82f32a5e4bac6ffd0d"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Persons Settings",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"isAppInDebugMode\": false,\r\n    \"useGoogleMaps\": true,\r\n    \"locationOptions\": {\r\n      \"accuracy\": 6,\r\n      \"distanceInterval\": 50\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{origin}}/api/person/:personId",
+							"host": [
+								"{{origin}}"
+							],
+							"path": [
+								"api",
+								"person",
+								":personId"
+							],
+							"variable": [
+								{
+									"key": "personId",
+									"value": "6575ce82f32a5e4bac6ffd0d"
 								}
 							]
 						}

@@ -16,6 +16,7 @@ import { Person, PersonDocument } from './person.schema';
 import {
   PersonAuthResultDto,
   PersonResultDto,
+  UpdatePersonSettingsDto,
 } from './person.dto';
 import { AuthDataDto } from '../mobileApp/mobileApp.dto';
 
@@ -44,6 +45,29 @@ export class PersonService {
   async findPersonById(id: string): Promise<PersonResultDto> {
     const person = await this.findPersonDocumentById(id);
     return PersonResultDto.fromPersonModel(person);
+  }
+
+  async updatePersonSettings(
+    id: string,
+    updatePersonDto: UpdatePersonSettingsDto,
+  ): Promise<PersonResultDto> {
+    const person = await this.findPersonDocumentById(id);
+    this.log.debug(`Setting new values: ${JSON.stringify(updatePersonDto)}`);
+    Object.assign(person, updatePersonDto);
+    try {
+      this.log.debug('Saving Person');
+      const savedPerson = await person.save();
+      this.log.debug(`Person ${savedPerson._id} saved`);
+      return PersonResultDto.fromPersonModel(person);
+    } catch (e) {
+      if (!(e instanceof Error)) {
+        throw new InternalServerErrorException(JSON.stringify(e));
+      }
+      if (e instanceof MongoError && e.code === MONGO_UNIQUE_INDEX_CONFLICT) {
+        throw new ConflictException({ type: UNIQUE_CONSTRAIN_ERROR, e });
+      }
+      throw new InternalServerErrorException(e.message);
+    }
   }
 
   async getPersonByCredentials(

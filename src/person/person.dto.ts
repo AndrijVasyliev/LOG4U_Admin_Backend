@@ -1,15 +1,11 @@
 import { Person } from './person.schema';
 import { PersonType } from '../utils/general.dto';
 
-/*export class UpdatePersonAuthDto {
-  // readonly fullName?: string;
-  // readonly appLogin?: string;
-  readonly appPermissions?: Record<string, any>;
-  readonly appLastLogin?: Date;
-  readonly deviceId?: string;
-  readonly deviceIdLastChange?: Date;
-  // readonly appPass?: string;
-}*/
+export class UpdatePersonSettingsDto {
+  readonly isAppInDebugMode?: boolean;
+  readonly useGoogleMaps?: boolean;
+  readonly locationOptions?: Record<string, any>;
+}
 
 export class PersonAuthResultDto {
   static fromPersonModel(person: Person): PersonAuthResultDto {
@@ -21,6 +17,7 @@ export class PersonAuthResultDto {
       appLogin: person.appLogin,
       deviceId: person.deviceId,
       useGoogleMaps: person.useGoogleMaps,
+      locationOptions: person.locationOptions,
     };
   }
 
@@ -31,6 +28,7 @@ export class PersonAuthResultDto {
   readonly appLogin?: string;
   readonly deviceId?: string;
   readonly useGoogleMaps?: boolean;
+  readonly locationOptions?: Record<string, any>;
 }
 
 export class PersonResultDto {
@@ -41,6 +39,7 @@ export class PersonResultDto {
       fullName: person.fullName,
       isAppInDebugMode: person.isAppInDebugMode,
       useGoogleMaps: person.useGoogleMaps,
+      locationOptions: person.locationOptions,
       appLogin: person.appLogin,
       deviceStatus: person.deviceStatus,
       deviceStatusLastChange: person.appPermissionsLastChange,
@@ -58,6 +57,7 @@ export class PersonResultDto {
   readonly fullName: string;
   readonly isAppInDebugMode?: boolean;
   readonly useGoogleMaps?: boolean;
+  readonly locationOptions?: Record<string, any>;
   readonly appLogin?: string;
   readonly deviceStatus?: Record<string, any>;
   readonly deviceStatusLastChange?: Date;
