@@ -2,6 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { HttpService } from '@nestjs/axios';
 import { Client } from '@googlemaps/google-maps-services-js';
+import { InjectMetric } from '@willsoto/nestjs-prometheus';
+import { Counter } from 'prom-client';
 import { LoggerService } from '../logger';
 import { MILES_IN_KM } from '../utils/constants';
 import { GeoPointType } from '../utils/general.dto';
@@ -19,6 +21,8 @@ export class GoogleGeoApiService {
     private readonly httpService: HttpService,
     private readonly configService: ConfigService,
     private readonly log: LoggerService,
+    @InjectMetric('outgoing_google_geo_requests')
+    private counter: Counter<string>,
   ) {
     this.apiKey = this.configService.get<string>('google.key');
     this.client = new Client({ axiosInstance: this.httpService.axiosRef });
@@ -96,6 +100,7 @@ export class GoogleGeoApiService {
       this.log.silly(
         `Response [${response?.status}]: ${JSON.stringify(response?.data)}`,
       );
+      this.counter.inc({ type: 'DistanceMatrix', code: response?.status || 0 });
 
       if (
         response?.status === 200 &&
@@ -122,6 +127,7 @@ export class GoogleGeoApiService {
       } else {
         this.log.info(`Unable to calculate: ${JSON.stringify(e)}`);
       }
+      this.counter.inc({ type: 'DistanceMatrix', code: 'Error' });
       return undefined;
     }
   }

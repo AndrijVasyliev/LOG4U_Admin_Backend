@@ -380,33 +380,8 @@ export class TruckService implements OnApplicationBootstrap, OnModuleDestroy {
       );
     }
 
-    /*let lastCity = '';
-    if (createTruckDto.lastLocation) {
-      try {
-        const nearestCity = await this.locationService.findNearestLocation(
-          createTruckDto.lastLocation,
-        );
-        lastCity = nearestCity.id;
-      } catch {}
-    }
-    let availabilityCity = '';
-    if (createTruckDto.availabilityLocation) {
-      try {
-        const nearestCity = await this.locationService.findNearestLocation(
-          createTruckDto.availabilityLocation,
-        );
-        availabilityCity = nearestCity.id;
-      } catch {}
-    }*/
-
     const truck = new this.truckModel(createTruckDto);
 
-    /*if (lastCity) {
-      Object.assign(truck, { lastCity, locationUpdatedAt: new Date() });
-    }
-    if (availabilityCity) {
-      Object.assign(truck, { availabilityCity });
-    }*/
     if (createTruckDto.reservedAt && user) {
       Object.assign(truck, { reservedBy: user.id });
     }
@@ -418,6 +393,8 @@ export class TruckService implements OnApplicationBootstrap, OnModuleDestroy {
       Object.assign(truck, { searchLocation: truck.availabilityLocation });
     } else if (truck.lastLocation) {
       Object.assign(truck, { searchLocation: truck.lastLocation });
+      Object.assign(truck, { availabilityLocation: null });
+      Object.assign(truck, { availabilityAt: null });
     } else {
       Object.assign(truck, { searchLocation: null });
     }
@@ -463,31 +440,6 @@ export class TruckService implements OnApplicationBootstrap, OnModuleDestroy {
       Object.assign(truck, { locationUpdatedAt: new Date() });
     }
 
-    /*let lastCity = '';
-    if (updateTruckDto.lastLocation) {
-      try {
-        const nearestCity = await this.locationService.findNearestLocation(
-          updateTruckDto.lastLocation,
-        );
-        lastCity = nearestCity.id;
-      } catch {}
-    }
-    let availabilityCity = '';
-    if (updateTruckDto.availabilityLocation) {
-      try {
-        const nearestCity = await this.locationService.findNearestLocation(
-          updateTruckDto.availabilityLocation,
-        );
-        availabilityCity = nearestCity.id;
-      } catch {}
-    }*/
-
-    /*if (lastCity) {
-      Object.assign(truck, { lastCity, locationUpdatedAt: new Date() });
-    }
-    if (availabilityCity) {
-      Object.assign(truck, { availabilityCity });
-    }*/
     if (updateTruckDto.reservedAt && user) {
       Object.assign(truck, { reservedBy: user.id });
     }
@@ -499,6 +451,8 @@ export class TruckService implements OnApplicationBootstrap, OnModuleDestroy {
       Object.assign(truck, { searchLocation: truck.availabilityLocation });
     } else if (truck.lastLocation) {
       Object.assign(truck, { searchLocation: truck.lastLocation });
+      Object.assign(truck, { availabilityLocation: null });
+      Object.assign(truck, { availabilityAt: null });
     } else {
       Object.assign(truck, { searchLocation: null });
     }

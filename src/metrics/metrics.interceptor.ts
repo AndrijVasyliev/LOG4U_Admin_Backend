@@ -12,8 +12,8 @@ import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { LoggerService } from '../logger';
 import {
-  API_PATH_PREFIX,
-  MOBILE_PATH_PREFIX,
+  // API_PATH_PREFIX,
+  // MOBILE_PATH_PREFIX,
   DO_NOT_COLLECT_METRICS_KEY,
 } from '../utils/constants';
 

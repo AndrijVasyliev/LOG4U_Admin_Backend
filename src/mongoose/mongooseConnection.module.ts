@@ -17,7 +17,7 @@ import { MetricsModule } from '../metrics/metrics.module';
   providers: [
     makeGaugeProvider({
       name: 'mongo_connections',
-      help: 'current_connections_in_connections_pool',
+      help: 'current connections in connections pool',
       labelNames: ['address'],
     }),
   ],

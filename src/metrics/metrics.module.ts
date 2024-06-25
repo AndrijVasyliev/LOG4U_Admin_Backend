@@ -19,12 +19,12 @@ import { MetricsInterceptor } from './metrics.interceptor';
   providers: [
     makeCounterProvider({
       name: 'incoming_requests',
-      help: 'count_incoming_requests_by_routes',
+      help: 'count incoming requests by routes',
       labelNames: ['endpoint'],
     }),
     makeSummaryProvider({
       name: 'incoming_requests_duration',
-      help: 'statistics_of_incoming_requests_process_time',
+      help: 'statistics of incoming requests process time',
       labelNames: ['endpoint', 'code'],
     }),
     {
