@@ -34,6 +34,7 @@ async function bootstrap() {
             // '*.gstatic.com',
             // '*',
           ],
+          connectSrc: ["'self'", 'www.gstatic.com', 'fonts.googleapis.com'],
           fontSrc: [
             "'self'",
             'fonts.googleapis.com',
