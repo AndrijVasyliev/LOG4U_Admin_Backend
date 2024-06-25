@@ -49,6 +49,7 @@ async function bootstrap() {
             'blob:',
             '*.gstatic.com',
             '*.googleapis.com',
+            '*.google.com',
             '*.ggpht.com',
           ],
         },
