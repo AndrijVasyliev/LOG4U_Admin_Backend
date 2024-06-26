@@ -4,7 +4,6 @@ import { LoadController } from './load.controller';
 import { Load, LoadSchema } from './load.schema';
 import { LoadService } from './load.service';
 import { TruckModule } from '../truck/truck.module';
-import { LocationModule } from '../location/location.module';
 import { GoogleGeoApiModule } from '../googleGeoApi/googleGeoApi.module';
 import { MONGO_CONNECTION_NAME } from '../utils/constants';
 
@@ -15,7 +14,6 @@ import { MONGO_CONNECTION_NAME } from '../utils/constants';
       MONGO_CONNECTION_NAME,
     ),
     TruckModule,
-    LocationModule,
     GoogleGeoApiModule,
   ],
   exports: [LoadService],

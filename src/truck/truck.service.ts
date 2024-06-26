@@ -20,6 +20,7 @@ import {
   TruckResultForMapDto,
   UpdateTruckDto,
   CalculatedDistances,
+  TruckChangeDocument,
 } from './truck.dto';
 import { LoggerService } from '../logger';
 import { GoogleGeoApiService } from '../googleGeoApi/googleGeoApi.service';
@@ -33,17 +34,19 @@ import {
 } from '../utils/constants';
 import { escapeForRegExp } from '../utils/escapeForRegExp';
 import { calcDistance } from '../utils/haversine.distance';
+import { ChangeDocument, Queue } from '../utils/queue';
 
-const { MongoError } = mongo;
+const { MongoError, ChangeStream } = mongo;
 
 @Injectable()
 export class TruckService implements OnApplicationBootstrap, OnModuleDestroy {
+  private readonly trucksChangeStream?: InstanceType<typeof ChangeStream>;
+  private trucksQueue?: Queue<ChangeDocument & TruckChangeDocument>;
   private readonly nearByRedundancyFactor: number;
   private readonly resetToAvailableOlderThen: number;
   constructor(
     @InjectModel(Truck.name, MONGO_CONNECTION_NAME)
     private readonly truckModel: PaginateModel<TruckDocument>,
-    // private readonly locationService: LocationService,
     private readonly geoApiService: GoogleGeoApiService,
     private readonly configService: ConfigService,
     private readonly log: LoggerService,
@@ -54,6 +57,32 @@ export class TruckService implements OnApplicationBootstrap, OnModuleDestroy {
     this.resetToAvailableOlderThen = configService.get<number>(
       'trucks.resetToAvailableWillBeOlderThen',
     ) as number;
+    this.trucksChangeStream = truckModel.watch([
+      {
+        $match: {
+          $or: [
+            {
+              operationType: 'insert',
+              'fullDocument.stops': { $exists: true },
+            },
+            {
+              operationType: 'update',
+              'updateDescription.updatedFields.stops': { $exists: true },
+            },
+          ],
+        },
+      },
+      {
+        $project: {
+          operationType: 1,
+          'documentKey._id': 1,
+          'fullDocument.__v': 1,
+          // 'fullDocument.stops': 1,
+          //'updateDescription.updatedFields.stops': 1,
+          'updateDescription.updatedFields.__v': 1,
+        },
+      },
+    ]);
   }
 
   onApplicationBootstrap(): void {
@@ -100,7 +129,11 @@ export class TruckService implements OnApplicationBootstrap, OnModuleDestroy {
           },
         },
         {
-          $unset: ['availabilityLocation', 'availabilityAt'],
+          $unset: [
+            'availabilityLocation',
+            'availabilityAt',
+            'availabilityAtLocal',
+          ],
         },
       ],
     );
@@ -373,10 +406,13 @@ export class TruckService implements OnApplicationBootstrap, OnModuleDestroy {
 
     if (
       createTruckDto?.status === 'Will be available' &&
-      !(createTruckDto?.availabilityLocation && createTruckDto?.availabilityAt)
+      !(
+        createTruckDto?.availabilityLocation &&
+        createTruckDto?.availabilityAtLocal
+      )
     ) {
       throw new PreconditionFailedException(
-        'Status must be "Will be available" and fields "availabilityLocation" and "availabilityAt" must be present',
+        'Status must be "Will be available" and fields "availabilityLocation" and "availabilityAtLocal" must be present',
       );
     }
 
@@ -389,14 +425,23 @@ export class TruckService implements OnApplicationBootstrap, OnModuleDestroy {
       Object.assign(truck, { reservedAt: null, reservedBy: null });
     }
 
-    if (truck.status === 'Will be available' && truck.availabilityLocation) {
-      Object.assign(truck, { searchLocation: truck.availabilityLocation });
-    } else if (truck.lastLocation) {
-      Object.assign(truck, { searchLocation: truck.lastLocation });
+    if (createTruckDto.availabilityAtLocal) {
+      Object.assign(truck, { availabilityAt: null });
+    }
+    if (createTruckDto.availabilityLocation) {
+      Object.assign(truck, {
+        searchLocation: createTruckDto.availabilityLocation,
+      });
+    }
+    if (createTruckDto.status !== 'Will be available') {
       Object.assign(truck, { availabilityLocation: null });
       Object.assign(truck, { availabilityAt: null });
-    } else {
-      Object.assign(truck, { searchLocation: null });
+      Object.assign(truck, { availabilityAtLocal: null });
+      if (truck.lastLocation) {
+        Object.assign(truck, { searchLocation: truck.lastLocation });
+      } else {
+        Object.assign(truck, { searchLocation: null });
+      }
     }
 
     try {
@@ -426,7 +471,8 @@ export class TruckService implements OnApplicationBootstrap, OnModuleDestroy {
     if (
       updateTruckDto?.status === 'Will be available' &&
       !(
-        updateTruckDto?.availabilityLocation && updateTruckDto?.availabilityAt
+        updateTruckDto?.availabilityLocation &&
+        updateTruckDto?.availabilityAtLocal
       ) &&
       !(updateTruckDto?.status === truck.status)
     ) {
@@ -447,14 +493,23 @@ export class TruckService implements OnApplicationBootstrap, OnModuleDestroy {
       Object.assign(truck, { reservedAt: null, reservedBy: null });
     }
 
-    if (truck.status === 'Will be available' && truck.availabilityLocation) {
-      Object.assign(truck, { searchLocation: truck.availabilityLocation });
-    } else if (truck.lastLocation) {
-      Object.assign(truck, { searchLocation: truck.lastLocation });
+    if (updateTruckDto.availabilityAtLocal) {
+      Object.assign(truck, { availabilityAt: null });
+    }
+    if (updateTruckDto.availabilityLocation) {
+      Object.assign(truck, {
+        searchLocation: updateTruckDto.availabilityLocation,
+      });
+    }
+    if (updateTruckDto.status !== 'Will be available') {
       Object.assign(truck, { availabilityLocation: null });
       Object.assign(truck, { availabilityAt: null });
-    } else {
-      Object.assign(truck, { searchLocation: null });
+      Object.assign(truck, { availabilityAtLocal: null });
+      if (truck.lastLocation) {
+        Object.assign(truck, { searchLocation: truck.lastLocation });
+      } else {
+        Object.assign(truck, { searchLocation: null });
+      }
     }
 
     try {

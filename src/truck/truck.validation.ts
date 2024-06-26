@@ -20,7 +20,7 @@ export const CreateTruckValidation = Joi.object({
     .required(),
   lastLocation: GeoPointBodyValidation.optional(),
   availabilityLocation: GeoPointBodyValidation.optional(),
-  availabilityAt: Joi.date().iso().greater('now').optional(),
+  availabilityAtLocal: Joi.date().iso().greater('now').optional(),
   crossborder: Joi.string()
     .valid(...TRUCK_CROSSBORDERS)
     .required(),
@@ -59,7 +59,7 @@ export const UpdateTruckValidation = Joi.object({
     .optional(),
   lastLocation: GeoPointBodyValidation.optional(),
   availabilityLocation: GeoPointBodyValidation.optional(),
-  availabilityAt: Joi.date().iso().greater('now').optional(),
+  availabilityAtLocal: Joi.date().iso().greater('now').optional(),
   crossborder: Joi.string()
     .valid(...TRUCK_CROSSBORDERS)
     .optional(),

@@ -23,7 +23,6 @@ import {
   UNIQUE_CONSTRAIN_ERROR,
 } from '../utils/constants';
 import { TruckService } from '../truck/truck.service';
-import { LocationService } from '../location/location.service';
 import { GoogleGeoApiService } from '../googleGeoApi/googleGeoApi.service';
 import { escapeForRegExp } from '../utils/escapeForRegExp';
 import { ChangeDocument, Queue } from '../utils/queue';
@@ -39,7 +38,6 @@ export class LoadService {
     @InjectModel(Load.name, MONGO_CONNECTION_NAME)
     private readonly loadModel: PaginateModel<LoadDocument>,
     private readonly truckService: TruckService,
-    private readonly locationService: LocationService,
     private readonly geoApiService: GoogleGeoApiService,
     private readonly configService: ConfigService,
     private readonly log: LoggerService,

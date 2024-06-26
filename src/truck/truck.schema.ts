@@ -92,16 +92,11 @@ export class Truck {
   })
   availabilityLocation?: GeoPointType;
 
-  /* @Prop({
-    required: false,
-    type: MongooseSchema.Types.ObjectId,
-    ref: 'Location',
-    autopopulate: true,
-  })
-  availabilityCity?: Location;*/
-
   @Prop({ required: false })
   availabilityAt: Date;
+
+  @Prop({ required: false })
+  availabilityAtLocal: Date;
 
   @Prop({
     required: false,

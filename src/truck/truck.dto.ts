@@ -13,17 +13,14 @@ import {
 import { OwnerResultDto } from '../owner/owner.dto';
 import { CoordinatorResultDto } from '../coordinator/coordinator.dto';
 import { DriverResultDto } from '../driver/driver.dto';
-// import { LocationResultDto } from '../location/location.dto';
 import { UserResultDto } from '../user/user.dto';
 
 export class CreateTruckDto {
   readonly truckNumber: number;
   readonly status: TruckStatus;
   readonly lastLocation?: GeoPointType;
-  // readonly lastCity?: string;
-  // readonly locationUpdatedAt?: Date;
   readonly availabilityLocation?: GeoPointType;
-  readonly availabilityAt?: Date;
+  readonly availabilityAtLocal?: Date;
   readonly crossborder: TruckCrossborder;
   readonly certificate?: TruckCertificate;
   readonly type: TruckType;
@@ -45,14 +42,35 @@ export class CreateTruckDto {
   readonly reservedBy?: string;
 }
 
+export class TruckChangeUpdateDocument {
+  readonly operationType: 'update';
+  readonly updateDescription: {
+    readonly updatedFields: {
+      readonly availabilityLocation?: GeoPointType;
+      readonly availabilityAtLocal?: Date;
+      readonly __v?: number;
+    };
+  };
+}
+export class TruckChangeInsertDocument {
+  readonly operationType: 'insert';
+  readonly fullDocument: {
+    readonly availabilityLocation?: GeoPointType;
+    readonly availabilityAtLocal?: Date;
+    readonly __v?: number;
+  };
+}
+
+export type TruckChangeDocument =
+  | TruckChangeUpdateDocument
+  | TruckChangeInsertDocument;
+
 export class UpdateTruckDto {
   readonly truckNumber?: number;
   readonly status?: TruckStatus;
   readonly lastLocation?: GeoPointType;
-  // readonly lastCity?: string;
-  // readonly locationUpdatedAt?: Date;
   readonly availabilityLocation?: GeoPointType;
-  readonly availabilityAt?: Date;
+  readonly availabilityAtLocal?: Date;
   readonly crossborder?: TruckCrossborder;
   readonly certificate?: TruckCertificate;
   readonly type?: TruckType;
@@ -101,11 +119,6 @@ export class TruckResultDto {
     milesHaversine?: number,
     milesByRoads?: number,
   ): TruckResultDto {
-    /*const lastCity =
-      truck.lastCity && LocationResultDto.fromLocationModel(truck.lastCity);
-    const availabilityCity =
-      truck.availabilityCity &&
-      LocationResultDto.fromLocationModel(truck.availabilityCity);*/
     const owner = truck.owner && OwnerResultDto.fromOwnerModel(truck.owner);
     const coordinator =
       truck.coordinator &&
@@ -122,6 +135,7 @@ export class TruckResultDto {
       locationUpdatedAt: truck.locationUpdatedAt,
       availabilityLocation: truck.availabilityLocation,
       availabilityAt: truck.availabilityAt,
+      availabilityAtLocal: truck.availabilityAtLocal,
       crossborder: truck.crossborder,
       certificate: truck.certificate,
       type: truck.type,
@@ -138,12 +152,6 @@ export class TruckResultDto {
       doorDims: truck.doorDims,
       reservedAt: truck.reservedAt,
     };
-    /*if (lastCity) {
-      result = { ...result, lastCity };
-    }
-    if (availabilityCity) {
-      result = { ...result, availabilityCity };
-    }*/
     if (owner) {
       result = { ...result, owner };
     }
@@ -171,11 +179,10 @@ export class TruckResultDto {
   readonly milesByRoads?: number;
   readonly milesHaversine?: number;
   readonly lastLocation?: GeoPointType;
-  // readonly lastCity?: LocationResultDto;
   readonly locationUpdatedAt?: Date;
   readonly availabilityLocation?: GeoPointType;
-  // readonly availabilityCity?: LocationResultDto;
   readonly availabilityAt?: Date;
+  readonly availabilityAtLocal?: Date;
   readonly crossborder: TruckCrossborder;
   readonly certificate?: TruckCertificate;
   readonly type: TruckType;
