@@ -81,8 +81,8 @@ export class LoadService {
           >;
         },
         this.onNewLoad.bind(this),
-        this.configService.get<number>('emailQueue.maxParallelTasks') as number,
-        this.configService.get<number>('emailQueue.taskTimeout') as number,
+        this.configService.get<number>('loadQueue.maxParallelTasks') as number,
+        this.configService.get<number>('loadQueue.taskTimeout') as number,
         this.log || console.log,
       );
     }
@@ -120,9 +120,9 @@ export class LoadService {
               stopsVer: '$__v', // Probably { $subtract: ['$__v', 0.5] },
             },
           },
-          {
-            $unset: ['miles'],
-          },
+          /*{
+            $unset: ['miles'], // ToDo probably null this on update stops field
+          },*/
         ],
       )
       .populate('stops');
@@ -149,7 +149,7 @@ export class LoadService {
     }
     this.log.debug(`Calculated distance: ${miles}`);
     if (!Number.isNaN(miles)) {
-      await this.loadModel.findOneAndUpdate(
+      const updated = await this.loadModel.findOneAndUpdate(
         {
           _id: change.documentKey._id,
           stopsVer: { $lte: load.__v },
@@ -163,7 +163,11 @@ export class LoadService {
           },
         ],
       );
-      this.log.debug('Load updated');
+      if (updated) {
+        this.log.debug(`Load ${change.documentKey._id} updated`);
+      } else {
+        this.log.warn(`Load ${change.documentKey._id} NOT updated`);
+      }
     }
   }
 
@@ -238,21 +242,6 @@ export class LoadService {
     try {
       this.log.debug('Saving Load');
       await createdLoad.save();
-      /*let load = await createdLoad.save();
-      this.log.debug('Calculating distance');
-      const miles = await this.geoApiService.getDistance(
-        [
-          createdLoad.get('pick.geometry.location')?.lat,
-          createdLoad.get('pick.geometry.location')?.lng,
-        ],
-        [
-          createdLoad.get('deliver.geometry.location')?.lat,
-          createdLoad.get('deliver.geometry.location')?.lng,
-        ],
-      );
-      this.log.debug(`Updating Load: miles ${miles}`);
-      createdLoad = await createdLoad.set('miles', miles).save();
-      this.log.debug('Load updated');*/
 
       // Calculate Truck Id to update status
       let truckIdToOnRoute: string | undefined;
@@ -284,6 +273,8 @@ export class LoadService {
     updateLoadDto: UpdateLoadDto,
   ): Promise<LoadResultDto> {
     const load = await this.findLoadDocumentById(id);
+    const currentLoadStops = load.stops;
+    const newLoadStops = updateLoadDto.stops;
     const currentLoadStatus = load.status;
     const newLoadStatus = updateLoadDto.status;
     const currentLoadTruckId = load.truck?._id.toString();
@@ -292,22 +283,13 @@ export class LoadService {
     Object.assign(load, {
       ...updateLoadDto,
     });
+    /*if () {
+      Object.assign(load, { miles: undefined });
+    }*/
+
     try {
       this.log.debug('Saving Load');
       await (await load.save()).populate('stops.facility');
-      /*this.log.debug('Calculating distance');
-      const miles = await this.geoApiService.getDistance(
-        [
-          load.get('pick.geometry.location')?.lat,
-          load.get('pick.geometry.location')?.lng,
-        ],
-        [
-          load.get('deliver.geometry.location')?.lat,
-          load.get('deliver.geometry.location')?.lng,
-        ],
-      );
-      this.log.debug(`Updating Load: miles ${miles}`);
-      load = await load.set('miles', miles).save();*/
       this.log.debug(`Load ${load._id} saved`);
 
       // Calculate Truck Id to update status
@@ -370,7 +352,7 @@ export class LoadService {
             ),
           );
       }
-
+      // END Calculate Truck Id to update status
       return LoadResultDto.fromLoadModel(load);
     } catch (e) {
       if (!(e instanceof Error)) {

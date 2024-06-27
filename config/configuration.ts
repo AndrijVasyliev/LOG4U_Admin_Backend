@@ -12,6 +12,10 @@ export default (): {
     resetToAvailableWillBeOlderThen: number;
     taskSetAvailableInterval: number;
   };
+  truckQueue: {
+    maxParallelTasks: number;
+    taskTimeout: number;
+  };
   db: MongooseModuleFactoryOptions;
   google: { key: string };
   email: any;
@@ -68,6 +72,10 @@ export default (): {
     taskSetAvailableInterval: +(
       process.env.TRUCK_TO_AVAILABLE_RESTART_INTERVAL || 1000 * 60 * 5
     ),
+  },
+  truckQueue: {
+    maxParallelTasks: +(process.env.TRUCK_QUEUE_MAX_PARALEL_TSAKS || 10),
+    taskTimeout: +(process.env.TRUCK_QUEUE_TASK_TIMEOUT || 1000 * 60 * 5),
   },
   db: {
     uri: process.env.MONGO_DSN || 'mongodb://localhost:27017/log4u',
@@ -127,8 +135,8 @@ export default (): {
     ),
   },
   loadQueue: {
-    maxParallelTasks: +(process.env.EMAIL_QUEUE_MAX_PARALEL_TSAKS || 10),
-    taskTimeout: +(process.env.EMAIL_QUEUE_TASK_TIMEOUT || 1000 * 60 * 5),
+    maxParallelTasks: +(process.env.LOAD_QUEUE_MAX_PARALEL_TSAKS || 10),
+    taskTimeout: +(process.env.LOAD_QUEUE_TASK_TIMEOUT || 1000 * 60 * 5),
   },
   file: { maxFileSize: +(process.env.FILE_MAX_SIZE || Infinity) },
 });

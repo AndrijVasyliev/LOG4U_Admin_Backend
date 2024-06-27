@@ -27,6 +27,58 @@ export class GoogleGeoApiService {
     this.apiKey = this.configService.get<string>('google.key');
     this.client = new Client({ axiosInstance: this.httpService.axiosRef });
   }
+  public async getTimeZone(
+    location?: GeoPointType,
+  ): Promise<string | undefined> {
+    if (!location || !this.apiKey) {
+      this.log.info(
+        `Unable to calculate ${!this.apiKey ? 'API Key not provided' : ''}`,
+      );
+      return undefined;
+    }
+    try {
+      const response = await this.client?.timezone({
+        params: {
+          key: this.apiKey,
+          location: { lat: location[0], lng: location[1] },
+          timestamp: Date.now() / 1000,
+        },
+      });
+      this.log.silly(
+        `Response [${response?.status}]: ${JSON.stringify(response?.data)}`,
+      );
+      this.counter.inc({
+        type: 'TimeZone',
+        code: response?.status,
+        status: response?.data.status,
+      });
+      if (
+        response?.status === 200 &&
+        response.data.status === Status.OK &&
+        response.data.timeZoneId
+      ) {
+        const timeZone = response.data.timeZoneId;
+        this.log.info(`TimeZone: ${timeZone}`);
+        return timeZone;
+      }
+      this.log.info(
+        `Unable to get TimeZone: ${response?.status}, ${response?.data?.status}`,
+      );
+      return undefined;
+    } catch (e) {
+      if (e instanceof Error) {
+        this.log.info(`Unable to calculate: ${e.message}`);
+      } else {
+        this.log.info(`Unable to calculate: ${JSON.stringify(e)}`);
+      }
+      this.counter.inc({
+        type: 'TimeZone',
+        code: 'Error',
+        status: 'Error',
+      });
+      return undefined;
+    }
+  }
   /*public async getDistanceByRoads({
     origins,
     destinations,
@@ -100,7 +152,14 @@ export class GoogleGeoApiService {
       this.log.silly(
         `Response [${response?.status}]: ${JSON.stringify(response?.data)}`,
       );
-      this.counter.inc({ type: 'DistanceMatrix', code: response?.status || 0 });
+      this.counter.inc({
+        type: 'DistanceMatrix',
+        code: response?.status,
+        status:
+          response?.data.status !== Status.OK
+            ? response?.data.status
+            : response.data.rows[0].elements[0].status,
+      });
 
       if (
         response?.status === 200 &&
@@ -114,7 +173,7 @@ export class GoogleGeoApiService {
         return distance;
       }
       this.log.info(
-        `Unable to calculate: ${response?.status}, ${response?.data?.status}, ${
+        `Unable to calculate distance: ${response?.status}, ${response?.data?.status}, ${
           response?.data?.rows &&
           response?.data?.rows[0]?.elements &&
           response?.data?.rows[0]?.elements[0]?.status
@@ -127,7 +186,11 @@ export class GoogleGeoApiService {
       } else {
         this.log.info(`Unable to calculate: ${JSON.stringify(e)}`);
       }
-      this.counter.inc({ type: 'DistanceMatrix', code: 'Error' });
+      this.counter.inc({
+        type: 'DistanceMatrix',
+        code: 'Error',
+        status: 'Error',
+      });
       return undefined;
     }
   }

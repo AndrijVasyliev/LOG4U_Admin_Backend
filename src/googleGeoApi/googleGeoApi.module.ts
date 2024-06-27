@@ -13,7 +13,7 @@ import { GoogleGeoApiService } from './googleGeoApi.service';
     makeCounterProvider({
       name: 'outgoing_google_geo_requests',
       help: 'count outgoing google geoapi requests by types',
-      labelNames: ['type', 'code'],
+      labelNames: ['type', 'code', 'status'],
     }),
   ],
 })

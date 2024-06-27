@@ -93,10 +93,16 @@ export class Truck {
   availabilityLocation?: GeoPointType;
 
   @Prop({ required: false })
-  availabilityAt: Date;
+  availabilityAt?: Date;
 
   @Prop({ required: false })
-  availabilityAtLocal: Date;
+  availabilityAtLocal?: Date;
+
+  @Prop({
+    required: false,
+    type: Number,
+  })
+  availabilityAtVer?: number;
 
   @Prop({
     required: false,

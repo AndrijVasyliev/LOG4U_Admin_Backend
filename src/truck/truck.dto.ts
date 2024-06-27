@@ -46,8 +46,8 @@ export class TruckChangeUpdateDocument {
   readonly operationType: 'update';
   readonly updateDescription: {
     readonly updatedFields: {
-      readonly availabilityLocation?: GeoPointType;
-      readonly availabilityAtLocal?: Date;
+      // readonly availabilityLocation?: GeoPointType;
+      // readonly availabilityAtLocal?: Date;
       readonly __v?: number;
     };
   };
@@ -55,8 +55,8 @@ export class TruckChangeUpdateDocument {
 export class TruckChangeInsertDocument {
   readonly operationType: 'insert';
   readonly fullDocument: {
-    readonly availabilityLocation?: GeoPointType;
-    readonly availabilityAtLocal?: Date;
+    // readonly availabilityLocation?: GeoPointType;
+    // readonly availabilityAtLocal?: Date;
     readonly __v?: number;
   };
 }

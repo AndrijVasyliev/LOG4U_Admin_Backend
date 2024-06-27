@@ -35,6 +35,8 @@ import {
 import { escapeForRegExp } from '../utils/escapeForRegExp';
 import { calcDistance } from '../utils/haversine.distance';
 import { ChangeDocument, Queue } from '../utils/queue';
+import { LoadChangeDocument } from '../load/load.dto';
+import { GeoPointType } from '../utils/general.dto';
 
 const { MongoError, ChangeStream } = mongo;
 
@@ -63,11 +65,37 @@ export class TruckService implements OnApplicationBootstrap, OnModuleDestroy {
           $or: [
             {
               operationType: 'insert',
-              'fullDocument.stops': { $exists: true },
+              $or: [
+                {
+                  'fullDocument.availabilityAtLocal': {
+                    $exists: true,
+                    $ne: null,
+                  },
+                },
+                {
+                  'fullDocument.availabilityLocation': {
+                    $exists: true,
+                    $ne: null,
+                  },
+                },
+              ],
             },
             {
               operationType: 'update',
-              'updateDescription.updatedFields.stops': { $exists: true },
+              $or: [
+                {
+                  'updateDescription.updatedFields.availabilityAtLocal': {
+                    $exists: true,
+                    $ne: null,
+                  },
+                },
+                {
+                  'updateDescription.updatedFields.availabilityLocation': {
+                    $exists: true,
+                    $ne: null,
+                  },
+                },
+              ],
             },
           ],
         },
@@ -77,8 +105,6 @@ export class TruckService implements OnApplicationBootstrap, OnModuleDestroy {
           operationType: 1,
           'documentKey._id': 1,
           'fullDocument.__v': 1,
-          // 'fullDocument.stops': 1,
-          //'updateDescription.updatedFields.stops': 1,
           'updateDescription.updatedFields.__v': 1,
         },
       },
@@ -86,6 +112,22 @@ export class TruckService implements OnApplicationBootstrap, OnModuleDestroy {
   }
 
   onApplicationBootstrap(): void {
+    this.log.debug('Creating queue');
+    const stream = this?.trucksChangeStream;
+    if (stream) {
+      this.trucksQueue = new Queue<ChangeDocument & TruckChangeDocument>(
+        async (): Promise<ChangeDocument & TruckChangeDocument> => {
+          await stream.hasNext();
+          return stream.next() as unknown as Promise<
+            ChangeDocument & TruckChangeDocument
+          >;
+        },
+        this.onNewTruck.bind(this),
+        this.configService.get<number>('truckQueue.maxParallelTasks') as number,
+        this.configService.get<number>('truckQueue.taskTimeout') as number,
+        this.log || console.log,
+      );
+    }
     this.log.debug('Starting set "Available" job');
     const restartIntervalValue = this.configService.get<number>(
       'trucks.taskSetAvailableInterval',
@@ -100,10 +142,98 @@ export class TruckService implements OnApplicationBootstrap, OnModuleDestroy {
   }
 
   async onModuleDestroy(): Promise<void> {
+    this.log.debug('Stopping queue');
+    await this?.trucksQueue?.stop();
+    this.log.debug('Closing change stream');
+    await this?.trucksChangeStream?.close();
+    this.log.debug('Truck change stream is closed');
     this.log.debug('Stopping set "Available" status job');
     clearInterval(
       this.schedulerRegistry.getInterval(TRUCK_SET_AVAIL_STATUS_JOB),
     );
+  }
+
+  private async onNewTruck(change: ChangeDocument & LoadChangeDocument) {
+    this.log.info(`Change ${JSON.stringify(change)}`);
+    const version =
+      (change.operationType === 'update' &&
+        change?.updateDescription?.updatedFields?.__v) ||
+      (change.operationType === 'insert' && change?.fullDocument.__v);
+    if (!version && version !== 0) {
+      this.log.info('No version field in changed data');
+      return;
+    }
+    const truck = await this.truckModel.findOneAndUpdate(
+      {
+        _id: change.documentKey._id,
+        $or: [
+          { availabilityAtVer: { $lte: version - 1 } },
+          { availabilityAtVer: { $exists: false } },
+        ],
+      },
+      [
+        {
+          $set: {
+            availabilityAtVer: '$__v',
+          },
+        },
+      ],
+    );
+    if (!truck) {
+      this.log.info('Truck not found');
+      return;
+    }
+    this.log.debug(
+      `Availability data updated. Calculating "availabilityAt" for Truck ${truck._id.toString()}.`,
+    );
+    const location = truck.availabilityLocation;
+    if (!location) {
+      this.log.warn(`No will be available location in Truck ${truck._id}`);
+    }
+    const timeZone = await this.geoApiService.getTimeZone(location);
+    if (!timeZone) {
+      this.log.warn('TimeZone is empty');
+      return;
+    }
+    const date = truck.availabilityAtLocal;
+    if (!date) {
+      this.log.warn('availabilityAtLocal is empty');
+      return;
+    }
+    /*const formatter = Intl.DateTimeFormat(undefined, {
+      timeZone,
+      year: 'numeric',
+      month: 'numeric',
+      day: 'numeric',
+      hour12: false,
+      hour: 'numeric',
+      minute: 'numeric',
+      second: 'numeric',
+      fractionalSecondDigits: 300,
+      // milisecond: 'numeric',
+    });*/
+    const availabilityAt = date;
+    if (availabilityAt instanceof Date && !isNaN(availabilityAt.getTime())) {
+      const updated = await this.truckModel.findOneAndUpdate(
+        {
+          _id: change.documentKey._id,
+          availabilityAtVer: { $lte: truck.__v },
+        },
+        [
+          {
+            $set: {
+              availabilityAtVer: truck.__v,
+              availabilityAt,
+            },
+          },
+        ],
+      );
+      if (updated) {
+        this.log.debug(`Truck ${change.documentKey._id} updated`);
+      } else {
+        this.log.warn(`Truck ${change.documentKey._id} NOT updated`);
+      }
+    }
   }
 
   private async resetToAvailableStatus(): Promise<void> {
@@ -403,7 +533,7 @@ export class TruckService implements OnApplicationBootstrap, OnModuleDestroy {
     user?: UserResultDto,
   ): Promise<TruckResultDto> {
     this.log.debug(`Creating new Truck: ${JSON.stringify(createTruckDto)}`);
-
+    // Will be available data check
     if (
       createTruckDto?.status === 'Will be available' &&
       !(
@@ -417,16 +547,19 @@ export class TruckService implements OnApplicationBootstrap, OnModuleDestroy {
     }
 
     const truck = new this.truckModel(createTruckDto);
-
+    // Set reserved data
     if (createTruckDto.reservedAt && user) {
       Object.assign(truck, { reservedBy: user.id });
     }
     if (createTruckDto.reservedAt === null || !user) {
-      Object.assign(truck, { reservedAt: null, reservedBy: null });
+      Object.assign(truck, { reservedAt: undefined, reservedBy: undefined });
     }
-
-    if (createTruckDto.availabilityAtLocal) {
-      Object.assign(truck, { availabilityAt: null });
+    // Set Will be available data
+    if (
+      createTruckDto.availabilityAtLocal ||
+      createTruckDto.availabilityLocation
+    ) {
+      Object.assign(truck, { availabilityAt: undefined });
     }
     if (createTruckDto.availabilityLocation) {
       Object.assign(truck, {
@@ -434,13 +567,13 @@ export class TruckService implements OnApplicationBootstrap, OnModuleDestroy {
       });
     }
     if (createTruckDto.status !== 'Will be available') {
-      Object.assign(truck, { availabilityLocation: null });
-      Object.assign(truck, { availabilityAt: null });
-      Object.assign(truck, { availabilityAtLocal: null });
+      Object.assign(truck, { availabilityLocation: undefined });
+      Object.assign(truck, { availabilityAt: undefined });
+      Object.assign(truck, { availabilityAtLocal: undefined });
       if (truck.lastLocation) {
         Object.assign(truck, { searchLocation: truck.lastLocation });
       } else {
-        Object.assign(truck, { searchLocation: null });
+        Object.assign(truck, { searchLocation: undefined });
       }
     }
 
@@ -464,10 +597,11 @@ export class TruckService implements OnApplicationBootstrap, OnModuleDestroy {
     updateTruckDto: UpdateTruckDto,
     user?: UserResultDto,
   ): Promise<TruckResultDto> {
-    this.log.debug(`Setting new values: ${JSON.stringify(updateTruckDto)}`);
-
     const truck = await this.findTruckDocumentById(id);
-
+    const currentTruckStatus = truck.status;
+    const newTruckStatus = updateTruckDto.status;
+    this.log.debug(`Setting new values: ${JSON.stringify(updateTruckDto)}`);
+    // Will be available data check
     if (
       updateTruckDto?.status === 'Will be available' &&
       !(
@@ -485,30 +619,37 @@ export class TruckService implements OnApplicationBootstrap, OnModuleDestroy {
     if (updateTruckDto.lastLocation) {
       Object.assign(truck, { locationUpdatedAt: new Date() });
     }
-
+    // Set reserved data
     if (updateTruckDto.reservedAt && user) {
       Object.assign(truck, { reservedBy: user.id });
     }
     if (updateTruckDto.reservedAt === null || !user) {
-      Object.assign(truck, { reservedAt: null, reservedBy: null });
+      Object.assign(truck, { reservedAt: undefined, reservedBy: undefined });
     }
-
-    if (updateTruckDto.availabilityAtLocal) {
-      Object.assign(truck, { availabilityAt: null });
+    // Set Will be available data
+    if (
+      updateTruckDto.availabilityAtLocal ||
+      updateTruckDto.availabilityLocation
+    ) {
+      Object.assign(truck, { availabilityAt: undefined });
     }
     if (updateTruckDto.availabilityLocation) {
       Object.assign(truck, {
         searchLocation: updateTruckDto.availabilityLocation,
       });
     }
-    if (updateTruckDto.status !== 'Will be available') {
-      Object.assign(truck, { availabilityLocation: null });
-      Object.assign(truck, { availabilityAt: null });
-      Object.assign(truck, { availabilityAtLocal: null });
+    if (
+      currentTruckStatus === 'Will be available' &&
+      currentTruckStatus !== newTruckStatus &&
+      newTruckStatus
+    ) {
+      Object.assign(truck, { availabilityLocation: undefined });
+      Object.assign(truck, { availabilityAt: undefined });
+      Object.assign(truck, { availabilityAtLocal: undefined });
       if (truck.lastLocation) {
         Object.assign(truck, { searchLocation: truck.lastLocation });
       } else {
-        Object.assign(truck, { searchLocation: null });
+        Object.assign(truck, { searchLocation: undefined });
       }
     }
 
