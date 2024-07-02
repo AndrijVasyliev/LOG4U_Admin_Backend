@@ -36,7 +36,6 @@ import { escapeForRegExp } from '../utils/escapeForRegExp';
 import { calcDistance } from '../utils/haversine.distance';
 import { ChangeDocument, Queue } from '../utils/queue';
 import { LoadChangeDocument } from '../load/load.dto';
-import { GeoPointType } from '../utils/general.dto';
 
 const { MongoError, ChangeStream } = mongo;
 
@@ -190,8 +189,8 @@ export class TruckService implements OnApplicationBootstrap, OnModuleDestroy {
     if (!location) {
       this.log.warn(`No will be available location in Truck ${truck._id}`);
     }
-    const timeZone = await this.geoApiService.getTimeZone(location);
-    if (!timeZone) {
+    const timeZoneData = await this.geoApiService.getTimeZone(location);
+    if (!timeZoneData) {
       this.log.warn('TimeZone is empty');
       return;
     }
@@ -200,19 +199,7 @@ export class TruckService implements OnApplicationBootstrap, OnModuleDestroy {
       this.log.warn('availabilityAtLocal is empty');
       return;
     }
-    /*const formatter = Intl.DateTimeFormat(undefined, {
-      timeZone,
-      year: 'numeric',
-      month: 'numeric',
-      day: 'numeric',
-      hour12: false,
-      hour: 'numeric',
-      minute: 'numeric',
-      second: 'numeric',
-      fractionalSecondDigits: 300,
-      // milisecond: 'numeric',
-    });*/
-    const availabilityAt = date;
+    const availabilityAt = new Date(date.getTime() - timeZoneData.offset * 1000);
     if (availabilityAt instanceof Date && !isNaN(availabilityAt.getTime())) {
       const updated = await this.truckModel.findOneAndUpdate(
         {
