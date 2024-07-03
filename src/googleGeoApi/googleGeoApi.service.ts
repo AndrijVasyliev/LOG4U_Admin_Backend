@@ -29,7 +29,8 @@ export class GoogleGeoApiService {
   }
   public async getTimeZone(
     location?: GeoPointType,
-  ): Promise<{ timeZone: string; offset: number } | undefined> {
+    timestamp?: Date | number,
+  ): Promise<{ timeZone: string; offset: number; dst: number } | undefined> {
     if (!location || !this.apiKey) {
       this.log.info(
         `Unable to calculate ${!this.apiKey ? 'API Key not provided' : ''}`,
@@ -41,7 +42,10 @@ export class GoogleGeoApiService {
         params: {
           key: this.apiKey,
           location: { lat: location[0], lng: location[1] },
-          timestamp: Date.now() / 1000,
+          timestamp: timestamp
+            ? (timestamp instanceof Date && timestamp.getTime() / 1000) ||
+              timestamp
+            : Date.now() / 1000,
         },
       });
       this.log.silly(
@@ -59,8 +63,9 @@ export class GoogleGeoApiService {
       ) {
         const timeZone = response.data.timeZoneId;
         const offset = response.data.rawOffset;
+        const dst = response.data.dstOffset;
         this.log.info(`TimeZone: ${timeZone} with offset: ${offset}`);
-        return { timeZone, offset };
+        return { timeZone, offset, dst };
       }
       this.log.info(
         `Unable to get TimeZone: ${response?.status}, ${response?.data?.status}`,

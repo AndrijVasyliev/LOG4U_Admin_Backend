@@ -189,17 +189,44 @@ export class TruckService implements OnApplicationBootstrap, OnModuleDestroy {
     if (!location) {
       this.log.warn(`No will be available location in Truck ${truck._id}`);
     }
-    const timeZoneData = await this.geoApiService.getTimeZone(location);
-    if (!timeZoneData) {
-      this.log.warn('TimeZone is empty');
-      return;
-    }
     const date = truck.availabilityAtLocal;
     if (!date) {
       this.log.warn('availabilityAtLocal is empty');
       return;
     }
-    const availabilityAt = new Date(date.getTime() - timeZoneData.offset * 1000);
+    const timeZoneData = await this.geoApiService.getTimeZone(location, date);
+    if (!timeZoneData) {
+      this.log.warn('TimeZone is empty');
+      return;
+    }
+
+    const correctedTimestamp = new Date(
+      date.getTime() - (timeZoneData.offset + timeZoneData.dst) * 1000,
+    );
+    const correctedTimeZoneData = await this.geoApiService.getTimeZone(
+      location,
+      correctedTimestamp,
+    );
+    if (!correctedTimeZoneData) {
+      this.log.warn('TimeZone is empty');
+      return;
+    }
+    let availabilityCorrection = 0;
+    if (timeZoneData.dst && !correctedTimeZoneData.dst) {
+      availabilityCorrection = -timeZoneData.dst;
+    }
+    if (!timeZoneData.dst && correctedTimeZoneData.dst) {
+      availabilityCorrection = correctedTimeZoneData.dst;
+    }
+    let availabilityAt: Date;
+    if (availabilityCorrection) {
+      availabilityAt = new Date(
+        correctedTimestamp.getTime() + availabilityCorrection * 1000,
+      );
+    } else {
+      availabilityAt = correctedTimestamp;
+    }
+
     if (availabilityAt instanceof Date && !isNaN(availabilityAt.getTime())) {
       const updated = await this.truckModel.findOneAndUpdate(
         {
