@@ -86,14 +86,14 @@ export class CreateLoadDto {
   readonly weight: string;
   readonly truckType: TruckType[];
   readonly rate?: number;
-  readonly totalCharges?: number;
+  readonly totalCharges: number;
   readonly currency: string;
-  readonly bookedByUser?: string;
+  readonly bookedByUser: string;
   readonly bookedByCompany?: string;
-  readonly assignTo?: string[];
+  readonly assignTo: string[];
   readonly checkInAs?: string;
   readonly truck?: string;
-  readonly bookedWith?: string;
+  readonly bookedWith: string;
 }
 
 export class LoadChangeUpdateDocument {
@@ -340,7 +340,7 @@ export class LoadResultDto {
   readonly truckType: TruckType[];
   readonly rate?: number;
   readonly currency: string;
-  readonly totalCharges?: number;
+  readonly totalCharges: number;
   readonly bookedByUser?: UserResultDto;
   readonly bookedByCompany?: string;
   readonly assignTo?: UserResultDto[];

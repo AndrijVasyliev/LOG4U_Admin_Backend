@@ -307,30 +307,30 @@ export class Load {
   @Prop({ required: false })
   rate?: number;
 
-  @Prop({ required: false })
-  totalCharges?: number;
+  @Prop({ required: true })
+  totalCharges: number;
 
   @Prop({ required: true })
   currency: string;
 
   @Prop({
-    required: false,
+    required: true,
     type: MongooseSchema.Types.ObjectId,
     ref: 'User',
     autopopulate: true,
   })
-  bookedByUser?: User;
+  bookedByUser: User;
 
   @Prop({ required: false })
   bookedByCompany?: string;
 
   @Prop({
-    required: false,
+    required: true,
     type: [MongooseSchema.Types.ObjectId],
     ref: 'User',
     autopopulate: true,
   })
-  assignTo?: User[];
+  assignTo: User[];
 
   @Prop({ required: false, default: DEFAULT_CHECK_IN_AS })
   checkInAs?: string;
@@ -344,12 +344,12 @@ export class Load {
   truck?: Truck;
 
   @Prop({
-    required: false,
+    required: true,
     type: MongooseSchema.Types.ObjectId,
     ref: 'Customer',
     autopopulate: true,
   })
-  bookedWith?: Customer;
+  bookedWith: Customer;
 
   created_at: Date;
 

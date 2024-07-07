@@ -40,7 +40,7 @@ const FreightValidation = Joi.object({
 
 const StopValidation = Joi.object({
   facility: MongoObjectIdValidation.required(),
-  addInfo: Joi.string().optional(),
+  addInfo: Joi.string().allow('').optional(),
 });
 
 const StopPickUpValidation = StopValidation.append({
@@ -88,14 +88,14 @@ export const CreateLoadValidation = Joi.object({
     )
     .required(),
   rate: Joi.number().min(0).optional(),
-  totalCharges: Joi.number().min(0).optional(),
+  totalCharges: Joi.number().min(0).required(),
   currency: Joi.string().required(),
-  bookedByUser: Joi.alternatives(null, MongoObjectIdValidation).optional(),
+  bookedByUser: MongoObjectIdValidation.required(),
   bookedByCompany: Joi.string().allow('').optional(),
-  assignTo: Joi.array().items(MongoObjectIdValidation.optional()).optional(),
+  assignTo: Joi.array().items(MongoObjectIdValidation).min(1).required(),
   checkInAs: Joi.string().allow('').optional(),
   truck: Joi.alternatives(null, MongoObjectIdValidation).optional(),
-  bookedWith: Joi.alternatives(null, MongoObjectIdValidation).optional(),
+  bookedWith: MongoObjectIdValidation.required(),
 });
 
 export const UpdateLoadValidation = Joi.object({
@@ -121,7 +121,7 @@ export const UpdateLoadValidation = Joi.object({
   currency: Joi.string().optional(),
   bookedByUser: Joi.alternatives(null, MongoObjectIdValidation).optional(),
   bookedByCompany: Joi.string().allow('').optional(),
-  assignTo: Joi.array().items(MongoObjectIdValidation.optional()).optional(),
+  assignTo: Joi.array().items(MongoObjectIdValidation).min(1).optional(),
   checkInAs: Joi.string().allow('').optional(),
   truck: Joi.alternatives(null, MongoObjectIdValidation).optional(),
   bookedWith: Joi.alternatives(null, MongoObjectIdValidation).optional(),
