@@ -640,6 +640,16 @@ export class TruckService implements OnApplicationBootstrap, OnModuleDestroy {
     if (updateTruckDto.reservedAt === null || !user) {
       Object.assign(truck, { reservedAt: undefined, reservedBy: undefined });
     }
+    // Set Search location
+    if (
+      updateTruckDto.lastLocation &&
+      currentTruckStatus !== 'Will be available' &&
+      !newTruckStatus
+    ) {
+      Object.assign(truck, {
+        searchLocation: updateTruckDto.lastLocation,
+      });
+    }
     // Set Will be available data
     if (
       updateTruckDto.availabilityAtLocal ||
@@ -647,7 +657,11 @@ export class TruckService implements OnApplicationBootstrap, OnModuleDestroy {
     ) {
       Object.assign(truck, { availabilityAt: undefined });
     }
-    if (updateTruckDto.availabilityLocation) {
+    if (
+      updateTruckDto.availabilityLocation &&
+      currentTruckStatus === 'Will be available' &&
+      (currentTruckStatus === newTruckStatus || !newTruckStatus)
+    ) {
       Object.assign(truck, {
         searchLocation: updateTruckDto.availabilityLocation,
       });
