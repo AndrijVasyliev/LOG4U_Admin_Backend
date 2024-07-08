@@ -4,6 +4,7 @@ import { Document, ObjectId, Schema as MongooseSchema } from 'mongoose';
 import { FILE_OF_TYPES, MONGO_FILE_BUCKET_NAME } from '../utils/constants';
 import { Truck } from '../truck/truck.schema';
 import { Person } from '../person/person.schema';
+import { Load } from '../load/load.schema';
 import { FileOfType } from '../utils/general.dto';
 
 export type FileDocument = File & Document;
@@ -18,9 +19,9 @@ export class Metadata {
     type: MongooseSchema.Types.ObjectId,
     refPath: 'to.toType',
     // Don`t need this as default
-    // autopopulate: true,
+    autopopulate: false,
   })
-  linkedTo: Truck | Person;
+  linkedTo: Truck | Person | Load;
 
   @Prop({
     required: true,

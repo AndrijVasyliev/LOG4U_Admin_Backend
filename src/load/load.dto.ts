@@ -58,6 +58,7 @@ class CreateFreightDto {
 }
 
 class CreateStopDto {
+  stopId?: string;
   facility: string;
   addInfo?: string;
 }
@@ -199,6 +200,7 @@ class StopResultDto {
     const facility =
       stop.facility && FacilityResultDto.fromFacilityModel(stop.facility);
     let result: StopResultDto = {
+      stopId: stop.stopId.toString(),
       type: stop.type,
       addInfo: stop.addInfo,
     };
@@ -208,6 +210,7 @@ class StopResultDto {
     return result;
   }
 
+  readonly stopId: string;
   readonly type: StopType;
   readonly facility?: FacilityResultDto;
   readonly addInfo?: string;

@@ -3,6 +3,11 @@ import { PaginateResult } from 'mongoose';
 import { File } from './file.schema';
 import { FileOfType, PaginatedResultDto, Query } from '../utils/general.dto';
 
+export type FileParentRef = {
+  readonly linkedTo: string;
+  readonly fileOf: FileOfType;
+};
+
 export class CreateFileDto {
   readonly linkedTo: string;
   readonly fileOf: FileOfType;

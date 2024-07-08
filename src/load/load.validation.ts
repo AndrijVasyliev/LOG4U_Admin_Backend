@@ -39,6 +39,7 @@ const FreightValidation = Joi.object({
 });
 
 const StopValidation = Joi.object({
+  stopId: Joi.string().optional(),
   facility: MongoObjectIdValidation.required(),
   addInfo: Joi.string().allow('').optional(),
 });

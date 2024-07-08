@@ -160,7 +160,7 @@ const FreightSchema = SchemaFactory.createForClass(Freight);
 // Stop
 @Schema({
   discriminatorKey: 'type',
-  _id: false,
+  _id: true,
   timestamps: false,
 })
 export class Stop {
@@ -184,10 +184,22 @@ export class Stop {
     required: false,
   })
   addInfo?: string;
+
+  @Prop({
+    required: false,
+    virtual: true,
+    set: function (value: string) {
+      (this as any).set({ _id: value });
+    },
+    get: function (): string {
+      return `${(this as any)._id}`;
+    },
+  })
+  stopId: string;
 }
 
 @Schema({
-  _id: false,
+  _id: true,
   timestamps: false,
 })
 export class StopPickUp {
@@ -209,7 +221,7 @@ export class StopPickUp {
   freightList: Freight[];
 }
 @Schema({
-  _id: false,
+  _id: true,
   timestamps: false,
 })
 export class StopDelivery {
