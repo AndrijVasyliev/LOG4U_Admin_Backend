@@ -628,7 +628,16 @@ export class TruckService implements OnApplicationBootstrap, OnModuleDestroy {
         'If new status is "Will be available" then there must be values for fields "availabilityLocation" and "availabilityAt"',
       );
     }
-
+    // Set Search location
+    if (
+      updateTruckDto.lastLocation &&
+      currentTruckStatus !== 'Will be available' &&
+      !newTruckStatus
+    ) {
+      Object.assign(truck, {
+        searchLocation: updateTruckDto.lastLocation,
+      });
+    }
     Object.assign(truck, updateTruckDto);
     if (updateTruckDto.lastLocation) {
       Object.assign(truck, { locationUpdatedAt: new Date() });
@@ -640,16 +649,6 @@ export class TruckService implements OnApplicationBootstrap, OnModuleDestroy {
     if (updateTruckDto.reservedAt === null || !user) {
       Object.assign(truck, { reservedAt: undefined, reservedBy: undefined });
     }
-    // Set Search location
-    if (
-      updateTruckDto.lastLocation &&
-      currentTruckStatus !== 'Will be available' &&
-      !newTruckStatus
-    ) {
-      Object.assign(truck, {
-        searchLocation: updateTruckDto.lastLocation,
-      });
-    }
     // Set Will be available data
     if (
       updateTruckDto.availabilityAtLocal ||
@@ -659,8 +658,8 @@ export class TruckService implements OnApplicationBootstrap, OnModuleDestroy {
     }
     if (
       updateTruckDto.availabilityLocation &&
-      currentTruckStatus === 'Will be available' &&
-      (currentTruckStatus === newTruckStatus || !newTruckStatus)
+      newTruckStatus === 'Will be available' &&
+      currentTruckStatus !== newTruckStatus
     ) {
       Object.assign(truck, {
         searchLocation: updateTruckDto.availabilityLocation,
