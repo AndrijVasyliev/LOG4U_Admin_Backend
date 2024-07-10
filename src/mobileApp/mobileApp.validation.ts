@@ -34,7 +34,7 @@ export const MobileUpdateTruckValidation = Joi.object({
     .valid(...TRUCK_STATUSES)
     .optional(),
   availabilityLocation: GeoPointBodyValidation.optional(),
-  availabilityAtLocal: Joi.date().iso().greater('now').optional(),
+  availabilityAtLocal: Joi.date().iso().optional(),
 });
 export const MobileUpdateTruckLocationValidation = Joi.object({
   deviceId: Joi.string().required(),
