@@ -63,7 +63,7 @@ const StopDeliveryValidation = StopValidation.append({
 });
 
 export const CreateLoadValidation = Joi.object({
-  ref: Joi.array().items(Joi.string().required()).min(1).max(3).optional(),
+  ref: Joi.array().items(Joi.string().required()).min(1).max(3).required(),
   status: Joi.string()
     .valid(...LOAD_STATUSES)
     .required(),

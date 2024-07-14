@@ -89,7 +89,12 @@ export const EMAIL_STATES = [
 ] as const;
 export const EMAIL_TO_TYPES = ['User', 'Person'] as const;
 
-export const FILE_OF_TYPES = ['Truck', 'Person', 'Load'] as const;
+export const FILE_OF_TYPES = [
+  'Truck',
+  'Person',
+  'Load_Rate',
+  'Load_Bill',
+] as const;
 
 export const CUSTOMER_TYPES = [
   'BROKER DOMESTIC',

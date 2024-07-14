@@ -17,7 +17,7 @@ export class Metadata {
   @Prop({
     required: true,
     type: MongooseSchema.Types.ObjectId,
-    refPath: 'to.toType',
+    refPath: 'metadata.fileOf',
     // Don`t need this as default
     autopopulate: false,
   })
@@ -32,6 +32,9 @@ export class Metadata {
 
   @Prop({ required: true, immutable: true })
   contentType: string;
+
+  @Prop({ required: false, type: [String] })
+  tags: string[];
 
   @Prop({ required: false })
   comment: string;
