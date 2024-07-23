@@ -1,5 +1,5 @@
 import * as Joi from 'joi';
-import { CUSTOMER_TYPES, USER_ROLES } from '../utils/constants';
+import { CUSTOMER_TYPES, ORDER_VALUES, USER_ROLES } from '../utils/constants';
 
 export const CreateCustomerValidation = Joi.object({
   name: Joi.string().required(),
@@ -62,6 +62,6 @@ export const CustomerQueryParamsSchema = Joi.object({
       'phone',
       'email',
     ),
-    direction: Joi.string().valid('asc', 'desc'),
+    direction: Joi.string().valid(...ORDER_VALUES),
   })
   .and('orderby', 'direction');

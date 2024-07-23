@@ -25,7 +25,7 @@ export class FacilityQuerySearch {
   readonly distance?: number;
 }
 
-export class FacilityQuery extends Query<FacilityQuerySearch> {}
+export interface FacilityQuery extends Query<FacilityQuerySearch> {}
 
 export class FacilityResultDto {
   static fromFacilityModel(facility: Facility): FacilityResultDto {

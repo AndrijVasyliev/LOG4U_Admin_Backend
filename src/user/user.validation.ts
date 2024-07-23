@@ -1,5 +1,5 @@
 import * as Joi from 'joi';
-import { ADMIN_ROLES } from '../utils/constants';
+import { ADMIN_ROLES, ORDER_VALUES } from '../utils/constants';
 
 export const CreateUserValidation = Joi.object({
   fullName: Joi.string().required(),
@@ -44,6 +44,6 @@ export const UserQueryParamsSchema = Joi.object({
       'jobTitle',
       'email',
     ),
-    direction: Joi.string().valid('asc', 'desc'),
+    direction: Joi.string().valid(...ORDER_VALUES),
   })
   .and('orderby', 'direction');

@@ -50,6 +50,6 @@ export const PersonQueryParamsSchema = Joi.object({
       'emergencyContactPhone',
       'appLogin',
     ),
-    direction: Joi.string().valid('asc', 'desc'),
+    direction: Joi.string().valid(...ORDER_VALUES),
   })
   .and('orderby', 'direction');*/

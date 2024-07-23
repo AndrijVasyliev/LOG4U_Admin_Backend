@@ -11,14 +11,14 @@ import { PersonResultDto } from '../person/person.dto';
 import { User } from '../user/user.schema';
 import { Person } from '../person/person.schema';
 
-export class SendEmailDto {
+export interface SendEmailDto {
   readonly from: string;
   readonly to: string;
   readonly subject: string;
   readonly text: string;
   readonly html?: string;
 }
-export class CreateEmailDto {
+export interface CreateEmailDto {
   readonly from: string;
   readonly to: To[];
   readonly subject: string;
@@ -26,7 +26,7 @@ export class CreateEmailDto {
   readonly html?: string;
 }
 
-export class UpdateEmailDto {
+export interface UpdateEmailDto {
   readonly state?: EmailState;
   readonly from?: string;
   readonly subject?: string;
@@ -34,13 +34,15 @@ export class UpdateEmailDto {
   readonly html?: string;
 }
 
-export class EmailQuerySearch {
+export interface EmailQuerySearch {
   readonly state?: EmailState;
   readonly from?: string;
   readonly subject?: string;
+  readonly createdAt?: string;
+  readonly updatedAt?: string;
 }
 
-export class EmailQuery extends Query<EmailQuerySearch> {}
+export interface EmailQuery extends Query<EmailQuerySearch> {}
 
 export class ToResultDto {
   static fromToModel(to: To): ToResultDto {

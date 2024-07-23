@@ -111,7 +111,7 @@ export class TruckQuerySearch {
   readonly vinCode?: string;
 }
 
-export class TruckQuery extends Query<TruckQuerySearch> {}
+export interface TruckQuery extends Query<TruckQuerySearch> {}
 
 export class TruckResultDto {
   static fromTruckModel(

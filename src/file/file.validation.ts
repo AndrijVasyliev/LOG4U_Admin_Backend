@@ -4,6 +4,7 @@ import {
   FILE_OF_TYPES,
   MAX_FILE_COMMENT_LENGTH,
   MIN_FILE_COMMENT_LENGTH,
+  ORDER_VALUES,
 } from '../utils/constants';
 
 export const CreateFileValidation = Joi.object({
@@ -15,6 +16,9 @@ export const CreateFileValidation = Joi.object({
     .min(MIN_FILE_COMMENT_LENGTH)
     .max(MAX_FILE_COMMENT_LENGTH)
     .optional(),
+  tags: Joi.object()
+    .pattern(Joi.string().required(), Joi.string().required())
+    .cast('map'),
 });
 
 export const FileQueryParamsSchema = Joi.object({
@@ -28,7 +32,7 @@ export const FileQueryParamsSchema = Joi.object({
 })
   .keys({
     orderby: Joi.string().valid('filename', 'createdAt'),
-    direction: Joi.string().valid('asc', 'desc'),
+    direction: Joi.string().valid(...ORDER_VALUES),
   })
   .and('orderby', 'direction')
   .keys({

@@ -8,13 +8,15 @@ export type FileParentRef = {
   readonly fileOf: FileOfType;
 };
 
-export class CreateFileDto {
+export interface CreateFileDto {
   readonly linkedTo: string;
   readonly fileOf: FileOfType;
   readonly comment?: string;
+  readonly tags?: Map<string, string>;
 }
 
-export class FileQuerySearch {
+export interface FileQuerySearch {
+  // readonly search?: string;
   readonly filename?: string;
   readonly comment?: string;
   readonly truck?: string;
@@ -22,7 +24,11 @@ export class FileQuerySearch {
   readonly load?: string;
 }
 
-export class FileQuery extends Query<FileQuerySearch> {}
+export interface FileQueryOrder extends Omit<FileQuerySearch, 'search'> {
+  readonly createdAt?: Date;
+}
+
+export interface FileQuery extends Query<FileQuerySearch, FileQueryOrder> {}
 
 export class FileResultDto {
   static fromFileModel(file: File): FileResultDto {
@@ -32,6 +38,8 @@ export class FileResultDto {
       contentType: file.metadata.contentType,
       contentLength: file.length,
       comment: file.metadata.comment,
+      tags:
+        file.metadata.tags && Object.fromEntries(file.metadata.tags.entries()),
     };
   }
 
@@ -40,6 +48,7 @@ export class FileResultDto {
   readonly contentType: string;
   readonly contentLength: number;
   readonly comment?: string;
+  readonly tags?: Record<string, string>;
 }
 
 export class DownloadFileResultDto extends FileResultDto {

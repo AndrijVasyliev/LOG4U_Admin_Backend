@@ -12,4 +12,4 @@ export class AuthDataDto {
 
 export class MobileLoadQuerySearch {}
 
-export class MobileLoadQuery extends Query<MobileLoadQuerySearch> {}
+export interface MobileLoadQuery extends Query<MobileLoadQuerySearch> {}

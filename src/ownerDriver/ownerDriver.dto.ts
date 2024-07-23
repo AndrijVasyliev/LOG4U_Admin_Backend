@@ -93,7 +93,7 @@ export class OwnerDriverQuerySearch {
   readonly owner?: string;
 }
 
-export class OwnerDriverQuery extends Query<OwnerDriverQuerySearch> {}
+export interface OwnerDriverQuery extends Query<OwnerDriverQuerySearch> {}
 
 export class OwnerDriverResultDto {
   static fromOwnerDriverModel(ownerDriver: OwnerDriver): OwnerDriverResultDto {

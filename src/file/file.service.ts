@@ -105,6 +105,7 @@ export class FileService {
 
   async findFileById(id: string): Promise<FileResultDto> {
     const file = await this.findFileDocumentById(id);
+    // const temp = await file.populate('metadata.linkedTo');
     return FileResultDto.fromFileModel(file);
   }
 

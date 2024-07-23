@@ -1,6 +1,6 @@
 import * as Joi from 'joi';
 import { Expo } from 'expo-server-sdk';
-import { TRUCK_STATUSES } from '../utils/constants';
+import { ORDER_VALUES, TRUCK_STATUSES } from '../utils/constants';
 import {
   GeoPointBodyValidation,
   LatitudeValidation,
@@ -66,6 +66,6 @@ export const MobileLoadQueryParamsSchema = Joi.object({
       'bookedByCompany',
       'checkInAs',
     ),
-    direction: Joi.string().valid('asc', 'desc'),
+    direction: Joi.string().valid(...ORDER_VALUES),
   })
   .and('orderby', 'direction');

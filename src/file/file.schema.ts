@@ -6,6 +6,7 @@ import { Truck } from '../truck/truck.schema';
 import { Person } from '../person/person.schema';
 import { Load } from '../load/load.schema';
 import { FileOfType } from '../utils/general.dto';
+import { User } from '../user/user.schema';
 
 export type FileDocument = File & Document;
 
@@ -14,14 +15,58 @@ export type FileDocument = File & Document;
   timestamps: false,
 })
 export class Metadata {
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-expect-error
   @Prop({
     required: true,
     type: MongooseSchema.Types.ObjectId,
-    refPath: 'metadata.fileOf',
+    // ref: 'Person',
+    ref: function () {
+      return function () {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-expect-error
+        return (this as any as Metadata).fileOf;
+      };
+      /*return new Proxy(
+        function () {
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // @ts-expect-error
+          return (this as any as Metadata).fileOf;
+        },
+        {
+          get(target, prop, receiver) {
+            if (prop === 'name' && !count) {
+              count++;
+              return null;
+            }
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-expect-error
+            return target[prop];
+          },
+        },
+      );*/
+    },
+    // refPath: 'metadata.fileOf',
+    /*refPath: function () {
+      //  return 'Person';
+      return this.fileOf;
+    },*/
+    /*switch ((this as Metadata).fileOf) {
+        case 'Truck':
+          return 'Truck';
+        case 'Person':
+          return 'Person';
+        case 'Load_Bill':
+        case 'Load_Rate':
+          return 'Load';
+        default:
+          return 'User';
+      }*/
+    // },
     // Don`t need this as default
-    autopopulate: false,
+    // autopopulate: true,
   })
-  linkedTo: Truck | Person | Load;
+  linkedTo: Truck | Person | Load | User;
 
   @Prop({
     required: true,
@@ -33,8 +78,8 @@ export class Metadata {
   @Prop({ required: true, immutable: true })
   contentType: string;
 
-  @Prop({ required: false, type: [String] })
-  tags: string[];
+  @Prop({ required: false, type: MongooseSchema.Types.Map, of: String })
+  tags: Map<string, string>;
 
   @Prop({ required: false })
   comment: string;

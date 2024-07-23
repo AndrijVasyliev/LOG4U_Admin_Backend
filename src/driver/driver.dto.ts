@@ -84,7 +84,7 @@ export class DriverQuerySearch {
   readonly owner?: string;
 }
 
-export class DriverQuery extends Query<DriverQuerySearch> {}
+export interface DriverQuery extends Query<DriverQuerySearch> {}
 
 export class DriverResultDto {
   static fromDriverModel(driver: Driver): DriverResultDto {

@@ -1,5 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document, ObjectId } from 'mongoose';
+import { Document, ObjectId, Schema as MongooseSchema } from 'mongoose';
 import { PERSON_TYPES } from '../utils/constants';
 import { PersonType } from '../utils/general.dto';
 import { hash } from '../utils/hash';
@@ -29,19 +29,19 @@ export class Person {
   @Prop({ required: false })
   useGoogleMaps?: boolean;
 
-  @Prop({ required: false, type: Object })
+  @Prop({ required: false, type: MongooseSchema.Types.Mixed })
   locationOptions?: Record<string, any>;
 
   @Prop({ required: false })
   appLogin?: string;
 
-  @Prop({ required: false, type: Object })
+  @Prop({ required: false, type: MongooseSchema.Types.Mixed })
   deviceStatus?: Record<string, any>;
 
   @Prop({ required: false })
   deviceStatusLastChange?: Date;
 
-  @Prop({ required: false, type: Object })
+  @Prop({ required: false, type: MongooseSchema.Types.Mixed })
   appPermissions?: Record<string, any>;
 
   @Prop({ required: false })

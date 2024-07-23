@@ -1,5 +1,5 @@
 import * as Joi from 'joi';
-import { LANG_PRIORITIES } from '../utils/constants';
+import { LANG_PRIORITIES, ORDER_VALUES } from '../utils/constants';
 import { MongoObjectIdValidation } from '../utils/idValidate.pipe';
 
 export const CreateCoordinatorValidation = Joi.object({
@@ -97,7 +97,8 @@ export const CoordinatorQueryParamsSchema = Joi.object({
       'emergencyContactName',
       'emergencyContactRel',
       'emergencyContactPhone',
+      'appLogin',
     ),
-    direction: Joi.string().valid('asc', 'desc'),
+    direction: Joi.string().valid(...ORDER_VALUES),
   })
   .and('orderby', 'direction');

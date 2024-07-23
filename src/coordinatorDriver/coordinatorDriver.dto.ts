@@ -94,7 +94,7 @@ export class CoordinatorDriverQuerySearch {
   readonly owner?: string;
 }
 
-export class CoordinatorDriverQuery extends Query<CoordinatorDriverQuerySearch> {}
+export interface CoordinatorDriverQuery extends Query<CoordinatorDriverQuerySearch> {}
 
 export class CoordinatorDriverResultDto {
   static fromCoordinatorDriverModel(

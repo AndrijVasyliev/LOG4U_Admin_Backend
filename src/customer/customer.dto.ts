@@ -45,7 +45,7 @@ export class CustomerQuerySearch {
   readonly website?: string;
 }
 
-export class CustomerQuery extends Query<CustomerQuerySearch> {}
+export interface CustomerQuery extends Query<CustomerQuerySearch> {}
 
 export class CustomerResultDto {
   static fromCustomerModel(customer: Customer): CustomerResultDto {

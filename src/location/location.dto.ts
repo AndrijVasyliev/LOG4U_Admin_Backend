@@ -91,7 +91,7 @@ export class LocationQuerySearch {
   readonly distance?: number;
 }
 
-export class LocationQuery extends Query<LocationQuerySearch> {}
+export interface LocationQuery extends Query<LocationQuerySearch> {}
 
 export class LocationResultDto extends CreateLocationDto {
   static fromLocationModel(location: Location): LocationResultDto {

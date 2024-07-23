@@ -162,7 +162,7 @@ export class MobileAppController {
       );
     }
     return this.loadService.getLoads({
-      orderby: 'orderNumber',
+      orderby: 'loadNumber',
       direction: 'desc',
       search: { truckNumber: driver.driveTrucks[0].truckNumber },
       ...loadQuery,

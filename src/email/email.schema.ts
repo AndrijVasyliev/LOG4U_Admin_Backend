@@ -18,6 +18,7 @@ export class To {
     type: MongooseSchema.Types.ObjectId,
     refPath: 'to.toType',
     // Need to "manually" populate by adding .populate('to.to') to requests
+    // ToDo: find out, why autopopulate does not work
     //autopopulate: true,
   })
   to: User | Person;

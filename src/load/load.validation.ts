@@ -2,6 +2,7 @@ import * as Joi from 'joi';
 import { StopType, TimeFrameType } from './load.schema';
 import {
   LOAD_STATUSES,
+  ORDER_VALUES,
   TRUCK_TYPES,
   UNITS_OF_LENGTH,
   UNITS_OF_WEIGHT,
@@ -159,6 +160,6 @@ export const LoadQueryParamsSchema = Joi.object({
       'bookedByCompany',
       'checkInAs',
     ),
-    direction: Joi.string().valid('asc', 'desc'),
+    direction: Joi.string().valid(...ORDER_VALUES),
   })
   .and('orderby', 'direction');

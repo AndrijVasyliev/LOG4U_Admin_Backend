@@ -18,6 +18,7 @@ import {
   LOAD_STATUSES,
   UNITS_OF_WEIGHT,
   UNITS_OF_LENGTH,
+  ORDER_VALUES,
 } from './constants';
 
 export type GeoPointType = LatLngArray;
@@ -26,6 +27,8 @@ export type MongoGeoPointType = {
   type: 'Point';
   coordinates: GeoPointType;
 };
+
+export type OrderType = (typeof ORDER_VALUES)[number];
 
 export type PersonType = (typeof PERSON_TYPES)[number];
 export type LangPriority = (typeof LANG_PRIORITIES)[number];
@@ -46,14 +49,14 @@ export type LoadStatus = (typeof LOAD_STATUSES)[number];
 export type UnitOfWeight = (typeof UNITS_OF_WEIGHT)[number];
 export type UnitOfLength = (typeof UNITS_OF_LENGTH)[number];
 
-export class Query<T> {
+export interface Query<SearchType, OrderType = SearchType> {
   readonly offset: number;
   readonly limit: number;
 
-  readonly orderby?: string;
-  readonly direction?: string;
+  readonly orderby?: keyof OrderType;
+  readonly direction?: OrderType;
 
-  readonly search?: T;
+  readonly search?: SearchType;
 }
 
 export class PaginatedResultDto<T> {

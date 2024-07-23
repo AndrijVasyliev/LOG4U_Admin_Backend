@@ -145,7 +145,7 @@ export class LoadQuerySearch {
   readonly truckNumber?: number;
 }
 
-export class LoadQuery extends Query<LoadQuerySearch> {}
+export interface LoadQuery extends Query<LoadQuerySearch> {}
 
 class TimeFrameFCFSResultDto {
   static fromTimeFrameFCFSModel(

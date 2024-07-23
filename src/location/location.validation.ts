@@ -1,5 +1,5 @@
 import * as Joi from 'joi';
-import { EARTH_RADIUS_MILES } from '../utils/constants';
+import { EARTH_RADIUS_MILES, ORDER_VALUES } from '../utils/constants';
 
 export const GeoPointQueryParamValidation = Joi.string()
   .regex(/^-?\d+\.?\d*,-?\d+\.?\d*$/)
@@ -84,7 +84,7 @@ export const LocationQueryParamsSchema = Joi.object({
 })
   .keys({
     orderby: Joi.string().valid('zipCode', 'name', 'stateCode', 'stateName'),
-    direction: Joi.string().valid('asc', 'desc'),
+    direction: Joi.string().valid(...ORDER_VALUES),
   })
   .and('orderby', 'direction')
   .keys({

@@ -3,14 +3,14 @@ import { Push } from './push.schema';
 import { PushState, PaginatedResultDto, Query } from '../utils/general.dto';
 import { PersonResultDto } from '../person/person.dto';
 
-export class SendPushDto {
+export interface SendPushDto {
   to: string;
   sound: string;
   body: string;
   data?: Record<string, any>;
 }
 
-export class CreatePushDto {
+export interface CreatePushDto {
   readonly to: string;
   readonly title?: string;
   readonly subtitle?: string;
@@ -19,7 +19,7 @@ export class CreatePushDto {
   readonly badge?: number;
 }
 
-export class UpdatePushDto {
+export interface UpdatePushDto {
   readonly state?: PushState;
   readonly title?: string;
   readonly subtitle?: string;
@@ -28,14 +28,19 @@ export class UpdatePushDto {
   readonly badge?: number;
 }
 
-export class PushQuerySearch {
+export interface PushQuerySearch {
+  // readonly search?: string;
   readonly state?: PushState;
   readonly title?: string;
   readonly subtitle?: string;
   readonly body?: string;
 }
+export interface PushQueryOrder extends Omit<PushQuerySearch, 'search'> {
+  readonly createdAt?: Date;
+  readonly updatedAt?: Date;
+}
 
-export class PushQuery extends Query<PushQuerySearch> {}
+export interface PushQuery extends Query<PushQuerySearch, PushQueryOrder> {}
 
 export class PushResultDto {
   static fromPushModel(push: Push): PushResultDto {

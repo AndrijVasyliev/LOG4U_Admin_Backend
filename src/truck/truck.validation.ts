@@ -1,5 +1,6 @@
 import * as Joi from 'joi';
 import {
+  ORDER_VALUES,
   TRUCK_CERTIFICATES,
   TRUCK_CROSSBORDERS,
   TRUCK_EQUIPMENTS,
@@ -163,7 +164,7 @@ export const TruckQueryParamsSchema = Joi.object({
       'insideDims',
       'doorDims',
     ),
-    direction: Joi.string().valid('asc', 'desc'),
+    direction: Joi.string().valid(...ORDER_VALUES),
   })
   .and('orderby', 'direction')
   .keys({

@@ -1,6 +1,6 @@
 import * as Joi from 'joi';
 import { MongoObjectIdValidation } from '../utils/idValidate.pipe';
-import { PUSH_STATES } from '../utils/constants';
+import { ORDER_VALUES, PUSH_STATES } from '../utils/constants';
 
 export const SendPushValidation = Joi.object({
   to: Joi.string().required(),
@@ -48,7 +48,6 @@ export const PushQueryParamsSchema = Joi.object({
   title: Joi.string().optional(),
   subtitle: Joi.string().optional(),
   body: Joi.string().optional(),
-  data: Joi.object().optional(),
 })
   .keys({
     orderby: Joi.string().valid(
@@ -56,11 +55,9 @@ export const PushQueryParamsSchema = Joi.object({
       'title',
       'subtitle',
       'body',
-      'data',
-      'badge',
       'createdAt',
       'updatedAt',
     ),
-    direction: Joi.string().valid('asc', 'desc'),
+    direction: Joi.string().valid(...ORDER_VALUES),
   })
   .and('orderby', 'direction');

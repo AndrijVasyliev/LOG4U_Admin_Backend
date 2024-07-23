@@ -76,7 +76,7 @@ export class OwnerQuerySearch {
   readonly truckNumber?: number;
 }
 
-export class OwnerQuery extends Query<OwnerQuerySearch> {}
+export interface OwnerQuery extends Query<OwnerQuerySearch> {}
 
 export class OwnerResultDto {
   static fromOwnerModel(owner: Owner): OwnerResultDto {

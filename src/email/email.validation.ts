@@ -1,6 +1,6 @@
 import * as Joi from 'joi';
 import { MongoObjectIdValidation } from '../utils/idValidate.pipe';
-import { EMAIL_STATES, EMAIL_TO_TYPES } from '../utils/constants';
+import { EMAIL_STATES, EMAIL_TO_TYPES, ORDER_VALUES } from '../utils/constants';
 
 export const SendEmailValidation = Joi.object({
   from: Joi.string().required(),
@@ -59,6 +59,6 @@ export const EmailQueryParamsSchema = Joi.object({
       'createdAt',
       'updatedAt',
     ),
-    direction: Joi.string().valid('asc', 'desc'),
+    direction: Joi.string().valid(...ORDER_VALUES),
   })
   .and('orderby', 'direction');

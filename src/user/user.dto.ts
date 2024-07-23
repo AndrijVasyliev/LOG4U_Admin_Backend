@@ -30,7 +30,7 @@ export class UserQuerySearch {
   readonly password?: string;
 }
 
-export class UserQuery extends Query<UserQuerySearch> {}
+export interface UserQuery extends Query<UserQuerySearch> {}
 
 export class UserResultDto {
   static fromUserModel(user: User): UserResultDto {

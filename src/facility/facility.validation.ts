@@ -4,6 +4,7 @@ import {
   GeoPointBodyValidation,
   GeoPointQueryParamValidation,
 } from '../location/location.validation';
+import { ORDER_VALUES } from '../utils/constants';
 
 export const CreateFacilityValidation = Joi.object({
   name: Joi.string().required(),
@@ -29,7 +30,7 @@ export const FacilityQueryParamsSchema = Joi.object({
 })
   .keys({
     orderby: Joi.string().valid('name'),
-    direction: Joi.string().valid('asc', 'desc'),
+    direction: Joi.string().valid(...ORDER_VALUES),
   })
   .and('orderby', 'direction')
   .keys({

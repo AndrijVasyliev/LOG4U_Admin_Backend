@@ -9,7 +9,7 @@ import {
 import { OwnerResultDto } from '../owner/owner.dto';
 import { TruckResultDto } from '../truck/truck.dto';
 
-export class CreateCoordinatorDto {
+export interface CreateCoordinatorDto {
   readonly fullName: string;
   readonly birthDate: Date;
   readonly citizenship: string;
@@ -33,7 +33,7 @@ export class CreateCoordinatorDto {
   readonly owner: string;
 }
 
-export class UpdateCoordinatorDto {
+export interface UpdateCoordinatorDto {
   readonly fullName?: string;
   readonly birthDate?: Date;
   readonly citizenship?: string;
@@ -57,7 +57,7 @@ export class UpdateCoordinatorDto {
   readonly owner?: string;
 }
 
-export class CoordinatorQuerySearch {
+export interface CoordinatorQuerySearch {
   readonly search?: string;
   readonly fullName?: string;
   readonly citizenship?: string;
@@ -78,7 +78,15 @@ export class CoordinatorQuerySearch {
   readonly owner?: string;
 }
 
-export class CoordinatorQuery extends Query<CoordinatorQuerySearch> {}
+export interface CoordinatorQueryOrder
+  extends Omit<CoordinatorQuerySearch, 'search'> {
+  readonly birthDate?: Date;
+  readonly hireDate?: Date;
+  readonly insurancePolicyExp?: Date;
+}
+
+export interface CoordinatorQuery
+  extends Query<CoordinatorQuerySearch, CoordinatorQueryOrder> {}
 
 export class CoordinatorResultDto {
   static fromCoordinatorModel(coordinator: Coordinator): CoordinatorResultDto {
