@@ -40,7 +40,7 @@ export class CustomerController {
 
   @Get()
   async getCustomers(
-    @Query(new QueryParamsPipe<CustomerQuerySearch>(CustomerQueryParamsSchema))
+    @Query(new QueryParamsPipe(CustomerQueryParamsSchema))
     customerQuery: CustomerQuery,
   ): Promise<PaginatedCustomerResultDto> {
     return this.customerService.getCustomers(customerQuery);

@@ -9,7 +9,7 @@ import {
 import { OwnerResultDto } from '../owner/owner.dto';
 import { TruckResultDto } from '../truck/truck.dto';
 
-export class CreateDriverDto {
+export interface CreateDriverDto {
   readonly fullName: string;
   readonly birthDate?: Date;
   readonly citizenship?: string;
@@ -35,7 +35,7 @@ export class CreateDriverDto {
   readonly owner: string;
 }
 
-export class UpdateDriverDto {
+export interface UpdateDriverDto {
   readonly fullName?: string;
   readonly birthDate?: Date;
   readonly citizenship?: string;
@@ -61,7 +61,7 @@ export class UpdateDriverDto {
   readonly owner?: string;
 }
 
-export class DriverQuerySearch {
+export interface DriverQuerySearch {
   readonly search?: string;
   readonly fullName?: string;
   readonly citizenship?: string;
@@ -84,7 +84,19 @@ export class DriverQuerySearch {
   readonly owner?: string;
 }
 
-export interface DriverQuery extends Query<DriverQuerySearch> {}
+export interface DriverQueryOrder
+  extends Omit<
+    DriverQuerySearch,
+    'search' | 'allPhone' | 'truckNumber' | 'owner'
+  > {
+  readonly birthDate?: Date;
+  readonly driverLicenceExp?: Date;
+  readonly idDocExp?: Date;
+  readonly hireDate?: Date;
+}
+
+export interface DriverQuery
+  extends Query<DriverQuerySearch, DriverQueryOrder> {}
 
 export class DriverResultDto {
   static fromDriverModel(driver: Driver): DriverResultDto {

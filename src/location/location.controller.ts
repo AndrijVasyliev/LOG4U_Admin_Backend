@@ -45,7 +45,7 @@ export class LocationController {
 
   @Get()
   async getLocations(
-    @Query(new QueryParamsPipe<LocationQuerySearch>(LocationQueryParamsSchema))
+    @Query(new QueryParamsPipe(LocationQueryParamsSchema))
     locationQuery: LocationQuery,
   ): Promise<PaginatedLocationResultDto> {
     return this.locationService.getLocations(locationQuery);

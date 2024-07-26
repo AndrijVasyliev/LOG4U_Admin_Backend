@@ -148,7 +148,7 @@ export class MobileAppController {
   async getLoad(
     @Req() request: Request,
     @Query(
-      new QueryParamsPipe<MobileLoadQuerySearch>(MobileLoadQueryParamsSchema),
+      new QueryParamsPipe(MobileLoadQueryParamsSchema),
     )
     loadQuery: MobileLoadQuery,
   ): Promise<PaginatedLoadResultDto> {

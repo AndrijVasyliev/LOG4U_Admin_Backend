@@ -38,7 +38,7 @@ export class DriverController {
 
   @Get()
   async getDrivers(
-    @Query(new QueryParamsPipe<DriverQuerySearch>(DriverQueryParamsSchema))
+    @Query(new QueryParamsPipe(DriverQueryParamsSchema))
     driverQuery: DriverQuery,
   ): Promise<PaginatedDriverResultDto> {
     return this.driverService.getDrivers(driverQuery);

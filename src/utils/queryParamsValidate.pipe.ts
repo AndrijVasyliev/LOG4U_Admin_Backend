@@ -9,7 +9,9 @@ import { Query } from './general.dto';
 import { DEFAULT_LIMIT, DEFAULT_OFFSET } from './constants';
 
 @Injectable()
-export class QueryParamsPipe<T> implements PipeTransform<any, Query<T>> {
+export class QueryParamsPipe<SearchType, OrderType>
+  implements PipeTransform<any, Query<SearchType, OrderType>>
+{
   constructor(private schema: ObjectSchema | ArraySchema) {}
 
   transform(inputValue: any, metadata: ArgumentMetadata) {
@@ -33,7 +35,7 @@ export class QueryParamsPipe<T> implements PipeTransform<any, Query<T>> {
       direction,
       ...search
     } = value;
-    let result: Query<T>;
+    let result: Query<SearchType, OrderType>;
     if (Object.keys(search).length) {
       result = {
         offset,

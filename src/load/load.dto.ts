@@ -28,28 +28,28 @@ import { TruckResultDto } from '../truck/truck.dto';
 import { CustomerResultDto } from '../customer/customer.dto';
 import { FacilityResultDto } from '../facility/facility.dto';
 
-class CreateTimeFrameFCFSDto {
-  type = TimeFrameType.FCFS;
+interface CreateTimeFrameFCFSDto {
+  type: TimeFrameType.FCFS;
   from: Date;
   to: Date;
 }
 
-class CreateTimeFrameAPPTDto {
-  type = TimeFrameType.APPT;
+interface CreateTimeFrameAPPTDto {
+  type: TimeFrameType.APPT;
   at: Date;
 }
 
-class CreateTimeFrameASAPDto {
-  type = TimeFrameType.ASAP;
+interface CreateTimeFrameASAPDto {
+  type: TimeFrameType.ASAP;
   at: Date;
 }
 
-class CreateTimeFrameDirectDto {
-  type = TimeFrameType.Direct;
+interface CreateTimeFrameDirectDto {
+  type: TimeFrameType.Direct;
   at: Date;
 }
 
-class CreateFreightDto {
+interface CreateFreightDto {
   pieces: number;
   unitOfWeight: UnitOfWeight;
   weight: number;
@@ -57,13 +57,13 @@ class CreateFreightDto {
   length: number;
 }
 
-class CreateStopDto {
+interface CreateStopDto {
   stopId?: string;
   facility: string;
   addInfo?: string;
 }
-class CreateStopPickUpDto extends CreateStopDto {
-  type = StopType.PickUp;
+interface CreateStopPickUpDto extends CreateStopDto {
+  type: StopType.PickUp;
   timeFrame:
     | CreateTimeFrameFCFSDto
     | CreateTimeFrameAPPTDto
@@ -71,15 +71,15 @@ class CreateStopPickUpDto extends CreateStopDto {
   freightList: CreateFreightDto[];
 }
 
-class CreateStopDeliveryDto extends CreateStopDto {
-  type = StopType.Delivery;
+interface CreateStopDeliveryDto extends CreateStopDto {
+  type: StopType.Delivery;
   timeFrame:
     | CreateTimeFrameFCFSDto
     | CreateTimeFrameAPPTDto
     | CreateTimeFrameDirectDto;
 }
 
-export class CreateLoadDto {
+export interface CreateLoadDto {
   readonly loadNumber: number;
   readonly ref?: string[];
   readonly status: LoadStatus;
@@ -97,7 +97,7 @@ export class CreateLoadDto {
   readonly bookedWith: string;
 }
 
-export class LoadChangeUpdateDocument {
+export interface LoadChangeUpdateDocument {
   readonly operationType: 'update';
   readonly updateDescription: {
     readonly updatedFields: {
@@ -106,7 +106,7 @@ export class LoadChangeUpdateDocument {
     };
   };
 }
-export class LoadChangeInsertDocument {
+export interface LoadChangeInsertDocument {
   readonly operationType: 'insert';
   readonly fullDocument: {
     readonly stops?: (CreateStopPickUpDto | CreateStopDeliveryDto)[];
@@ -118,7 +118,7 @@ export type LoadChangeDocument =
   | LoadChangeUpdateDocument
   | LoadChangeInsertDocument;
 
-export class UpdateLoadDto {
+export interface UpdateLoadDto {
   readonly ref?: string[];
   readonly status?: LoadStatus;
   readonly stops?: (CreateStopPickUpDto | CreateStopDeliveryDto)[];
@@ -135,7 +135,7 @@ export class UpdateLoadDto {
   readonly bookedWith?: string;
 }
 
-export class LoadQuerySearch {
+export interface LoadQuerySearch {
   readonly loadNumber?: string;
   readonly status?: LoadStatus;
   readonly weight?: string;
@@ -145,7 +145,14 @@ export class LoadQuerySearch {
   readonly truckNumber?: number;
 }
 
-export interface LoadQuery extends Query<LoadQuerySearch> {}
+export interface LoadQueryOrder
+  extends Omit<LoadQuerySearch, 'search' | 'truckType' | 'truckNumber'> {
+  readonly rate?: number;
+  readonly totalCharges?: number;
+  readonly currency?: string;
+}
+
+export interface LoadQuery extends Query<LoadQuerySearch, LoadQueryOrder> {}
 
 class TimeFrameFCFSResultDto {
   static fromTimeFrameFCFSModel(

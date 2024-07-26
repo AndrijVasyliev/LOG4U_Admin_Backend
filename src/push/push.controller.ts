@@ -58,7 +58,7 @@ export class PushController {
 
   @Get()
   async getPushs(
-    @Query(new QueryParamsPipe<PushQuerySearch>(PushQueryParamsSchema))
+    @Query(new QueryParamsPipe(PushQueryParamsSchema))
     pushQuery: PushQuery,
   ): Promise<PaginatedPushResultDto> {
     return this.pushService.getPushs(pushQuery);

@@ -49,7 +49,7 @@ export type LoadStatus = (typeof LOAD_STATUSES)[number];
 export type UnitOfWeight = (typeof UNITS_OF_WEIGHT)[number];
 export type UnitOfLength = (typeof UNITS_OF_LENGTH)[number];
 
-export interface Query<SearchType, OrderType = SearchType> {
+export interface Query<SearchType, OrderType> {
   readonly offset: number;
   readonly limit: number;
 

@@ -2,21 +2,21 @@ import { PaginateResult } from 'mongoose';
 import { Facility } from './facility.schema';
 import { Query, PaginatedResultDto, GeoPointType } from '../utils/general.dto';
 
-export class CreateFacilityDto {
+export interface CreateFacilityDto {
   readonly name: string;
   readonly address: string;
   readonly address2?: string;
   readonly facilityLocation: GeoPointType;
 }
 
-export class UpdateFacilityDto {
+export interface UpdateFacilityDto {
   readonly name?: string;
   readonly address?: string;
   readonly address2?: string;
   readonly facilityLocation?: GeoPointType;
 }
 
-export class FacilityQuerySearch {
+export interface FacilityQuerySearch {
   readonly search?: string;
   readonly name?: string;
   readonly address?: string;
@@ -25,7 +25,10 @@ export class FacilityQuerySearch {
   readonly distance?: number;
 }
 
-export interface FacilityQuery extends Query<FacilityQuerySearch> {}
+export interface FacilityQueryOrder extends Pick<FacilityQuerySearch, 'name'> {}
+
+export interface FacilityQuery
+  extends Query<FacilityQuerySearch, FacilityQueryOrder> {}
 
 export class FacilityResultDto {
   static fromFacilityModel(facility: Facility): FacilityResultDto {

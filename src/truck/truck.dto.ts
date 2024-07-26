@@ -15,7 +15,7 @@ import { CoordinatorResultDto } from '../coordinator/coordinator.dto';
 import { DriverResultDto } from '../driver/driver.dto';
 import { UserResultDto } from '../user/user.dto';
 
-export class CreateTruckDto {
+export interface CreateTruckDto {
   readonly truckNumber: number;
   readonly status: TruckStatus;
   readonly lastLocation?: GeoPointType;
@@ -42,7 +42,7 @@ export class CreateTruckDto {
   readonly reservedBy?: string;
 }
 
-export class TruckChangeUpdateDocument {
+export interface TruckChangeUpdateDocument {
   readonly operationType: 'update';
   readonly updateDescription: {
     readonly updatedFields: {
@@ -52,7 +52,7 @@ export class TruckChangeUpdateDocument {
     };
   };
 }
-export class TruckChangeInsertDocument {
+export interface TruckChangeInsertDocument {
   readonly operationType: 'insert';
   readonly fullDocument: {
     // readonly availabilityLocation?: GeoPointType;
@@ -65,7 +65,7 @@ export type TruckChangeDocument =
   | TruckChangeUpdateDocument
   | TruckChangeInsertDocument;
 
-export class UpdateTruckDto {
+export interface UpdateTruckDto {
   readonly truckNumber?: number;
   readonly status?: TruckStatus;
   readonly lastLocation?: GeoPointType;
@@ -92,7 +92,7 @@ export class UpdateTruckDto {
   readonly reservedBy?: string;
 }
 
-export class TruckQuerySearch {
+export interface TruckQuerySearch {
   readonly search?: string;
   readonly truckNumber?: number;
   readonly status?: TruckStatus[];
@@ -111,7 +111,23 @@ export class TruckQuerySearch {
   readonly vinCode?: string;
 }
 
-export interface TruckQuery extends Query<TruckQuerySearch> {}
+export interface TruckQuerySearchOrder
+  extends Omit<
+    TruckQuerySearch,
+    | 'search'
+    | 'lastLocation'
+    | 'availableBefore'
+    | 'availableAfter'
+    | 'distance'
+    | 'equipment'
+  > {
+  readonly payload: number;
+  readonly year: number;
+  readonly licencePlate: string;
+}
+
+export interface TruckQuery
+  extends Query<TruckQuerySearch, TruckQuerySearchOrder> {}
 
 export class TruckResultDto {
   static fromTruckModel(

@@ -34,7 +34,7 @@ export const UserQueryParamsSchema = Joi.object({
     .optional(),
   jobTitle: Joi.string().optional(),
   email: Joi.string().optional(),
-  password: Joi.string().optional(),
+  // password: Joi.string().optional(),
 })
   .keys({
     orderby: Joi.string().valid(

@@ -38,11 +38,7 @@ export class CoordinatorDriverController {
 
   @Get()
   async getCoordinatorDrivers(
-    @Query(
-      new QueryParamsPipe<CoordinatorDriverQuerySearch>(
-        CoordinatorDriverQueryParamsSchema,
-      ),
-    )
+    @Query(new QueryParamsPipe(CoordinatorDriverQueryParamsSchema))
     coordinatorDriverQuery: CoordinatorDriverQuery,
   ): Promise<PaginatedCoordinatorDriverResultDto> {
     return this.coordinatorDriverService.getCoordinatorDrivers(

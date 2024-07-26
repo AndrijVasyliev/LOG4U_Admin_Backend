@@ -47,7 +47,7 @@ export class FileController {
 
   @Get()
   async getFiles(
-    @Query(new QueryParamsPipe<FileQuerySearch>(FileQueryParamsSchema))
+    @Query(new QueryParamsPipe(FileQueryParamsSchema))
     fileQuery: FileQuery,
   ): Promise<PaginatedFileResultDto> {
     return this.fileService.getFiles(fileQuery);

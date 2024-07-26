@@ -1483,7 +1483,7 @@
 								{
 									"key": "orderby",
 									"value": "truckNumber",
-									"description": "'truckNumber','status','crossborder','certificate','type','payload','grossWeight','make','model','year','color','vinCode','licencePlate','insideDims','doorDims'",
+									"description": "'truckNumber','status','crossborder','certificate','type','payload','grossWeight','make','model','year','color','vinCode','licencePlate'",
 									"disabled": true
 								},
 								{
@@ -3018,7 +3018,7 @@
 							"variable": [
 								{
 									"key": "fileId",
-									"value": "660c7879a5f4bea629741218"
+									"value": "669fca4364ba7a91289f1661"
 								}
 							]
 						}
@@ -3074,7 +3074,7 @@
 								{
 									"key": "file",
 									"type": "file",
-									"src": "/C:/Users/Andrey/Downloads/truck.svg"
+									"src": "/C:/Users/Andrey/Desktop/деталька/IMG_20160920_073614.jpg"
 								},
 								{
 									"key": "linkedTo",
@@ -3084,6 +3084,21 @@
 								{
 									"key": "fileOf",
 									"value": "Person",
+									"type": "text"
+								},
+								{
+									"key": "comment",
+									"value": "Some comment here",
+									"type": "text"
+								},
+								{
+									"key": "tags[key]",
+									"value": "some value",
+									"type": "text"
+								},
+								{
+									"key": "tags[otherKey]",
+									"value": "some other value",
 									"type": "text"
 								}
 							]

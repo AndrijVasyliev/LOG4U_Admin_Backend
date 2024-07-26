@@ -38,7 +38,7 @@ export class LoadController {
 
   @Get()
   async getLoads(
-    @Query(new QueryParamsPipe<LoadQuerySearch>(LoadQueryParamsSchema))
+    @Query(new QueryParamsPipe(LoadQueryParamsSchema))
     loadQuery: LoadQuery,
   ): Promise<PaginatedLoadResultDto> {
     return this.loadService.getLoads(loadQuery);

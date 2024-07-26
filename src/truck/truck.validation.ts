@@ -161,8 +161,6 @@ export const TruckQueryParamsSchema = Joi.object({
       'color',
       'vinCode',
       'licencePlate',
-      'insideDims',
-      'doorDims',
     ),
     direction: Joi.string().valid(...ORDER_VALUES),
   })

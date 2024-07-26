@@ -40,7 +40,7 @@ export class FacilityController {
 
   @Get()
   async getFacilities(
-    @Query(new QueryParamsPipe<FacilityQuerySearch>(FacilityQueryParamsSchema))
+    @Query(new QueryParamsPipe(FacilityQueryParamsSchema))
     facilityQuery: FacilityQuery,
   ): Promise<PaginatedFacilityResultDto> {
     return this.facilityService.getFacilities(facilityQuery);

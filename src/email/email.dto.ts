@@ -37,12 +37,16 @@ export interface UpdateEmailDto {
 export interface EmailQuerySearch {
   readonly state?: EmailState;
   readonly from?: string;
+  readonly toType?: EmailToType;
   readonly subject?: string;
-  readonly createdAt?: string;
-  readonly updatedAt?: string;
 }
 
-export interface EmailQuery extends Query<EmailQuerySearch> {}
+export interface EmailQueryOrder extends Omit<EmailQuerySearch, 'search'> {
+  readonly createdAt?: Date;
+  readonly updatedAt?: Date;
+}
+
+export interface EmailQuery extends Query<EmailQuerySearch, EmailQueryOrder> {}
 
 export class ToResultDto {
   static fromToModel(to: To): ToResultDto {

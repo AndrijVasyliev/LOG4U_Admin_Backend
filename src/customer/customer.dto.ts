@@ -2,7 +2,7 @@ import { PaginateResult } from 'mongoose';
 import { Customer } from './customer.schema';
 import { Query, PaginatedResultDto, CustomerType } from '../utils/general.dto';
 
-export class CreateCustomerDto {
+export interface CreateCustomerDto {
   readonly name: string;
   readonly type: CustomerType;
   readonly address: string;
@@ -16,7 +16,7 @@ export class CreateCustomerDto {
   readonly website?: string;
 }
 
-export class UpdateCustomerDto {
+export interface UpdateCustomerDto {
   readonly name?: string;
   readonly type?: CustomerType;
   readonly address?: string;
@@ -30,7 +30,7 @@ export class UpdateCustomerDto {
   readonly website?: string;
 }
 
-export class CustomerQuerySearch {
+export interface CustomerQuerySearch {
   readonly search?: string;
   readonly name?: string;
   readonly type?: CustomerType;
@@ -45,7 +45,14 @@ export class CustomerQuerySearch {
   readonly website?: string;
 }
 
-export interface CustomerQuery extends Query<CustomerQuerySearch> {}
+export interface CustomerQueryOrder
+  extends Omit<
+    CustomerQuerySearch,
+    'search' | 'address2' | 'fax' | 'website'
+  > {}
+
+export interface CustomerQuery
+  extends Query<CustomerQuerySearch, CustomerQueryOrder> {}
 
 export class CustomerResultDto {
   static fromCustomerModel(customer: Customer): CustomerResultDto {

@@ -24,7 +24,7 @@ export class PersonController {
   ) {}
   /*@Get()
   async getPersons(
-    @Query(new QueryParamsPipe<PersonQuerySearch>(PersonQueryParamsSchema))
+    @Query(new QueryParamsPipe(PersonQueryParamsSchema))
       personQuery: PersonQuery,
   ): Promise<PaginatedPersonResultDto> {
     return this.personService.getOwners(personQuery);

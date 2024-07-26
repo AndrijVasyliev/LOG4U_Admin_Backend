@@ -42,7 +42,7 @@ export class TruckController {
 
   @Get()
   async getTrucks(
-    @Query(new QueryParamsPipe<TruckQuerySearch>(TruckQueryParamsSchema))
+    @Query(new QueryParamsPipe(TruckQueryParamsSchema))
     truckQuery: TruckQuery,
   ): Promise<PaginatedTruckResultDto> {
     return this.truckService.getTrucks(truckQuery);

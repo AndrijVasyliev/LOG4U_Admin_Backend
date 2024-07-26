@@ -48,7 +48,7 @@ export class UserController {
 
   @Get()
   async getUsers(
-    @Query(new QueryParamsPipe<UserQuerySearch>(UserQueryParamsSchema))
+    @Query(new QueryParamsPipe(UserQueryParamsSchema))
     userQuery: UserQuery,
   ): Promise<PaginatedUserResultDto> {
     return this.userService.getUsers(userQuery);

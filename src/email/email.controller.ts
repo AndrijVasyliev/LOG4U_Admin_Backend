@@ -48,7 +48,7 @@ export class EmailController {
 
   @Get()
   async getEmails(
-    @Query(new QueryParamsPipe<EmailQuerySearch>(EmailQueryParamsSchema))
+    @Query(new QueryParamsPipe(EmailQueryParamsSchema))
     emailQuery: EmailQuery,
   ): Promise<PaginatedEmailResultDto> {
     return this.emailService.getEmails(emailQuery);

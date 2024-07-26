@@ -2,19 +2,19 @@ import { PaginateResult } from 'mongoose';
 import { GeoLocation, GeometryLocation, Location } from './location.schema';
 import { Query, PaginatedResultDto, GeoPointType } from '../utils/general.dto';
 
-export class AddressLocation {
+export interface AddressLocation {
   short_name: string;
   long_name: string;
   postcode_localities?: string[];
   types: string[];
 }
 
-export class GeoCode {
+export interface GeoCode {
   compound_code: string;
   global_code: string;
 }
 
-export class LatLng {
+export interface LatLng {
   lat: number;
   lng: number;
 }
@@ -64,7 +64,7 @@ export class GeoLocationDto {
   geometry: GeometryLocationDto;
 }
 
-export class CreateLocationDto {
+export interface CreateLocationDto {
   readonly zipCode: string;
   readonly name: string;
   readonly stateCode: string;
@@ -72,7 +72,7 @@ export class CreateLocationDto {
   readonly location: GeoPointType;
 }
 
-export class UpdateLocationDto {
+export interface UpdateLocationDto {
   readonly zipCode?: string;
   readonly name?: string;
   readonly stateCode?: string;
@@ -80,7 +80,7 @@ export class UpdateLocationDto {
   readonly location?: GeoPointType;
 }
 
-export class LocationQuerySearch {
+export interface LocationQuerySearch {
   readonly search?: string;
   readonly searchState?: string;
   readonly zipCode?: string;
@@ -91,9 +91,16 @@ export class LocationQuerySearch {
   readonly distance?: number;
 }
 
-export interface LocationQuery extends Query<LocationQuerySearch> {}
+export interface LocationQueryOrder
+  extends Omit<
+    LocationQuerySearch,
+    'search' | 'searchState' | 'location' | 'distance'
+  > {}
 
-export class LocationResultDto extends CreateLocationDto {
+export interface LocationQuery
+  extends Query<LocationQuerySearch, LocationQueryOrder> {}
+
+export class LocationResultDto {
   static fromLocationModel(location: Location): LocationResultDto {
     return {
       id: location._id.toString(),
@@ -106,6 +113,11 @@ export class LocationResultDto extends CreateLocationDto {
   }
 
   readonly id: string;
+  readonly zipCode: string;
+  readonly name: string;
+  readonly stateCode: string;
+  readonly stateName: string;
+  readonly location: GeoPointType;
 }
 
 export class PaginatedLocationResultDto extends PaginatedResultDto<LocationResultDto> {

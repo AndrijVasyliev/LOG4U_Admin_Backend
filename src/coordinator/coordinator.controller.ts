@@ -38,9 +38,7 @@ export class CoordinatorController {
 
   @Get()
   async getCoordinators(
-    @Query(
-      new QueryParamsPipe<CoordinatorQuerySearch>(CoordinatorQueryParamsSchema),
-    )
+    @Query(new QueryParamsPipe(CoordinatorQueryParamsSchema))
     coordinatorQuery: CoordinatorQuery,
   ): Promise<PaginatedCoordinatorResultDto> {
     return this.coordinatorService.getCoordinators(coordinatorQuery);

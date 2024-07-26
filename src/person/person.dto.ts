@@ -1,7 +1,7 @@
 import { Person } from './person.schema';
 import { PersonType } from '../utils/general.dto';
 
-export class UpdatePersonSettingsDto {
+export interface UpdatePersonSettingsDto {
   readonly isAppInDebugMode?: boolean;
   readonly useGoogleMaps?: boolean;
   readonly locationOptions?: Record<string, any>;

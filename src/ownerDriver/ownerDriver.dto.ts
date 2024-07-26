@@ -10,7 +10,7 @@ import { TruckResultDto } from '../truck/truck.dto';
 import { CoordinatorResultDto } from '../coordinator/coordinator.dto';
 import { DriverResultDto } from '../driver/driver.dto';
 
-export class CreateOwnerDriverDto {
+export interface CreateOwnerDriverDto {
   readonly fullName: string;
   readonly birthDate: Date;
   readonly citizenship: string;
@@ -39,7 +39,7 @@ export class CreateOwnerDriverDto {
   readonly appPass?: string;
 }
 
-export class UpdateOwnerDriverDto {
+export interface UpdateOwnerDriverDto {
   readonly fullName?: string;
   readonly birthDate?: Date;
   readonly citizenship?: string;
@@ -68,7 +68,7 @@ export class UpdateOwnerDriverDto {
   readonly appPass?: string;
 }
 
-export class OwnerDriverQuerySearch {
+export interface OwnerDriverQuerySearch {
   readonly search?: string;
   readonly fullName?: string;
   readonly citizenship?: string;
@@ -93,7 +93,17 @@ export class OwnerDriverQuerySearch {
   readonly owner?: string;
 }
 
-export interface OwnerDriverQuery extends Query<OwnerDriverQuerySearch> {}
+export interface OwnerDriverQueryOrder
+  extends Omit<OwnerDriverQuerySearch, 'search' | 'truckNumber' | 'owner'> {
+  readonly birthDate?: Date;
+  readonly driverLicenceExp?: Date;
+  readonly idDocExp?: Date;
+  readonly hireDate?: Date;
+  readonly insurancePolicyExp?: Date;
+}
+
+export interface OwnerDriverQuery
+  extends Query<OwnerDriverQuerySearch, OwnerDriverQueryOrder> {}
 
 export class OwnerDriverResultDto {
   static fromOwnerDriverModel(ownerDriver: OwnerDriver): OwnerDriverResultDto {

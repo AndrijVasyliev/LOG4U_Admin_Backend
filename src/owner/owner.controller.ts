@@ -38,7 +38,7 @@ export class OwnerController {
 
   @Get()
   async getOwners(
-    @Query(new QueryParamsPipe<OwnerQuerySearch>(OwnerQueryParamsSchema))
+    @Query(new QueryParamsPipe(OwnerQueryParamsSchema))
     ownerQuery: OwnerQuery,
   ): Promise<PaginatedOwnerResultDto> {
     return this.ownerService.getOwners(ownerQuery);

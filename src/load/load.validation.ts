@@ -151,8 +151,6 @@ export const LoadQueryParamsSchema = Joi.object({
     orderby: Joi.string().valid(
       'loadNumber',
       'status',
-      /*'pickDate',
-      'deliverDate',*/
       'weight',
       'rate',
       'totalCharges',

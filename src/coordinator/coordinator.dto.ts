@@ -79,7 +79,7 @@ export interface CoordinatorQuerySearch {
 }
 
 export interface CoordinatorQueryOrder
-  extends Omit<CoordinatorQuerySearch, 'search'> {
+  extends Omit<CoordinatorQuerySearch, 'search' | 'truckNumber' | 'owner'> {
   readonly birthDate?: Date;
   readonly hireDate?: Date;
   readonly insurancePolicyExp?: Date;

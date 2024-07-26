@@ -79,7 +79,7 @@ export class GeoLocation {
   @Prop({ required: false })
   place_id?: string;
 
-  @Prop({ required: false })
+  @Prop({ required: false, type: MongooseSchema.Types.Mixed })
   plus_code?: GeoCode;
 
   @Prop({ required: false })
