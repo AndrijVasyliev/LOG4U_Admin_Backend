@@ -18,7 +18,8 @@ export const CreateFileValidation = Joi.object({
     .optional(),
   tags: Joi.object()
     .pattern(Joi.string().required(), Joi.string().required())
-    .cast('map'),
+    .cast('map')
+    .optional(),
 });
 
 export const FileQueryParamsSchema = Joi.object({
@@ -29,6 +30,10 @@ export const FileQueryParamsSchema = Joi.object({
     .min(MIN_FILE_COMMENT_LENGTH)
     .max(MAX_FILE_COMMENT_LENGTH)
     .optional(),
+  tags: Joi.object()
+    .pattern(Joi.string().required(), Joi.string().required())
+    .cast('map')
+    .optional(),
 })
   .keys({
     orderby: Joi.string().valid('filename', 'createdAt'),
@@ -36,8 +41,9 @@ export const FileQueryParamsSchema = Joi.object({
   })
   .and('orderby', 'direction')
   .keys({
-    truck: MongoObjectIdValidation.optional(),
-    person: MongoObjectIdValidation.optional(),
-    load: MongoObjectIdValidation.optional(),
+    linkedTo: MongoObjectIdValidation.required(),
+    fileOf: Joi.string()
+      .valid(...FILE_OF_TYPES)
+      .optional(),
   })
-  .oxor('truck', 'person', 'load');
+  .and('linkedTo', 'fileOf');

@@ -19,12 +19,12 @@ export interface FileQuerySearch {
   // readonly search?: string;
   readonly filename?: string;
   readonly comment?: string;
-  readonly truck?: string;
-  readonly person?: string;
-  readonly load?: string;
+  readonly linkedTo: string;
+  readonly fileOf: FileOfType;
+  readonly tags?: Map<string, string>;
 }
 
-export interface FileQueryOrder extends Omit<FileQuerySearch, 'search'> {
+export interface FileQueryOrder extends Pick<FileQuerySearch, 'filename'> {
   readonly createdAt?: Date;
 }
 

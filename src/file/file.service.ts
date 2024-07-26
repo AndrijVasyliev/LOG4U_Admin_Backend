@@ -117,44 +117,35 @@ export class FileService {
       const searchParams = Object.entries(query.search);
       searchParams.forEach((entry) => {
         entry[0] !== 'search' &&
-          entry[0] !== 'truck' &&
-          entry[0] !== 'person' &&
-          entry[0] !== 'load' &&
+          entry[0] !== 'linkedTo' &&
+          entry[0] !== 'fileOf' &&
+          entry[0] !== 'tags' &&
+          entry[0] !== 'comment' &&
           (documentQuery[entry[0]] = {
             $regex: new RegExp(escapeForRegExp(entry[1]), 'i'),
           });
       });
     }
-    const metadataParts = [];
-    if (query?.search?.person) {
-      const searchObj: Record<string, any> = {};
-      searchObj['metadata.linkedTo'] = { $eq: query?.search?.person };
-      searchObj['metadata.fileOf'] = { $eq: 'Person' };
-      metadataParts.push(searchObj);
+    if (query?.search?.comment) {
+      documentQuery['metadata.comment'] = {
+        $regex: new RegExp(escapeForRegExp(query.search.comment), 'i'),
+      };
     }
-    if (query?.search?.truck) {
-      const searchObj: Record<string, any> = {};
-      searchObj['metadata.linkedTo'] = { $eq: query?.search?.truck };
-      searchObj['metadata.fileOf'] = { $eq: 'Truck' };
-      metadataParts.push(searchObj);
+    if (query?.search?.linkedTo && query?.search?.fileOf) {
+      documentQuery['metadata.linkedTo'] = { $eq: query.search.linkedTo };
+      documentQuery['metadata.fileOf'] = { $eq: query.search.fileOf };
     }
-    if (query?.search?.load) {
-      const searchObj: Record<string, any> = {};
-      searchObj['metadata.linkedTo'] = { $eq: query?.search?.load };
-      searchObj['metadata.fileOf'] = { $eq: 'Load' };
-      metadataParts.push(searchObj);
+    if (query?.search?.tags) {
+      const tags: Record<string, any>[] = [];
+      query.search.tags.forEach((tagValue, tagKey) => {
+        tags.push({ [`metadata.tags.${tagKey}`]: { $eq: tagValue } });
+      });
+      if (tags.length > 1) {
+        documentQuery['$or'] = tags;
+      } else if (tags.length === 1) {
+        Object.assign(documentQuery, tags[0]);
+      }
     }
-    if (metadataParts.length > 1) {
-      documentQuery['$or'] = metadataParts;
-    } else if (metadataParts.length === 1) {
-      Object.assign(documentQuery, metadataParts[0]);
-    }
-    /*if (query?.search?.search) {
-      const search = escapeForRegExp(query?.search?.search);
-      documentQuery.$or = [
-        { filename: { $regex: new RegExp(search, 'i') } },
-      ];
-    }*/
 
     const options: PaginateOptions = {
       limit: query.limit,

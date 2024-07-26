@@ -2935,7 +2935,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{origin}}/api/file?limit=30&offset=0&load=64d27f673413a42712c69645",
+							"raw": "{{origin}}/api/file?limit=30&offset=0&linkedTo=657e25869e04394b3780079c&fileOf=Person",
 							"host": [
 								"{{origin}}"
 							],
@@ -2954,7 +2954,7 @@
 								},
 								{
 									"key": "orderby",
-									"value": "filename",
+									"value": "createdAt",
 									"description": "'filename', 'createdAt'",
 									"disabled": true
 								},
@@ -2965,23 +2965,32 @@
 									"disabled": true
 								},
 								{
+									"key": "linkedTo",
+									"value": "657e25869e04394b3780079c"
+								},
+								{
+									"key": "fileOf",
+									"value": "Person"
+								},
+								{
 									"key": "filename",
-									"value": "image.svg",
+									"value": "IMG_20160920_073614.jpg",
 									"disabled": true
 								},
 								{
-									"key": "truck",
-									"value": "64d27f673413a42712c69645",
+									"key": "comment",
+									"value": "Some comment here",
 									"disabled": true
 								},
 								{
-									"key": "person",
-									"value": "657e25869e04394b3780079c",
+									"key": "tags[6615a1feb6d857c56844cd24]",
+									"value": "StopPickUp",
 									"disabled": true
 								},
 								{
-									"key": "load",
-									"value": "64d27f673413a42712c69645"
+									"key": "tags[6615a1feb6d857c56844cd28]",
+									"value": "StopDelivery",
+									"disabled": true
 								}
 							]
 						}
@@ -3092,13 +3101,13 @@
 									"type": "text"
 								},
 								{
-									"key": "tags[key]",
-									"value": "some value",
+									"key": "tags[6615a1feb6d857c56844cd24]",
+									"value": "StopPickUp",
 									"type": "text"
 								},
 								{
-									"key": "tags[otherKey]",
-									"value": "some other value",
+									"key": "tags[6615a1feb6d857c56844cd28]",
+									"value": "StopDelivery",
 									"type": "text"
 								}
 							]
@@ -3976,7 +3985,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{origin}}/mobileApp/file?limit=30&offset=0",
+							"raw": "{{origin}}/mobileApp/file?limit=30&offset=0&linkedTo=657e25869e04394b3780079c&fileOf=Person",
 							"host": [
 								"{{origin}}"
 							],
@@ -3995,7 +4004,7 @@
 								},
 								{
 									"key": "orderby",
-									"value": "filename",
+									"value": "createdAt",
 									"description": "'filename', 'createdAt'",
 									"disabled": true
 								},
@@ -4006,18 +4015,31 @@
 									"disabled": true
 								},
 								{
+									"key": "linkedTo",
+									"value": "657e25869e04394b3780079c"
+								},
+								{
+									"key": "fileOf",
+									"value": "Person"
+								},
+								{
 									"key": "filename",
-									"value": "image.svg",
+									"value": "IMG_20160920_073614.jpg",
 									"disabled": true
 								},
 								{
-									"key": "truck",
-									"value": "64d27f673413a42712c69645",
+									"key": "comment",
+									"value": "Some comment here",
 									"disabled": true
 								},
 								{
-									"key": "person",
-									"value": "657e25869e04394b3780079c",
+									"key": "tags[6615a1feb6d857c56844cd24]",
+									"value": "StopPickUp",
+									"disabled": true
+								},
+								{
+									"key": "tags[6615a1feb6d857c56844cd28]",
+									"value": "StopDelivery",
 									"disabled": true
 								}
 							]
@@ -4111,11 +4133,11 @@
 								{
 									"key": "file",
 									"type": "file",
-									"src": "/C:/Users/Andrey/Downloads/107enV5public.zip"
+									"src": "/C:/Users/Andrey/Desktop/деталька/IMG_20160920_073614.jpg"
 								},
 								{
 									"key": "linkedTo",
-									"value": "6505cd91c8506650905f4544",
+									"value": "657e25869e04394b3780079c",
 									"type": "text"
 								},
 								{
@@ -4125,7 +4147,17 @@
 								},
 								{
 									"key": "comment",
-									"value": "Drivers licence",
+									"value": "Some comment here",
+									"type": "text"
+								},
+								{
+									"key": "tags[6615a1feb6d857c56844cd24]",
+									"value": "StopPickUp",
+									"type": "text"
+								},
+								{
+									"key": "tags[6615a1feb6d857c56844cd28]",
+									"value": "StopDelivery",
 									"type": "text"
 								}
 							]

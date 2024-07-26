@@ -16,7 +16,6 @@ import { Response } from 'express';
 import {
   CreateFileDto,
   FileQuery,
-  FileQuerySearch,
   FileResultDto,
   PaginatedFileResultDto,
 } from './file.dto';

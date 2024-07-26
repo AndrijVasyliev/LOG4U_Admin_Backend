@@ -88,6 +88,8 @@ export class Metadata {
 export const MetadataSchema = SchemaFactory.createForClass(Metadata);
 MetadataSchema.index({ linkedTo: 1 });
 MetadataSchema.index({ fileOf: 1 });
+MetadataSchema.index({ 'tags.$**': 1 });
+MetadataSchema.index({ comment: 1 }, { sparse: true });
 
 @Schema({
   timestamps: { createdAt: 'uploadDate', updatedAt: false },
@@ -116,3 +118,4 @@ export class File {
 export const FileSchema = SchemaFactory.createForClass(File);
 
 FileSchema.index({ uploadDate: 1 });
+FileSchema.index({ filename: 1 });
