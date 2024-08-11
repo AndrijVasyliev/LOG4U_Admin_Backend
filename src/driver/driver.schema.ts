@@ -3,8 +3,8 @@ import { Document, ObjectId, Schema as MongooseSchema } from 'mongoose';
 import { LANG_PRIORITIES, OWNER_TYPES, PERSON_TYPES } from '../utils/constants';
 import { LangPriority, PersonType } from '../utils/general.dto';
 import { hash } from '../utils/hash';
-import { Owner } from '../owner/owner.schema';
-import { Truck } from '../truck/truck.schema';
+import { OwnerDocument } from '../owner/owner.schema';
+import { TruckDocument } from '../truck/truck.schema';
 
 export type DriverDocument = Driver & Document;
 
@@ -98,9 +98,9 @@ export class Driver {
     ref: 'Owner',
     autopopulate: { match: { type: { $in: OWNER_TYPES } } },
   })
-  owner: Owner;
+  owner: OwnerDocument;
 
-  readonly driveTrucks?: Truck[];
+  readonly driveTrucks?: TruckDocument[];
 
   created_at: Date;
 

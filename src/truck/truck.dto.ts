@@ -149,6 +149,7 @@ export class TruckResultDto {
       status: truck.status,
       lastLocation: truck.lastLocation,
       locationUpdatedAt: truck.locationUpdatedAt,
+      renewLocationPushMessageAt: truck.renewLocationPushMessageAt,
       availabilityLocation: truck.availabilityLocation,
       availabilityAt: truck.availabilityAt,
       availabilityAtLocal: truck.availabilityAtLocal,
@@ -196,6 +197,7 @@ export class TruckResultDto {
   readonly milesHaversine?: number;
   readonly lastLocation?: GeoPointType;
   readonly locationUpdatedAt?: Date;
+  readonly renewLocationPushMessageAt?: Date;
   readonly availabilityLocation?: GeoPointType;
   readonly availabilityAt?: Date;
   readonly availabilityAtLocal?: Date;

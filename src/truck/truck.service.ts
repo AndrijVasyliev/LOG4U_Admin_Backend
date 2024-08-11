@@ -24,12 +24,14 @@ import {
 } from './truck.dto';
 import { LoggerService } from '../logger';
 import { GoogleGeoApiService } from '../googleGeoApi/googleGeoApi.service';
+import { PushService } from '../push/push.service';
 import { UserResultDto } from '../user/user.dto';
 import {
   EARTH_RADIUS_MILES,
   MONGO_CONNECTION_NAME,
   MONGO_UNIQUE_INDEX_CONFLICT,
   TRUCK_SET_AVAIL_STATUS_JOB,
+  TRUCK_SEND_RENEW_LOCATION_PUSH_JOB,
   UNIQUE_CONSTRAIN_ERROR,
 } from '../utils/constants';
 import { escapeForRegExp } from '../utils/escapeForRegExp';
@@ -45,10 +47,12 @@ export class TruckService implements OnApplicationBootstrap, OnModuleDestroy {
   private trucksQueue?: Queue<ChangeDocument & TruckChangeDocument>;
   private readonly nearByRedundancyFactor: number;
   private readonly resetToAvailableOlderThen: number;
+  private readonly locationUpdatedLaterThen: number;
   constructor(
     @InjectModel(Truck.name, MONGO_CONNECTION_NAME)
     private readonly truckModel: PaginateModel<TruckDocument>,
     private readonly geoApiService: GoogleGeoApiService,
+    private readonly pushService: PushService,
     private readonly configService: ConfigService,
     private readonly log: LoggerService,
     private schedulerRegistry: SchedulerRegistry,
@@ -57,6 +61,9 @@ export class TruckService implements OnApplicationBootstrap, OnModuleDestroy {
       this.configService.get<number>('trucks.nearByRedundancyFactor') || 0;
     this.resetToAvailableOlderThen = configService.get<number>(
       'trucks.resetToAvailableWillBeOlderThen',
+    ) as number;
+    this.locationUpdatedLaterThen = configService.get<number>(
+      'trucks.sendRenewLocationPushOlderThen',
     ) as number;
     this.trucksChangeStream = truckModel.watch([
       {
@@ -127,16 +134,29 @@ export class TruckService implements OnApplicationBootstrap, OnModuleDestroy {
         this.log || console.log,
       );
     }
+
     this.log.debug('Starting set "Available" job');
-    const restartIntervalValue = this.configService.get<number>(
+    const restartSetAvailableIntervalValue = this.configService.get<number>(
       'trucks.taskSetAvailableInterval',
     ) as number;
     const setAvailInterval = setInterval(() => {
       this.resetToAvailableStatus.bind(this)();
-    }, restartIntervalValue);
+    }, restartSetAvailableIntervalValue);
     this.schedulerRegistry.addInterval(
       TRUCK_SET_AVAIL_STATUS_JOB,
       setAvailInterval,
+    );
+
+    this.log.debug('Starting send renew location push job');
+    const restartSendPushIntervalValue = this.configService.get<number>(
+      'trucks.taskSendRenewLocationPushInterval',
+    ) as number;
+    const setSendPushInterval = setInterval(() => {
+      this.sendRenewLocationPush.bind(this)();
+    }, restartSendPushIntervalValue);
+    this.schedulerRegistry.addInterval(
+      TRUCK_SEND_RENEW_LOCATION_PUSH_JOB,
+      setSendPushInterval,
     );
   }
 
@@ -149,6 +169,10 @@ export class TruckService implements OnApplicationBootstrap, OnModuleDestroy {
     this.log.debug('Stopping set "Available" status job');
     clearInterval(
       this.schedulerRegistry.getInterval(TRUCK_SET_AVAIL_STATUS_JOB),
+    );
+    this.log.debug('Stopping send update location push job');
+    clearInterval(
+      this.schedulerRegistry.getInterval(TRUCK_SEND_RENEW_LOCATION_PUSH_JOB),
     );
   }
 
@@ -284,6 +308,67 @@ export class TruckService implements OnApplicationBootstrap, OnModuleDestroy {
     this.log.info(
       `Updated ${result.modifiedCount === 1 ? '1 truck' : result.modifiedCount + ' trucks'} status`,
     );
+    return;
+  }
+
+  private async sendRenewLocationPush(): Promise<void> {
+    let wasFound = false;
+    let processedCount = 0;
+    this.log.info('Starting to find trucks and send push`s');
+    do {
+      const locationUpdatedLaterThenDate = new Date(
+        Date.now() - this.locationUpdatedLaterThen,
+      );
+      this.log.info(
+        `Finding truck with location updated later then ${locationUpdatedLaterThenDate}`,
+      );
+      const truck = await this.truckModel.findOneAndUpdate(
+        {
+          locationUpdatedAt: {
+            $exists: true,
+            $ne: null,
+            $lte: locationUpdatedLaterThenDate,
+          },
+          $or: [
+            { renewLocationPushMessageAt: { $exists: false } },
+            { renewLocationPushMessageAt: { $eq: null } },
+            {
+              $expr: {
+                $lt: ['$renewLocationPushMessageAt', '$locationUpdatedAt'],
+              },
+            },
+          ],
+        },
+        [
+          {
+            $set: {
+              renewLocationPushMessageAt: new Date(),
+            },
+          },
+        ],
+      );
+      if (truck) {
+        this.log.info(
+          `Found truck: ${truck._id} with location updated ${truck.locationUpdatedAt}`,
+        );
+        wasFound = true;
+        const driverId = truck.driver?._id.toString();
+        if (driverId) {
+          const newPushMessage = await this.pushService.createPush({
+            to: driverId,
+            title: 'Please log in',
+            body: 'You need to log in to app to update location',
+          });
+          await this.pushService.updatePush(newPushMessage.id, {
+            state: 'Ready for send',
+          });
+        }
+        ++processedCount;
+      } else {
+        wasFound = false;
+      }
+    } while (wasFound);
+    this.log.info(`Processed count ${processedCount}`);
     return;
   }
 

@@ -2,8 +2,8 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, ObjectId, Schema as MongooseSchema } from 'mongoose';
 import { EMAIL_STATES, EMAIL_TO_TYPES } from '../utils/constants';
 import { EmailState, EmailToType } from '../utils/general.dto';
-import { User } from '../user/user.schema';
-import { Person } from '../person/person.schema';
+import { UserDocument } from '../user/user.schema';
+import { PersonDocument } from '../person/person.schema';
 
 export type EmailDocument = Email & Document;
 
@@ -21,7 +21,7 @@ export class To {
     // ToDo: find out, why autopopulate does not work
     //autopopulate: true,
   })
-  to: User | Person;
+  to: UserDocument | PersonDocument;
 
   @Prop({
     required: true,

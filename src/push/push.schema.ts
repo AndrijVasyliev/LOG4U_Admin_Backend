@@ -2,7 +2,7 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, ObjectId, Schema as MongooseSchema } from 'mongoose';
 import { PUSH_STATES } from '../utils/constants';
 import { PushState } from '../utils/general.dto';
-import { Person } from '../person/person.schema';
+import { PersonDocument } from '../person/person.schema';
 
 export type PushDocument = Push & Document;
 
@@ -19,7 +19,7 @@ export class Push {
     ref: 'Person',
     autopopulate: true,
   })
-  to: Person;
+  to: PersonDocument;
 
   @Prop({ required: true, type: String, enum: PUSH_STATES, default: 'New' })
   state: PushState;

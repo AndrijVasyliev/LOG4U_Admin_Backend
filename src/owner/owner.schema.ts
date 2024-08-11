@@ -8,10 +8,9 @@ import {
 } from '../utils/constants';
 import { LangPriority, PersonType } from '../utils/general.dto';
 import { hash } from '../utils/hash';
-import { Truck } from '../truck/truck.schema';
-import { Driver } from '../driver/driver.schema';
-import { Coordinator } from '../coordinator/coordinator.schema';
-import { OwnerDriverSchema } from '../ownerDriver/ownerDriver.schema';
+import { TruckDocument } from '../truck/truck.schema';
+import { DriverDocument } from '../driver/driver.schema';
+import { CoordinatorDocument } from '../coordinator/coordinator.schema';
 
 export type OwnerDocument = Owner & Document;
 
@@ -93,9 +92,9 @@ export class Owner {
   })
   appPass?: string;
 
-  readonly ownTrucks?: Truck[];
-  readonly coordinators?: Coordinator[];
-  readonly drivers?: Driver[];
+  readonly ownTrucks?: TruckDocument[];
+  readonly coordinators?: CoordinatorDocument[];
+  readonly drivers?: DriverDocument[];
 
   created_at: Date;
 
@@ -126,4 +125,4 @@ OwnerSchema.virtual('drivers', {
   match: { type: { $in: DRIVER_TYPES } },
 });
 
-OwnerDriverSchema.index({ appLogin: 1 }, { unique: true, sparse: true });
+OwnerSchema.index({ appLogin: 1 }, { unique: true, sparse: true });

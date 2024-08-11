@@ -2,11 +2,11 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, ObjectId, Schema as MongooseSchema } from 'mongoose';
 
 import { FILE_OF_TYPES, MONGO_FILE_BUCKET_NAME } from '../utils/constants';
-import { Truck } from '../truck/truck.schema';
-import { Person } from '../person/person.schema';
-import { Load } from '../load/load.schema';
+import { TruckDocument } from '../truck/truck.schema';
+import { PersonDocument } from '../person/person.schema';
+import { LoadDocument } from '../load/load.schema';
 import { FileOfType } from '../utils/general.dto';
-import { User } from '../user/user.schema';
+import { UserDocument } from '../user/user.schema';
 
 export type FileDocument = File & Document;
 
@@ -66,7 +66,7 @@ export class Metadata {
     // Don`t need this as default
     // autopopulate: true,
   })
-  linkedTo: Truck | Person | Load | User;
+  linkedTo: TruckDocument | PersonDocument | LoadDocument | UserDocument;
 
   @Prop({
     required: true,

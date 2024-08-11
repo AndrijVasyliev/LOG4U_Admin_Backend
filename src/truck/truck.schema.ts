@@ -19,11 +19,13 @@ import {
   TruckStatus,
   TruckType,
 } from '../utils/general.dto';
-import { GeoPointSchema /*, Location*/ } from '../location/location.schema';
-import { Owner } from '../owner/owner.schema';
-import { Coordinator } from '../coordinator/coordinator.schema';
-import { Driver } from '../driver/driver.schema';
-import { User } from '../user/user.schema';
+import {
+  GeoPointSchema /*, LocationDocument*/,
+} from '../location/location.schema';
+import { OwnerDocument } from '../owner/owner.schema';
+import { CoordinatorDocument } from '../coordinator/coordinator.schema';
+import { DriverDocument } from '../driver/driver.schema';
+import { UserDocument } from '../user/user.schema';
 
 export type TruckDocument = Truck & Document;
 
@@ -66,10 +68,13 @@ export class Truck {
     ref: 'Location',
     autopopulate: true,
   })
-  lastCity?: Location;*/
+  lastCity?: LocationDocument;*/
 
   @Prop({ required: false })
-  locationUpdatedAt: Date;
+  locationUpdatedAt?: Date;
+
+  @Prop({ required: false })
+  renewLocationPushMessageAt?: Date;
 
   @Prop({
     required: false,
@@ -176,7 +181,7 @@ export class Truck {
     ref: 'Owner',
     autopopulate: { match: { type: { $in: OWNER_TYPES } } },
   })
-  owner: Owner;
+  owner: OwnerDocument;
 
   @Prop({
     required: false,
@@ -184,7 +189,7 @@ export class Truck {
     ref: 'Coordinator',
     autopopulate: { match: { type: { $in: COORDINATOR_TYPES } } },
   })
-  coordinator?: Coordinator;
+  coordinator?: CoordinatorDocument;
 
   @Prop({
     required: false,
@@ -192,10 +197,10 @@ export class Truck {
     ref: 'Driver',
     autopopulate: { match: { type: { $in: DRIVER_TYPES } } },
   })
-  driver?: Driver;
+  driver?: DriverDocument;
 
   @Prop({ required: false })
-  reservedAt: Date;
+  reservedAt?: Date;
 
   @Prop({
     required: false,
@@ -203,7 +208,7 @@ export class Truck {
     ref: 'User',
     autopopulate: true,
   })
-  reservedBy?: User;
+  reservedBy?: UserDocument;
 
   created_at: Date;
 

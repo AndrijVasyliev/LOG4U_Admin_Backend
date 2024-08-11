@@ -11,6 +11,8 @@ export default (): {
     nearByRedundancyFactor: number;
     resetToAvailableWillBeOlderThen: number;
     taskSetAvailableInterval: number;
+    sendRenewLocationPushOlderThen: number;
+    taskSendRenewLocationPushInterval: number;
   };
   truckQueue: {
     maxParallelTasks: number;
@@ -71,6 +73,14 @@ export default (): {
     ),
     taskSetAvailableInterval: +(
       process.env.TRUCK_TO_AVAILABLE_RESTART_INTERVAL || 1000 * 60 * 5
+    ),
+    sendRenewLocationPushOlderThen: +(
+      process.env.TRUCK_SEND_RENEW_LOCATION_PUSH_OLDER_THEN ||
+      1000 * 60 * 60 * 24 * 3
+    ),
+    taskSendRenewLocationPushInterval: +(
+      process.env.TRUCK_SEND_RENEW_LOCATION_PUSH_RESTART_INTERVAL ||
+      1000 * 60 * 5
     ),
   },
   truckQueue: {

@@ -2,8 +2,8 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, ObjectId, Schema as MongooseSchema } from 'mongoose';
 import { LANG_PRIORITIES, OWNER_TYPES, PERSON_TYPES } from '../utils/constants';
 import { LangPriority, PersonType } from '../utils/general.dto';
-import { Owner } from '../owner/owner.schema';
-import { Truck } from '../truck/truck.schema';
+import { OwnerDocument } from '../owner/owner.schema';
+import { TruckDocument } from '../truck/truck.schema';
 import { hash } from '../utils/hash';
 
 export type CoordinatorDocument = Coordinator & Document;
@@ -92,9 +92,9 @@ export class Coordinator {
     ref: 'Owner',
     autopopulate: { match: { type: { $in: OWNER_TYPES } } },
   })
-  owner: Owner;
+  owner: OwnerDocument;
 
-  readonly coordinateTrucks?: Truck[];
+  readonly coordinateTrucks?: TruckDocument[];
 
   created_at: Date;
 

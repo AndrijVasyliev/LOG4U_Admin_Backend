@@ -14,10 +14,10 @@ import {
   UnitOfWeight,
 } from '../utils/general.dto';
 // import { GeoLocationSchema, Location } from '../location/location.schema';
-import { User } from '../user/user.schema';
-import { Truck } from '../truck/truck.schema';
-import { Customer } from '../customer/customer.schema';
-import { Facility } from '../facility/facility.schema';
+import { User, UserDocument } from '../user/user.schema';
+import { TruckDocument } from '../truck/truck.schema';
+import { CustomerDocument } from '../customer/customer.schema';
+import { FacilityDocument } from '../facility/facility.schema';
 // import { GeoLocationDto } from '../location/location.dto';
 
 export enum TimeFrameType {
@@ -178,7 +178,7 @@ export class Stop {
     ref: 'Facility',
     autopopulate: true,
   })
-  facility: Facility;
+  facility: FacilityDocument;
 
   @Prop({
     required: false,
@@ -331,7 +331,7 @@ export class Load {
     ref: 'User',
     autopopulate: true,
   })
-  bookedByUser: User;
+  bookedByUser: UserDocument;
 
   @Prop({ required: false })
   bookedByCompany?: string;
@@ -353,7 +353,7 @@ export class Load {
     ref: 'Truck',
     autopopulate: true,
   })
-  truck?: Truck;
+  truck?: TruckDocument;
 
   @Prop({
     required: true,
@@ -361,7 +361,7 @@ export class Load {
     ref: 'Customer',
     autopopulate: true,
   })
-  bookedWith: Customer;
+  bookedWith: CustomerDocument;
 
   created_at: Date;
 

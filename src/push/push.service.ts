@@ -214,6 +214,9 @@ export class PushService implements OnApplicationBootstrap, OnModuleDestroy {
             push.set('state', 'Sent to user');
           } else {
             push.set('state', 'Error from receipt');
+            const person = push.to;
+            person.set('pushToken', undefined);
+            await person.save();
           }
         } else {
           throw new Error('No receipt');

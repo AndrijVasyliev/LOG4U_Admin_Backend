@@ -8,10 +8,10 @@ import {
 } from '../utils/constants';
 import { LangPriority, PersonType } from '../utils/general.dto';
 import { hash } from '../utils/hash';
-import { Truck } from '../truck/truck.schema';
-import { Coordinator } from '../coordinator/coordinator.schema';
-import { Driver, DriverSchema } from '../driver/driver.schema';
-import { Owner } from '../owner/owner.schema';
+import { TruckDocument } from '../truck/truck.schema';
+import { CoordinatorDocument } from '../coordinator/coordinator.schema';
+import { DriverDocument } from '../driver/driver.schema';
+import { OwnerDocument } from '../owner/owner.schema';
 
 export type OwnerDriverDocument = OwnerDriver & Document;
 
@@ -118,12 +118,12 @@ export class OwnerDriver {
     ref: 'Owner',
     autopopulate: false, // { match: { type: { $in: OWNER_TYPES } } },
   })
-  owner: Owner;
+  owner: OwnerDocument;
 
-  readonly ownTrucks?: Truck[];
-  readonly coordinators?: Coordinator[];
-  readonly drivers?: Driver[];
-  readonly driveTrucks?: Truck[];
+  readonly ownTrucks?: TruckDocument[];
+  readonly coordinators?: CoordinatorDocument[];
+  readonly drivers?: DriverDocument[];
+  readonly driveTrucks?: TruckDocument[];
 
   created_at: Date;
 
