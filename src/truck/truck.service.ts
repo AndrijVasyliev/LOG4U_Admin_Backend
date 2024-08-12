@@ -343,6 +343,7 @@ export class TruckService implements OnApplicationBootstrap, OnModuleDestroy {
           {
             $set: {
               renewLocationPushMessageAt: new Date(),
+              status: 'Not Available',
             },
           },
         ],
