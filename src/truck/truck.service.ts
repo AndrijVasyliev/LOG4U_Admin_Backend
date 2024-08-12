@@ -324,6 +324,7 @@ export class TruckService implements OnApplicationBootstrap, OnModuleDestroy {
       );
       const truck = await this.truckModel.findOneAndUpdate(
         {
+          status: 'Available',
           locationUpdatedAt: {
             $exists: true,
             $ne: null,
