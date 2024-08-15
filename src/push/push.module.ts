@@ -1,8 +1,9 @@
-import { Module } from '@nestjs/common';
+import { Module, forwardRef } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { PushController } from './push.controller';
 import { Push, PushSchema } from './push.schema';
 import { PushService } from './push.service';
+import { PersonModule } from '../person/person.module';
 import { MONGO_CONNECTION_NAME } from '../utils/constants';
 
 @Module({
@@ -11,6 +12,7 @@ import { MONGO_CONNECTION_NAME } from '../utils/constants';
       [{ name: Push.name, schema: PushSchema }],
       MONGO_CONNECTION_NAME,
     ),
+    forwardRef(() => PersonModule),
   ],
   exports: [PushService],
   controllers: [PushController],

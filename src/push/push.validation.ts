@@ -41,7 +41,8 @@ export const UpdatePushValidation = Joi.object({
 export const PushQueryParamsSchema = Joi.object({
   offset: Joi.number().integer().min(0).optional(),
   limit: Joi.number().integer().min(1).optional(),
-  // search: Joi.string().optional(),
+  search: Joi.string().optional(),
+  truckNumber: Joi.number().optional(),
   state: Joi.string()
     .valid(...PUSH_STATES)
     .optional(),

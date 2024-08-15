@@ -1,4 +1,4 @@
-import { mongo, PaginateModel } from 'mongoose';
+import { mongo, PaginateModel, PaginateOptions } from 'mongoose';
 import {
   ConflictException,
   Injectable,
@@ -14,11 +14,15 @@ import {
 } from '../utils/constants';
 import { Person, PersonDocument } from './person.schema';
 import {
+  PaginatedPersonResultDto,
   PersonAuthResultDto,
+  PersonQuery,
   PersonResultDto,
   UpdatePersonSettingsDto,
 } from './person.dto';
 import { AuthDataDto } from '../mobileApp/mobileApp.dto';
+import { TruckService } from '../truck/truck.service';
+import { escapeForRegExp } from '../utils/escapeForRegExp';
 
 const { MongoError } = mongo;
 
@@ -27,6 +31,7 @@ export class PersonService {
   constructor(
     @InjectModel(Person.name, MONGO_CONNECTION_NAME)
     private readonly personModel: PaginateModel<PersonDocument>,
+    private readonly truckService: TruckService,
     private readonly log: LoggerService,
   ) {}
 
@@ -45,6 +50,64 @@ export class PersonService {
   async findPersonById(id: string): Promise<PersonResultDto> {
     const person = await this.findPersonDocumentById(id);
     return PersonResultDto.fromPersonModel(person);
+  }
+
+  async getPersons(query: PersonQuery): Promise<PaginatedPersonResultDto> {
+    this.log.debug(`Searching for Owners: ${JSON.stringify(query)}`);
+
+    const documentQuery: Parameters<typeof this.personModel.paginate>[0] = {};
+    if (query.search) {
+      const searchParams = Object.entries(query.search);
+      searchParams.forEach((entry) => {
+        entry[0] !== 'search' &&
+          entry[0] !== 'truckNumber' &&
+          (documentQuery[entry[0]] = {
+            $regex: new RegExp(escapeForRegExp(entry[1]), 'i'),
+          });
+      });
+    }
+    if (query?.search?.truckNumber) {
+      const truck = await this.truckService.findTruckByNumber(
+        query.search.truckNumber,
+      );
+      const { owner, coordinator, driver } = truck;
+      const conditions = [];
+      if (owner) {
+        conditions.push({ _id: owner.id });
+      }
+      if (coordinator) {
+        conditions.push({ _id: coordinator.id });
+      }
+      if (driver) {
+        conditions.push({ _id: driver.id });
+      }
+      if (conditions.length === 1) {
+        Object.assign(documentQuery, conditions[0]);
+      }
+      if (conditions.length > 1) {
+        documentQuery.$or = conditions;
+      }
+    }
+    if (query?.search?.search) {
+      const search = escapeForRegExp(query?.search?.search);
+      documentQuery.$or = [
+        ...(documentQuery.$or ? documentQuery.$or : []),
+        { fullName: { $regex: new RegExp(search, 'i') } },
+        { email: { $regex: new RegExp(search, 'i') } },
+      ];
+    }
+
+    const options: PaginateOptions = {
+      limit: query.limit,
+      offset: query.offset,
+    };
+    if (query.direction && query.orderby) {
+      options.sort = { [query.orderby]: query.direction };
+    }
+
+    const res = await this.personModel.paginate(documentQuery, options);
+
+    return PaginatedPersonResultDto.from(res);
   }
 
   async updatePersonSettings(

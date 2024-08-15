@@ -29,7 +29,8 @@ export interface UpdatePushDto {
 }
 
 export interface PushQuerySearch {
-  // readonly search?: string;
+  readonly search?: string;
+  readonly truckNumber?: number;
   readonly state?: PushState;
   readonly title?: string;
   readonly subtitle?: string;

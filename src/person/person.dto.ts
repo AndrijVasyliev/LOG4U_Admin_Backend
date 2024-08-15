@@ -1,11 +1,25 @@
 import { Person } from './person.schema';
-import { PersonType } from '../utils/general.dto';
+import { PaginatedResultDto, PersonType, Query } from '../utils/general.dto';
+import { PaginateResult } from 'mongoose';
 
 export interface UpdatePersonSettingsDto {
   readonly isAppInDebugMode?: boolean;
   readonly useGoogleMaps?: boolean;
   readonly locationOptions?: Record<string, any>;
 }
+
+export interface PersonQuerySearch {
+  readonly search?: string;
+  readonly fullName?: string;
+  readonly email?: string;
+  readonly truckNumber?: number;
+}
+
+export interface PersonQueryOrder
+  extends Omit<PersonQuerySearch, 'search' | 'truckNumber'> {}
+
+export interface PersonQuery
+  extends Query<PersonQuerySearch, PersonQueryOrder> {}
 
 export class PersonAuthResultDto {
   static fromPersonModel(person: Person): PersonAuthResultDto {
@@ -67,4 +81,19 @@ export class PersonResultDto {
   readonly deviceIdLastChange?: Date;
   readonly pushToken?: string;
   readonly pushTokenLastChange?: Date;
+}
+
+export class PaginatedPersonResultDto extends PaginatedResultDto<PersonResultDto> {
+  static from(
+    paginatedPersons: PaginateResult<Person>,
+  ): PaginatedPersonResultDto {
+    return {
+      items: paginatedPersons.docs.map((person) =>
+        PersonResultDto.fromPersonModel(person),
+      ),
+      offset: paginatedPersons.offset,
+      limit: paginatedPersons.limit,
+      total: paginatedPersons.totalDocs,
+    };
+  }
 }

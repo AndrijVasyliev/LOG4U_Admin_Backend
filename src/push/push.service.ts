@@ -11,6 +11,8 @@ import {
   OnModuleDestroy,
   ConflictException,
   Injectable,
+  Inject,
+  forwardRef,
   InternalServerErrorException,
   NotFoundException,
 } from '@nestjs/common';
@@ -26,6 +28,7 @@ import {
   PaginatedPushResultDto,
   UpdatePushDto,
 } from './push.dto';
+import { PersonService } from '../person/person.service';
 import { LoggerService } from '../logger';
 import {
   MONGO_CONNECTION_NAME,
@@ -49,6 +52,8 @@ export class PushService implements OnApplicationBootstrap, OnModuleDestroy {
   constructor(
     @InjectModel(Push.name, MONGO_CONNECTION_NAME)
     private readonly pushModel: PaginateModel<PushDocument>,
+    @Inject(forwardRef(() => PersonService))
+    private readonly personService: PersonService,
     private readonly configService: ConfigService,
     private readonly log: LoggerService,
     private schedulerRegistry: SchedulerRegistry,
@@ -349,17 +354,26 @@ export class PushService implements OnApplicationBootstrap, OnModuleDestroy {
       const searchParams = Object.entries(query.search);
       searchParams.forEach((entry) => {
         entry[0] !== 'search' &&
+          entry[0] !== 'truckNumber' &&
           (documentQuery[entry[0]] = {
             $regex: new RegExp(escapeForRegExp(entry[1]), 'i'),
           });
       });
     }
-    /*if (query?.search?.search) {
-      const search = escapeForRegExp(query?.search?.search);
-      documentQuery.$or = [
-        { to: { $regex: new RegExp(search, 'i') } },
-      ];
-    }*/
+    if (query?.search?.search || query?.search?.truckNumber) {
+      const persons = await this.personService.getPersons({
+        limit: query.limit,
+        offset: query.offset,
+        search: {
+          search: !query?.search?.search ? undefined : query.search.search,
+          truckNumber: !query?.search?.truckNumber
+            ? undefined
+            : query.search.truckNumber,
+        },
+      });
+      const personsIds = persons.items.map((person) => person.id);
+      documentQuery.to = { $in: personsIds };
+    }
 
     const options: PaginateOptions = {
       limit: query.limit,
