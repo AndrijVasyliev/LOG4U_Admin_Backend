@@ -76,7 +76,7 @@ export default (): {
     ),
     sendRenewLocationPushOlderThen: +(
       process.env.TRUCK_SEND_RENEW_LOCATION_PUSH_OLDER_THEN ||
-      1000 * 60 * 60 * 24 * 3
+      1000 * 60 * 60 * 24 * 4
     ),
     taskSendRenewLocationPushInterval: +(
       process.env.TRUCK_SEND_RENEW_LOCATION_PUSH_RESTART_INTERVAL ||

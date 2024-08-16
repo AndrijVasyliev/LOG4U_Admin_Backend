@@ -325,18 +325,24 @@ export class TruckService implements OnApplicationBootstrap, OnModuleDestroy {
       const truck = await this.truckModel.findOneAndUpdate(
         {
           status: 'Available',
-          locationUpdatedAt: {
-            $exists: true,
-            $ne: null,
-            $lte: locationUpdatedLaterThenDate,
-          },
-          $or: [
-            { renewLocationPushMessageAt: { $exists: false } },
-            { renewLocationPushMessageAt: { $eq: null } },
+          $and: [
             {
-              $expr: {
-                $lt: ['$renewLocationPushMessageAt', '$locationUpdatedAt'],
-              },
+              $or: [
+                { locationUpdatedAt: { $exists: false } },
+                { locationUpdatedAt: { $eq: null } },
+                { locationUpdatedAt: { $lte: locationUpdatedLaterThenDate } },
+              ],
+            },
+            {
+              $or: [
+                { renewLocationPushMessageAt: { $exists: false } },
+                { renewLocationPushMessageAt: { $eq: null } },
+                {
+                  $expr: {
+                    $lt: ['$renewLocationPushMessageAt', '$locationUpdatedAt'],
+                  },
+                },
+              ],
             },
           ],
         },
@@ -358,8 +364,8 @@ export class TruckService implements OnApplicationBootstrap, OnModuleDestroy {
         if (driverId) {
           const newPushMessage = await this.pushService.createPush({
             to: driverId,
-            title: 'Please log in',
-            body: 'You need to log in to app to update location',
+            title: 'Please update your truck status.',
+            body: 'To receive a load offer, please update your app by clicking on this message and setting your status to Available.',
           });
           await this.pushService.updatePush(newPushMessage.id, {
             state: 'Ready for send',
