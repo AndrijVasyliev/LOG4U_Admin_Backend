@@ -203,7 +203,7 @@ export class PersonService {
     const { token, deviceStatus, appPermissions } = authDataDto;
 
     const person = await this.findPersonDocumentById(id);
-    if (token && person.pushToken !== token) {
+    if (typeof token === 'string' && person.pushToken !== token) {
       person.set('pushToken', token);
       person.set('pushTokenLastChange', new Date());
     }
