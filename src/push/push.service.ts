@@ -298,7 +298,9 @@ export class PushService implements OnApplicationBootstrap, OnModuleDestroy {
     return;
   }
 
-  async sendPush(push: ExpoPushMessage): Promise<ExpoPushTicket[]> {
+  async sendPush(
+    push: ExpoPushMessage & { _contentAvailable?: boolean },
+  ): Promise<ExpoPushTicket[]> {
     if (this.expo) {
       return this.expo.sendPushNotificationsAsync([push]);
     }

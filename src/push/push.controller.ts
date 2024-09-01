@@ -45,7 +45,7 @@ export class PushController {
   @Post('send')
   async sendPush(
     @Body(new BodyValidationPipe(SendPushValidation))
-    sendPushBodyDto: ExpoPushMessage,
+    sendPushBodyDto: ExpoPushMessage & { _contentAvailable?: boolean },
   ): Promise<ExpoPushTicket[]> {
     return this.pushService.sendPush(sendPushBodyDto);
   }

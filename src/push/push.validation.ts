@@ -16,6 +16,7 @@ export const SendPushValidation = Joi.object({
   channelId: Joi.string().optional(),
   categoryId: Joi.string().optional(),
   mutableContent: Joi.boolean().optional(),
+  _contentAvailable: Joi.boolean().optional(),
 });
 
 export const CreatePushValidation = Joi.object({
