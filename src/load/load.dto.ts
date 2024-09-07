@@ -1,4 +1,4 @@
-import { PaginateResult } from 'mongoose';
+import { PaginateResult, ObjectId } from 'mongoose';
 import {
   Freight,
   Load,
@@ -97,7 +97,7 @@ export interface CreateLoadDto {
   readonly bookedWith: string;
 }
 
-export interface LoadChangeUpdateDocument {
+export interface StopChangeUpdateDocument {
   readonly operationType: 'update';
   readonly updateDescription: {
     readonly updatedFields: {
@@ -106,10 +106,43 @@ export interface LoadChangeUpdateDocument {
     };
   };
 }
-export interface LoadChangeInsertDocument {
+export interface StopChangeInsertDocument {
   readonly operationType: 'insert';
   readonly fullDocument: {
     readonly stops?: (CreateStopPickUpDto | CreateStopDeliveryDto)[];
+    readonly __v?: number;
+  };
+}
+
+export type StopChangeDocument =
+  | StopChangeUpdateDocument
+  | StopChangeInsertDocument;
+
+export interface LoadChangeUpdateDocument {
+  readonly operationType: 'update';
+  readonly updateDescription: {
+    readonly updatedFields: {
+      readonly status?: LoadStatus;
+      readonly truck?: ObjectId;
+      readonly __v?: number;
+    };
+  };
+  readonly fullDocument: {
+    readonly status?: LoadStatus;
+    readonly truck?: ObjectId;
+    readonly __v?: number;
+  };
+  readonly fullDocumentBeforeChange: {
+    readonly status?: LoadStatus;
+    readonly truck?: ObjectId;
+    readonly __v?: number;
+  };
+}
+export interface LoadChangeInsertDocument {
+  readonly operationType: 'insert';
+  readonly fullDocument: {
+    readonly status?: LoadStatus;
+    readonly truck?: ObjectId;
     readonly __v?: number;
   };
 }

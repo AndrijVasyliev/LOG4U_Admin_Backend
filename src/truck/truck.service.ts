@@ -1,4 +1,4 @@
-import { mongo, PaginateModel, PaginateOptions } from 'mongoose';
+import { mongo, ObjectId, PaginateModel, PaginateOptions } from 'mongoose';
 import {
   ConflictException,
   Injectable,
@@ -37,7 +37,6 @@ import {
 import { escapeForRegExp } from '../utils/escapeForRegExp';
 import { calcDistance } from '../utils/haversine.distance';
 import { ChangeDocument, Queue } from '../utils/queue';
-import { LoadChangeDocument } from '../load/load.dto';
 
 const { MongoError, ChangeStream } = mongo;
 
@@ -176,7 +175,7 @@ export class TruckService implements OnApplicationBootstrap, OnModuleDestroy {
     );
   }
 
-  private async onNewTruck(change: ChangeDocument & LoadChangeDocument) {
+  private async onNewTruck(change: ChangeDocument & TruckChangeDocument) {
     this.log.info(`Change ${JSON.stringify(change)}`);
     const version =
       (change.operationType === 'update' &&
@@ -380,7 +379,9 @@ export class TruckService implements OnApplicationBootstrap, OnModuleDestroy {
     return;
   }
 
-  private async findTruckDocumentById(id: string): Promise<TruckDocument> {
+  private async findTruckDocumentById(
+    id: string | ObjectId,
+  ): Promise<TruckDocument> {
     this.log.debug(`Searching for Truck ${id}`);
     const truck = await this.truckModel.findOne({ _id: id });
     if (!truck) {
@@ -700,7 +701,7 @@ export class TruckService implements OnApplicationBootstrap, OnModuleDestroy {
   }
 
   async updateTruck(
-    id: string,
+    id: string | ObjectId,
     updateTruckDto: UpdateTruckDto,
     user?: UserResultDto,
   ): Promise<TruckResultDto> {

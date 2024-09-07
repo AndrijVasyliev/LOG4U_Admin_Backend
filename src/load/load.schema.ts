@@ -255,11 +255,13 @@ const timeFrameDelivery =
 timeFrameDelivery.discriminator(TimeFrameType.FCFS, TimeFrameFCFSSchema);
 timeFrameDelivery.discriminator(TimeFrameType.APPT, TimeFrameAPPTSchema);
 timeFrameDelivery.discriminator(TimeFrameType.Direct, TimeFrameDirectSchema);
+
 // Main entity
 @Schema({
   timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' },
   optimisticConcurrency: true,
   collection: 'loads',
+  collectionOptions: { changeStreamPreAndPostImages: { enabled: true } },
 })
 export class Load {
   @Prop({
@@ -283,6 +285,12 @@ export class Load {
   status: LoadStatus;
 
   @Prop({
+    required: false,
+    type: Number,
+  })
+  statusVer?: number;
+
+  @Prop({
     required: true,
     type: [StopSchema],
     autopopulate: true,
@@ -291,6 +299,18 @@ export class Load {
     | (Stop & StopPickUp & { type: StopType.PickUp })
     | (Stop & StopDelivery & { type: StopType.Delivery })
   )[];
+
+  @Prop({
+    required: false,
+    type: Date,
+  })
+  stopsStart?: Date;
+
+  @Prop({
+    required: false,
+    type: Date,
+  })
+  stopsEnd?: Date;
 
   @Prop({
     required: false,

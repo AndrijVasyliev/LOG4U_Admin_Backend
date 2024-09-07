@@ -1,9 +1,10 @@
+import { ObjectId } from 'mongoose';
 import { runWithId } from 'cls-rtracer';
 import { LoggerService } from '../logger';
 
 export type ChangeDocument = {
   _id: { data: string };
-  documentKey: { _id: string };
+  documentKey: { _id: ObjectId };
 };
 
 class TimeoutError extends Error {}
