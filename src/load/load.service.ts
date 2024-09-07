@@ -345,10 +345,12 @@ export class LoadService {
 
     if (
       ((change.operationType === 'update' &&
-        change.fullDocument.truck?.toString() !==
-          change.fullDocumentBeforeChange.truck?.toString() &&
+        (change.fullDocument.truck?.toString() !==
+          change.fullDocumentBeforeChange.truck?.toString() ||
+          change.fullDocument.status !==
+            change.fullDocumentBeforeChange.status) &&
         newTruckActivatedLoadId?.toString() !==
-          change.documentKey._id?.toString()) || //// !!!!!!!!!
+          change.documentKey._id?.toString()) ||
         (change.operationType === 'insert' && change.fullDocument.truck)) &&
       change.fullDocument.status !== 'TONU' &&
       change.fullDocument.status !== 'Cancelled' &&
