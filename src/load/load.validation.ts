@@ -92,31 +92,42 @@ export const CreateLoadValidation = Joi.object({
       'custom.stopStatusDouble':
         'More then one stop in not New or Completed status',
       'custom.stopStatusOrder': 'Wrong order of stop status',
+      'custom.stopStatusOnlyNew':
+        'If first stop status is New, all stops statuses must be New',
     })
     .custom((value: Stops, helper) => {
-      let countNotFinalState = 0;
-      for (let index = 0; index < value.length; index++) {
-        if (
-          index > 0 &&
-          !countNotFinalState &&
-          value[index - 1].status !== 'Completed'
-        ) {
-          return helper.error('custom.stopStatusOrder');
+      if (
+        value[0] &&
+        value[0].status === 'New'
+      ) {
+        if (value.find((stop) => stop.status !== 'New')) {
+          return helper.error('custom.stopStatusOnlyNew');
         }
-        value[index].status &&
-          value[index].status !== 'New' &&
-          value[index].status !== 'Completed' &&
-          countNotFinalState++;
-        if (
-          index < value.length - 1 &&
-          countNotFinalState &&
-          value[index + 1].status !== 'New'
-        ) {
-          return helper.error('custom.stopStatusOrder');
+      } else {
+        let countNotFinalState = 0;
+        for (let index = 0; index < value.length; index++) {
+          if (
+            index > 0 &&
+            !countNotFinalState &&
+            value[index - 1].status !== 'Completed'
+          ) {
+            return helper.error('custom.stopStatusOrder');
+          }
+          value[index].status &&
+            value[index].status !== 'New' &&
+            value[index].status !== 'Completed' &&
+            countNotFinalState++;
+          if (
+            index < value.length - 1 &&
+            countNotFinalState &&
+            value[index + 1].status !== 'New'
+          ) {
+            return helper.error('custom.stopStatusOrder');
+          }
         }
-      }
-      if (countNotFinalState > 1) {
-        return helper.error('custom.stopStatusDouble');
+        if (countNotFinalState > 1) {
+          return helper.error('custom.stopStatusDouble');
+        }
       }
       return value;
     })
