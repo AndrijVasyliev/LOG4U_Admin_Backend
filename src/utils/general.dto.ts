@@ -16,6 +16,8 @@ import {
   ADMIN_ROLES,
   MOBILE_ROLES,
   LOAD_STATUSES,
+  STOP_PICKUP_STATUSES,
+  STOP_DELIVERY_STATUSES,
   UNITS_OF_WEIGHT,
   UNITS_OF_LENGTH,
   ORDER_VALUES,
@@ -46,6 +48,8 @@ export type EmailState = (typeof EMAIL_STATES)[number];
 export type EmailToType = (typeof EMAIL_TO_TYPES)[number];
 export type FileOfType = (typeof FILE_OF_TYPES)[number];
 export type LoadStatus = (typeof LOAD_STATUSES)[number];
+export type StopPickupStatus = (typeof STOP_PICKUP_STATUSES)[number];
+export type StopDeliveryStatus = (typeof STOP_DELIVERY_STATUSES)[number];
 export type UnitOfWeight = (typeof UNITS_OF_WEIGHT)[number];
 export type UnitOfLength = (typeof UNITS_OF_LENGTH)[number];
 

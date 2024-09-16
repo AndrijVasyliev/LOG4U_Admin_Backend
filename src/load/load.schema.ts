@@ -3,12 +3,16 @@ import { Document, ObjectId, Schema as MongooseSchema } from 'mongoose';
 import {
   DEFAULT_CHECK_IN_AS,
   LOAD_STATUSES,
+  STOP_DELIVERY_STATUSES,
+  STOP_PICKUP_STATUSES,
   TRUCK_TYPES,
   UNITS_OF_LENGTH,
   UNITS_OF_WEIGHT,
 } from '../utils/constants';
 import {
   LoadStatus,
+  StopDeliveryStatus,
+  StopPickupStatus,
   TruckType,
   UnitOfLength,
   UnitOfWeight,
@@ -207,6 +211,14 @@ export class StopPickUp {
 
   @Prop({
     required: true,
+    type: String,
+    enum: STOP_PICKUP_STATUSES,
+    default: 'New',
+  })
+  status: StopPickupStatus;
+
+  @Prop({
+    required: true,
     type: TimeFramePickupSchema,
   })
   timeFrame:
@@ -226,6 +238,14 @@ export class StopPickUp {
 })
 export class StopDelivery {
   type = StopType.Delivery;
+
+  @Prop({
+    required: true,
+    type: String,
+    enum: STOP_DELIVERY_STATUSES,
+    default: 'New',
+  })
+  status: StopDeliveryStatus;
 
   @Prop({
     required: true,

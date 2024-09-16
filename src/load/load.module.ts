@@ -6,6 +6,7 @@ import { LoadService } from './load.service';
 import { TruckModule } from '../truck/truck.module';
 import { GoogleGeoApiModule } from '../googleGeoApi/googleGeoApi.module';
 import { MONGO_CONNECTION_NAME } from '../utils/constants';
+import { PushModule } from '../push/push.module';
 
 @Module({
   imports: [
@@ -15,6 +16,7 @@ import { MONGO_CONNECTION_NAME } from '../utils/constants';
     ),
     TruckModule,
     GoogleGeoApiModule,
+    PushModule,
   ],
   exports: [LoadService],
   controllers: [LoadController],

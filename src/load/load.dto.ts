@@ -16,6 +16,8 @@ import {
 } from './load.schema';
 import {
   LoadStatus,
+  StopDeliveryStatus,
+  StopPickupStatus,
   PaginatedResultDto,
   Query,
   TruckType,
@@ -64,6 +66,7 @@ interface CreateStopDto {
 }
 interface CreateStopPickUpDto extends CreateStopDto {
   type: StopType.PickUp;
+  status?: StopPickupStatus;
   timeFrame:
     | CreateTimeFrameFCFSDto
     | CreateTimeFrameAPPTDto
@@ -73,17 +76,20 @@ interface CreateStopPickUpDto extends CreateStopDto {
 
 interface CreateStopDeliveryDto extends CreateStopDto {
   type: StopType.Delivery;
+  status?: StopDeliveryStatus;
   timeFrame:
     | CreateTimeFrameFCFSDto
     | CreateTimeFrameAPPTDto
     | CreateTimeFrameDirectDto;
 }
 
+export type Stops = (CreateStopPickUpDto | CreateStopDeliveryDto)[];
+
 export interface CreateLoadDto {
   readonly loadNumber: number;
   readonly ref?: string[];
   readonly status: LoadStatus;
-  readonly stops: (CreateStopPickUpDto | CreateStopDeliveryDto)[];
+  readonly stops: Stops;
   readonly weight: string;
   readonly truckType: TruckType[];
   readonly rate?: number;
@@ -101,7 +107,7 @@ export interface StopChangeUpdateDocument {
   readonly operationType: 'update';
   readonly updateDescription: {
     readonly updatedFields: {
-      readonly stops?: (CreateStopPickUpDto | CreateStopDeliveryDto)[];
+      readonly stops?: Stops;
       readonly __v?: number;
     };
   };
@@ -109,7 +115,7 @@ export interface StopChangeUpdateDocument {
 export interface StopChangeInsertDocument {
   readonly operationType: 'insert';
   readonly fullDocument: {
-    readonly stops?: (CreateStopPickUpDto | CreateStopDeliveryDto)[];
+    readonly stops?: Stops;
     readonly __v?: number;
   };
 }
@@ -154,7 +160,7 @@ export type LoadChangeDocument =
 export interface UpdateLoadDto {
   readonly ref?: string[];
   readonly status?: LoadStatus;
-  readonly stops?: (CreateStopPickUpDto | CreateStopDeliveryDto)[];
+  readonly stops?: Stops;
   readonly weight?: string;
   readonly truckType?: TruckType[];
   readonly rate?: number;
@@ -273,11 +279,13 @@ class StopPickUpResultDto extends StopResultDto {
     })(stop.timeFrame);
     return {
       ...stopResult,
+      status: stop.status,
       freightList,
       timeFrame,
     };
   }
 
+  readonly status: StopPickupStatus;
   readonly timeFrame: TimeFrameFCFSResultDto | TimeFrameResultDto;
   readonly freightList: FreightResultDto[];
 }
@@ -298,10 +306,12 @@ class StopDeliveryResultDto extends StopResultDto {
     })(stop.timeFrame);
     return {
       ...stopResult,
+      status: stop.status,
       timeFrame,
     };
   }
 
+  readonly status: StopDeliveryStatus;
   readonly timeFrame: TimeFrameFCFSResultDto | TimeFrameResultDto;
 }
 

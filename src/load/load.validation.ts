@@ -1,7 +1,10 @@
 import * as Joi from 'joi';
 import { StopType, TimeFrameType } from './load.schema';
+import { Stops } from './load.dto';
 import {
   LOAD_STATUSES,
+  STOP_DELIVERY_STATUSES,
+  STOP_PICKUP_STATUSES,
   ORDER_VALUES,
   TRUCK_TYPES,
   UNITS_OF_LENGTH,
@@ -47,6 +50,9 @@ const StopValidation = Joi.object({
 
 const StopPickUpValidation = StopValidation.append({
   type: Joi.string().valid(StopType.PickUp).required(),
+  status: Joi.string()
+    .valid(...STOP_PICKUP_STATUSES)
+    .optional(),
   timeFrame: Joi.alternatives(
     TimeFrameFCFSValidation,
     TimeFrameAPPTValidation,
@@ -56,6 +62,9 @@ const StopPickUpValidation = StopValidation.append({
 });
 const StopDeliveryValidation = StopValidation.append({
   type: Joi.string().valid(StopType.Delivery).required(),
+  status: Joi.string()
+    .valid(...STOP_DELIVERY_STATUSES)
+    .optional(),
   timeFrame: Joi.alternatives(
     TimeFrameFCFSValidation,
     TimeFrameAPPTValidation,
@@ -71,11 +80,43 @@ export const CreateLoadValidation = Joi.object({
   stops: Joi.array()
     .ordered(StopPickUpValidation.required())
     .items(StopPickUpValidation, StopDeliveryValidation.required())
-    .custom((value: object[]) => {
+    .custom((value: Stops) => {
       const lastItem = value[value.length - 1];
       const validationResult = StopDeliveryValidation.validate(lastItem);
       if (validationResult.error) {
         throw validationResult.error;
+      }
+      return value;
+    })
+    .messages({
+      'custom.stopStatusDouble':
+        'More then one stop in not New or Completed status',
+      'custom.stopStatusOrder': 'Wrong order of stop status',
+    })
+    .custom((value: Stops, helper) => {
+      let countNotFinalState = 0;
+      for (let index = 0; index < value.length; index++) {
+        if (
+          index > 0 &&
+          !countNotFinalState &&
+          value[index - 1].status !== 'Completed'
+        ) {
+          return helper.error('custom.stopStatusOrder');
+        }
+        value[index].status &&
+          value[index].status !== 'New' &&
+          value[index].status !== 'Completed' &&
+          countNotFinalState++;
+        if (
+          index < value.length - 1 &&
+          countNotFinalState &&
+          value[index + 1].status !== 'New'
+        ) {
+          return helper.error('custom.stopStatusOrder');
+        }
+      }
+      if (countNotFinalState > 1) {
+        return helper.error('custom.stopStatusDouble');
       }
       return value;
     })
@@ -100,7 +141,12 @@ export const CreateLoadValidation = Joi.object({
   bookedWith: MongoObjectIdValidation.required(),
 });
 
-export const UpdateLoadValidation = Joi.object({
+export const UpdateLoadValidation = CreateLoadValidation.fork(
+  Object.keys(CreateLoadValidation.describe().keys),
+  (schema) => schema.optional(),
+);
+
+/*export const UpdateLoadValidation = Joi.object({
   ref: Joi.array().items(Joi.string().required()).min(1).max(3).optional(),
   status: Joi.string()
     .valid(...LOAD_STATUSES)
@@ -108,6 +154,30 @@ export const UpdateLoadValidation = Joi.object({
   stops: Joi.array()
     .ordered(StopPickUpValidation.required())
     .items(StopPickUpValidation, StopDeliveryValidation.required())
+    .custom((value: object[]) => {
+      const lastItem = value[value.length - 1];
+      const validationResult = StopDeliveryValidation.validate(lastItem);
+      if (validationResult.error) {
+        throw validationResult.error;
+      }
+      return value;
+    })
+    .messages({
+      'custom.stopStatus': 'More then one stop in not New or Completed status',
+    })
+    .custom((value: Stops, helper) => {
+      let countNotFinalState = 0;
+      value.forEach((stop) => {
+        stop.status &&
+          stop.status !== 'New' &&
+          stop.status !== 'Completed' &&
+          countNotFinalState++;
+      });
+      if (countNotFinalState > 1) {
+        return helper.error('custom.stopStatus');
+      }
+      return value;
+    })
     .optional(),
   weight: Joi.string().optional(),
   truckType: Joi.array()
@@ -127,7 +197,7 @@ export const UpdateLoadValidation = Joi.object({
   checkInAs: Joi.string().allow('').optional(),
   truck: Joi.alternatives(null, MongoObjectIdValidation).optional(),
   bookedWith: Joi.alternatives(null, MongoObjectIdValidation).optional(),
-});
+});*/
 
 export const LoadQueryParamsSchema = Joi.object({
   offset: Joi.number().integer().min(0).optional(),

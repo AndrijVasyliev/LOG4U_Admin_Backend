@@ -407,7 +407,7 @@ export class TruckService implements OnApplicationBootstrap, OnModuleDestroy {
     return truck;
   }
 
-  async findTruckById(id: string): Promise<TruckResultDto> {
+  async findTruckById(id: string | ObjectId): Promise<TruckResultDto> {
     const truck = await this.findTruckDocumentById(id);
     return TruckResultDto.fromTruckModel(truck);
   }

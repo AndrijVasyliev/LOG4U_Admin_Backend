@@ -161,5 +161,23 @@ export const LOAD_STATUSES = [
   'Completed',
 ] as const;
 
+export const STOP_PICKUP_STATUSES = [
+  'New',
+  'On route to PU',
+  'On site PU',
+  'Loaded, Waiting GTG',
+  'GTG',
+  'Completed',
+] as const;
+
+export const STOP_DELIVERY_STATUSES = [
+  'New',
+  'On route to DEL',
+  'On site DEL',
+  'Unloaded, Waiting GTG',
+  'GTG',
+  'Completed',
+] as const;
+
 export const UNITS_OF_WEIGHT = ['LBS', 'KG', 'TON'] as const;
 export const UNITS_OF_LENGTH = ['FT', 'IN', 'M', 'CM'] as const;

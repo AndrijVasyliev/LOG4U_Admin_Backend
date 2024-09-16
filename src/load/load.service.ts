@@ -28,6 +28,7 @@ import { GoogleGeoApiService } from '../googleGeoApi/googleGeoApi.service';
 import { escapeForRegExp } from '../utils/escapeForRegExp';
 import { ChangeDocument, Queue } from '../utils/queue';
 import { GeoPointType, LoadStatus } from '../utils/general.dto';
+import { PushService } from '../push/push.service';
 
 const { MongoError, ChangeStream } = mongo;
 
@@ -42,6 +43,7 @@ export class LoadService {
     private readonly loadModel: PaginateModel<LoadDocument>,
     private readonly truckService: TruckService,
     private readonly geoApiService: GoogleGeoApiService,
+    private readonly pushService: PushService,
     private readonly configService: ConfigService,
     private readonly log: LoggerService,
   ) {
@@ -195,8 +197,9 @@ export class LoadService {
       return;
     }
 
-    const firstStop = load.stops?.at(0);
-    const lastStop = load.stops?.at(-1);
+    const stops = load.stops;
+    const firstStop = stops?.at(0);
+    const lastStop = stops?.at(-1);
     const stopsStart =
       firstStop &&
       (firstStop.timeFrame.type === TimeFrameType.FCFS
@@ -207,15 +210,11 @@ export class LoadService {
       (lastStop.timeFrame.type === TimeFrameType.FCFS
         ? lastStop.timeFrame.to
         : lastStop.timeFrame.at);
-    load.set('stopsStart', stopsStart);
-    load.set('stopsEnd', stopsEnd);
-    await load.save();
 
     this.log.debug(
       `Stops updated. Calculating distance for Load ${load._id.toString()}.`,
     );
-    const stops = load.stops;
-    let miles = 0;
+    let miles: number | null = 0;
     let prevStopLocation: GeoPointType | undefined = undefined;
     this.log.debug('Calculating distance by roads');
     for (const stop of stops) {
@@ -224,31 +223,35 @@ export class LoadService {
           prevStopLocation,
           stop.facility.facilityLocation,
         );
+        if (partRouteLength === undefined) {
+          miles = null;
+          break;
+        }
         miles += Number(partRouteLength);
       }
       prevStopLocation = stop.facility.facilityLocation;
     }
     this.log.debug(`Calculated distance: ${miles}`);
-    if (!Number.isNaN(miles)) {
-      const updated = await this.loadModel.findOneAndUpdate(
+    const updated = await this.loadModel.findOneAndUpdate(
+      {
+        _id: change.documentKey._id,
+        stopsVer: { $lte: load.__v },
+      },
+      [
         {
-          _id: change.documentKey._id,
-          stopsVer: { $lte: load.__v },
-        },
-        [
-          {
-            $set: {
-              stopsVer: load.__v,
-              miles,
-            },
+          $set: {
+            stopsVer: load.__v,
+            miles,
+            stopsStart,
+            stopsEnd,
           },
-        ],
-      );
-      if (updated) {
-        this.log.debug(`Load ${change.documentKey._id} updated`);
-      } else {
-        this.log.warn(`Load ${change.documentKey._id} NOT updated`);
-      }
+        },
+      ],
+    );
+    if (updated) {
+      this.log.debug(`Load ${change.documentKey._id} updated`);
+    } else {
+      this.log.warn(`Load ${change.documentKey._id} NOT updated`);
     }
   }
   private async onNewLoad(change: ChangeDocument & LoadChangeDocument) {
@@ -384,9 +387,26 @@ export class LoadService {
           truckIdsToOnRoute.add(change.fullDocument.truck.toString());
           truckIdsToAvailable.delete(change.fullDocument.truck.toString());
         }
-        load.set('status', newLoadStatus);
-        await load.save();
-        this.log.debug(`Load ${load._id} saved`);
+
+        const updated = await this.loadModel.findOneAndUpdate(
+          {
+            _id: change.documentKey._id,
+            statusVer: { $lte: load.__v },
+          },
+          [
+            {
+              $set: {
+                statusVer: load.__v,
+                status: newLoadStatus,
+              },
+            },
+          ],
+        );
+        if (updated) {
+          this.log.debug(`Load ${change.documentKey._id} updated`);
+        } else {
+          this.log.warn(`Load ${change.documentKey._id} NOT updated`);
+        }
       }
     }
 
@@ -406,6 +426,42 @@ export class LoadService {
           status: 'On route',
         });
         this.log.debug(`Truck ${truckId} updated`);
+      }
+    }
+
+    if (
+      ((change.operationType === 'update' &&
+        (change.fullDocument.truck?.toString() !==
+          change.fullDocumentBeforeChange.truck?.toString() ||
+          change.fullDocument.status !==
+            change.fullDocumentBeforeChange.status)) ||
+        change.operationType === 'insert') &&
+      change.fullDocument.truck &&
+      change.fullDocument.status === 'In Progress'
+    ) {
+      this.log.debug(
+        `Load ${change.documentKey._id} in progress is now on truck ${change.fullDocument.truck}`,
+      );
+
+      const truck = await this.truckService.findTruckById(
+        change.fullDocument.truck,
+      );
+      if (truck && truck.driver) {
+        const newPushMessage = await this.pushService.createPush({
+          to: truck.driver.id,
+          title: 'New load is assigned.',
+          body: `Load #${load.loadNumber} is assigned to truck #${truck.truckNumber} and transferred to "In Progress".`,
+          data: {
+            routeTo: `/home/loads?selectedLoadId=${change.documentKey._id}&renew=data`,
+          },
+        });
+        await this.pushService.updatePush(newPushMessage.id, {
+          state: 'Ready for send',
+        });
+      } else {
+        this.log.warn(
+          `Truck ${change.fullDocument.truck} not found or have no driver assigned`,
+        );
       }
     }
   }
