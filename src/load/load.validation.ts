@@ -94,12 +94,22 @@ export const CreateLoadValidation = Joi.object({
       'custom.stopStatusOrder': 'Wrong order of stop status',
       'custom.stopStatusOnlyNew':
         'If first stop status is New, all stops statuses must be New',
+      'custom.stopStatusConsistent':
+        'If first stop have  status is New, all stops statuses must be New',
     })
     .custom((value: Stops, helper) => {
-      if (
-        value[0] &&
-        value[0].status === 'New'
-      ) {
+      if (value[0]) {
+        const stopsWithEmptyStatus = value.reduce(
+          (acc, stop) => (!stop.status ? acc + 1 : acc),
+          0,
+        );
+        if (stopsWithEmptyStatus > 0 && stopsWithEmptyStatus !== value.length) {
+          return helper.error('custom.stopStatusConsistent');
+        } else if (stopsWithEmptyStatus === value.length) {
+          return value;
+        }
+      }
+      if (value[0] && value[0].status === 'New') {
         if (value.find((stop) => stop.status !== 'New')) {
           return helper.error('custom.stopStatusOnlyNew');
         }
