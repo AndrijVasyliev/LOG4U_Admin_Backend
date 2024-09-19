@@ -383,10 +383,10 @@ export class LoadService {
         this.log.debug(
           `Changing load status from ${load.status} to ${newLoadStatus}`,
         );
-        if (change.fullDocument.truck && newLoadStatus === 'In Progress') {
+        /*if (change.fullDocument.truck && newLoadStatus === 'In Progress') {
           truckIdsToOnRoute.add(change.fullDocument.truck.toString());
           truckIdsToAvailable.delete(change.fullDocument.truck.toString());
-        }
+        }*/
 
         const updated = await this.loadModel.findOneAndUpdate(
           {
@@ -408,6 +408,19 @@ export class LoadService {
           this.log.warn(`Load ${change.documentKey._id} NOT updated`);
         }
       }
+    }
+
+    if (
+      ((change.operationType === 'update' &&
+        (change.fullDocument.truck?.toString() !==
+          change.fullDocumentBeforeChange.truck?.toString() ||
+          change.fullDocument.status !==
+            change.fullDocumentBeforeChange.status)) ||
+        change.operationType === 'insert') &&
+      change.fullDocument.status === 'In Progress' &&
+      change.fullDocument.truck
+    ) {
+      truckIdsToOnRoute.add(change.fullDocument.truck.toString());
     }
 
     if (truckIdsToAvailable.size > 0) {
