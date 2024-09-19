@@ -383,10 +383,10 @@ export class LoadService {
         this.log.debug(
           `Changing load status from ${load.status} to ${newLoadStatus}`,
         );
-        /*if (change.fullDocument.truck && newLoadStatus === 'In Progress') {
+        if (change.fullDocument.truck && newLoadStatus === 'In Progress') {
           truckIdsToOnRoute.add(change.fullDocument.truck.toString());
           truckIdsToAvailable.delete(change.fullDocument.truck.toString());
-        }*/
+        }
 
         const updated = await this.loadModel.findOneAndUpdate(
           {
