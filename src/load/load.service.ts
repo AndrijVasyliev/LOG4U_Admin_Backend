@@ -295,6 +295,8 @@ export class LoadService {
     if (
       change.operationType === 'update' &&
       change.fullDocument.status !== change.fullDocumentBeforeChange.status &&
+      change.fullDocument.truck?.toString() ===
+        change.fullDocumentBeforeChange.truck?.toString() &&
       change.fullDocument.truck &&
       change.fullDocumentBeforeChange.status === 'In Progress'
     ) {
