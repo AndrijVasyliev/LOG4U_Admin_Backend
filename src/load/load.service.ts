@@ -386,6 +386,7 @@ export class LoadService {
           `Changing load status from ${load.status} to ${newLoadStatus}`,
         );
         if (change.fullDocument.truck && newLoadStatus === 'In Progress') {
+          newTruckActivatedLoadId = change.documentKey._id;
           truckIdsToOnRoute.add(change.fullDocument.truck.toString());
           truckIdsToAvailable.delete(change.fullDocument.truck.toString());
         }
@@ -452,7 +453,9 @@ export class LoadService {
             change.fullDocumentBeforeChange.status)) ||
         change.operationType === 'insert') &&
       change.fullDocument.truck &&
-      change.fullDocument.status === 'In Progress'
+      (change.fullDocument.status === 'In Progress' ||
+        newTruckActivatedLoadId?.toString() ===
+          change.documentKey._id?.toString())
     ) {
       this.log.debug(
         `Load ${change.documentKey._id} in progress is now on truck ${change.fullDocument.truck}`,
