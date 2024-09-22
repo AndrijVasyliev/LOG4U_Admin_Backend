@@ -129,12 +129,14 @@ CoordinatorDriverSchema.virtual('coordinateTrucks', {
   ref: 'Truck',
   localField: '_id',
   foreignField: 'coordinator',
+  options: { sort: { truckNumber: 1 } },
 });
 
 CoordinatorDriverSchema.virtual('driveTrucks', {
   ref: 'Truck',
   localField: '_id',
   foreignField: 'driver',
+  options: { sort: { truckNumber: 1 } },
 });
 
 CoordinatorDriverSchema.index({ appLogin: 1 }, { unique: true, sparse: true });

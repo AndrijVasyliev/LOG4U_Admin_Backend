@@ -115,6 +115,7 @@ DriverSchema.virtual('driveTrucks', {
   ref: 'Truck',
   localField: '_id',
   foreignField: 'driver',
+  options: { sort: { truckNumber: 1 } },
 });
 
 DriverSchema.index({ appLogin: 1 }, { unique: true, sparse: true });

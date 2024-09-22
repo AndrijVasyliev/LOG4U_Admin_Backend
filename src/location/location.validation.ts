@@ -64,13 +64,10 @@ export const CreateLocationValidation = Joi.object({
   location: GeoPointBodyValidation.required(),
 });
 
-export const UpdateLocationValidation = Joi.object({
-  zipCode: Joi.string().optional(),
-  name: Joi.string().optional(),
-  stateCode: Joi.string().optional(),
-  stateName: Joi.string().optional(),
-  location: GeoPointBodyValidation,
-});
+export const UpdateLocationValidation = CreateLocationValidation.fork(
+  Object.keys(CreateLocationValidation.describe().keys),
+  (schema) => schema.optional(),
+);
 
 export const LocationQueryParamsSchema = Joi.object({
   offset: Joi.number().integer().min(0).optional(),

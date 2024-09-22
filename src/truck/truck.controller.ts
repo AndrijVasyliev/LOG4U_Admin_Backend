@@ -13,7 +13,6 @@ import { Request } from 'express';
 import {
   CreateTruckDto,
   TruckQuery,
-  TruckQuerySearch,
   TruckResultDto,
   PaginatedTruckResultDto,
   UpdateTruckDto,
@@ -69,7 +68,17 @@ export class TruckController {
     const { user } = request as unknown as {
       user: UserResultDto;
     };
-    return this.truckService.createTruck(createTruckBodyDto, user);
+    let newValues: CreateTruckDto = createTruckBodyDto;
+    if (createTruckBodyDto.reservedAt && user.id) {
+      newValues = { ...createTruckBodyDto, reservedBy: user.id };
+    } else if (createTruckBodyDto.reservedAt === null) {
+      newValues = {
+        ...createTruckBodyDto,
+        reservedAt: undefined,
+        reservedBy: undefined,
+      };
+    }
+    return this.truckService.createTruck(newValues);
   }
 
   @Patch(':truckId')
@@ -82,7 +91,17 @@ export class TruckController {
     const { user } = request as unknown as {
       user: UserResultDto;
     };
-    return this.truckService.updateTruck(truckId, updateTruckBodyDto, user);
+    let newValues: UpdateTruckDto = updateTruckBodyDto;
+    if (updateTruckBodyDto.reservedAt && user.id) {
+      newValues = { ...updateTruckBodyDto, reservedBy: user.id };
+    } else if (updateTruckBodyDto.reservedAt === null) {
+      newValues = {
+        ...updateTruckBodyDto,
+        reservedAt: undefined,
+        reservedBy: undefined,
+      };
+    }
+    return this.truckService.updateTruck(truckId, newValues);
   }
 
   @Delete(':truckId')

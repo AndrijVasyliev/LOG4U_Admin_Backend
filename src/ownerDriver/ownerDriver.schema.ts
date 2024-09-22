@@ -138,6 +138,7 @@ OwnerDriverSchema.virtual('ownTrucks', {
   ref: 'Truck',
   localField: '_id',
   foreignField: 'owner',
+  options: { sort: { truckNumber: 1 } },
 });
 
 OwnerDriverSchema.virtual('coordinators', {
@@ -145,6 +146,7 @@ OwnerDriverSchema.virtual('coordinators', {
   localField: '_id',
   foreignField: 'owner',
   match: { type: { $in: COORDINATOR_TYPES } },
+  options: { sort: { fullName: 1 } },
 });
 
 OwnerDriverSchema.virtual('drivers', {
@@ -152,12 +154,14 @@ OwnerDriverSchema.virtual('drivers', {
   localField: '_id',
   foreignField: 'owner',
   match: { type: { $in: DRIVER_TYPES } },
+  options: { sort: { fullName: 1 } },
 });
 
 OwnerDriverSchema.virtual('driveTrucks', {
   ref: 'Truck',
   localField: '_id',
   foreignField: 'driver',
+  options: { sort: { truckNumber: 1 } },
 });
 
 OwnerDriverSchema.index({ appLogin: 1 }, { unique: true, sparse: true });

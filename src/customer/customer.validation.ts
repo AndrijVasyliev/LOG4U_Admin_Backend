@@ -1,5 +1,5 @@
 import * as Joi from 'joi';
-import { CUSTOMER_TYPES, ORDER_VALUES, USER_ROLES } from '../utils/constants';
+import { CUSTOMER_TYPES, ORDER_VALUES } from '../utils/constants';
 
 export const CreateCustomerValidation = Joi.object({
   name: Joi.string().required(),
@@ -17,21 +17,10 @@ export const CreateCustomerValidation = Joi.object({
   website: Joi.string().allow('').optional(),
 });
 
-export const UpdateCustomerValidation = Joi.object({
-  name: Joi.string().optional(),
-  type: Joi.string()
-    .valid(...CUSTOMER_TYPES)
-    .optional(),
-  address: Joi.string().optional(),
-  address2: Joi.string().allow('').optional(),
-  city: Joi.string().optional(),
-  state: Joi.string().optional(),
-  zipCode: Joi.string().optional(),
-  phone: Joi.string().optional(),
-  fax: Joi.string().allow('').optional(),
-  email: Joi.string().optional(),
-  website: Joi.string().allow('').optional(),
-});
+export const UpdateCustomerValidation = CreateCustomerValidation.fork(
+  Object.keys(CreateCustomerValidation.describe().keys),
+  (schema) => schema.optional(),
+);
 
 export const CustomerQueryParamsSchema = Joi.object({
   offset: Joi.number().integer().min(0).optional(),

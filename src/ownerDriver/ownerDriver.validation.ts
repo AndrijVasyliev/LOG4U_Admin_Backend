@@ -32,36 +32,10 @@ export const CreateOwnerDriverValidation = Joi.object({
   appPass: Joi.string().allow('').optional(),
 });
 
-export const UpdateOwnerDriverValidation = Joi.object({
-  fullName: Joi.string().optional(),
-  birthDate: Joi.date().iso().optional(),
-  citizenship: Joi.string().optional(),
-  languagePriority: Joi.string()
-    .valid(...LANG_PRIORITIES)
-    .optional(),
-  driverLicenceNumber: Joi.string().optional(),
-  driverLicenceState: Joi.string().optional(),
-  driverLicenceExp: Joi.date().iso().optional(),
-  idDocId: Joi.string().allow('').optional(),
-  idDocType: Joi.string().allow('').optional(),
-  idDocExp: Joi.date().iso().optional(),
-  hiredBy: Joi.string().optional(),
-  hireDate: Joi.date().iso().optional(),
-  snn: Joi.string().optional(),
-  company: Joi.string().allow('').optional(),
-  insurancePolicy: Joi.string().optional(),
-  insurancePolicyExp: Joi.date().iso().optional(),
-  address: Joi.string().optional(),
-  phone: Joi.string().optional(),
-  phone2: Joi.string().allow('').optional(),
-  email: Joi.string().optional(),
-  emergencyContactName: Joi.string().allow('').optional(),
-  emergencyContactRel: Joi.string().allow('').optional(),
-  emergencyContactPhone: Joi.string().allow('').optional(),
-  notes: Joi.string().allow('').optional(),
-  appLogin: Joi.string().allow('').optional(),
-  appPass: Joi.string().allow('').optional(),
-});
+export const UpdateOwnerDriverValidation = CreateOwnerDriverValidation.fork(
+  Object.keys(CreateOwnerDriverValidation.describe().keys),
+  (schema) => schema.optional(),
+);
 
 export const OwnerDriverQueryParamsSchema = Joi.object({
   offset: Joi.number().integer().min(0).optional(),

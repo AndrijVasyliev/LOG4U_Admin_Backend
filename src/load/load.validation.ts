@@ -167,59 +167,6 @@ export const UpdateLoadValidation = CreateLoadValidation.fork(
   (schema) => schema.optional(),
 );
 
-/*export const UpdateLoadValidation = Joi.object({
-  ref: Joi.array().items(Joi.string().required()).min(1).max(3).optional(),
-  status: Joi.string()
-    .valid(...LOAD_STATUSES)
-    .optional(),
-  stops: Joi.array()
-    .ordered(StopPickUpValidation.required())
-    .items(StopPickUpValidation, StopDeliveryValidation.required())
-    .custom((value: object[]) => {
-      const lastItem = value[value.length - 1];
-      const validationResult = StopDeliveryValidation.validate(lastItem);
-      if (validationResult.error) {
-        throw validationResult.error;
-      }
-      return value;
-    })
-    .messages({
-      'custom.stopStatus': 'More then one stop in not New or Completed status',
-    })
-    .custom((value: Stops, helper) => {
-      let countNotFinalState = 0;
-      value.forEach((stop) => {
-        stop.status &&
-          stop.status !== 'New' &&
-          stop.status !== 'Completed' &&
-          countNotFinalState++;
-      });
-      if (countNotFinalState > 1) {
-        return helper.error('custom.stopStatus');
-      }
-      return value;
-    })
-    .optional(),
-  weight: Joi.string().optional(),
-  truckType: Joi.array()
-    .min(1)
-    .items(
-      Joi.string()
-        .valid(...TRUCK_TYPES)
-        .required(),
-    )
-    .optional(),
-  rate: Joi.number().min(0).optional(),
-  totalCharges: Joi.number().min(0).optional(),
-  currency: Joi.string().optional(),
-  bookedByUser: Joi.alternatives(null, MongoObjectIdValidation).optional(),
-  bookedByCompany: Joi.string().allow('').optional(),
-  assignTo: Joi.array().items(MongoObjectIdValidation).min(1).optional(),
-  checkInAs: Joi.string().allow('').optional(),
-  truck: Joi.alternatives(null, MongoObjectIdValidation).optional(),
-  bookedWith: Joi.alternatives(null, MongoObjectIdValidation).optional(),
-});*/
-
 export const LoadQueryParamsSchema = Joi.object({
   offset: Joi.number().integer().min(0).optional(),
   limit: Joi.number().integer().min(1).optional(),

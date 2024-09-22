@@ -1,11 +1,12 @@
 import * as Joi from 'joi';
 import { Expo } from 'expo-server-sdk';
-import { ORDER_VALUES, TRUCK_STATUSES } from '../utils/constants';
 import {
   GeoPointBodyValidation,
   LatitudeValidation,
   LongitudeValidation,
 } from '../location/location.validation';
+import { CreateLoadValidation } from '../load/load.validation';
+import { ORDER_VALUES, TRUCK_STATUSES } from '../utils/constants';
 
 export const MobileAuthValidation = Joi.object({
   force: Joi.boolean().optional(),
@@ -28,6 +29,13 @@ export const MobileAuthDataValidation = Joi.object({
     })
     .optional(),
 });
+
+export const MobileUpdateLoadValidation = CreateLoadValidation.fork(
+  Object.keys(CreateLoadValidation.describe().keys).filter(
+    (key) => key !== 'stops',
+  ),
+  (schema) => schema.forbidden(),
+);
 
 export const MobileUpdateTruckValidation = Joi.object({
   status: Joi.string()

@@ -13,12 +13,10 @@ export const CreateFacilityValidation = Joi.object({
   facilityLocation: GeoPointBodyValidation.required(),
 });
 
-export const UpdateFacilityValidation = Joi.object({
-  name: Joi.string().optional(),
-  address: Joi.string().optional(),
-  address2: Joi.string().allow('').optional(),
-  facilityLocation: GeoPointBodyValidation.optional(),
-});
+export const UpdateFacilityValidation = CreateFacilityValidation.fork(
+  Object.keys(CreateFacilityValidation.describe().keys),
+  (schema) => schema.optional(),
+);
 
 export const FacilityQueryParamsSchema = Joi.object({
   offset: Joi.number().integer().min(0).optional(),

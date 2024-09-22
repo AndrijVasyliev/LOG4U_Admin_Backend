@@ -34,37 +34,11 @@ export const CreateCoordinatorDriverValidation = Joi.object({
   owner: MongoObjectIdValidation.required(),
 });
 
-export const UpdateCoordinatorDriverValidation = Joi.object({
-  fullName: Joi.string().optional(),
-  birthDate: Joi.date().iso().optional(),
-  citizenship: Joi.string().optional(),
-  languagePriority: Joi.string()
-    .valid(...LANG_PRIORITIES)
-    .optional(),
-  driverLicenceNumber: Joi.string().optional(),
-  driverLicenceState: Joi.string().optional(),
-  driverLicenceExp: Joi.date().iso().optional(),
-  idDocId: Joi.string().allow('').optional(),
-  idDocType: Joi.string().allow('').optional(),
-  idDocExp: Joi.date().iso().optional(),
-  hiredBy: Joi.string().optional(),
-  hireDate: Joi.date().iso().optional(),
-  snn: Joi.string().optional(),
-  company: Joi.string().allow('').optional(),
-  insurancePolicy: Joi.string().optional(),
-  insurancePolicyExp: Joi.date().iso().optional(),
-  address: Joi.string().optional(),
-  phone: Joi.string().optional(),
-  phone2: Joi.string().allow('').optional(),
-  email: Joi.string().optional(),
-  emergencyContactName: Joi.string().allow('').optional(),
-  emergencyContactRel: Joi.string().allow('').optional(),
-  emergencyContactPhone: Joi.string().allow('').optional(),
-  notes: Joi.string().allow('').optional(),
-  appLogin: Joi.string().allow('').optional(),
-  appPass: Joi.string().allow('').optional(),
-  owner: MongoObjectIdValidation.optional(),
-});
+export const UpdateCoordinatorDriverValidation =
+  CreateCoordinatorDriverValidation.fork(
+    Object.keys(CreateCoordinatorDriverValidation.describe().keys),
+    (schema) => schema.optional(),
+  );
 
 export const CoordinatorDriverQueryParamsSchema = Joi.object({
   offset: Joi.number().integer().min(0).optional(),

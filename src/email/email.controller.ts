@@ -11,7 +11,6 @@ import {
 import {
   CreateEmailDto,
   EmailQuery,
-  EmailQuerySearch,
   EmailResultDto,
   PaginatedEmailResultDto,
   SendEmailDto,

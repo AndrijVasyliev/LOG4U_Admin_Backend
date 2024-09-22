@@ -11,7 +11,6 @@ import {
 import {
   CreateOwnerDto,
   OwnerQuery,
-  OwnerQuerySearch,
   OwnerResultDto,
   PaginatedOwnerResultDto,
   UpdateOwnerDto,

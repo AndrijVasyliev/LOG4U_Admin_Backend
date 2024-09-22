@@ -11,7 +11,6 @@ import {
 import {
   CreateCoordinatorDriverDto,
   CoordinatorDriverQuery,
-  CoordinatorDriverQuerySearch,
   CoordinatorDriverResultDto,
   PaginatedCoordinatorDriverResultDto,
   UpdateCoordinatorDriverDto,

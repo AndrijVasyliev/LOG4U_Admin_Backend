@@ -51,47 +51,13 @@ export const CreateTruckValidation = Joi.object({
   owner: MongoObjectIdValidation.required(),
   coordinator: Joi.alternatives(null, MongoObjectIdValidation).optional(),
   driver: Joi.alternatives(null, MongoObjectIdValidation).optional(),
-});
-
-export const UpdateTruckValidation = Joi.object({
-  truckNumber: Joi.number().min(0).optional(),
-  status: Joi.string()
-    .valid(...TRUCK_STATUSES)
-    .optional(),
-  lastLocation: GeoPointBodyValidation.optional(),
-  availabilityLocation: GeoPointBodyValidation.optional(),
-  availabilityAtLocal: Joi.date().iso().optional(),
-  crossborder: Joi.string()
-    .valid(...TRUCK_CROSSBORDERS)
-    .optional(),
-  certificate: Joi.string()
-    .valid(...TRUCK_CERTIFICATES)
-    .optional(),
-  type: Joi.string()
-    .valid(...TRUCK_TYPES)
-    .optional(),
-  equipment: Joi.array()
-    .items(
-      Joi.string()
-        .valid(...TRUCK_EQUIPMENTS)
-        .optional(),
-    )
-    .optional(),
-  payload: Joi.number().integer().optional(),
-  grossWeight: Joi.string().optional(),
-  make: Joi.string().optional(),
-  model: Joi.string().optional(),
-  year: Joi.number().integer().optional(),
-  color: Joi.string().optional(),
-  vinCode: Joi.string().optional(),
-  licencePlate: Joi.string().optional(),
-  insideDims: Joi.string().optional(),
-  doorDims: Joi.string().optional(),
-  owner: MongoObjectIdValidation.optional(),
-  coordinator: Joi.alternatives(null, MongoObjectIdValidation).optional(),
-  driver: Joi.alternatives(null, MongoObjectIdValidation).optional(),
   reservedAt: Joi.alternatives(null, Joi.date().iso().required()).optional(),
 });
+
+export const UpdateTruckValidation = CreateTruckValidation.fork(
+  Object.keys(CreateTruckValidation.describe().keys),
+  (schema) => schema.optional(),
+);
 
 export const TruckQueryParamsSchema = Joi.object({
   offset: Joi.number().integer().min(0).optional(),

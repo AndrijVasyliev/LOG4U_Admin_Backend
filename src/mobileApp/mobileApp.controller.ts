@@ -13,17 +13,16 @@ import {
 import { Request } from 'express';
 import { LoggerService } from '../logger';
 import { Public, Roles } from '../auth/auth.decorator';
-import {
-  AuthDataDto,
-  AuthDto,
-  MobileLoadQuery,
-  MobileLoadQuerySearch,
-} from './mobileApp.dto';
+import { AuthDataDto, AuthDto, MobileLoadQuery } from './mobileApp.dto';
 import { PersonAuthResultDto } from '../person/person.dto';
 import { DriverResultDto } from '../driver/driver.dto';
 import { OwnerResultDto } from '../owner/owner.dto';
 import { CoordinatorResultDto } from '../coordinator/coordinator.dto';
-import { PaginatedLoadResultDto } from '../load/load.dto';
+import {
+  LoadResultDto,
+  PaginatedLoadResultDto,
+  UpdateLoadDto,
+} from '../load/load.dto';
 import { UpdateTruckDto } from '../truck/truck.dto';
 import { PersonService } from '../person/person.service';
 import { DriverService } from '../driver/driver.service';
@@ -31,19 +30,19 @@ import { OwnerService } from '../owner/owner.service';
 import { CoordinatorService } from '../coordinator/coordinator.service';
 import { LoadService } from '../load/load.service';
 import { TruckService } from '../truck/truck.service';
-import { FileService } from '../file/file.service';
 import { QueryParamsPipe } from '../utils/queryParamsValidate.pipe';
 import {
   MobileAuthValidation,
+  MobileAuthDataValidation,
   MobileLoadQueryParamsSchema,
+  MobileUpdateLoadValidation,
   MobileUpdateTruckValidation,
   MobileUpdateTruckLocationValidation,
-  MobileAuthDataValidation,
 } from './mobileApp.validation';
 import { BodyValidationPipe } from '../utils/bodyValidate.pipe';
 import { MongoObjectIdPipe } from '../utils/idValidate.pipe';
 import { MOBILE_PATH_PREFIX } from '../utils/constants';
-
+// ToDo stripe responses of redundant data
 @Controller(`${MOBILE_PATH_PREFIX}`)
 export class MobileAppController {
   constructor(
@@ -54,7 +53,6 @@ export class MobileAppController {
     private readonly coordinatorService: CoordinatorService,
     private readonly loadService: LoadService,
     private readonly truckService: TruckService,
-    private readonly fileService: FileService,
   ) {}
   // ToDo remove after switching to new auth schema
   @Patch('auth')
@@ -147,9 +145,7 @@ export class MobileAppController {
   @Roles('Driver', 'Owner', 'OwnerDriver', 'CoordinatorDriver')
   async getLoad(
     @Req() request: Request,
-    @Query(
-      new QueryParamsPipe(MobileLoadQueryParamsSchema),
-    )
+    @Query(new QueryParamsPipe(MobileLoadQueryParamsSchema))
     loadQuery: MobileLoadQuery,
   ): Promise<PaginatedLoadResultDto> {
     const { user: person } = request as unknown as {
@@ -168,6 +164,27 @@ export class MobileAppController {
       ...loadQuery,
     });
   }
+
+  @Patch('updateLoad/:loadId')
+  @Roles('Driver', 'Owner', 'OwnerDriver', 'CoordinatorDriver')
+  async updateLoad(
+    @Req() request: Request,
+    @Param('loadId', MongoObjectIdPipe) loadId: string,
+    @Body(new BodyValidationPipe(MobileUpdateLoadValidation))
+    updateLoadBodyDto: UpdateLoadDto,
+  ): Promise<LoadResultDto> {
+    const { user: person } = request as unknown as {
+      user: PersonAuthResultDto;
+    };
+    const driver = await this.driverService.findDriverById(person.id);
+    if (!driver.driveTrucks || driver.driveTrucks.length !== 1) {
+      throw new PreconditionFailedException(
+        `Driver ${driver.fullName} have no trucks`,
+      );
+    }
+    return this.loadService.updateLoad(loadId, updateLoadBodyDto);
+  }
+
   // ToDo remove after app update
   @Patch('updateTruck')
   @Roles('Driver', 'Owner', 'OwnerDriver', 'CoordinatorDriver')

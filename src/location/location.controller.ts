@@ -16,7 +16,6 @@ import * as readline from 'node:readline';
 import {
   CreateLocationDto,
   LocationQuery,
-  LocationQuerySearch,
   LocationResultDto,
   PaginatedLocationResultDto,
   UpdateLocationDto,

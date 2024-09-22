@@ -28,31 +28,10 @@ export const CreateCoordinatorValidation = Joi.object({
   owner: MongoObjectIdValidation.required(),
 });
 
-export const UpdateCoordinatorValidation = Joi.object({
-  fullName: Joi.string().optional(),
-  birthDate: Joi.date().iso().optional(),
-  citizenship: Joi.string().optional(),
-  languagePriority: Joi.string()
-    .valid(...LANG_PRIORITIES)
-    .optional(),
-  hiredBy: Joi.string().optional(),
-  hireDate: Joi.date().iso().optional(),
-  snn: Joi.string().optional(),
-  company: Joi.string().allow('').optional(),
-  insurancePolicy: Joi.string().optional(),
-  insurancePolicyExp: Joi.date().iso().optional(),
-  address: Joi.string().optional(),
-  phone: Joi.string().optional(),
-  phone2: Joi.string().allow('').optional(),
-  email: Joi.string().optional(),
-  emergencyContactName: Joi.string().allow('').optional(),
-  emergencyContactRel: Joi.string().allow('').optional(),
-  emergencyContactPhone: Joi.string().allow('').optional(),
-  notes: Joi.string().allow('').optional(),
-  appLogin: Joi.string().allow('').optional(),
-  appPass: Joi.string().allow('').optional(),
-  owner: MongoObjectIdValidation.optional(),
-});
+export const UpdateCoordinatorValidation = CreateCoordinatorValidation.fork(
+  Object.keys(CreateCoordinatorValidation.describe().keys),
+  (schema) => schema.optional(),
+);
 
 export const CoordinatorQueryParamsSchema = Joi.object({
   offset: Joi.number().integer().min(0).optional(),

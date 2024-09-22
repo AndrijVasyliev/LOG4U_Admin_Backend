@@ -11,7 +11,6 @@ import {
 import {
   CreateLoadDto,
   LoadQuery,
-  LoadQuerySearch,
   LoadResultDto,
   PaginatedLoadResultDto,
   UpdateLoadDto,

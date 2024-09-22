@@ -11,7 +11,6 @@ import {
 import {
   CreateOwnerDriverDto,
   OwnerDriverQuery,
-  OwnerDriverQuerySearch,
   OwnerDriverResultDto,
   PaginatedOwnerDriverResultDto,
   UpdateOwnerDriverDto,

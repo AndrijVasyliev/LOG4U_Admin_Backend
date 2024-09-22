@@ -12,16 +12,10 @@ export const CreateUserValidation = Joi.object({
   password: Joi.string().required(),
 });
 
-export const UpdateUserValidation = Joi.object({
-  fullName: Joi.string().optional(),
-  phone: Joi.string().allow('').optional(),
-  userRole: Joi.string()
-    .valid(...ADMIN_ROLES)
-    .optional(),
-  jobTitle: Joi.string().optional(),
-  email: Joi.string().optional(),
-  password: Joi.string().optional(),
-});
+export const UpdateUserValidation = CreateUserValidation.fork(
+  Object.keys(CreateUserValidation.describe().keys),
+  (schema) => schema.optional(),
+);
 
 export const UserQueryParamsSchema = Joi.object({
   offset: Joi.number().integer().min(0).optional(),

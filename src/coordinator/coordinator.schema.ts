@@ -109,6 +109,7 @@ CoordinatorSchema.virtual('coordinateTrucks', {
   ref: 'Truck',
   localField: '_id',
   foreignField: 'coordinator',
+  options: { sort: { truckNumber: 1 } },
 });
 
 CoordinatorSchema.index({ appLogin: 1 }, { unique: true, sparse: true });

@@ -175,6 +175,7 @@ export interface UpdateLoadDto {
 }
 
 export interface LoadQuerySearch {
+  readonly search?: string;
   readonly loadNumber?: string;
   readonly status?: LoadStatus;
   readonly weight?: string;

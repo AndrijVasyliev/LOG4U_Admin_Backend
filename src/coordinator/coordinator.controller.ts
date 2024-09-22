@@ -11,7 +11,6 @@ import {
 import {
   CreateCoordinatorDto,
   CoordinatorQuery,
-  CoordinatorQuerySearch,
   CoordinatorResultDto,
   PaginatedCoordinatorResultDto,
   UpdateCoordinatorDto,

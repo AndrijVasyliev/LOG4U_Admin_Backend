@@ -30,33 +30,10 @@ export const CreateDriverValidation = Joi.object({
   owner: MongoObjectIdValidation.required(),
 });
 
-export const UpdateDriverValidation = Joi.object({
-  fullName: Joi.string().optional(),
-  birthDate: Joi.date().iso().optional(),
-  citizenship: Joi.string().allow('').optional(),
-  languagePriority: Joi.string()
-    .valid(...LANG_PRIORITIES)
-    .optional(),
-  driverLicenceNumber: Joi.string().optional(),
-  driverLicenceState: Joi.string().optional(),
-  driverLicenceExp: Joi.date().iso().optional(),
-  idDocId: Joi.string().allow('').optional(),
-  idDocType: Joi.string().allow('').optional(),
-  idDocExp: Joi.date().iso().optional(),
-  hiredBy: Joi.string().allow('').optional(),
-  hireDate: Joi.date().iso().optional(),
-  address: Joi.string().allow('').optional(),
-  phone: Joi.string().optional(),
-  phone2: Joi.string().allow('').optional(),
-  email: Joi.string().allow('').optional(),
-  emergencyContactName: Joi.string().allow('').optional(),
-  emergencyContactRel: Joi.string().allow('').optional(),
-  emergencyContactPhone: Joi.string().allow('').optional(),
-  notes: Joi.string().allow('').optional(),
-  appLogin: Joi.string().allow('').optional(),
-  appPass: Joi.string().allow('').optional(),
-  owner: MongoObjectIdValidation.optional(),
-});
+export const UpdateDriverValidation = CreateDriverValidation.fork(
+  Object.keys(CreateDriverValidation.describe().keys),
+  (schema) => schema.optional(),
+);
 
 export const DriverQueryParamsSchema = Joi.object({
   offset: Joi.number().integer().min(0).optional(),

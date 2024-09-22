@@ -17,7 +17,6 @@ import {
   CreatePushDto,
   PaginatedPushResultDto,
   PushQuery,
-  PushQuerySearch,
   PushResultDto,
   UpdatePushDto,
 } from './push.dto';

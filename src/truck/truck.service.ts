@@ -424,13 +424,13 @@ export class TruckService implements OnApplicationBootstrap, OnModuleDestroy {
     if (query.search) {
       const searchParams = Object.entries(query.search);
       searchParams.forEach((entry) => {
-        entry[0] !== 'availableBefore' &&
+        entry[0] !== 'search' &&
+          entry[0] !== 'availableBefore' &&
           entry[0] !== 'availableAfter' &&
           entry[0] !== 'status' &&
           entry[0] !== 'lastLocation' &&
           entry[0] !== 'distance' &&
           entry[0] !== 'truckNumber' &&
-          entry[0] !== 'search' &&
           (documentQuery[entry[0]] = {
             $regex: new RegExp(escapeForRegExp(entry[1]), 'i'),
           });
@@ -636,10 +636,7 @@ export class TruckService implements OnApplicationBootstrap, OnModuleDestroy {
     return res.map((truck) => TruckResultForMapDto.fromTruckForMapModel(truck));
   }
 
-  async createTruck(
-    createTruckDto: CreateTruckDto,
-    user?: UserResultDto,
-  ): Promise<TruckResultDto> {
+  async createTruck(createTruckDto: CreateTruckDto): Promise<TruckResultDto> {
     this.log.debug(`Creating new Truck: ${JSON.stringify(createTruckDto)}`);
     // Will be available data check
     if (
@@ -655,13 +652,6 @@ export class TruckService implements OnApplicationBootstrap, OnModuleDestroy {
     }
 
     const truck = new this.truckModel(createTruckDto);
-    // Set reserved data
-    if (createTruckDto.reservedAt && user) {
-      Object.assign(truck, { reservedBy: user.id });
-    }
-    if (createTruckDto.reservedAt === null || !user) {
-      Object.assign(truck, { reservedAt: undefined, reservedBy: undefined });
-    }
     // Set Will be available data
     if (
       createTruckDto.availabilityAtLocal ||
@@ -703,7 +693,6 @@ export class TruckService implements OnApplicationBootstrap, OnModuleDestroy {
   async updateTruck(
     id: string | ObjectId,
     updateTruckDto: UpdateTruckDto,
-    user?: UserResultDto,
   ): Promise<TruckResultDto> {
     const truck = await this.findTruckDocumentById(id);
     const currentTruckStatus = truck.status;
@@ -735,13 +724,6 @@ export class TruckService implements OnApplicationBootstrap, OnModuleDestroy {
     Object.assign(truck, updateTruckDto);
     if (updateTruckDto.lastLocation) {
       Object.assign(truck, { locationUpdatedAt: new Date() });
-    }
-    // Set reserved data
-    if (updateTruckDto.reservedAt && user) {
-      Object.assign(truck, { reservedBy: user.id });
-    }
-    if (updateTruckDto.reservedAt === null || !user) {
-      Object.assign(truck, { reservedAt: undefined, reservedBy: undefined });
     }
     // Set Will be available data
     if (

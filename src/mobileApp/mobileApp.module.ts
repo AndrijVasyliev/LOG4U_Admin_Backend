@@ -6,7 +6,6 @@ import { OwnerModule } from '../owner/owner.module';
 import { CoordinatorModule } from '../coordinator/coordinator.module';
 import { LoadModule } from '../load/load.module';
 import { TruckModule } from '../truck/truck.module';
-import { FileModule } from '../file/file.module';
 
 @Module({
   imports: [
@@ -16,7 +15,6 @@ import { FileModule } from '../file/file.module';
     OwnerModule,
     CoordinatorModule,
     PersonModule,
-    FileModule,
   ],
   exports: [],
   controllers: [MobileAppController],

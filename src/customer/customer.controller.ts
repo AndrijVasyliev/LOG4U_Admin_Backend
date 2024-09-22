@@ -1,7 +1,6 @@
 import {
   Controller,
   Get,
-  Req,
   Param,
   Query,
   Body,
@@ -9,11 +8,9 @@ import {
   Patch,
   Delete,
 } from '@nestjs/common';
-import { Request } from 'express';
 import {
   CreateCustomerDto,
   CustomerQuery,
-  CustomerQuerySearch,
   CustomerResultDto,
   PaginatedCustomerResultDto,
   UpdateCustomerDto,

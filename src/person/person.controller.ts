@@ -1,7 +1,6 @@
 import { Controller, Get, Patch, Param, Body } from '@nestjs/common';
 import {
   // PersonQuery,
-  // PersonQuerySearch,
   PersonResultDto,
   UpdatePersonSettingsDto,
   // PaginatedPersonResultDto,

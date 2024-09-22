@@ -11,7 +11,6 @@ import {
 import {
   CreateDriverDto,
   DriverQuery,
-  DriverQuerySearch,
   DriverResultDto,
   PaginatedDriverResultDto,
   UpdateDriverDto,

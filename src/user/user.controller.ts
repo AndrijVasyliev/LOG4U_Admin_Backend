@@ -13,7 +13,6 @@ import { Request } from 'express';
 import {
   CreateUserDto,
   UserQuery,
-  UserQuerySearch,
   UserResultDto,
   PaginatedUserResultDto,
   UpdateUserDto,
