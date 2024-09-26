@@ -1906,7 +1906,7 @@
 							"variable": [
 								{
 									"key": "loadId",
-									"value": "64d920416ed68dcb405fe1b3"
+									"value": "66e5ce8f751c3069d1833705"
 								}
 							]
 						}
@@ -3926,6 +3926,84 @@
 								{
 									"key": "loadId",
 									"value": "66e5ce8f751c3069d1833705"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Load Stop PickUp  status",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"status\": \"Completed\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{origin}}/mobileApp/setLoadStopPickUpStatus/:loadId/:stopId",
+							"host": [
+								"{{origin}}"
+							],
+							"path": [
+								"mobileApp",
+								"setLoadStopPickUpStatus",
+								":loadId",
+								":stopId"
+							],
+							"variable": [
+								{
+									"key": "loadId",
+									"value": "66e5ce8f751c3069d1833705"
+								},
+								{
+									"key": "stopId",
+									"value": "66effec9204feee40523c8b6"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Load Stop Delivery status",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"status\": \"Completed\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{origin}}/mobileApp/setLoadStopDeliveryStatus/:loadId/:stopId",
+							"host": [
+								"{{origin}}"
+							],
+							"path": [
+								"mobileApp",
+								"setLoadStopDeliveryStatus",
+								":loadId",
+								":stopId"
+							],
+							"variable": [
+								{
+									"key": "loadId",
+									"value": "66e5ce8f751c3069d1833705"
+								},
+								{
+									"key": "stopId",
+									"value": "66effec9204feee40523c8b7"
 								}
 							]
 						}

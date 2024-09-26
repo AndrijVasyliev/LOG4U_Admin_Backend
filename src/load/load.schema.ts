@@ -203,11 +203,65 @@ export class Stop {
 }
 
 @Schema({
+  _id: false,
+  timestamps: false,
+})
+export class StopPickUpDriversInfo {
+  @Prop({
+    required: true,
+  })
+  pieces: number;
+
+  @Prop({
+    required: true,
+    type: String,
+    enum: UNITS_OF_WEIGHT,
+  })
+  unitOfWeight: UnitOfWeight;
+
+  @Prop({
+    required: true,
+  })
+  weight: number;
+
+  @Prop({
+    required: true,
+    type: String,
+    enum: UNITS_OF_LENGTH,
+  })
+  unitOfLength: UnitOfLength;
+
+  @Prop({
+    required: true,
+  })
+  bol: string;
+
+  @Prop({
+    required: true,
+  })
+  seal: string;
+
+  @Prop({
+    required: true,
+  })
+  addressIsCorrect: string;
+}
+const StopPickUpDriversInfoSchema = SchemaFactory.createForClass(
+  StopPickUpDriversInfo,
+);
+
+@Schema({
   _id: true,
   timestamps: false,
 })
 export class StopPickUp {
   type = StopType.PickUp;
+
+  @Prop({
+    required: false,
+    type: StopPickUpDriversInfoSchema,
+  })
+  driversInfo: StopPickUpDriversInfo & Document;
 
   @Prop({
     required: true,
@@ -222,22 +276,51 @@ export class StopPickUp {
     type: TimeFramePickupSchema,
   })
   timeFrame:
-    | (TimeFramePickUp & TimeFrameASAP & { type: TimeFrameType.ASAP })
-    | (TimeFramePickUp & TimeFrameFCFS & { type: TimeFrameType.FCFS })
-    | (TimeFramePickUp & TimeFrameAPPT & { type: TimeFrameType.APPT });
+    | (TimeFramePickUp &
+        TimeFrameASAP & { type: TimeFrameType.ASAP } & Document)
+    | (TimeFramePickUp &
+        TimeFrameFCFS & { type: TimeFrameType.FCFS } & Document)
+    | (TimeFramePickUp &
+        TimeFrameAPPT & { type: TimeFrameType.APPT } & Document);
 
   @Prop({
     required: true,
     type: [FreightSchema],
   })
-  freightList: Freight[];
+  freightList: (Freight & Document)[];
 }
+
+@Schema({
+  _id: false,
+  timestamps: false,
+})
+export class StopDeliveryDriversInfo {
+  @Prop({
+    required: true,
+  })
+  bol: string;
+
+  @Prop({
+    required: true,
+  })
+  signedBy: string;
+}
+const StopDeliveryDriversInfoSchema = SchemaFactory.createForClass(
+  StopDeliveryDriversInfo,
+);
+
 @Schema({
   _id: true,
   timestamps: false,
 })
 export class StopDelivery {
   type = StopType.Delivery;
+
+  @Prop({
+    required: false,
+    type: StopDeliveryDriversInfoSchema,
+  })
+  driversInfo: StopDeliveryDriversInfo & Document;
 
   @Prop({
     required: true,
@@ -252,9 +335,12 @@ export class StopDelivery {
     type: TimeFrameDeliverySchema,
   })
   timeFrame:
-    | (TimeFrameDelivery & TimeFrameDirect & { type: TimeFrameType.Direct })
-    | (TimeFrameDelivery & TimeFrameFCFS & { type: TimeFrameType.FCFS })
-    | (TimeFrameDelivery & TimeFrameAPPT & { type: TimeFrameType.APPT });
+    | (TimeFrameDelivery &
+        TimeFrameDirect & { type: TimeFrameType.Direct } & Document)
+    | (TimeFrameDelivery &
+        TimeFrameFCFS & { type: TimeFrameType.FCFS } & Document)
+    | (TimeFrameDelivery &
+        TimeFrameAPPT & { type: TimeFrameType.APPT } & Document);
 }
 /*export type StopPickUpType = Omit<InstanceType<typeof Stop>, 'type'> &
   InstanceType<typeof StopPickUp> & { type: StopType.PickUp };
@@ -316,8 +402,8 @@ export class Load {
     autopopulate: true,
   })
   stops: (
-    | (Stop & StopPickUp & { type: StopType.PickUp })
-    | (Stop & StopDelivery & { type: StopType.Delivery })
+    | (Stop & StopPickUp & { type: StopType.PickUp } & Document)
+    | (Stop & StopDelivery & { type: StopType.Delivery } & Document)
   )[];
 
   @Prop({

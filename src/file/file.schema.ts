@@ -108,7 +108,7 @@ export class File {
     immutable: true,
     type: MetadataSchema,
   })
-  metadata: Metadata;
+  metadata: Metadata & Document;
 
   uploadDate: Date;
 

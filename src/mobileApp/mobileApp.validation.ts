@@ -6,7 +6,12 @@ import {
   LongitudeValidation,
 } from '../location/location.validation';
 import { CreateLoadValidation } from '../load/load.validation';
-import { ORDER_VALUES, TRUCK_STATUSES } from '../utils/constants';
+import {
+  ORDER_VALUES,
+  STOP_DELIVERY_STATUSES,
+  STOP_PICKUP_STATUSES,
+  TRUCK_STATUSES,
+} from '../utils/constants';
 
 export const MobileAuthValidation = Joi.object({
   force: Joi.boolean().optional(),
@@ -36,6 +41,18 @@ export const MobileUpdateLoadValidation = CreateLoadValidation.fork(
   ),
   (schema) => schema.forbidden(),
 );
+
+export const MobileUpdateLoadStopPickUpStatusValidation = Joi.object({
+  status: Joi.string()
+    .valid(...STOP_PICKUP_STATUSES)
+    .required(),
+});
+
+export const MobileUpdateLoadStopDeliveryStatusValidation = Joi.object({
+  status: Joi.string()
+    .valid(...STOP_DELIVERY_STATUSES)
+    .required(),
+});
 
 export const MobileUpdateTruckValidation = Joi.object({
   status: Joi.string()

@@ -157,6 +157,14 @@ export type LoadChangeDocument =
   | LoadChangeUpdateDocument
   | LoadChangeInsertDocument;
 
+export interface UpdateLoadStopPickUpStatusDto {
+  readonly status: StopPickupStatus;
+}
+
+export interface UpdateLoadStopDeliveryStatusDto {
+  readonly status: StopDeliveryStatus;
+}
+
 export interface UpdateLoadDto {
   readonly ref?: string[];
   readonly status?: LoadStatus;

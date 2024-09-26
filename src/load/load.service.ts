@@ -4,10 +4,11 @@ import {
   Injectable,
   InternalServerErrorException,
   NotFoundException,
+  PreconditionFailedException,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { ConfigService } from '@nestjs/config';
-import { Load, LoadDocument, TimeFrameType } from './load.schema';
+import { Load, LoadDocument, StopType, TimeFrameType } from './load.schema';
 import {
   CreateLoadDto,
   StopChangeDocument,
@@ -16,11 +17,15 @@ import {
   LoadResultDto,
   PaginatedLoadResultDto,
   UpdateLoadDto,
+  UpdateLoadStopPickUpStatusDto,
+  UpdateLoadStopDeliveryStatusDto,
 } from './load.dto';
 import { LoggerService } from '../logger';
 import {
   MONGO_CONNECTION_NAME,
   MONGO_UNIQUE_INDEX_CONFLICT,
+  STOP_DELIVERY_STATUSES,
+  STOP_PICKUP_STATUSES,
   UNIQUE_CONSTRAIN_ERROR,
 } from '../utils/constants';
 import { TruckService } from '../truck/truck.service';
@@ -667,6 +672,149 @@ export class LoadService {
           );
       }*/
       // END Calculate Truck Id to update status
+      return LoadResultDto.fromLoadModel(load);
+    } catch (e) {
+      if (!(e instanceof Error)) {
+        throw new InternalServerErrorException(JSON.stringify(e));
+      }
+      if (e instanceof MongoError && e.code === MONGO_UNIQUE_INDEX_CONFLICT) {
+        throw new ConflictException({ type: UNIQUE_CONSTRAIN_ERROR, e });
+      }
+      throw new InternalServerErrorException(e.message);
+    }
+  }
+
+  async updateLoadStopPickUpStatus(
+    id: string,
+    stopId: string,
+    updateLoadStopPickUpStatusBodyDto: UpdateLoadStopPickUpStatusDto,
+  ): Promise<LoadResultDto> {
+    const load = await this.findLoadDocumentById(id);
+
+    this.log.debug(
+      `Setting new status ${updateLoadStopPickUpStatusBodyDto.status} for Stop ${stopId} in Load ${id}`,
+    );
+
+    const stopIndex = load.stops.findIndex(
+      (stopItem) => stopItem.stopId === stopId,
+    );
+    if (!~stopIndex) {
+      throw new PreconditionFailedException(`No Stop ${stopId} in Load ${id}`);
+    }
+    const stop = load.stops[stopIndex];
+    if (stop.type !== StopType.PickUp) {
+      throw new PreconditionFailedException(
+        `Stop ${stopId} in Load ${id} has wrong type: ${stop.type}`,
+      );
+    }
+
+    const oldStopStatus = stop.status;
+    const newStopStatus = updateLoadStopPickUpStatusBodyDto.status;
+    const oldStopStatusIndex = STOP_PICKUP_STATUSES.findIndex(
+      (status) => status === oldStopStatus,
+    );
+    const newStopStatusIndex = STOP_PICKUP_STATUSES.findIndex(
+      (status) => status === newStopStatus,
+    );
+    if (Math.abs(oldStopStatusIndex - newStopStatusIndex) !== 1) {
+      throw new PreconditionFailedException(
+        `Stop status can be changed only sequentially. Got ${oldStopStatus} -> ${newStopStatus}`,
+      );
+    }
+
+    stop.set('status', newStopStatus);
+
+    if (
+      newStopStatusIndex === STOP_PICKUP_STATUSES.length - 1 &&
+      stopIndex !== load.stops.length - 1
+    ) {
+      const nextStop = load.stops[stopIndex + 1];
+      switch (nextStop.type) {
+        case StopType.PickUp:
+          nextStop.set('status', STOP_PICKUP_STATUSES[1]);
+          break;
+        case StopType.Delivery:
+          nextStop.set('status', STOP_DELIVERY_STATUSES[1]);
+          break;
+      }
+    }
+
+    try {
+      await load.save();
+      return LoadResultDto.fromLoadModel(load);
+    } catch (e) {
+      if (!(e instanceof Error)) {
+        throw new InternalServerErrorException(JSON.stringify(e));
+      }
+      if (e instanceof MongoError && e.code === MONGO_UNIQUE_INDEX_CONFLICT) {
+        throw new ConflictException({ type: UNIQUE_CONSTRAIN_ERROR, e });
+      }
+      throw new InternalServerErrorException(e.message);
+    }
+  }
+
+  async updateLoadStopDeliveryStatus(
+    id: string,
+    stopId: string,
+    updateLoadStopDeliveryStatusBodyDto: UpdateLoadStopDeliveryStatusDto,
+  ): Promise<LoadResultDto> {
+    const load = await this.findLoadDocumentById(id);
+
+    this.log.debug(
+      `Setting new status ${updateLoadStopDeliveryStatusBodyDto.status} for Stop ${stopId} in Load ${id}`,
+    );
+
+    const stopIndex = load.stops.findIndex(
+      (stopItem) => stopItem.stopId === stopId,
+    );
+    if (!~stopIndex) {
+      throw new PreconditionFailedException(`No Stop ${stopId} in Load ${id}`);
+    }
+    const stop = load.stops[stopIndex];
+    if (stop.type !== StopType.Delivery) {
+      throw new PreconditionFailedException(
+        `Stop ${stopId} in Load ${id} has wrong type: ${stop.type}`,
+      );
+    }
+
+    const oldStopStatus = stop.status;
+    const newStopStatus = updateLoadStopDeliveryStatusBodyDto.status;
+    const oldStopStatusIndex = STOP_DELIVERY_STATUSES.findIndex(
+      (status) => status === oldStopStatus,
+    );
+    const newStopStatusIndex = STOP_DELIVERY_STATUSES.findIndex(
+      (status) => status === newStopStatus,
+    );
+    if (Math.abs(oldStopStatusIndex - newStopStatusIndex) !== 1) {
+      throw new PreconditionFailedException(
+        `Stop status can be changed only sequentially. Got ${oldStopStatus} -> ${newStopStatus}`,
+      );
+    }
+
+    stop.set('status', updateLoadStopDeliveryStatusBodyDto.status);
+
+    if (
+      newStopStatusIndex === STOP_DELIVERY_STATUSES.length - 1 &&
+      stopIndex !== load.stops.length - 1
+    ) {
+      const nextStop = load.stops[stopIndex + 1];
+      switch (nextStop.type) {
+        case StopType.PickUp:
+          nextStop.set('status', STOP_PICKUP_STATUSES[1]);
+          break;
+        case StopType.Delivery:
+          nextStop.set('status', STOP_DELIVERY_STATUSES[1]);
+          break;
+      }
+    } else if (
+      newStopStatusIndex === STOP_DELIVERY_STATUSES.length - 1 &&
+      stopIndex === load.stops.length - 1
+    ) {
+      load.set('status', 'Completed');
+    }
+
+    try {
+      await load.save();
       return LoadResultDto.fromLoadModel(load);
     } catch (e) {
       if (!(e instanceof Error)) {

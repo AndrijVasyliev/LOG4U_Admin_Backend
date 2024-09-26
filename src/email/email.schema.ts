@@ -52,7 +52,7 @@ export class Email {
     immutable: true,
     type: [ToSchema],
   })
-  to: To[];
+  to: (To & Document)[];
 
   @Prop({ required: true })
   subject: string;
