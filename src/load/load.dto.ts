@@ -4,7 +4,9 @@ import {
   Load,
   Stop,
   StopDelivery,
+  StopDeliveryDriversInfo,
   StopPickUp,
+  StopPickUpDriversInfo,
   StopType,
   TimeFrameAPPT,
   TimeFrameASAP,
@@ -52,11 +54,28 @@ interface CreateTimeFrameDirectDto {
 }
 
 interface CreateFreightDto {
+  freightId?: string;
   pieces: number;
   unitOfWeight: UnitOfWeight;
   weight: number;
   unitOfLength: UnitOfLength;
   length: number;
+}
+
+export interface CreateStopPickUpDriversInfoDto {
+  driversInfoId?: string;
+  pieces: number;
+  unitOfWeight: UnitOfWeight;
+  weight: number;
+  bol: string;
+  seal: string;
+  addressIsCorrect: boolean;
+}
+
+export interface CreateStopDeliveryDriversInfoDto {
+  driversInfoId?: string;
+  bol: string;
+  signedBy: string;
 }
 
 interface CreateStopDto {
@@ -66,6 +85,7 @@ interface CreateStopDto {
 }
 interface CreateStopPickUpDto extends CreateStopDto {
   type: StopType.PickUp;
+  driversInfo?: CreateStopPickUpDriversInfoDto[];
   status?: StopPickupStatus;
   timeFrame:
     | CreateTimeFrameFCFSDto
@@ -76,6 +96,7 @@ interface CreateStopPickUpDto extends CreateStopDto {
 
 interface CreateStopDeliveryDto extends CreateStopDto {
   type: StopType.Delivery;
+  driversInfo?: CreateStopDeliveryDriversInfoDto[];
   status?: StopDeliveryStatus;
   timeFrame:
     | CreateTimeFrameFCFSDto
@@ -233,8 +254,9 @@ class TimeFrameResultDto {
 }
 
 class FreightResultDto {
-  static fromStopModel(freight: Freight): FreightResultDto {
+  static fromFreightModel(freight: Freight): FreightResultDto {
     return {
+      freightId: freight.freightId.toString(),
       pieces: freight.pieces,
       unitOfWeight: freight.unitOfWeight,
       weight: freight.weight,
@@ -243,11 +265,52 @@ class FreightResultDto {
     };
   }
 
+  readonly freightId: string;
   readonly pieces: number;
   readonly unitOfWeight: UnitOfWeight;
   readonly weight: number;
   readonly unitOfLength: UnitOfLength;
   readonly length: number;
+}
+
+class StopPickUpDriversInfoResultDto {
+  static fromStopPickUpDriversInfoModel(
+    stopPickUpDriversInfo: StopPickUpDriversInfo,
+  ): StopPickUpDriversInfoResultDto {
+    return {
+      driversInfoId: stopPickUpDriversInfo.driversInfoId.toString(),
+      pieces: stopPickUpDriversInfo.pieces,
+      unitOfWeight: stopPickUpDriversInfo.unitOfWeight,
+      weight: stopPickUpDriversInfo.weight,
+      bol: stopPickUpDriversInfo.bol,
+      seal: stopPickUpDriversInfo.seal,
+      addressIsCorrect: stopPickUpDriversInfo.addressIsCorrect,
+    };
+  }
+
+  readonly driversInfoId?: string;
+  readonly pieces: number;
+  readonly unitOfWeight: UnitOfWeight;
+  readonly weight: number;
+  readonly bol: string;
+  readonly seal: string;
+  readonly addressIsCorrect: boolean;
+}
+
+class StopDeliveryDriversInfoResultDto {
+  static fromStopDeliveryDriversInfoModel(
+    stopDeliveryDriversInfo: StopDeliveryDriversInfo,
+  ): StopDeliveryDriversInfoResultDto {
+    return {
+      driversInfoId: stopDeliveryDriversInfo.driversInfoId.toString(),
+      bol: stopDeliveryDriversInfo.bol,
+      signedBy: stopDeliveryDriversInfo.signedBy,
+    };
+  }
+
+  readonly driversInfoId: string;
+  readonly bol: string;
+  readonly signedBy: string;
 }
 
 class StopResultDto {
@@ -274,8 +337,15 @@ class StopResultDto {
 class StopPickUpResultDto extends StopResultDto {
   static fromStopPickUpModel(stop: Stop & StopPickUp): StopPickUpResultDto {
     const stopResult = StopResultDto.fromStopModel(stop);
+    const driversInfo =
+      stop.driversInfo &&
+      stop.driversInfo.map((driversInfoItem) =>
+        StopPickUpDriversInfoResultDto.fromStopPickUpDriversInfoModel(
+          driversInfoItem,
+        ),
+      );
     const freightList = stop.freightList.map((freight) =>
-      FreightResultDto.fromStopModel(freight),
+      FreightResultDto.fromFreightModel(freight),
     );
     const timeFrame = ((timeFrame) => {
       switch (timeFrame.type) {
@@ -286,15 +356,20 @@ class StopPickUpResultDto extends StopResultDto {
           return TimeFrameFCFSResultDto.fromTimeFrameFCFSModel(timeFrame);
       }
     })(stop.timeFrame);
-    return {
+    let result: StopPickUpResultDto = {
       ...stopResult,
       status: stop.status,
       freightList,
       timeFrame,
     };
+    if (driversInfo) {
+      result = { ...result, driversInfo };
+    }
+    return result;
   }
 
   readonly status: StopPickupStatus;
+  readonly driversInfo?: StopPickUpDriversInfoResultDto[];
   readonly timeFrame: TimeFrameFCFSResultDto | TimeFrameResultDto;
   readonly freightList: FreightResultDto[];
 }
@@ -304,6 +379,13 @@ class StopDeliveryResultDto extends StopResultDto {
     stop: Stop & StopDelivery,
   ): StopDeliveryResultDto {
     const stopResult = StopResultDto.fromStopModel(stop);
+    const driversInfo =
+      stop.driversInfo &&
+      stop.driversInfo.map((driversInfoItem) =>
+        StopDeliveryDriversInfoResultDto.fromStopDeliveryDriversInfoModel(
+          driversInfoItem,
+        ),
+      );
     const timeFrame = ((timeFrame) => {
       switch (timeFrame.type) {
         case TimeFrameType.APPT:
@@ -313,14 +395,19 @@ class StopDeliveryResultDto extends StopResultDto {
           return TimeFrameFCFSResultDto.fromTimeFrameFCFSModel(timeFrame);
       }
     })(stop.timeFrame);
-    return {
+    let result: StopDeliveryResultDto = {
       ...stopResult,
       status: stop.status,
       timeFrame,
     };
+    if (driversInfo) {
+      result = { ...result, driversInfo };
+    }
+    return result;
   }
 
   readonly status: StopDeliveryStatus;
+  readonly driversInfo?: StopDeliveryDriversInfoResultDto[];
   readonly timeFrame: TimeFrameFCFSResultDto | TimeFrameResultDto;
 }
 

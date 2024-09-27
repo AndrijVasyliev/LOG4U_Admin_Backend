@@ -19,11 +19,12 @@ import { DriverResultDto } from '../driver/driver.dto';
 import { OwnerResultDto } from '../owner/owner.dto';
 import { CoordinatorResultDto } from '../coordinator/coordinator.dto';
 import {
+  CreateStopDeliveryDriversInfoDto,
+  CreateStopPickUpDriversInfoDto,
   LoadResultDto,
   PaginatedLoadResultDto,
   UpdateLoadStopDeliveryStatusDto,
   UpdateLoadStopPickUpStatusDto,
-  // UpdateLoadDto,
 } from '../load/load.dto';
 import { UpdateTruckDto } from '../truck/truck.dto';
 import { PersonService } from '../person/person.service';
@@ -32,20 +33,22 @@ import { OwnerService } from '../owner/owner.service';
 import { CoordinatorService } from '../coordinator/coordinator.service';
 import { LoadService } from '../load/load.service';
 import { TruckService } from '../truck/truck.service';
-import { QueryParamsPipe } from '../utils/queryParamsValidate.pipe';
 import {
   MobileAuthValidation,
   MobileAuthDataValidation,
   MobileLoadQueryParamsSchema,
-  // MobileUpdateLoadValidation,
   MobileUpdateTruckValidation,
   MobileUpdateTruckLocationValidation,
   MobileUpdateLoadStopPickUpStatusValidation,
   MobileUpdateLoadStopDeliveryStatusValidation,
+  MobileSetStopPickUpDriversInfoValidation,
+  MobileSetStopDeliveryDriversInfoValidation,
 } from './mobileApp.validation';
+import { QueryParamsPipe } from '../utils/queryParamsValidate.pipe';
 import { BodyValidationPipe } from '../utils/bodyValidate.pipe';
 import { MongoObjectIdPipe } from '../utils/idValidate.pipe';
 import { MOBILE_PATH_PREFIX } from '../utils/constants';
+
 // ToDo stripe responses of redundant data
 @Controller(`${MOBILE_PATH_PREFIX}`)
 export class MobileAppController {
@@ -146,7 +149,7 @@ export class MobileAppController {
   }
 
   @Get('getLoad')
-  @Roles('Driver', 'Owner', 'OwnerDriver', 'CoordinatorDriver')
+  @Roles('Driver', 'OwnerDriver', 'CoordinatorDriver')
   async getLoad(
     @Req() request: Request,
     @Query(new QueryParamsPipe(MobileLoadQueryParamsSchema))
@@ -168,26 +171,6 @@ export class MobileAppController {
       ...loadQuery,
     });
   }
-
-  /*@Patch('updateLoad/:loadId')
-  @Roles('Driver', 'Owner', 'OwnerDriver', 'CoordinatorDriver')
-  async updateLoad(
-    @Req() request: Request,
-    @Param('loadId', MongoObjectIdPipe) loadId: string,
-    @Body(new BodyValidationPipe(MobileUpdateLoadValidation))
-    updateLoadBodyDto: UpdateLoadDto,
-  ): Promise<LoadResultDto> {
-    const { user: person } = request as unknown as {
-      user: PersonAuthResultDto;
-    };
-    const driver = await this.driverService.findDriverById(person.id);
-    if (!driver.driveTrucks || driver.driveTrucks.length !== 1) {
-      throw new PreconditionFailedException(
-        `Driver ${driver.fullName} have no trucks`,
-      );
-    }
-    return this.loadService.updateLoad(loadId, updateLoadBodyDto);
-  }*/
 
   @Patch('setLoadStopPickUpStatus/:loadId/:stopId')
   @Roles('Driver', 'OwnerDriver', 'CoordinatorDriver')
@@ -239,14 +222,14 @@ export class MobileAppController {
     );
   }
 
-  /*@Patch('setLoadStopPickUpDriversInfo/:loadId/:stopId')
+  @Patch('setLoadStopPickUpDriversInfo/:loadId/:stopId')
   @Roles('Driver', 'OwnerDriver', 'CoordinatorDriver')
   async updateLoadStopPickUpDriversInfo(
     @Req() request: Request,
     @Param('loadId', MongoObjectIdPipe) loadId: string,
     @Param('stopId', MongoObjectIdPipe) stopId: string,
-    @Body(new BodyValidationPipe(MobileUpdateLoadStopStatusValidation))
-    updateLoadStopStatusBodyDto: UpdateLoadStopStatusDto,
+    @Body(new BodyValidationPipe(MobileSetStopPickUpDriversInfoValidation))
+    setStopPickUpDriversInfoDto: CreateStopPickUpDriversInfoDto[],
   ): Promise<LoadResultDto> {
     const { user: person } = request as unknown as {
       user: PersonAuthResultDto;
@@ -257,12 +240,37 @@ export class MobileAppController {
         `Driver ${driver.fullName} have no trucks`,
       );
     }
-    return this.loadService.updateLoadStopDeliveryStatus(
+    return this.loadService.setStopPickUpDriversInfo(
       loadId,
       stopId,
-      updateLoadStopStatusBodyDto,
+      setStopPickUpDriversInfoDto,
     );
-  }*/
+  }
+
+  @Patch('setLoadStopDeliveryDriversInfo/:loadId/:stopId')
+  @Roles('Driver', 'OwnerDriver', 'CoordinatorDriver')
+  async updateLoadStopDeliveryDriversInfo(
+    @Req() request: Request,
+    @Param('loadId', MongoObjectIdPipe) loadId: string,
+    @Param('stopId', MongoObjectIdPipe) stopId: string,
+    @Body(new BodyValidationPipe(MobileSetStopDeliveryDriversInfoValidation))
+    setStopDeliveryDriversInfoDto: CreateStopDeliveryDriversInfoDto[],
+  ): Promise<LoadResultDto> {
+    const { user: person } = request as unknown as {
+      user: PersonAuthResultDto;
+    };
+    const driver = await this.driverService.findDriverById(person.id);
+    if (!driver.driveTrucks || driver.driveTrucks.length !== 1) {
+      throw new PreconditionFailedException(
+        `Driver ${driver.fullName} have no trucks`,
+      );
+    }
+    return this.loadService.setStopDeliveryDriversInfo(
+      loadId,
+      stopId,
+      setStopDeliveryDriversInfoDto,
+    );
+  }
 
   // ToDo remove after app update
   @Patch('updateTruck')

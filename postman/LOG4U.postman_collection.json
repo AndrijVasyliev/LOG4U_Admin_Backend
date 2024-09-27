@@ -1947,7 +1947,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"ref\":[\"firstRef\",\"secondRef\",\"thirdRef\"],\r\n    \"status\":\"Available\",\r\n    \"stops\":[{\r\n       \"type\":\"PickUp\",\r\n       \"status\": \"Completed\",\r\n       \"facility\": \"6650abdd91ec5b7d47736f0e\",\r\n       \"timeFrame\":{\r\n         \"type\":\"FCFS\",\r\n         \"from\":\"2001-07-25T20:33:52.147Z\",\r\n         \"to\":\"2001-07-27T20:33:52.147Z\"\r\n       },\r\n       \"freightList\":[{\r\n         \"pieces\":3,\r\n         \"unitOfWeight\":\"KG\",\r\n         \"weight\":100500,\r\n         \"unitOfLength\":\"M\",\r\n         \"length\":13\r\n       },{\r\n         \"pieces\":1,\r\n         \"unitOfWeight\":\"TON\",\r\n         \"weight\":104,\r\n         \"unitOfLength\":\"CM\",\r\n         \"length\":378\r\n       }],\r\n       \"addInfo\":\"Some info\"\r\n    },{\r\n       \"type\":\"PickUp\",\r\n       \"status\": \"On route to PU\",\r\n       \"facility\": \"6650abdd91ec5b7d47736f0e\",\r\n       \"timeFrame\":{\r\n         \"type\":\"FCFS\",\r\n         \"from\":\"2001-07-25T20:33:52.147Z\",\r\n         \"to\":\"2001-07-27T20:33:52.147Z\"\r\n       },\r\n       \"freightList\":[{\r\n         \"pieces\":3,\r\n         \"unitOfWeight\":\"KG\",\r\n         \"weight\":100500,\r\n         \"unitOfLength\":\"M\",\r\n         \"length\":13\r\n       },{\r\n         \"pieces\":1,\r\n         \"unitOfWeight\":\"TON\",\r\n         \"weight\":104,\r\n         \"unitOfLength\":\"CM\",\r\n         \"length\":378\r\n       }],\r\n       \"addInfo\":\"Some info\"\r\n    },{\r\n      \"type\":\"Delivery\",\r\n      \"status\": \"New\",\r\n      \"facility\":\"6650abea91ec5b7d47736f11\",\r\n      \"timeFrame\":{\r\n         \"type\":\"Direct\",\r\n         \"at\":\"2002-07-25T20:33:52.147Z\"\r\n       },\r\n       \"addInfo\":\"Some other info\"\r\n    }],\r\n    \"weight\":\"100 ton\",\r\n    \"truckType\":[\r\n        \"Cargo van\",\r\n        \"Reefer van\",\r\n        \"Box truck\",\r\n        \"Box truck Reefer\",\r\n        \"Straight truck\",\r\n        \"Hotshot\",\r\n        \"Tented box\"\r\n    ],\r\n    \"rate\":3.56,\r\n    \"totalCharges\":5.34,\r\n    \"currency\":\"HUY\",\r\n    \"bookedByUser\":\"64d254f5139acc9c42bf63bb\",\r\n    \"bookedByCompany\":\"Horns & Hoofs\",\r\n    \"assignTo\":[\"64d254fc139acc9c42bf63bf\",\"64d254fd139acc9c42bf63c1\"],\r\n    \"checkInAs\":\"MegoCorp\",\r\n    \"truck\":\"64d28a394be7ed067d17b845\",\r\n    \"bookedWith\":\"66367b84a7d923452894b871\"\r\n}",
+							"raw": "{\r\n    \"ref\":[\"firstRef\",\"secondRef\",\"thirdRef\"],\r\n    \"status\":\"Available\",\r\n    \"stops\":[{\r\n       \"stopId\": \"66f701c555f40dfbec31cf96\",\r\n       \"type\":\"PickUp\",\r\n       \"driversInfo\": [\r\n         {\r\n           \"pieces\":2,\r\n           \"unitOfWeight\":\"KG\",\r\n           \"weight\": 468,\r\n           \"bol\":\"66f701c555f40dfbec31cf97\",\r\n           \"seal\":\"kukuseal\",\r\n           \"addressIsCorrect\":true\r\n         },\r\n         {\r\n           \"pieces\":2,\r\n           \"unitOfWeight\":\"KG\",\r\n           \"weight\": 468,\r\n           \"bol\":\"66f701c555f40dfbec31cf98\",\r\n           \"seal\":\"kukuseal\",\r\n           \"addressIsCorrect\":true\r\n         }\r\n       ],\r\n       \"status\": \"Completed\",\r\n       \"facility\": \"6650abdd91ec5b7d47736f0e\",\r\n       \"timeFrame\":{\r\n         \"type\":\"FCFS\",\r\n         \"from\":\"2001-07-25T20:33:52.147Z\",\r\n         \"to\":\"2001-07-27T20:33:52.147Z\"\r\n       },\r\n       \"freightList\":[{\r\n         \"freightId\": \"66f701c555f40dfbec31cf97\",\r\n         \"pieces\":3,\r\n         \"unitOfWeight\":\"KG\",\r\n         \"weight\":100500,\r\n         \"unitOfLength\":\"M\",\r\n         \"length\":13\r\n       },{\r\n         \"freightId\": \"66f701c555f40dfbec31cf98\",\r\n         \"pieces\":1,\r\n         \"unitOfWeight\":\"TON\",\r\n         \"weight\":104,\r\n         \"unitOfLength\":\"CM\",\r\n         \"length\":378\r\n       }],\r\n       \"addInfo\":\"Some info\"\r\n    },{\r\n       \"stopId\": \"66f701c555f40dfbec31cf99\",\r\n       \"type\":\"PickUp\",\r\n       \"status\": \"On route to PU\",\r\n       \"driversInfo\": [{\r\n         \"pieces\":2,\r\n         \"unitOfWeight\":\"KG\",\r\n         \"weight\": 468,\r\n         \"bol\":\"66f701c555f40dfbec31cf9b\",\r\n         \"seal\":\"kukuseal\",\r\n         \"addressIsCorrect\":true\r\n       }],\r\n       \"facility\": \"6650abdd91ec5b7d47736f0e\",\r\n       \"timeFrame\":{\r\n         \"type\":\"FCFS\",\r\n         \"from\":\"2001-07-25T20:33:52.147Z\",\r\n         \"to\":\"2001-07-27T20:33:52.147Z\"\r\n       },\r\n       \"freightList\":[{\r\n         \"freightId\": \"66f701c555f40dfbec31cf9b\",\r\n         \"pieces\":3,\r\n         \"unitOfWeight\":\"KG\",\r\n         \"weight\":100500,\r\n         \"unitOfLength\":\"M\",\r\n         \"length\":13\r\n       },{\r\n         \"freightId\": \"66f701c555f40dfbec31cf9c\",\r\n         \"pieces\":1,\r\n         \"unitOfWeight\":\"TON\",\r\n         \"weight\":104,\r\n         \"unitOfLength\":\"CM\",\r\n         \"length\":378\r\n       }],\r\n       \"addInfo\":\"Some info\"\r\n    },{\r\n      \"stopId\": \"66f701c555f40dfbec31cf9d\",  \r\n      \"type\":\"Delivery\",\r\n      \"driversInfo\": [\r\n        {\r\n          \"bol\":\"66f701c555f40dfbec31cf9b\",\r\n          \"signedBy\":\"Vasya Pupkin\"\r\n        },\r\n        {\r\n          \"bol\":\"66f701c555f40dfbec31cf9c\",\r\n          \"signedBy\":\"Vasya Dupkin\"\r\n        }\r\n      ],\r\n      \"status\": \"New\",\r\n      \"facility\":\"6650abea91ec5b7d47736f11\",\r\n      \"timeFrame\":{\r\n         \"type\":\"Direct\",\r\n         \"at\":\"2002-07-25T20:33:52.147Z\"\r\n       },\r\n       \"addInfo\":\"Some other info\"\r\n    }],\r\n    \"weight\":\"100 ton\",\r\n    \"truckType\":[\r\n        \"Cargo van\",\r\n        \"Reefer van\",\r\n        \"Box truck\",\r\n        \"Box truck Reefer\",\r\n        \"Straight truck\",\r\n        \"Hotshot\",\r\n        \"Tented box\"\r\n    ],\r\n    \"rate\":3.56,\r\n    \"totalCharges\":5.34,\r\n    \"currency\":\"HUY\",\r\n    \"bookedByUser\":\"64d254f5139acc9c42bf63bb\",\r\n    \"bookedByCompany\":\"Horns & Hoofs\",\r\n    \"assignTo\":[\"64d254fc139acc9c42bf63bf\",\"64d254fd139acc9c42bf63c1\"],\r\n    \"checkInAs\":\"MegoCorp\",\r\n    \"truck\":\"64d28a394be7ed067d17b845\",\r\n    \"bookedWith\":\"66367b84a7d923452894b871\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1967,7 +1967,7 @@
 							"variable": [
 								{
 									"key": "loadId",
-									"value": "66e89ab31156d444d3244d03"
+									"value": "66d96a39b4949a1e824fbdb6"
 								}
 							]
 						}
@@ -3972,6 +3972,45 @@
 					"response": []
 				},
 				{
+					"name": "Update Load Stop PickUp  DriversInfo",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "[\r\n  {\r\n    //\"driversInfoId\": \"66f724fd099714180add9357\",\r\n    \"pieces\": 8,\r\n    \"unitOfWeight\": \"KG\",\r\n    \"weight\": 468,\r\n    \"bol\": \"66f701c555f40dfbec31cf97\",\r\n    \"seal\": \"pukuseal\",\r\n    \"addressIsCorrect\": true\r\n  },\r\n  {\r\n    //\"driversInfoId\": \"66f724fd099714180add9358\",\r\n    \"pieces\": 4,\r\n    \"unitOfWeight\": \"KG\",\r\n    \"weight\": 468,\r\n    \"bol\": \"66f701c555f40dfbec31cf98\",\r\n    \"seal\": \"kakuseal\",\r\n    \"addressIsCorrect\": true\r\n  }\r\n ]",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{origin}}/mobileApp/setLoadStopPickUpDriversInfo/:loadId/:stopId",
+							"host": [
+								"{{origin}}"
+							],
+							"path": [
+								"mobileApp",
+								"setLoadStopPickUpDriversInfo",
+								":loadId",
+								":stopId"
+							],
+							"variable": [
+								{
+									"key": "loadId",
+									"value": "66d96a39b4949a1e824fbdb6"
+								},
+								{
+									"key": "stopId",
+									"value": "66f701c555f40dfbec31cf96"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "Update Load Stop Delivery status",
 					"request": {
 						"method": "PATCH",
@@ -4004,6 +4043,45 @@
 								{
 									"key": "stopId",
 									"value": "66effec9204feee40523c8b7"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Load Stop Delivery DriversInfo",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "[\r\n  {\r\n    //\"driversInfoId\": \"66f724fd099714180add9360\",\r\n    \"bol\": \"66f701c555f40dfbec31cf9b\",\r\n    \"signedBy\": \"Vasya Chupkin\"\r\n  },\r\n  {\r\n    //\"driversInfoId\": \"66f724fd099714180add9361\",\r\n    \"bol\": \"66f701c555f40dfbec31cf9c\",\r\n    \"signedBy\": \"Vasya Fupkin\"\r\n  }\r\n]",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{origin}}/mobileApp/setLoadStopDeliveryDriversInfo/:loadId/:stopId",
+							"host": [
+								"{{origin}}"
+							],
+							"path": [
+								"mobileApp",
+								"setLoadStopDeliveryDriversInfo",
+								":loadId",
+								":stopId"
+							],
+							"variable": [
+								{
+									"key": "loadId",
+									"value": "66d96a39b4949a1e824fbdb6"
+								},
+								{
+									"key": "stopId",
+									"value": "66f701c555f40dfbec31cf9d"
 								}
 							]
 						}

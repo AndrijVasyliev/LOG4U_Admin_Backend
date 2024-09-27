@@ -5,7 +5,11 @@ import {
   LatitudeValidation,
   LongitudeValidation,
 } from '../location/location.validation';
-import { CreateLoadValidation } from '../load/load.validation';
+import {
+  CreateLoadValidation,
+  StopDeliveryDriversInfoValidation,
+  StopPickUpDriversInfoValidation,
+} from '../load/load.validation';
 import {
   ORDER_VALUES,
   STOP_DELIVERY_STATUSES,
@@ -53,6 +57,14 @@ export const MobileUpdateLoadStopDeliveryStatusValidation = Joi.object({
     .valid(...STOP_DELIVERY_STATUSES)
     .required(),
 });
+
+export const MobileSetStopPickUpDriversInfoValidation = Joi.array()
+  .items(StopPickUpDriversInfoValidation)
+  .required();
+
+export const MobileSetStopDeliveryDriversInfoValidation = Joi.array()
+  .items(StopDeliveryDriversInfoValidation)
+  .required();
 
 export const MobileUpdateTruckValidation = Joi.object({
   status: Joi.string()

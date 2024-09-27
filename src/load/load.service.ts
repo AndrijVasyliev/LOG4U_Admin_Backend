@@ -19,6 +19,8 @@ import {
   UpdateLoadDto,
   UpdateLoadStopPickUpStatusDto,
   UpdateLoadStopDeliveryStatusDto,
+  CreateStopPickUpDriversInfoDto,
+  CreateStopDeliveryDriversInfoDto,
 } from './load.dto';
 import { LoggerService } from '../logger';
 import {
@@ -812,6 +814,86 @@ export class LoadService {
     ) {
       load.set('status', 'Completed');
     }
+
+    try {
+      await load.save();
+      return LoadResultDto.fromLoadModel(load);
+    } catch (e) {
+      if (!(e instanceof Error)) {
+        throw new InternalServerErrorException(JSON.stringify(e));
+      }
+      if (e instanceof MongoError && e.code === MONGO_UNIQUE_INDEX_CONFLICT) {
+        throw new ConflictException({ type: UNIQUE_CONSTRAIN_ERROR, e });
+      }
+      throw new InternalServerErrorException(e.message);
+    }
+  }
+
+  async setStopPickUpDriversInfo(
+    id: string,
+    stopId: string,
+    setStopPickUpDriversInfoDto: CreateStopPickUpDriversInfoDto[],
+  ): Promise<LoadResultDto> {
+    const load = await this.findLoadDocumentById(id);
+
+    this.log.debug(
+      `Setting new drivers info for Stop ${stopId} in Load ${id}: ${JSON.stringify(setStopPickUpDriversInfoDto)}`,
+    );
+
+    const stopIndex = load.stops.findIndex(
+      (stopItem) => stopItem.stopId === stopId,
+    );
+    if (!~stopIndex) {
+      throw new PreconditionFailedException(`No Stop ${stopId} in Load ${id}`);
+    }
+    const stop = load.stops[stopIndex];
+    if (stop.type !== StopType.PickUp) {
+      throw new PreconditionFailedException(
+        `Stop ${stopId} in Load ${id} has wrong type: ${stop.type}`,
+      );
+    }
+
+    stop.set('driversInfo', setStopPickUpDriversInfoDto);
+
+    try {
+      await load.save();
+      return LoadResultDto.fromLoadModel(load);
+    } catch (e) {
+      if (!(e instanceof Error)) {
+        throw new InternalServerErrorException(JSON.stringify(e));
+      }
+      if (e instanceof MongoError && e.code === MONGO_UNIQUE_INDEX_CONFLICT) {
+        throw new ConflictException({ type: UNIQUE_CONSTRAIN_ERROR, e });
+      }
+      throw new InternalServerErrorException(e.message);
+    }
+  }
+
+  async setStopDeliveryDriversInfo(
+    id: string,
+    stopId: string,
+    setStopDeliveryDriversInfoDto: CreateStopDeliveryDriversInfoDto[],
+  ): Promise<LoadResultDto> {
+    const load = await this.findLoadDocumentById(id);
+
+    this.log.debug(
+      `Setting new drivers info for Stop ${stopId} in Load ${id}: ${JSON.stringify(setStopDeliveryDriversInfoDto)}`,
+    );
+
+    const stopIndex = load.stops.findIndex(
+      (stopItem) => stopItem.stopId === stopId,
+    );
+    if (!~stopIndex) {
+      throw new PreconditionFailedException(`No Stop ${stopId} in Load ${id}`);
+    }
+    const stop = load.stops[stopIndex];
+    if (stop.type !== StopType.Delivery) {
+      throw new PreconditionFailedException(
+        `Stop ${stopId} in Load ${id} has wrong type: ${stop.type}`,
+      );
+    }
+
+    stop.set('driversInfo', setStopDeliveryDriversInfoDto);
 
     try {
       await load.save();

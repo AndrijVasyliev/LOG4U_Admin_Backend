@@ -31,6 +31,7 @@ const TimeFrameDirectValidation = Joi.object({
 });
 
 const FreightValidation = Joi.object({
+  freightId: Joi.string().optional(),
   pieces: Joi.number().integer().min(1).required(),
   unitOfWeight: Joi.string()
     .valid(...UNITS_OF_WEIGHT)
@@ -42,6 +43,24 @@ const FreightValidation = Joi.object({
   length: Joi.number().greater(0).required(),
 });
 
+export const StopPickUpDriversInfoValidation = Joi.object({
+  driversInfoId: Joi.string().optional(),
+  pieces: Joi.number().integer().min(1).required(),
+  unitOfWeight: Joi.string()
+    .valid(...UNITS_OF_WEIGHT)
+    .required(),
+  weight: Joi.number().greater(0).required(),
+  bol: MongoObjectIdValidation.required(),
+  seal: Joi.string().required(),
+  addressIsCorrect: Joi.boolean().required(),
+});
+
+export const StopDeliveryDriversInfoValidation = Joi.object({
+  driversInfoId: Joi.string().optional(),
+  bol: MongoObjectIdValidation.required(),
+  signedBy: Joi.string().required(),
+});
+
 const StopValidation = Joi.object({
   stopId: Joi.string().optional(),
   facility: MongoObjectIdValidation.required(),
@@ -50,6 +69,7 @@ const StopValidation = Joi.object({
 
 const StopPickUpValidation = StopValidation.append({
   type: Joi.string().valid(StopType.PickUp).required(),
+  driversInfo: Joi.array().items(StopPickUpDriversInfoValidation).optional(),
   status: Joi.string()
     .valid(...STOP_PICKUP_STATUSES)
     .optional(),
@@ -62,6 +82,7 @@ const StopPickUpValidation = StopValidation.append({
 });
 const StopDeliveryValidation = StopValidation.append({
   type: Joi.string().valid(StopType.Delivery).required(),
+  driversInfo: Joi.array().items(StopDeliveryDriversInfoValidation).optional(),
   status: Joi.string()
     .valid(...STOP_DELIVERY_STATUSES)
     .optional(),

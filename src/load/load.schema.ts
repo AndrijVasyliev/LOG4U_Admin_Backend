@@ -126,7 +126,7 @@ const TimeFrameASAPSchema = SchemaFactory.createForClass(TimeFrameASAP);
 const TimeFrameDirectSchema = SchemaFactory.createForClass(TimeFrameDirect);
 // Freight
 @Schema({
-  _id: false,
+  _id: true,
   timestamps: false,
 })
 export class Freight {
@@ -158,6 +158,18 @@ export class Freight {
     required: true,
   })
   length: number;
+
+  @Prop({
+    required: false,
+    virtual: true,
+    set: function (value: string) {
+      (this as any).set({ _id: value });
+    },
+    get: function (): string {
+      return `${(this as any)._id}`;
+    },
+  })
+  freightId: string;
 }
 
 const FreightSchema = SchemaFactory.createForClass(Freight);
@@ -203,7 +215,7 @@ export class Stop {
 }
 
 @Schema({
-  _id: false,
+  _id: true,
   timestamps: false,
 })
 export class StopPickUpDriversInfo {
@@ -226,13 +238,7 @@ export class StopPickUpDriversInfo {
 
   @Prop({
     required: true,
-    type: String,
-    enum: UNITS_OF_LENGTH,
-  })
-  unitOfLength: UnitOfLength;
-
-  @Prop({
-    required: true,
+    type: MongooseSchema.Types.ObjectId,
   })
   bol: string;
 
@@ -244,7 +250,19 @@ export class StopPickUpDriversInfo {
   @Prop({
     required: true,
   })
-  addressIsCorrect: string;
+  addressIsCorrect: boolean;
+
+  @Prop({
+    required: false,
+    virtual: true,
+    set: function (value: string) {
+      (this as any).set({ _id: value });
+    },
+    get: function (): string {
+      return `${(this as any)._id}`;
+    },
+  })
+  driversInfoId: string;
 }
 const StopPickUpDriversInfoSchema = SchemaFactory.createForClass(
   StopPickUpDriversInfo,
@@ -259,9 +277,9 @@ export class StopPickUp {
 
   @Prop({
     required: false,
-    type: StopPickUpDriversInfoSchema,
+    type: [StopPickUpDriversInfoSchema],
   })
-  driversInfo: StopPickUpDriversInfo & Document;
+  driversInfo?: (StopPickUpDriversInfo & Document)[];
 
   @Prop({
     required: true,
@@ -291,12 +309,13 @@ export class StopPickUp {
 }
 
 @Schema({
-  _id: false,
+  _id: true,
   timestamps: false,
 })
 export class StopDeliveryDriversInfo {
   @Prop({
     required: true,
+    type: MongooseSchema.Types.ObjectId,
   })
   bol: string;
 
@@ -304,6 +323,18 @@ export class StopDeliveryDriversInfo {
     required: true,
   })
   signedBy: string;
+
+  @Prop({
+    required: false,
+    virtual: true,
+    set: function (value: string) {
+      (this as any).set({ _id: value });
+    },
+    get: function (): string {
+      return `${(this as any)._id}`;
+    },
+  })
+  driversInfoId: string;
 }
 const StopDeliveryDriversInfoSchema = SchemaFactory.createForClass(
   StopDeliveryDriversInfo,
@@ -318,9 +349,9 @@ export class StopDelivery {
 
   @Prop({
     required: false,
-    type: StopDeliveryDriversInfoSchema,
+    type: [StopDeliveryDriversInfoSchema],
   })
-  driversInfo: StopDeliveryDriversInfo & Document;
+  driversInfo?: (StopDeliveryDriversInfo & Document)[];
 
   @Prop({
     required: true,
