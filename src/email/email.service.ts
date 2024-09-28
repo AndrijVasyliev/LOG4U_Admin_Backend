@@ -3,9 +3,7 @@ import { mongo, PaginateModel, PaginateOptions } from 'mongoose';
 import {
   OnApplicationBootstrap,
   OnModuleDestroy,
-  ConflictException,
   Injectable,
-  InternalServerErrorException,
   NotFoundException,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
@@ -25,13 +23,11 @@ import { LoggerService } from '../logger';
 import {
   EMAIL_QUEUE_ORPHANED_JOB,
   MONGO_CONNECTION_NAME,
-  MONGO_UNIQUE_INDEX_CONFLICT,
-  UNIQUE_CONSTRAIN_ERROR,
 } from '../utils/constants';
 import { escapeForRegExp } from '../utils/escapeForRegExp';
 import { ChangeDocument, Queue } from '../utils/queue';
 
-const { MongoError, ChangeStream } = mongo;
+const { ChangeStream } = mongo;
 
 @Injectable()
 export class EmailService implements OnApplicationBootstrap, OnModuleDestroy {
@@ -306,19 +302,10 @@ export class EmailService implements OnApplicationBootstrap, OnModuleDestroy {
     this.log.debug(`Creating new Email: ${JSON.stringify(createEmailDto)}`);
     const createdEmail = new this.emailModel(createEmailDto);
 
-    try {
-      this.log.debug('Saving Email');
-      const email = await (await createdEmail.save()).populate('to.to');
-      return EmailResultDto.fromEmailModel(email);
-    } catch (e) {
-      if (!(e instanceof Error)) {
-        throw new InternalServerErrorException(JSON.stringify(e));
-      }
-      if (e instanceof MongoError && e.code === MONGO_UNIQUE_INDEX_CONFLICT) {
-        throw new ConflictException({ type: UNIQUE_CONSTRAIN_ERROR, e });
-      }
-      throw new InternalServerErrorException(e.message);
-    }
+    this.log.debug('Saving Email');
+    const email = await (await createdEmail.save()).populate('to.to');
+
+    return EmailResultDto.fromEmailModel(email);
   }
 
   async updateEmail(
@@ -328,20 +315,11 @@ export class EmailService implements OnApplicationBootstrap, OnModuleDestroy {
     const email = await this.findEmailDocumentById(id);
     this.log.debug(`Setting new values: ${JSON.stringify(updateEmailDto)}`);
     Object.assign(email, updateEmailDto);
-    try {
-      this.log.debug('Saving Email');
-      const savedEmail = await email.save();
-      this.log.debug(`Email ${savedEmail._id} saved`);
-      return EmailResultDto.fromEmailModel(email);
-    } catch (e) {
-      if (!(e instanceof Error)) {
-        throw new InternalServerErrorException(JSON.stringify(e));
-      }
-      if (e instanceof MongoError && e.code === MONGO_UNIQUE_INDEX_CONFLICT) {
-        throw new ConflictException({ type: UNIQUE_CONSTRAIN_ERROR, e });
-      }
-      throw new InternalServerErrorException(e.message);
-    }
+    this.log.debug('Saving Email');
+    const savedEmail = await email.save();
+    this.log.debug(`Email ${savedEmail._id} saved`);
+
+    return EmailResultDto.fromEmailModel(email);
   }
 
   async deleteEmail(id: string): Promise<EmailResultDto> {
@@ -349,15 +327,9 @@ export class EmailService implements OnApplicationBootstrap, OnModuleDestroy {
 
     this.log.debug(`Deleting Email ${email._id}`);
 
-    try {
-      await email.deleteOne();
-      this.log.debug('Email deleted');
-    } catch (e) {
-      if (!(e instanceof Error)) {
-        throw new InternalServerErrorException(JSON.stringify(e));
-      }
-      throw new InternalServerErrorException(e.message);
-    }
+    await email.deleteOne();
+    this.log.debug('Email deleted');
+
     return EmailResultDto.fromEmailModel(email);
   }
 }

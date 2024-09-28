@@ -1,18 +1,8 @@
-import { mongo, PaginateModel, PaginateOptions } from 'mongoose';
-import {
-  ConflictException,
-  Injectable,
-  InternalServerErrorException,
-  NotFoundException,
-} from '@nestjs/common';
+import { PaginateModel, PaginateOptions } from 'mongoose';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { LoggerService } from '../logger';
-import {
-  MONGO_CONNECTION_NAME,
-  MONGO_UNIQUE_INDEX_CONFLICT,
-  OWNER_TYPES,
-  UNIQUE_CONSTRAIN_ERROR,
-} from '../utils/constants';
+import { MONGO_CONNECTION_NAME, OWNER_TYPES } from '../utils/constants';
 import { Owner, OwnerDocument } from './owner.schema';
 import {
   CreateOwnerDto,
@@ -23,8 +13,6 @@ import {
 } from './owner.dto';
 import { TruckService } from '../truck/truck.service';
 import { escapeForRegExp } from '../utils/escapeForRegExp';
-
-const { MongoError } = mongo;
 
 @Injectable()
 export class OwnerService {
@@ -122,19 +110,10 @@ export class OwnerService {
     this.log.debug(`Creating new Owner: ${JSON.stringify(createOwnerDto)}`);
     const createdOwner = new this.ownerModel(createOwnerDto);
 
-    try {
-      this.log.debug('Saving Owner');
-      const owner = await createdOwner.save();
-      return OwnerResultDto.fromOwnerModel(owner);
-    } catch (e) {
-      if (!(e instanceof Error)) {
-        throw new InternalServerErrorException(JSON.stringify(e));
-      }
-      if (e instanceof MongoError && e.code === MONGO_UNIQUE_INDEX_CONFLICT) {
-        throw new ConflictException({ type: UNIQUE_CONSTRAIN_ERROR, e });
-      }
-      throw new InternalServerErrorException(e.message);
-    }
+    this.log.debug('Saving Owner');
+    const owner = await createdOwner.save();
+
+    return OwnerResultDto.fromOwnerModel(owner);
   }
 
   async updateOwner(
@@ -144,20 +123,11 @@ export class OwnerService {
     const owner = await this.findOwnerDocumentById(id);
     this.log.debug(`Setting new values: ${JSON.stringify(updateOwnerDto)}`);
     Object.assign(owner, updateOwnerDto);
-    try {
-      this.log.debug('Saving Owner');
-      const savedOwner = await owner.save();
-      this.log.debug(`Owner ${savedOwner._id} saved`);
-      return OwnerResultDto.fromOwnerModel(owner);
-    } catch (e) {
-      if (!(e instanceof Error)) {
-        throw new InternalServerErrorException(JSON.stringify(e));
-      }
-      if (e instanceof MongoError && e.code === MONGO_UNIQUE_INDEX_CONFLICT) {
-        throw new ConflictException({ type: UNIQUE_CONSTRAIN_ERROR, e });
-      }
-      throw new InternalServerErrorException(e.message);
-    }
+    this.log.debug('Saving Owner');
+    const savedOwner = await owner.save();
+    this.log.debug(`Owner ${savedOwner._id} saved`);
+
+    return OwnerResultDto.fromOwnerModel(owner);
   }
 
   async deleteOwner(id: string): Promise<OwnerResultDto> {
@@ -165,15 +135,9 @@ export class OwnerService {
 
     this.log.debug(`Deleting Owner ${owner._id}`);
 
-    try {
-      await owner.deleteOne();
-      this.log.debug('Owner deleted');
-    } catch (e) {
-      if (!(e instanceof Error)) {
-        throw new InternalServerErrorException(JSON.stringify(e));
-      }
-      throw new InternalServerErrorException(e.message);
-    }
+    await owner.deleteOne();
+    this.log.debug('Owner deleted');
+
     return OwnerResultDto.fromOwnerModel(owner);
   }
 }

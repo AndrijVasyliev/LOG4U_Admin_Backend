@@ -1,10 +1,5 @@
-import { mongo, PaginateModel, PaginateOptions } from 'mongoose';
-import {
-  ConflictException,
-  Injectable,
-  InternalServerErrorException,
-  NotFoundException,
-} from '@nestjs/common';
+import { PaginateModel, PaginateOptions } from 'mongoose';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Driver, DriverDocument } from './driver.schema';
 import {
@@ -15,16 +10,9 @@ import {
   UpdateDriverDto,
 } from './driver.dto';
 import { LoggerService } from '../logger';
-import {
-  DRIVER_TYPES,
-  MONGO_CONNECTION_NAME,
-  MONGO_UNIQUE_INDEX_CONFLICT,
-  UNIQUE_CONSTRAIN_ERROR,
-} from '../utils/constants';
+import { DRIVER_TYPES, MONGO_CONNECTION_NAME } from '../utils/constants';
 import { TruckService } from '../truck/truck.service';
 import { escapeForRegExp } from '../utils/escapeForRegExp';
-
-const { MongoError } = mongo;
 
 @Injectable()
 export class DriverService {
@@ -137,19 +125,10 @@ export class DriverService {
     this.log.debug(`Creating new Driver: ${JSON.stringify(createDriverDto)}`);
     const createdDriver = new this.driverModel(createDriverDto);
 
-    try {
-      this.log.debug('Saving Driver');
-      const driver = await createdDriver.save();
-      return DriverResultDto.fromDriverModel(driver);
-    } catch (e) {
-      if (!(e instanceof Error)) {
-        throw new InternalServerErrorException(JSON.stringify(e));
-      }
-      if (e instanceof MongoError && e.code === MONGO_UNIQUE_INDEX_CONFLICT) {
-        throw new ConflictException({ type: UNIQUE_CONSTRAIN_ERROR, e });
-      }
-      throw new InternalServerErrorException(e.message);
-    }
+    this.log.debug('Saving Driver');
+    const driver = await createdDriver.save();
+
+    return DriverResultDto.fromDriverModel(driver);
   }
 
   async updateDriver(
@@ -159,20 +138,11 @@ export class DriverService {
     const driver = await this.findDriverDocumentById(id);
     this.log.debug(`Setting new values: ${JSON.stringify(updateDriverDto)}`);
     Object.assign(driver, updateDriverDto);
-    try {
-      this.log.debug('Saving Driver');
-      const savedDriver = await driver.save();
-      this.log.debug(`Driver ${savedDriver._id} saved`);
-      return DriverResultDto.fromDriverModel(driver);
-    } catch (e) {
-      if (!(e instanceof Error)) {
-        throw new InternalServerErrorException(JSON.stringify(e));
-      }
-      if (e instanceof MongoError && e.code === MONGO_UNIQUE_INDEX_CONFLICT) {
-        throw new ConflictException({ type: UNIQUE_CONSTRAIN_ERROR, e });
-      }
-      throw new InternalServerErrorException(e.message);
-    }
+    this.log.debug('Saving Driver');
+    const savedDriver = await driver.save();
+    this.log.debug(`Driver ${savedDriver._id} saved`);
+
+    return DriverResultDto.fromDriverModel(driver);
   }
 
   async deleteDriver(id: string): Promise<DriverResultDto> {
@@ -180,15 +150,9 @@ export class DriverService {
 
     this.log.debug(`Deleting Driver ${driver._id}`);
 
-    try {
-      await driver.deleteOne();
-      this.log.debug('Driver deleted');
-    } catch (e) {
-      if (!(e instanceof Error)) {
-        throw new InternalServerErrorException(JSON.stringify(e));
-      }
-      throw new InternalServerErrorException(e.message);
-    }
+    await driver.deleteOne();
+    this.log.debug('Driver deleted');
+
     return DriverResultDto.fromDriverModel(driver);
   }
 }

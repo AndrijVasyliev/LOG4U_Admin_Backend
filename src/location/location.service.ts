@@ -1,18 +1,8 @@
-import { mongo, PaginateModel, PaginateOptions } from 'mongoose';
-import {
-  ConflictException,
-  Injectable,
-  InternalServerErrorException,
-  NotFoundException,
-} from '@nestjs/common';
+import { PaginateModel, PaginateOptions } from 'mongoose';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { LoggerService } from '../logger';
-import {
-  EARTH_RADIUS_MILES,
-  MONGO_CONNECTION_NAME,
-  MONGO_UNIQUE_INDEX_CONFLICT,
-  UNIQUE_CONSTRAIN_ERROR,
-} from '../utils/constants';
+import { EARTH_RADIUS_MILES, MONGO_CONNECTION_NAME } from '../utils/constants';
 import { Location, LocationDocument } from './location.schema';
 import {
   CreateLocationDto,
@@ -23,8 +13,6 @@ import {
 } from './location.dto';
 import { escapeForRegExp } from '../utils/escapeForRegExp';
 import { GeoPointType } from '../utils/general.dto';
-
-const { MongoError } = mongo;
 
 @Injectable()
 export class LocationService {
@@ -156,19 +144,9 @@ export class LocationService {
     );
     const createdLocation = new this.locationModel(createLocationDto);
 
-    try {
-      this.log.debug('Saving Location');
-      const location = await createdLocation.save();
-      return LocationResultDto.fromLocationModel(location);
-    } catch (e) {
-      if (!(e instanceof Error)) {
-        throw new InternalServerErrorException(JSON.stringify(e));
-      }
-      if (e instanceof MongoError && e.code === MONGO_UNIQUE_INDEX_CONFLICT) {
-        throw new ConflictException({ type: UNIQUE_CONSTRAIN_ERROR, e });
-      }
-      throw new InternalServerErrorException(e.message);
-    }
+    this.log.debug('Saving Location');
+    const location = await createdLocation.save();
+    return LocationResultDto.fromLocationModel(location);
   }
 
   async updateLocation(
@@ -178,20 +156,11 @@ export class LocationService {
     const location = await this.findLocationDocumentById(id);
     this.log.debug(`Setting new values: ${JSON.stringify(updateLocationDto)}`);
     Object.assign(location, updateLocationDto);
-    try {
-      this.log.debug('Saving Location');
-      const savedLocation = await location.save();
-      this.log.debug(`Location ${savedLocation._id} saved`);
-      return LocationResultDto.fromLocationModel(location);
-    } catch (e) {
-      if (!(e instanceof Error)) {
-        throw new InternalServerErrorException(JSON.stringify(e));
-      }
-      if (e instanceof MongoError && e.code === MONGO_UNIQUE_INDEX_CONFLICT) {
-        throw new ConflictException({ type: UNIQUE_CONSTRAIN_ERROR, e });
-      }
-      throw new InternalServerErrorException(e.message);
-    }
+
+    this.log.debug('Saving Location');
+    const savedLocation = await location.save();
+    this.log.debug(`Location ${savedLocation._id} saved`);
+    return LocationResultDto.fromLocationModel(location);
   }
 
   async deleteLocation(id: string): Promise<LocationResultDto> {
@@ -199,15 +168,9 @@ export class LocationService {
 
     this.log.debug(`Deleting Location ${location._id}`);
 
-    try {
-      await location.deleteOne();
-      this.log.debug('Location deleted');
-    } catch (e) {
-      if (!(e instanceof Error)) {
-        throw new InternalServerErrorException(JSON.stringify(e));
-      }
-      throw new InternalServerErrorException(e.message);
-    }
+    await location.deleteOne();
+    this.log.debug('Location deleted');
+
     return LocationResultDto.fromLocationModel(location);
   }
 }

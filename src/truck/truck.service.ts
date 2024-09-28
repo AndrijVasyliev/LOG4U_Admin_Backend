@@ -1,9 +1,7 @@
 import { mongo, ObjectId, PaginateModel, PaginateOptions } from 'mongoose';
 import {
-  ConflictException,
   Injectable,
   PreconditionFailedException,
-  InternalServerErrorException,
   NotFoundException,
   OnApplicationBootstrap,
   OnModuleDestroy,
@@ -25,20 +23,17 @@ import {
 import { LoggerService } from '../logger';
 import { GoogleGeoApiService } from '../googleGeoApi/googleGeoApi.service';
 import { PushService } from '../push/push.service';
-import { UserResultDto } from '../user/user.dto';
 import {
   EARTH_RADIUS_MILES,
   MONGO_CONNECTION_NAME,
-  MONGO_UNIQUE_INDEX_CONFLICT,
   TRUCK_SET_AVAIL_STATUS_JOB,
   TRUCK_SEND_RENEW_LOCATION_PUSH_JOB,
-  UNIQUE_CONSTRAIN_ERROR,
 } from '../utils/constants';
 import { escapeForRegExp } from '../utils/escapeForRegExp';
 import { calcDistance } from '../utils/haversine.distance';
 import { ChangeDocument, Queue } from '../utils/queue';
 
-const { MongoError, ChangeStream } = mongo;
+const { ChangeStream } = mongo;
 
 @Injectable()
 export class TruckService implements OnApplicationBootstrap, OnModuleDestroy {
@@ -675,19 +670,10 @@ export class TruckService implements OnApplicationBootstrap, OnModuleDestroy {
       }
     }
 
-    try {
-      this.log.debug('Saving Truck');
-      const createdTruck = await truck.save();
-      return TruckResultDto.fromTruckModel(createdTruck);
-    } catch (e) {
-      if (!(e instanceof Error)) {
-        throw new InternalServerErrorException(JSON.stringify(e));
-      }
-      if (e instanceof MongoError && e.code === MONGO_UNIQUE_INDEX_CONFLICT) {
-        throw new ConflictException({ type: UNIQUE_CONSTRAIN_ERROR, e });
-      }
-      throw new InternalServerErrorException(e.message);
-    }
+    this.log.debug('Saving Truck');
+    const createdTruck = await truck.save();
+
+    return TruckResultDto.fromTruckModel(createdTruck);
   }
 
   async updateTruck(
@@ -756,20 +742,11 @@ export class TruckService implements OnApplicationBootstrap, OnModuleDestroy {
       }
     }
 
-    try {
-      this.log.debug('Saving Truck');
-      const savedTruck = await truck.save();
-      this.log.debug(`Truck ${savedTruck._id} saved`);
-      return TruckResultDto.fromTruckModel(truck);
-    } catch (e) {
-      if (!(e instanceof Error)) {
-        throw new InternalServerErrorException(JSON.stringify(e));
-      }
-      if (e instanceof MongoError && e.code === MONGO_UNIQUE_INDEX_CONFLICT) {
-        throw new ConflictException({ type: UNIQUE_CONSTRAIN_ERROR, e });
-      }
-      throw new InternalServerErrorException(e.message);
-    }
+    this.log.debug('Saving Truck');
+    const savedTruck = await truck.save();
+    this.log.debug(`Truck ${savedTruck._id} saved`);
+
+    return TruckResultDto.fromTruckModel(truck);
   }
 
   async deleteTruck(id: string): Promise<TruckResultDto> {
@@ -777,15 +754,9 @@ export class TruckService implements OnApplicationBootstrap, OnModuleDestroy {
 
     this.log.debug(`Deleting Truck ${truck._id}`);
 
-    try {
-      await truck.deleteOne();
-      this.log.debug('Truck deleted');
-    } catch (e) {
-      if (!(e instanceof Error)) {
-        throw new InternalServerErrorException(JSON.stringify(e));
-      }
-      throw new InternalServerErrorException(e.message);
-    }
+    await truck.deleteOne();
+    this.log.debug('Truck deleted');
+
     return TruckResultDto.fromTruckModel(truck);
   }
 }

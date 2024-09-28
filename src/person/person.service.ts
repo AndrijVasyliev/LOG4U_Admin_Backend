@@ -1,17 +1,8 @@
-import { mongo, PaginateModel, PaginateOptions } from 'mongoose';
-import {
-  ConflictException,
-  Injectable,
-  InternalServerErrorException,
-  NotFoundException,
-} from '@nestjs/common';
+import { PaginateModel, PaginateOptions } from 'mongoose';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { LoggerService } from '../logger';
-import {
-  MONGO_CONNECTION_NAME,
-  MONGO_UNIQUE_INDEX_CONFLICT,
-  UNIQUE_CONSTRAIN_ERROR,
-} from '../utils/constants';
+import { MONGO_CONNECTION_NAME } from '../utils/constants';
 import { Person, PersonDocument } from './person.schema';
 import {
   PaginatedPersonResultDto,
@@ -23,8 +14,6 @@ import {
 import { AuthDataDto } from '../mobileApp/mobileApp.dto';
 import { TruckService } from '../truck/truck.service';
 import { escapeForRegExp } from '../utils/escapeForRegExp';
-
-const { MongoError } = mongo;
 
 @Injectable()
 export class PersonService {
@@ -117,20 +106,11 @@ export class PersonService {
     const person = await this.findPersonDocumentById(id);
     this.log.debug(`Setting new values: ${JSON.stringify(updatePersonDto)}`);
     Object.assign(person, updatePersonDto);
-    try {
-      this.log.debug('Saving Person');
-      const savedPerson = await person.save();
-      this.log.debug(`Person ${savedPerson._id} saved`);
-      return PersonResultDto.fromPersonModel(person);
-    } catch (e) {
-      if (!(e instanceof Error)) {
-        throw new InternalServerErrorException(JSON.stringify(e));
-      }
-      if (e instanceof MongoError && e.code === MONGO_UNIQUE_INDEX_CONFLICT) {
-        throw new ConflictException({ type: UNIQUE_CONSTRAIN_ERROR, e });
-      }
-      throw new InternalServerErrorException(e.message);
-    }
+    this.log.debug('Saving Person');
+    const savedPerson = await person.save();
+    this.log.debug(`Person ${savedPerson._id} saved`);
+
+    return PersonResultDto.fromPersonModel(person);
   }
 
   async getPersonByCredentials(
@@ -180,20 +160,11 @@ export class PersonService {
     const person = await this.findPersonDocumentById(id);
     person.set('deviceId', deviceId);
     person.set('deviceIdLastChange', new Date());
-    try {
-      this.log.debug('Saving Person');
-      const savedPerson = await person.save();
-      this.log.debug(`Driver ${savedPerson._id} saved`);
-      return PersonAuthResultDto.fromPersonModel(person);
-    } catch (e) {
-      if (!(e instanceof Error)) {
-        throw new InternalServerErrorException(JSON.stringify(e));
-      }
-      if (e instanceof MongoError && e.code === MONGO_UNIQUE_INDEX_CONFLICT) {
-        throw new ConflictException({ type: UNIQUE_CONSTRAIN_ERROR, e });
-      }
-      throw new InternalServerErrorException(e.message);
-    }
+    this.log.debug('Saving Person');
+    const savedPerson = await person.save();
+    this.log.debug(`Driver ${savedPerson._id} saved`);
+
+    return PersonAuthResultDto.fromPersonModel(person);
   }
 
   async setAppData(
@@ -216,16 +187,9 @@ export class PersonService {
       person.set('appPermissionsLastChange', new Date());
     }
 
-    try {
-      this.log.debug('Saving Person');
-      const savedPerson = await person.save();
-      this.log.debug(`Person ${savedPerson._id} saved`);
-      return PersonAuthResultDto.fromPersonModel(person);
-    } catch (e) {
-      if (!(e instanceof Error)) {
-        throw new InternalServerErrorException(JSON.stringify(e));
-      }
-      throw new InternalServerErrorException(e.message);
-    }
+    this.log.debug('Saving Person');
+    const savedPerson = await person.save();
+    this.log.debug(`Person ${savedPerson._id} saved`);
+    return PersonAuthResultDto.fromPersonModel(person);
   }
 }

@@ -1,17 +1,8 @@
-import { mongo, PaginateModel, PaginateOptions } from 'mongoose';
-import {
-  ConflictException,
-  Injectable,
-  InternalServerErrorException,
-  NotFoundException,
-} from '@nestjs/common';
+import { PaginateModel, PaginateOptions } from 'mongoose';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { LoggerService } from '../logger';
-import {
-  MONGO_CONNECTION_NAME,
-  MONGO_UNIQUE_INDEX_CONFLICT,
-  UNIQUE_CONSTRAIN_ERROR,
-} from '../utils/constants';
+import { MONGO_CONNECTION_NAME } from '../utils/constants';
 import { User, UserDocument } from './user.schema';
 import {
   CreateUserDto,
@@ -21,8 +12,6 @@ import {
   UpdateUserDto,
 } from './user.dto';
 import { escapeForRegExp } from '../utils/escapeForRegExp';
-
-const { MongoError } = mongo;
 
 @Injectable()
 export class UserService {
@@ -104,19 +93,9 @@ export class UserService {
     this.log.debug(`Creating new User: ${JSON.stringify(createUserDto)}`);
     const createdUser = new this.userModel(createUserDto);
 
-    try {
-      this.log.debug('Saving User');
-      const user = await createdUser.save();
-      return UserResultDto.fromUserModel(user);
-    } catch (e) {
-      if (!(e instanceof Error)) {
-        throw new InternalServerErrorException(JSON.stringify(e));
-      }
-      if (e instanceof MongoError && e.code === MONGO_UNIQUE_INDEX_CONFLICT) {
-        throw new ConflictException({ type: UNIQUE_CONSTRAIN_ERROR, e });
-      }
-      throw new InternalServerErrorException(e.message);
-    }
+    this.log.debug('Saving User');
+    const user = await createdUser.save();
+    return UserResultDto.fromUserModel(user);
   }
 
   async updateUser(
@@ -126,20 +105,10 @@ export class UserService {
     const user = await this.findUserDocumentById(id);
     this.log.debug(`Setting new values: ${JSON.stringify(updateUserDto)}`);
     Object.assign(user, updateUserDto);
-    try {
-      this.log.debug('Saving User');
-      const savedUser = await user.save();
-      this.log.debug(`User ${savedUser._id} saved`);
-      return UserResultDto.fromUserModel(user);
-    } catch (e) {
-      if (!(e instanceof Error)) {
-        throw new InternalServerErrorException(JSON.stringify(e));
-      }
-      if (e instanceof MongoError && e.code === MONGO_UNIQUE_INDEX_CONFLICT) {
-        throw new ConflictException({ type: UNIQUE_CONSTRAIN_ERROR, e });
-      }
-      throw new InternalServerErrorException(e.message);
-    }
+    this.log.debug('Saving User');
+    const savedUser = await user.save();
+    this.log.debug(`User ${savedUser._id} saved`);
+    return UserResultDto.fromUserModel(user);
   }
 
   async deleteUser(id: string): Promise<UserResultDto> {
@@ -147,15 +116,9 @@ export class UserService {
 
     this.log.debug(`Deleting User ${user._id}`);
 
-    try {
-      await user.deleteOne();
-      this.log.debug('User deleted');
-    } catch (e) {
-      if (!(e instanceof Error)) {
-        throw new InternalServerErrorException(JSON.stringify(e));
-      }
-      throw new InternalServerErrorException(e.message);
-    }
+    await user.deleteOne();
+    this.log.debug('User deleted');
+
     return UserResultDto.fromUserModel(user);
   }
 }

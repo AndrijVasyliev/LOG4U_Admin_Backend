@@ -1,18 +1,8 @@
-import { mongo, PaginateModel, PaginateOptions } from 'mongoose';
-import {
-  ConflictException,
-  Injectable,
-  InternalServerErrorException,
-  NotFoundException,
-} from '@nestjs/common';
+import { PaginateModel, PaginateOptions } from 'mongoose';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { LoggerService } from '../logger';
-import {
-  MONGO_CONNECTION_NAME,
-  MONGO_UNIQUE_INDEX_CONFLICT,
-  OWNER_TYPES,
-  UNIQUE_CONSTRAIN_ERROR,
-} from '../utils/constants';
+import { MONGO_CONNECTION_NAME, OWNER_TYPES } from '../utils/constants';
 import {
   CoordinatorDriver,
   CoordinatorDriverDocument,
@@ -26,8 +16,6 @@ import {
 } from './coordinatorDriver.dto';
 import { TruckService } from '../truck/truck.service';
 import { escapeForRegExp } from '../utils/escapeForRegExp';
-
-const { MongoError } = mongo;
 
 @Injectable()
 export class CoordinatorDriverService {
@@ -154,25 +142,16 @@ export class CoordinatorDriverService {
       createCoordinatorDriverDto,
     );
 
-    try {
-      this.log.debug('Saving CoordinatorDriver');
-      const coordinatorDriver = await createdCoordinatorDriver.save();
-      await coordinatorDriver.populate({
-        path: 'owner',
-        match: { type: { $in: OWNER_TYPES } },
-      });
-      return CoordinatorDriverResultDto.fromCoordinatorDriverModel(
-        coordinatorDriver,
-      );
-    } catch (e) {
-      if (!(e instanceof Error)) {
-        throw new InternalServerErrorException(JSON.stringify(e));
-      }
-      if (e instanceof MongoError && e.code === MONGO_UNIQUE_INDEX_CONFLICT) {
-        throw new ConflictException({ type: UNIQUE_CONSTRAIN_ERROR, e });
-      }
-      throw new InternalServerErrorException(e.message);
-    }
+    this.log.debug('Saving CoordinatorDriver');
+    const coordinatorDriver = await createdCoordinatorDriver.save();
+    await coordinatorDriver.populate({
+      path: 'owner',
+      match: { type: { $in: OWNER_TYPES } },
+    });
+
+    return CoordinatorDriverResultDto.fromCoordinatorDriverModel(
+      coordinatorDriver,
+    );
   }
 
   async updateCoordinatorDriver(
@@ -184,26 +163,17 @@ export class CoordinatorDriverService {
       `Setting new values: ${JSON.stringify(updateCoordinatorDriverDto)}`,
     );
     Object.assign(coordinatorDriver, updateCoordinatorDriverDto);
-    try {
-      this.log.debug('Saving CoordinatorDriver');
-      const savedCoordinatorDriver = await coordinatorDriver.save();
-      this.log.debug(`CoordinatorDriver ${savedCoordinatorDriver._id} saved`);
-      await coordinatorDriver.populate({
-        path: 'owner',
-        match: { type: { $in: OWNER_TYPES } },
-      });
-      return CoordinatorDriverResultDto.fromCoordinatorDriverModel(
-        coordinatorDriver,
-      );
-    } catch (e) {
-      if (!(e instanceof Error)) {
-        throw new InternalServerErrorException(JSON.stringify(e));
-      }
-      if (e instanceof MongoError && e.code === MONGO_UNIQUE_INDEX_CONFLICT) {
-        throw new ConflictException({ type: UNIQUE_CONSTRAIN_ERROR, e });
-      }
-      throw new InternalServerErrorException(e.message);
-    }
+    this.log.debug('Saving CoordinatorDriver');
+    const savedCoordinatorDriver = await coordinatorDriver.save();
+    this.log.debug(`CoordinatorDriver ${savedCoordinatorDriver._id} saved`);
+    await coordinatorDriver.populate({
+      path: 'owner',
+      match: { type: { $in: OWNER_TYPES } },
+    });
+
+    return CoordinatorDriverResultDto.fromCoordinatorDriverModel(
+      coordinatorDriver,
+    );
   }
 
   async deleteCoordinatorDriver(
@@ -213,15 +183,9 @@ export class CoordinatorDriverService {
 
     this.log.debug(`Deleting CoordinatorDriver ${coordinatorDriver._id}`);
 
-    try {
-      await coordinatorDriver.deleteOne();
-      this.log.debug('CoordinatorDriver deleted');
-    } catch (e) {
-      if (!(e instanceof Error)) {
-        throw new InternalServerErrorException(JSON.stringify(e));
-      }
-      throw new InternalServerErrorException(e.message);
-    }
+    await coordinatorDriver.deleteOne();
+    this.log.debug('CoordinatorDriver deleted');
+
     return CoordinatorDriverResultDto.fromCoordinatorDriverModel(
       coordinatorDriver,
     );

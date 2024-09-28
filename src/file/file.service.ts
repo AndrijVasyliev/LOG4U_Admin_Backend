@@ -5,12 +5,7 @@ import {
   PaginateOptions,
   Types,
 } from 'mongoose';
-import {
-  ConflictException,
-  Injectable,
-  InternalServerErrorException,
-  NotFoundException,
-} from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectConnection, InjectModel } from '@nestjs/mongoose';
 import { ConfigService } from '@nestjs/config';
 import { File, FileDocument } from './file.schema';
@@ -24,18 +19,11 @@ import {
 import { LoggerService } from '../logger';
 import {
   MONGO_CONNECTION_NAME,
-  MONGO_UNIQUE_INDEX_CONFLICT,
-  UNIQUE_CONSTRAIN_ERROR,
   MONGO_FILE_BUCKET_NAME,
 } from '../utils/constants';
 import { escapeForRegExp } from '../utils/escapeForRegExp';
 
-const {
-  GridFSBucket,
-  GridFSBucketWriteStream,
-  GridFSBucketReadStream,
-  MongoError,
-} = mongo;
+const { GridFSBucket, GridFSBucketWriteStream, GridFSBucketReadStream } = mongo;
 
 @Injectable()
 export class FileService {
@@ -183,21 +171,13 @@ export class FileService {
     createFileDto: CreateFileDto,
     file: Express.Multer.File,
   ): Promise<FileResultDto> {
-    try {
-      this.log.debug(`Creating new File: ${JSON.stringify(createFileDto)}`);
-      const fileDocument = await this.findFileDocumentById(file.filename);
-      Object.assign(fileDocument.metadata, createFileDto);
-      const savedFile = await fileDocument.save();
-      return FileResultDto.fromFileModel(savedFile);
-    } catch (e) {
-      if (!(e instanceof Error)) {
-        throw new InternalServerErrorException(JSON.stringify(e));
-      }
-      if (e instanceof MongoError && e.code === MONGO_UNIQUE_INDEX_CONFLICT) {
-        throw new ConflictException({ type: UNIQUE_CONSTRAIN_ERROR, e });
-      }
-      throw new InternalServerErrorException(e.message);
-    }
+    this.log.debug(`Creating new File: ${JSON.stringify(createFileDto)}`);
+
+    const fileDocument = await this.findFileDocumentById(file.filename);
+    Object.assign(fileDocument.metadata, createFileDto);
+    const savedFile = await fileDocument.save();
+
+    return FileResultDto.fromFileModel(savedFile);
   }
 
   async deleteFile(id: string): Promise<FileResultDto> {
@@ -205,15 +185,9 @@ export class FileService {
 
     this.log.debug(`Deleting File ${file._id}`);
 
-    try {
-      await this.fs.delete(new Types.ObjectId(file.id));
-      this.log.debug('File deleted');
-    } catch (e) {
-      if (!(e instanceof Error)) {
-        throw new InternalServerErrorException(JSON.stringify(e));
-      }
-      throw new InternalServerErrorException(e.message);
-    }
+    await this.fs.delete(new Types.ObjectId(file.id));
+    this.log.debug('File deleted');
+
     return FileResultDto.fromFileModel(file);
   }
 }

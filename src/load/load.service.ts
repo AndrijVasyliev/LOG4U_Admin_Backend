@@ -1,8 +1,6 @@
 import { mongo, PaginateModel, PaginateOptions, ObjectId } from 'mongoose';
 import {
-  ConflictException,
   Injectable,
-  InternalServerErrorException,
   NotFoundException,
   PreconditionFailedException,
 } from '@nestjs/common';
@@ -25,10 +23,8 @@ import {
 import { LoggerService } from '../logger';
 import {
   MONGO_CONNECTION_NAME,
-  MONGO_UNIQUE_INDEX_CONFLICT,
   STOP_DELIVERY_STATUSES,
   STOP_PICKUP_STATUSES,
-  UNIQUE_CONSTRAIN_ERROR,
 } from '../utils/constants';
 import { TruckService } from '../truck/truck.service';
 import { GoogleGeoApiService } from '../googleGeoApi/googleGeoApi.service';
@@ -37,7 +33,7 @@ import { ChangeDocument, Queue } from '../utils/queue';
 import { GeoPointType, LoadStatus } from '../utils/general.dto';
 import { PushService } from '../push/push.service';
 
-const { MongoError, ChangeStream } = mongo;
+const { ChangeStream } = mongo;
 
 @Injectable()
 export class LoadService {
@@ -560,33 +556,10 @@ export class LoadService {
         : 1,
     });
 
-    try {
-      this.log.debug('Saving Load');
-      await createdLoad.save();
+    this.log.debug('Saving Load');
+    await createdLoad.save();
 
-      // Calculate Truck Id to update status
-      /*let truckIdToOnRoute: string | undefined;
-      if (createLoadDto.status === 'In Progress' && createLoadDto.truck) {
-        truckIdToOnRoute = createLoadDto.truck;
-      }
-      if (truckIdToOnRoute) {
-        this.truckService
-          .updateTruck(truckIdToOnRoute, { status: 'On route' })
-          .then(() =>
-            this.log.info(`Status "On route" set to truck ${truckIdToOnRoute}`),
-          );
-      }*/
-
-      return LoadResultDto.fromLoadModel(createdLoad);
-    } catch (e) {
-      if (!(e instanceof Error)) {
-        throw new InternalServerErrorException(JSON.stringify(e));
-      }
-      if (e instanceof MongoError && e.code === MONGO_UNIQUE_INDEX_CONFLICT) {
-        throw new ConflictException({ type: UNIQUE_CONSTRAIN_ERROR, e });
-      }
-      throw new InternalServerErrorException(e.message);
-    }
+    return LoadResultDto.fromLoadModel(createdLoad);
   }
 
   async updateLoad(
@@ -594,96 +567,17 @@ export class LoadService {
     updateLoadDto: UpdateLoadDto,
   ): Promise<LoadResultDto> {
     const load = await this.findLoadDocumentById(id);
-    // const currentLoadStops = load.stops;
-    // const newLoadStops = updateLoadDto.stops;
-    // const currentLoadStatus = load.status;
-    // const newLoadStatus = updateLoadDto.status;
-    // const currentLoadTruckId = load.truck?._id.toString();
-    // const newLoadTruckId = updateLoadDto.truck;
+
     this.log.debug(`Setting new values: ${JSON.stringify(updateLoadDto)}`);
     Object.assign(load, {
       ...updateLoadDto,
     });
-    /*if () {
-      Object.assign(load, { miles: undefined });
-    }*/
 
-    try {
-      this.log.debug('Saving Load');
-      await (await load.save()).populate('stops.facility');
-      this.log.debug(`Load ${load._id} saved`);
+    this.log.debug('Saving Load');
+    await (await load.save()).populate('stops.facility');
+    this.log.debug(`Load ${load._id} saved`);
 
-      // Calculate Truck Id to update status
-      /*let truckIdToOnRoute: string | undefined;
-      let truckIdToAvailable: string | undefined;
-      if (
-        newLoadStatus === 'In Progress' &&
-        newLoadStatus !== currentLoadStatus &&
-        (newLoadTruckId === undefined || newLoadTruckId === currentLoadTruckId)
-      ) {
-        truckIdToOnRoute = currentLoadTruckId;
-      }
-      if (
-        currentLoadStatus === 'In Progress' &&
-        newLoadStatus !== currentLoadStatus &&
-        (newLoadTruckId === undefined || newLoadTruckId === currentLoadTruckId)
-      ) {
-        truckIdToAvailable = currentLoadTruckId;
-      }
-      if (
-        newLoadTruckId !== currentLoadTruckId &&
-        (newLoadStatus === undefined || newLoadStatus === currentLoadStatus) &&
-        currentLoadStatus === 'In Progress'
-      ) {
-        truckIdToOnRoute = newLoadTruckId;
-        truckIdToAvailable = currentLoadTruckId;
-      }
-      if (
-        newLoadTruckId !== undefined &&
-        newLoadStatus !== undefined &&
-        newLoadTruckId !== currentLoadTruckId &&
-        newLoadStatus !== currentLoadStatus &&
-        currentLoadStatus === 'In Progress'
-      ) {
-        truckIdToAvailable = currentLoadTruckId;
-      }
-      if (
-        newLoadTruckId !== undefined &&
-        newLoadStatus !== undefined &&
-        newLoadTruckId !== currentLoadTruckId &&
-        newLoadStatus !== currentLoadStatus &&
-        newLoadStatus === 'In Progress'
-      ) {
-        truckIdToOnRoute = newLoadTruckId;
-      }
-
-      if (truckIdToOnRoute) {
-        this.truckService
-          .updateTruck(truckIdToOnRoute, { status: 'On route' })
-          .then(() =>
-            this.log.info(`Status "On route" set to truck ${truckIdToOnRoute}`),
-          );
-      }
-      if (truckIdToAvailable) {
-        this.truckService
-          .updateTruck(truckIdToAvailable, { status: 'Available' })
-          .then(() =>
-            this.log.info(
-              `Status "Available" set to truck ${truckIdToAvailable}`,
-            ),
-          );
-      }*/
-      // END Calculate Truck Id to update status
-      return LoadResultDto.fromLoadModel(load);
-    } catch (e) {
-      if (!(e instanceof Error)) {
-        throw new InternalServerErrorException(JSON.stringify(e));
-      }
-      if (e instanceof MongoError && e.code === MONGO_UNIQUE_INDEX_CONFLICT) {
-        throw new ConflictException({ type: UNIQUE_CONSTRAIN_ERROR, e });
-      }
-      throw new InternalServerErrorException(e.message);
-    }
+    return LoadResultDto.fromLoadModel(load);
   }
 
   async updateLoadStopPickUpStatus(
@@ -741,18 +635,9 @@ export class LoadService {
       }
     }
 
-    try {
-      await load.save();
-      return LoadResultDto.fromLoadModel(load);
-    } catch (e) {
-      if (!(e instanceof Error)) {
-        throw new InternalServerErrorException(JSON.stringify(e));
-      }
-      if (e instanceof MongoError && e.code === MONGO_UNIQUE_INDEX_CONFLICT) {
-        throw new ConflictException({ type: UNIQUE_CONSTRAIN_ERROR, e });
-      }
-      throw new InternalServerErrorException(e.message);
-    }
+    await load.save();
+
+    return LoadResultDto.fromLoadModel(load);
   }
 
   async updateLoadStopDeliveryStatus(
@@ -815,18 +700,9 @@ export class LoadService {
       load.set('status', 'Completed');
     }
 
-    try {
-      await load.save();
-      return LoadResultDto.fromLoadModel(load);
-    } catch (e) {
-      if (!(e instanceof Error)) {
-        throw new InternalServerErrorException(JSON.stringify(e));
-      }
-      if (e instanceof MongoError && e.code === MONGO_UNIQUE_INDEX_CONFLICT) {
-        throw new ConflictException({ type: UNIQUE_CONSTRAIN_ERROR, e });
-      }
-      throw new InternalServerErrorException(e.message);
-    }
+    await load.save();
+
+    return LoadResultDto.fromLoadModel(load);
   }
 
   async setStopPickUpDriversInfo(
@@ -855,18 +731,9 @@ export class LoadService {
 
     stop.set('driversInfo', setStopPickUpDriversInfoDto);
 
-    try {
-      await load.save();
-      return LoadResultDto.fromLoadModel(load);
-    } catch (e) {
-      if (!(e instanceof Error)) {
-        throw new InternalServerErrorException(JSON.stringify(e));
-      }
-      if (e instanceof MongoError && e.code === MONGO_UNIQUE_INDEX_CONFLICT) {
-        throw new ConflictException({ type: UNIQUE_CONSTRAIN_ERROR, e });
-      }
-      throw new InternalServerErrorException(e.message);
-    }
+    await load.save();
+
+    return LoadResultDto.fromLoadModel(load);
   }
 
   async setStopDeliveryDriversInfo(
@@ -895,18 +762,9 @@ export class LoadService {
 
     stop.set('driversInfo', setStopDeliveryDriversInfoDto);
 
-    try {
-      await load.save();
-      return LoadResultDto.fromLoadModel(load);
-    } catch (e) {
-      if (!(e instanceof Error)) {
-        throw new InternalServerErrorException(JSON.stringify(e));
-      }
-      if (e instanceof MongoError && e.code === MONGO_UNIQUE_INDEX_CONFLICT) {
-        throw new ConflictException({ type: UNIQUE_CONSTRAIN_ERROR, e });
-      }
-      throw new InternalServerErrorException(e.message);
-    }
+    await load.save();
+
+    return LoadResultDto.fromLoadModel(load);
   }
 
   async deleteLoad(id: string): Promise<LoadResultDto> {
@@ -914,15 +772,9 @@ export class LoadService {
 
     this.log.debug(`Deleting Load ${load._id}`);
 
-    try {
-      await load.deleteOne();
-      this.log.debug('Load deleted');
-    } catch (e) {
-      if (!(e instanceof Error)) {
-        throw new InternalServerErrorException(JSON.stringify(e));
-      }
-      throw new InternalServerErrorException(e.message);
-    }
+    await load.deleteOne();
+    this.log.debug('Load deleted');
+
     return LoadResultDto.fromLoadModel(load);
   }
 }

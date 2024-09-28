@@ -1,18 +1,11 @@
-import { mongo, PaginateModel, PaginateOptions } from 'mongoose';
-import {
-  ConflictException,
-  Injectable,
-  InternalServerErrorException,
-  NotFoundException,
-} from '@nestjs/common';
+import { PaginateModel, PaginateOptions } from 'mongoose';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { LoggerService } from '../logger';
 import {
   COORDINATOR_TYPES,
   MONGO_CONNECTION_NAME,
-  MONGO_UNIQUE_INDEX_CONFLICT,
   OWNER_TYPES,
-  UNIQUE_CONSTRAIN_ERROR,
 } from '../utils/constants';
 import { Coordinator, CoordinatorDocument } from './coordinator.schema';
 import {
@@ -24,8 +17,6 @@ import {
 } from './coordinator.dto';
 import { TruckService } from '../truck/truck.service';
 import { escapeForRegExp } from '../utils/escapeForRegExp';
-
-const { MongoError } = mongo;
 
 @Injectable()
 export class CoordinatorService {
@@ -137,23 +128,14 @@ export class CoordinatorService {
     );
     const createdCoordinator = new this.coordinatorModel(createCoordinatorDto);
 
-    try {
-      this.log.debug('Saving Coordinator');
-      const coordinator = await createdCoordinator.save();
-      await coordinator.populate({
-        path: 'owner',
-        match: { type: { $in: OWNER_TYPES } },
-      });
-      return CoordinatorResultDto.fromCoordinatorModel(coordinator);
-    } catch (e) {
-      if (!(e instanceof Error)) {
-        throw new InternalServerErrorException(JSON.stringify(e));
-      }
-      if (e instanceof MongoError && e.code === MONGO_UNIQUE_INDEX_CONFLICT) {
-        throw new ConflictException({ type: UNIQUE_CONSTRAIN_ERROR, e });
-      }
-      throw new InternalServerErrorException(e.message);
-    }
+    this.log.debug('Saving Coordinator');
+    const coordinator = await createdCoordinator.save();
+    await coordinator.populate({
+      path: 'owner',
+      match: { type: { $in: OWNER_TYPES } },
+    });
+
+    return CoordinatorResultDto.fromCoordinatorModel(coordinator);
   }
 
   async updateCoordinator(
@@ -165,24 +147,15 @@ export class CoordinatorService {
       `Setting new values: ${JSON.stringify(updateCoordinatorDto)}`,
     );
     Object.assign(coordinator, updateCoordinatorDto);
-    try {
-      this.log.debug('Saving Coordinator');
-      const savedCoordinator = await coordinator.save();
-      this.log.debug(`Coordinator ${savedCoordinator._id} saved`);
-      await coordinator.populate({
-        path: 'owner',
-        match: { type: { $in: OWNER_TYPES } },
-      });
-      return CoordinatorResultDto.fromCoordinatorModel(coordinator);
-    } catch (e) {
-      if (!(e instanceof Error)) {
-        throw new InternalServerErrorException(JSON.stringify(e));
-      }
-      if (e instanceof MongoError && e.code === MONGO_UNIQUE_INDEX_CONFLICT) {
-        throw new ConflictException({ type: UNIQUE_CONSTRAIN_ERROR, e });
-      }
-      throw new InternalServerErrorException(e.message);
-    }
+    this.log.debug('Saving Coordinator');
+    const savedCoordinator = await coordinator.save();
+    this.log.debug(`Coordinator ${savedCoordinator._id} saved`);
+    await coordinator.populate({
+      path: 'owner',
+      match: { type: { $in: OWNER_TYPES } },
+    });
+
+    return CoordinatorResultDto.fromCoordinatorModel(coordinator);
   }
 
   async deleteCoordinator(id: string): Promise<CoordinatorResultDto> {
@@ -190,15 +163,9 @@ export class CoordinatorService {
 
     this.log.debug(`Deleting Coordinator ${coordinator._id}`);
 
-    try {
-      await coordinator.deleteOne();
-      this.log.debug('Coordinator deleted');
-    } catch (e) {
-      if (!(e instanceof Error)) {
-        throw new InternalServerErrorException(JSON.stringify(e));
-      }
-      throw new InternalServerErrorException(e.message);
-    }
+    await coordinator.deleteOne();
+    this.log.debug('Coordinator deleted');
+
     return CoordinatorResultDto.fromCoordinatorModel(coordinator);
   }
 }

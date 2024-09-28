@@ -9,11 +9,9 @@ import { mongo, PaginateModel, PaginateOptions } from 'mongoose';
 import {
   OnApplicationBootstrap,
   OnModuleDestroy,
-  ConflictException,
   Injectable,
   Inject,
   forwardRef,
-  InternalServerErrorException,
   NotFoundException,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
@@ -32,15 +30,13 @@ import { PersonService } from '../person/person.service';
 import { LoggerService } from '../logger';
 import {
   MONGO_CONNECTION_NAME,
-  MONGO_UNIQUE_INDEX_CONFLICT,
   PUSH_QUEUE_ORPHANED_JOB,
   PUSH_QUEUE_START_RECEIPT_JOB,
-  UNIQUE_CONSTRAIN_ERROR,
 } from '../utils/constants';
 import { escapeForRegExp } from '../utils/escapeForRegExp';
 import { ChangeDocument, Queue } from '../utils/queue';
 
-const { MongoError, ChangeStream } = mongo;
+const { ChangeStream } = mongo;
 
 @Injectable()
 export class PushService implements OnApplicationBootstrap, OnModuleDestroy {
@@ -405,19 +401,10 @@ export class PushService implements OnApplicationBootstrap, OnModuleDestroy {
     this.log.debug(`Creating new Push: ${JSON.stringify(createPushDto)}`);
     const createdPush = new this.pushModel(createPushDto);
 
-    try {
-      this.log.debug('Saving Push');
-      const push = await (await createdPush.save()).populate('to.to');
-      return PushResultDto.fromPushModel(push);
-    } catch (e) {
-      if (!(e instanceof Error)) {
-        throw new InternalServerErrorException(JSON.stringify(e));
-      }
-      if (e instanceof MongoError && e.code === MONGO_UNIQUE_INDEX_CONFLICT) {
-        throw new ConflictException({ type: UNIQUE_CONSTRAIN_ERROR, e });
-      }
-      throw new InternalServerErrorException(e.message);
-    }
+    this.log.debug('Saving Push');
+    const push = await (await createdPush.save()).populate('to.to');
+
+    return PushResultDto.fromPushModel(push);
   }
 
   async updatePush(
@@ -427,20 +414,11 @@ export class PushService implements OnApplicationBootstrap, OnModuleDestroy {
     const push = await this.findPushDocumentById(id);
     this.log.debug(`Setting new values: ${JSON.stringify(updatePushDto)}`);
     Object.assign(push, updatePushDto);
-    try {
-      this.log.debug('Saving Push');
-      const savedPush = await push.save();
-      this.log.debug(`Push ${savedPush._id} saved`);
-      return PushResultDto.fromPushModel(push);
-    } catch (e) {
-      if (!(e instanceof Error)) {
-        throw new InternalServerErrorException(JSON.stringify(e));
-      }
-      if (e instanceof MongoError && e.code === MONGO_UNIQUE_INDEX_CONFLICT) {
-        throw new ConflictException({ type: UNIQUE_CONSTRAIN_ERROR, e });
-      }
-      throw new InternalServerErrorException(e.message);
-    }
+    this.log.debug('Saving Push');
+    const savedPush = await push.save();
+    this.log.debug(`Push ${savedPush._id} saved`);
+
+    return PushResultDto.fromPushModel(push);
   }
 
   async deletePush(id: string): Promise<PushResultDto> {
@@ -448,15 +426,9 @@ export class PushService implements OnApplicationBootstrap, OnModuleDestroy {
 
     this.log.debug(`Deleting Push ${push._id}`);
 
-    try {
-      await push.deleteOne();
-      this.log.debug('Push deleted');
-    } catch (e) {
-      if (!(e instanceof Error)) {
-        throw new InternalServerErrorException(JSON.stringify(e));
-      }
-      throw new InternalServerErrorException(e.message);
-    }
+    await push.deleteOne();
+    this.log.debug('Push deleted');
+
     return PushResultDto.fromPushModel(push);
   }
 }

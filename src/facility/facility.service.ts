@@ -1,18 +1,8 @@
-import { mongo, PaginateModel, PaginateOptions } from 'mongoose';
-import {
-  ConflictException,
-  Injectable,
-  InternalServerErrorException,
-  NotFoundException,
-} from '@nestjs/common';
+import { PaginateModel, PaginateOptions } from 'mongoose';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { LoggerService } from '../logger';
-import {
-  EARTH_RADIUS_MILES,
-  MONGO_CONNECTION_NAME,
-  MONGO_UNIQUE_INDEX_CONFLICT,
-  UNIQUE_CONSTRAIN_ERROR,
-} from '../utils/constants';
+import { EARTH_RADIUS_MILES, MONGO_CONNECTION_NAME } from '../utils/constants';
 import { Facility, FacilityDocument } from './facility.schema';
 import {
   CreateFacilityDto,
@@ -22,8 +12,6 @@ import {
   UpdateFacilityDto,
 } from './facility.dto';
 import { escapeForRegExp } from '../utils/escapeForRegExp';
-
-const { MongoError } = mongo;
 
 @Injectable()
 export class FacilityService {
@@ -102,21 +90,13 @@ export class FacilityService {
     this.log.debug(
       `Creating new Facility: ${JSON.stringify(createFacilityDto)}`,
     );
+
     const createdFacility = new this.facilityModel(createFacilityDto);
 
-    try {
-      this.log.debug('Saving Facility');
-      const facility = await createdFacility.save();
-      return FacilityResultDto.fromFacilityModel(facility);
-    } catch (e) {
-      if (!(e instanceof Error)) {
-        throw new InternalServerErrorException(JSON.stringify(e));
-      }
-      if (e instanceof MongoError && e.code === MONGO_UNIQUE_INDEX_CONFLICT) {
-        throw new ConflictException({ type: UNIQUE_CONSTRAIN_ERROR, e });
-      }
-      throw new InternalServerErrorException(e.message);
-    }
+    this.log.debug('Saving Facility');
+    const facility = await createdFacility.save();
+
+    return FacilityResultDto.fromFacilityModel(facility);
   }
 
   async updateFacility(
@@ -126,20 +106,11 @@ export class FacilityService {
     const facility = await this.findFacilityDocumentById(id);
     this.log.debug(`Setting new values: ${JSON.stringify(updateFacilityDto)}`);
     Object.assign(facility, updateFacilityDto);
-    try {
-      this.log.debug('Saving Facility');
-      const savedFacility = await facility.save();
-      this.log.debug(`Facility ${savedFacility._id} saved`);
-      return FacilityResultDto.fromFacilityModel(facility);
-    } catch (e) {
-      if (!(e instanceof Error)) {
-        throw new InternalServerErrorException(JSON.stringify(e));
-      }
-      if (e instanceof MongoError && e.code === MONGO_UNIQUE_INDEX_CONFLICT) {
-        throw new ConflictException({ type: UNIQUE_CONSTRAIN_ERROR, e });
-      }
-      throw new InternalServerErrorException(e.message);
-    }
+    this.log.debug('Saving Facility');
+    const savedFacility = await facility.save();
+    this.log.debug(`Facility ${savedFacility._id} saved`);
+
+    return FacilityResultDto.fromFacilityModel(facility);
   }
 
   async deleteFacility(id: string): Promise<FacilityResultDto> {
@@ -147,15 +118,9 @@ export class FacilityService {
 
     this.log.debug(`Deleting Facility ${facility._id}`);
 
-    try {
-      await facility.deleteOne();
-      this.log.debug('Facility deleted');
-    } catch (e) {
-      if (!(e instanceof Error)) {
-        throw new InternalServerErrorException(JSON.stringify(e));
-      }
-      throw new InternalServerErrorException(e.message);
-    }
+    await facility.deleteOne();
+    this.log.debug('Facility deleted');
+
     return FacilityResultDto.fromFacilityModel(facility);
   }
 }
