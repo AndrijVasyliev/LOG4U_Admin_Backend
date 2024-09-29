@@ -205,8 +205,9 @@ export interface UpdateLoadDto {
 
 export interface LoadQuerySearch {
   readonly search?: string;
+  readonly ref?: string;
   readonly loadNumber?: string;
-  readonly status?: LoadStatus;
+  readonly status?: LoadStatus[];
   readonly weight?: string;
   readonly truckType?: TruckType;
   readonly bookedByCompany?: string;

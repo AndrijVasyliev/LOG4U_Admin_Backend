@@ -510,12 +510,18 @@ export class LoadService {
       const searchParams = Object.entries(query.search);
       searchParams.forEach((entry) => {
         entry[0] !== 'search' &&
+          entry[0] !== 'status' &&
           entry[0] !== 'loadNumber' &&
           entry[0] !== 'truckNumber' &&
           (documentQuery[entry[0]] = {
             $regex: new RegExp(escapeForRegExp(entry[1]), 'i'),
           });
       });
+    }
+    if (query?.search?.status) {
+      documentQuery.status = {
+        $in: query.search.status,
+      };
     }
     if (query?.search?.loadNumber) {
       documentQuery.loadNumber = {

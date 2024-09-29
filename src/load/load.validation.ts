@@ -191,9 +191,27 @@ export const UpdateLoadValidation = CreateLoadValidation.fork(
 export const LoadQueryParamsSchema = Joi.object({
   offset: Joi.number().integer().min(0).optional(),
   limit: Joi.number().integer().min(1).optional(),
+  ref: Joi.string().optional(),
   loadNumber: Joi.number().min(0).optional(),
-  status: Joi.string()
-    .valid(...LOAD_STATUSES)
+  status: Joi.alternatives(
+    Joi.string()
+      .valid(...LOAD_STATUSES)
+      .required(),
+    Joi.array()
+      .items(
+        Joi.string()
+          .valid(...LOAD_STATUSES)
+          .required(),
+      )
+      .min(1)
+      .required(),
+  )
+    .custom((value: string | string[]) => {
+      if (Array.isArray(value)) {
+        return value;
+      }
+      return value.split(',');
+    })
     .optional(),
   weight: Joi.string().optional(),
   truckType: Joi.string()

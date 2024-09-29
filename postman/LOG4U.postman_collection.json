@@ -1831,9 +1831,39 @@
 									"description": "asc or desc"
 								},
 								{
+									"key": "ref",
+									"value": "test",
+									"disabled": true
+								},
+								{
+									"key": "status",
+									"value": "Available",
+									"disabled": true
+								},
+								{
+									"key": "status",
+									"value": "Planned",
+									"disabled": true
+								},
+								{
 									"key": "status",
 									"value": "In Progress",
 									"description": "'Available',  'Planned',  'In Progress',  'TONU',  'Cancelled',  'Completed'",
+									"disabled": true
+								},
+								{
+									"key": "status",
+									"value": "TONU",
+									"disabled": true
+								},
+								{
+									"key": "status",
+									"value": "Cancelled",
+									"disabled": true
+								},
+								{
+									"key": "status",
+									"value": "Completed",
 									"disabled": true
 								},
 								{
