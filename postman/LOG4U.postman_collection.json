@@ -3724,33 +3724,6 @@
 			"name": "Mobile",
 			"item": [
 				{
-					"name": "Auth (Will be removed soon)",
-					"request": {
-						"method": "PATCH",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"deviceId\": \"mego_device\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{origin}}/mobileApp/auth",
-							"host": [
-								"{{origin}}"
-							],
-							"path": [
-								"mobileApp",
-								"auth"
-							]
-						}
-					},
-					"response": []
-				},
-				{
 					"name": "Set Auth",
 					"request": {
 						"method": "PATCH",
@@ -3864,13 +3837,13 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{origin}}/mobileApp/getLoad?limit=15&offset=0",
+							"raw": "{{origin}}/mobileApp/load?limit=15&offset=0",
 							"host": [
 								"{{origin}}"
 							],
 							"path": [
 								"mobileApp",
-								"getLoad"
+								"load"
 							],
 							"query": [
 								{
@@ -3899,41 +3872,7 @@
 					"response": []
 				},
 				{
-					"name": "Update Load",
-					"request": {
-						"method": "PATCH",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"stops\":[{\r\n       \"type\":\"PickUp\",\r\n       \"status\": \"Completed\",\r\n       \"facility\": \"6650abdd91ec5b7d47736f0e\",\r\n       \"timeFrame\":{\r\n         \"type\":\"FCFS\",\r\n         \"from\":\"2001-07-25T20:33:52.147Z\",\r\n         \"to\":\"2001-07-27T20:33:52.147Z\"\r\n       },\r\n       \"freightList\":[{\r\n         \"pieces\":3,\r\n         \"unitOfWeight\":\"KG\",\r\n         \"weight\":100500,\r\n         \"unitOfLength\":\"M\",\r\n         \"length\":13\r\n       },{\r\n         \"pieces\":1,\r\n         \"unitOfWeight\":\"TON\",\r\n         \"weight\":104,\r\n         \"unitOfLength\":\"CM\",\r\n         \"length\":378\r\n       }],\r\n       \"addInfo\":\"Some info\"\r\n    },{\r\n       \"type\":\"PickUp\",\r\n       \"status\": \"On route to PU\",\r\n       \"facility\": \"6650abdd91ec5b7d47736f0e\",\r\n       \"timeFrame\":{\r\n         \"type\":\"FCFS\",\r\n         \"from\":\"2001-07-25T20:33:52.147Z\",\r\n         \"to\":\"2001-07-27T20:33:52.147Z\"\r\n       },\r\n       \"freightList\":[{\r\n         \"pieces\":3,\r\n         \"unitOfWeight\":\"KG\",\r\n         \"weight\":100500,\r\n         \"unitOfLength\":\"M\",\r\n         \"length\":13\r\n       },{\r\n         \"pieces\":1,\r\n         \"unitOfWeight\":\"TON\",\r\n         \"weight\":104,\r\n         \"unitOfLength\":\"CM\",\r\n         \"length\":378\r\n       }],\r\n       \"addInfo\":\"Some info\"\r\n    },{\r\n      \"type\":\"Delivery\",\r\n      \"status\": \"New\",\r\n      \"facility\":\"6650abea91ec5b7d47736f11\",\r\n      \"timeFrame\":{\r\n         \"type\":\"Direct\",\r\n         \"at\":\"2002-07-25T20:33:52.147Z\"\r\n       },\r\n       \"addInfo\":\"Some other info\"\r\n    }]\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{origin}}/mobileApp/updateLoad/:loadId",
-							"host": [
-								"{{origin}}"
-							],
-							"path": [
-								"mobileApp",
-								"updateLoad",
-								":loadId"
-							],
-							"variable": [
-								{
-									"key": "loadId",
-									"value": "66e5ce8f751c3069d1833705"
-								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Update Load Stop PickUp  status",
+					"name": "Set Load Stop PickUp  status",
 					"request": {
 						"method": "PATCH",
 						"header": [],
@@ -3947,14 +3886,15 @@
 							}
 						},
 						"url": {
-							"raw": "{{origin}}/mobileApp/setLoadStopPickUpStatus/:loadId/:stopId",
+							"raw": "{{origin}}/mobileApp/load/:loadId/stopPickUp/:stopId",
 							"host": [
 								"{{origin}}"
 							],
 							"path": [
 								"mobileApp",
-								"setLoadStopPickUpStatus",
+								"load",
 								":loadId",
+								"stopPickUp",
 								":stopId"
 							],
 							"variable": [
@@ -3972,7 +3912,7 @@
 					"response": []
 				},
 				{
-					"name": "Update Load Stop PickUp  DriversInfo",
+					"name": "Set Load Stop PickUp  DriversInfo",
 					"request": {
 						"method": "PATCH",
 						"header": [],
@@ -3986,15 +3926,17 @@
 							}
 						},
 						"url": {
-							"raw": "{{origin}}/mobileApp/setLoadStopPickUpDriversInfo/:loadId/:stopId",
+							"raw": "{{origin}}/mobileApp/load/:loadId/stopPickUp/:stopId/driversInfo",
 							"host": [
 								"{{origin}}"
 							],
 							"path": [
 								"mobileApp",
-								"setLoadStopPickUpDriversInfo",
+								"load",
 								":loadId",
-								":stopId"
+								"stopPickUp",
+								":stopId",
+								"driversInfo"
 							],
 							"variable": [
 								{
@@ -4011,7 +3953,7 @@
 					"response": []
 				},
 				{
-					"name": "Update Load Stop Delivery status",
+					"name": "Set Load Stop Delivery status",
 					"request": {
 						"method": "PATCH",
 						"header": [],
@@ -4025,14 +3967,15 @@
 							}
 						},
 						"url": {
-							"raw": "{{origin}}/mobileApp/setLoadStopDeliveryStatus/:loadId/:stopId",
+							"raw": "{{origin}}/mobileApp/load/:loadId/stopDelivery/:stopId",
 							"host": [
 								"{{origin}}"
 							],
 							"path": [
 								"mobileApp",
-								"setLoadStopDeliveryStatus",
+								"load",
 								":loadId",
+								"stopDelivery",
 								":stopId"
 							],
 							"variable": [
@@ -4064,15 +4007,17 @@
 							}
 						},
 						"url": {
-							"raw": "{{origin}}/mobileApp/setLoadStopDeliveryDriversInfo/:loadId/:stopId",
+							"raw": "{{origin}}/mobileApp/load/:loadId/stopDelivery/:stopId/driversInfo",
 							"host": [
 								"{{origin}}"
 							],
 							"path": [
 								"mobileApp",
-								"setLoadStopDeliveryDriversInfo",
+								"load",
 								":loadId",
-								":stopId"
+								"stopDelivery",
+								":stopId",
+								"driversInfo"
 							],
 							"variable": [
 								{
@@ -4130,13 +4075,13 @@
 							}
 						},
 						"url": {
-							"raw": "{{origin}}/mobileApp/updateTruck/:truckId",
+							"raw": "{{origin}}/mobileApp/truck/:truckId",
 							"host": [
 								"{{origin}}"
 							],
 							"path": [
 								"mobileApp",
-								"updateTruck",
+								"truck",
 								":truckId"
 							],
 							"variable": [

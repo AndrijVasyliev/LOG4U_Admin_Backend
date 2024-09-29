@@ -61,26 +61,6 @@ export class MobileAppController {
     private readonly loadService: LoadService,
     private readonly truckService: TruckService,
   ) {}
-  // ToDo remove after switching to new auth schema
-  @Patch('auth')
-  @Roles('Driver', 'Owner', 'OwnerDriver', 'Coordinator', 'CoordinatorDriver')
-  async auth(
-    @Req() request: Request,
-    @Body(new BodyValidationPipe(MobileAuthValidation))
-    authDto: AuthDto,
-  ): Promise<DriverResultDto> {
-    const { user: person } = request as unknown as {
-      user: PersonAuthResultDto;
-    };
-    const { deviceId } = authDto;
-    if (!deviceId) {
-      throw new BadRequestException(`No deviceId in auth request`);
-    }
-    if (person.deviceId !== deviceId) {
-      await this.personService.setDeviceId(person.id, deviceId);
-    }
-    return this.driverService.findDriverById(person.id);
-  }
 
   @Patch('setAuth')
   @Roles('Driver', 'Owner', 'OwnerDriver', 'Coordinator', 'CoordinatorDriver')
@@ -148,7 +128,7 @@ export class MobileAppController {
     return this.coordinatorService.findCoordinatorById(person.id);
   }
 
-  @Get('getLoad')
+  @Get('load')
   @Roles('Driver', 'OwnerDriver', 'CoordinatorDriver')
   async getLoad(
     @Req() request: Request,
@@ -172,7 +152,7 @@ export class MobileAppController {
     });
   }
 
-  @Patch('setLoadStopPickUpStatus/:loadId/:stopId')
+  @Patch('load/:loadId/stopPickUp/:stopId')
   @Roles('Driver', 'OwnerDriver', 'CoordinatorDriver')
   async updateLoadStopPickUpStatus(
     @Req() request: Request,
@@ -197,7 +177,7 @@ export class MobileAppController {
     );
   }
 
-  @Patch('setLoadStopDeliveryStatus/:loadId/:stopId')
+  @Patch('load/:loadId/stopDelivery/:stopId')
   @Roles('Driver', 'OwnerDriver', 'CoordinatorDriver')
   async updateLoadStopDeliveryStatus(
     @Req() request: Request,
@@ -222,7 +202,7 @@ export class MobileAppController {
     );
   }
 
-  @Patch('setLoadStopPickUpDriversInfo/:loadId/:stopId')
+  @Patch('load/:loadId/stopPickUp/:stopId/driversInfo')
   @Roles('Driver', 'OwnerDriver', 'CoordinatorDriver')
   async updateLoadStopPickUpDriversInfo(
     @Req() request: Request,
@@ -247,7 +227,7 @@ export class MobileAppController {
     );
   }
 
-  @Patch('setLoadStopDeliveryDriversInfo/:loadId/:stopId')
+  @Patch('load/:loadId/stopDelivery/:stopId/driversInfo')
   @Roles('Driver', 'OwnerDriver', 'CoordinatorDriver')
   async updateLoadStopDeliveryDriversInfo(
     @Req() request: Request,
@@ -272,31 +252,7 @@ export class MobileAppController {
     );
   }
 
-  // ToDo remove after app update
-  @Patch('updateTruck')
-  @Roles('Driver', 'Owner', 'OwnerDriver', 'CoordinatorDriver')
-  async updateTruck(
-    @Req() request: Request,
-    @Body(new BodyValidationPipe(MobileUpdateTruckValidation))
-    updateTruckBodyDto: UpdateTruckDto,
-  ): Promise<UpdateTruckDto> {
-    const { user: person } = request as unknown as {
-      user: PersonAuthResultDto;
-    };
-    const driver = await this.driverService.findDriverById(person.id);
-    if (!driver.driveTrucks || driver.driveTrucks.length !== 1) {
-      throw new PreconditionFailedException(
-        `Driver ${driver.fullName} have no trucks`,
-      );
-    }
-    await this.truckService.updateTruck(
-      driver.driveTrucks[0].id,
-      updateTruckBodyDto,
-    );
-    return updateTruckBodyDto;
-  }
-
-  @Patch('updateTruck/:truckId')
+  @Patch('truck/:truckId')
   @Roles('Driver', 'Owner', 'OwnerDriver', 'CoordinatorDriver')
   async updateTrucks(
     @Req() request: Request,
