@@ -4023,7 +4023,7 @@
 					"response": []
 				},
 				{
-					"name": "Update Load Stop Delivery DriversInfo",
+					"name": "Set Load Stop Delivery DriversInfo",
 					"request": {
 						"method": "PATCH",
 						"header": [],
