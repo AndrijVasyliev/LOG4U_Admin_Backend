@@ -126,7 +126,7 @@ export class OwnerDriverService {
       `Creating new OwnerDriver: ${JSON.stringify(createOwnerDriverDto)}`,
     );
     const createdOwnerDriver = new this.ownerDriverModel(createOwnerDriverDto);
-    createdOwnerDriver.owner = createdOwnerDriver._id;
+    createdOwnerDriver.set('owner', createdOwnerDriver._id);
 
     this.log.debug('Saving OwnerDriver');
     const ownerDriver = await createdOwnerDriver.save();

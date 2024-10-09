@@ -52,6 +52,9 @@ export class MongooseHealthIndicator extends HealthIndicator {
   }
 
   private async pingDb(connection: Connection, timeout: number) {
+    if (!connection.db) {
+      return;
+    }
     const promise = connection.db.admin().ping();
     return await promiseTimeout(timeout, promise);
   }

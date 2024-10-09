@@ -36,9 +36,11 @@ export class FileService {
     @InjectConnection(MONGO_CONNECTION_NAME)
     private mongoConnection: typeof connection,
   ) {
-    this.fs = new GridFSBucket(mongoConnection.db, {
-      bucketName: MONGO_FILE_BUCKET_NAME,
-    });
+    if (mongoConnection.db) {
+      this.fs = new GridFSBucket(mongoConnection.db, {
+        bucketName: MONGO_FILE_BUCKET_NAME,
+      });
+    }
   }
 
   _handleFile(
