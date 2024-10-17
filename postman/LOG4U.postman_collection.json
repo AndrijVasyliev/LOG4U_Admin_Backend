@@ -1588,7 +1588,7 @@
 								},
 								{
 									"key": "distance",
-									"value": "55",
+									"value": "3963",
 									"description": "miles",
 									"disabled": true
 								},
@@ -1936,7 +1936,7 @@
 							"variable": [
 								{
 									"key": "loadId",
-									"value": "66e5ce8f751c3069d1833705"
+									"value": "66fa978a87729085e2489fa8"
 								}
 							]
 						}
@@ -3971,11 +3971,11 @@
 							"variable": [
 								{
 									"key": "loadId",
-									"value": "66d96a39b4949a1e824fbdb6"
+									"value": "66e5ce8f751c3069d1833705"
 								},
 								{
 									"key": "stopId",
-									"value": "66f701c555f40dfbec31cf96"
+									"value": "66effec9204feee40523c8b5"
 								}
 							]
 						}
@@ -4052,39 +4052,12 @@
 							"variable": [
 								{
 									"key": "loadId",
-									"value": "66d96a39b4949a1e824fbdb6"
+									"value": "66e5ce8f751c3069d1833705"
 								},
 								{
 									"key": "stopId",
-									"value": "66f701c555f40dfbec31cf9d"
+									"value": "66effec9204feee40523c8b7"
 								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Update Truck Status (Old)",
-					"request": {
-						"method": "PATCH",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"status\":\"Will be available\",\r\n    \"availabilityLocation\":[38.97704,-77.03195],\r\n    \"availabilityAtLocal\":\"2024-07-24T20:33:52.147Z\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{origin}}/mobileApp/updateTruck",
-							"host": [
-								"{{origin}}"
-							],
-							"path": [
-								"mobileApp",
-								"updateTruck"
 							]
 						}
 					},

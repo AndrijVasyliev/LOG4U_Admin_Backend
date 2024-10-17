@@ -3,7 +3,6 @@ import {
   Get,
   Req,
   PreconditionFailedException,
-  BadRequestException,
   Query,
   Patch,
   Post,
@@ -128,7 +127,7 @@ export class MobileAppController {
     return this.coordinatorService.findCoordinatorById(person.id);
   }
 
-  @Get('load')
+  @Get(['getLoad', 'load'])
   @Roles('Driver', 'OwnerDriver', 'CoordinatorDriver')
   async getLoad(
     @Req() request: Request,
@@ -252,7 +251,7 @@ export class MobileAppController {
     );
   }
 
-  @Patch('truck/:truckId')
+  @Patch(['updateTruck/:truckId', 'truck/:truckId'])
   @Roles('Driver', 'Owner', 'OwnerDriver', 'CoordinatorDriver')
   async updateTrucks(
     @Req() request: Request,
