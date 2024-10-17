@@ -701,7 +701,7 @@ export class TruckService implements OnApplicationBootstrap, OnModuleDestroy {
     if (
       updateTruckDto.lastLocation &&
       currentTruckStatus !== 'Will be available' &&
-      !newTruckStatus
+      newTruckStatus !== 'Will be available'
     ) {
       Object.assign(truck, {
         searchLocation: updateTruckDto.lastLocation,
@@ -722,6 +722,15 @@ export class TruckService implements OnApplicationBootstrap, OnModuleDestroy {
       updateTruckDto.availabilityLocation &&
       newTruckStatus === 'Will be available' &&
       currentTruckStatus !== newTruckStatus
+    ) {
+      Object.assign(truck, {
+        searchLocation: updateTruckDto.availabilityLocation,
+      });
+    }
+    if (
+      updateTruckDto.availabilityLocation &&
+      currentTruckStatus === 'Will be available' &&
+      (!newTruckStatus || newTruckStatus === currentTruckStatus)
     ) {
       Object.assign(truck, {
         searchLocation: updateTruckDto.availabilityLocation,

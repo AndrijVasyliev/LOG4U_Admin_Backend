@@ -132,6 +132,14 @@ export interface StopChangeUpdateDocument {
       readonly __v?: number;
     };
   };
+  readonly fullDocument: {
+    readonly stops?: Stops;
+    readonly __v?: number;
+  };
+  readonly fullDocumentBeforeChange: {
+    readonly stops?: Stops;
+    readonly __v?: number;
+  };
 }
 export interface StopChangeInsertDocument {
   readonly operationType: 'insert';
@@ -440,7 +448,7 @@ export class LoadResultDto {
       ref: load.ref,
       status: load.status,
       stops,
-      milesByRoads: load.miles,
+      milesByRoads: load.miles?.reduce((acc, item) => acc + item, 0),
       milesHaversine: stops.reduce(
         (prev, stop, index) => {
           if (index === 0 || prev === undefined) {

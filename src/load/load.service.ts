@@ -50,32 +50,40 @@ export class LoadService {
     private readonly configService: ConfigService,
     private readonly log: LoggerService,
   ) {
-    this.stopsChangeStream = loadModel.watch([
-      {
-        $match: {
-          $or: [
-            {
-              operationType: 'insert',
-              'fullDocument.stops': { $exists: true },
-            },
-            {
-              operationType: 'update',
-              'updateDescription.updatedFields.stops': { $exists: true },
-            },
-          ],
+    this.stopsChangeStream = loadModel.watch(
+      [
+        {
+          $match: {
+            $or: [
+              {
+                operationType: 'insert',
+                'fullDocument.stops': { $exists: true },
+              },
+              {
+                operationType: 'update',
+                'updateDescription.updatedFields.stops': { $exists: true },
+              },
+            ],
+          },
         },
-      },
-      {
-        $project: {
-          operationType: 1,
-          'documentKey._id': 1,
-          'fullDocument.__v': 1,
-          // 'fullDocument.stops': 1,
-          //'updateDescription.updatedFields.stops': 1,
-          'updateDescription.updatedFields.__v': 1,
+        {
+          $project: {
+            operationType: 1,
+            'documentKey._id': 1,
+            'fullDocument.__v': 1,
+            'fullDocument.stops': 1,
+            'fullDocumentBeforeChange.__v': 1,
+            'fullDocumentBeforeChange.stops': 1,
+            'updateDescription.updatedFields.stops': 1,
+            'updateDescription.updatedFields.__v': 1,
+          },
         },
+      ],
+      {
+        fullDocumentBeforeChange: 'whenAvailable',
+        fullDocument: 'whenAvailable',
       },
-    ]);
+    );
     this.loadChangeStream = loadModel.watch(
       [
         {
@@ -200,9 +208,20 @@ export class LoadService {
       return;
     }
 
+
+    const filter: Record<string, any> = {
+      _id: change.documentKey._id,
+      stopsVer: { $lte: load.__v },
+    };
+    const setData: Record<string, any> = {
+      stopsVer: load.__v,
+    };
+
     const stops = load.stops;
     const firstStop = stops?.at(0);
     const lastStop = stops?.at(-1);
+
+    // Calculate start and stop date
     const stopsStart =
       firstStop &&
       (firstStop.timeFrame.type === TimeFrameType.FCFS
@@ -213,11 +232,39 @@ export class LoadService {
       (lastStop.timeFrame.type === TimeFrameType.FCFS
         ? lastStop.timeFrame.to
         : lastStop.timeFrame.at);
+    this.log.debug(`Setting stopsStart to ${stopsStart} and stopsEnd to ${stopsEnd}`);
+    Object.assign(setData, { stopsStart, stopsEnd});
 
+    // Calculate stop status
+    const stopInNonFinalStatusIndex = stops.findIndex((stop) => (stop.type === StopType.PickUp && stop.status !== STOP_PICKUP_STATUSES.at(0) && stop.status !== STOP_PICKUP_STATUSES.at(-1)) || (stop.type === StopType.Delivery && stop.status !== STOP_DELIVERY_STATUSES.at(0) && stop.status !== STOP_DELIVERY_STATUSES.at(-1)));
+    const firstStopInNewStatusIndex = stops.findIndex((stop) => (stop.type === StopType.PickUp && stop.status === STOP_PICKUP_STATUSES.at(0)) || (stop.type === StopType.Delivery && stop.status === STOP_DELIVERY_STATUSES.at(0)));
+
+    if (!~stopInNonFinalStatusIndex && ~firstStopInNewStatusIndex && firstStopInNewStatusIndex !== 0) {
+      const stopToNextStatus = stops[firstStopInNewStatusIndex];
+      let nextStopStatus: string | undefined;
+      switch (stopToNextStatus.type) {
+        case StopType.PickUp:
+          nextStopStatus = STOP_PICKUP_STATUSES.at(1);
+          break;
+        case StopType.Delivery :
+          nextStopStatus = STOP_DELIVERY_STATUSES.at(1);
+          break;
+      }
+      if (nextStopStatus) {
+        this.log.debug(`Setting stop at index [${firstStopInNewStatusIndex}] to ${nextStopStatus} status`);
+        Object.assign(filter, { 'stops._id': stops[firstStopInNewStatusIndex]._id });
+        Object.assign(setData, { 'stops.$.status': nextStopStatus });
+      }
+    } else if (load.status !== 'Completed' && !~firstStopInNewStatusIndex && !~stopInNonFinalStatusIndex && (change.operationType === 'insert' || (change.fullDocumentBeforeChange.stops?.at(-1)?.type === StopType.Delivery && change.fullDocumentBeforeChange.stops?.at(-1)?.status !== STOP_DELIVERY_STATUSES.at(-1)))) {
+      this.log.debug('Setting load status to completed');
+      Object.assign(setData, { status: 'Completed' });
+    }
+
+    // Calculate stop distances
     this.log.debug(
       `Stops updated. Calculating distance for Load ${load._id.toString()}.`,
     );
-    let miles: number | null = 0;
+    let miles: number[] | void = [];
     let prevStopLocation: GeoPointType | undefined = undefined;
     this.log.debug('Calculating distance by roads');
     for (const stop of stops) {
@@ -227,29 +274,22 @@ export class LoadService {
           stop.facility.facilityLocation,
         );
         if (partRouteLength === undefined) {
-          miles = null;
+          miles = undefined;
           break;
         }
-        miles += Number(partRouteLength);
+        miles.push(Number(partRouteLength));
       }
       prevStopLocation = stop.facility.facilityLocation;
     }
+    Object.assign(setData, { miles });
     this.log.debug(`Calculated distance: ${miles}`);
+
     const updated = await this.loadModel.findOneAndUpdate(
+      filter,
       {
-        _id: change.documentKey._id,
-        stopsVer: { $lte: load.__v },
+        $set: setData,
       },
-      [
-        {
-          $set: {
-            stopsVer: load.__v,
-            miles,
-            stopsStart,
-            stopsEnd,
-          },
-        },
-      ],
+      { strict: false },
     );
     if (updated) {
       this.log.debug(`Load ${change.documentKey._id} updated`);

@@ -135,22 +135,32 @@ export const CreateLoadValidation = Joi.object({
           return helper.error('custom.stopStatusOnlyNew');
         }
       } else {
+        let completedPassed = false;
+        let newStarted = false;
         let countNotFinalState = 0;
         for (let index = 0; index < value.length; index++) {
           if (
             index > 0 &&
-            !countNotFinalState &&
+            !completedPassed &&
             value[index - 1].status !== 'Completed'
           ) {
             return helper.error('custom.stopStatusOrder');
           }
+          value[index].status &&
+            value[index].status !== 'Completed' &&
+            !completedPassed &&
+            (completedPassed = true);
+          value[index].status &&
+            value[index].status === 'New' &&
+            !newStarted &&
+            (newStarted = true);
           value[index].status &&
             value[index].status !== 'New' &&
             value[index].status !== 'Completed' &&
             countNotFinalState++;
           if (
             index < value.length - 1 &&
-            countNotFinalState &&
+            newStarted &&
             value[index + 1].status !== 'New'
           ) {
             return helper.error('custom.stopStatusOrder');

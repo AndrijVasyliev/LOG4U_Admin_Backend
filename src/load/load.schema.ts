@@ -457,9 +457,9 @@ export class Load {
 
   @Prop({
     required: false,
-    type: Number,
+    type: [Number],
   })
-  miles?: number;
+  miles?: number[];
 
   @Prop({ required: true })
   weight: string;
