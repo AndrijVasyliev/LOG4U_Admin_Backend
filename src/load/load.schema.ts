@@ -126,7 +126,7 @@ const TimeFrameASAPSchema = SchemaFactory.createForClass(TimeFrameASAP);
 const TimeFrameDirectSchema = SchemaFactory.createForClass(TimeFrameDirect);
 // Freight
 @Schema({
-  _id: true,
+  // _id: true,
   timestamps: false,
 })
 export class Freight {
@@ -170,13 +170,15 @@ export class Freight {
     },
   })
   freightId: string;
+
+  _id: ObjectId;
 }
 
 const FreightSchema = SchemaFactory.createForClass(Freight);
 // Stop
 @Schema({
   discriminatorKey: 'type',
-  _id: true,
+  // _id: true,
   timestamps: false,
 })
 export class Stop {
@@ -212,10 +214,12 @@ export class Stop {
     },
   })
   stopId: string;
+
+  _id: ObjectId;
 }
 
 @Schema({
-  _id: true,
+  // _id: true,
   timestamps: false,
 })
 export class StopPickUpDriversInfo {
@@ -263,13 +267,15 @@ export class StopPickUpDriversInfo {
     },
   })
   driversInfoId: string;
+
+  _id: ObjectId;
 }
 const StopPickUpDriversInfoSchema = SchemaFactory.createForClass(
   StopPickUpDriversInfo,
 );
 
 @Schema({
-  _id: true,
+  // _id: true,
   timestamps: false,
 })
 export class StopPickUp {
@@ -306,10 +312,12 @@ export class StopPickUp {
     type: [FreightSchema],
   })
   freightList: (Freight & Document)[];
+
+  _id: ObjectId;
 }
 
 @Schema({
-  _id: true,
+  // _id: true,
   timestamps: false,
 })
 export class StopDeliveryDriversInfo {
@@ -335,13 +343,15 @@ export class StopDeliveryDriversInfo {
     },
   })
   driversInfoId: string;
+
+  _id: ObjectId;
 }
 const StopDeliveryDriversInfoSchema = SchemaFactory.createForClass(
   StopDeliveryDriversInfo,
 );
 
 @Schema({
-  _id: true,
+  // _id: true,
   timestamps: false,
 })
 export class StopDelivery {
@@ -372,6 +382,8 @@ export class StopDelivery {
         TimeFrameFCFS & { type: TimeFrameType.FCFS } & Document)
     | (TimeFrameDelivery &
         TimeFrameAPPT & { type: TimeFrameType.APPT } & Document);
+
+  _id: ObjectId;
 }
 /*export type StopPickUpType = Omit<InstanceType<typeof Stop>, 'type'> &
   InstanceType<typeof StopPickUp> & { type: StopType.PickUp };

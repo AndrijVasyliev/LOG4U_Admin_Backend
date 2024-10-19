@@ -72,8 +72,10 @@ export class LoadService {
             'documentKey._id': 1,
             'fullDocument.__v': 1,
             'fullDocument.stops': 1,
+            'fullDocument.miles': 1,
             'fullDocumentBeforeChange.__v': 1,
             'fullDocumentBeforeChange.stops': 1,
+            'fullDocumentBeforeChange.miles': 1,
             'updateDescription.updatedFields.stops': 1,
             'updateDescription.updatedFields.__v': 1,
           },
@@ -217,6 +219,8 @@ export class LoadService {
       stopsVer: load.__v,
     };
 
+    const stopsBeforeChange = change.operationType === 'update' ? change.fullDocumentBeforeChange.stops : undefined;
+    const milesBeforeChange = change.operationType === 'update' ? change.fullDocumentBeforeChange.miles : undefined;
     const stops = load.stops;
     const firstStop = stops?.at(0);
     const lastStop = stops?.at(-1);
@@ -255,7 +259,7 @@ export class LoadService {
         Object.assign(filter, { 'stops._id': stops[firstStopInNewStatusIndex]._id });
         Object.assign(setData, { 'stops.$.status': nextStopStatus });
       }
-    } else if (load.status !== 'Completed' && !~firstStopInNewStatusIndex && !~stopInNonFinalStatusIndex && (change.operationType === 'insert' || (change.fullDocumentBeforeChange.stops?.at(-1)?.type === StopType.Delivery && change.fullDocumentBeforeChange.stops?.at(-1)?.status !== STOP_DELIVERY_STATUSES.at(-1)))) {
+    } else if (load.status !== 'Completed' && !~firstStopInNewStatusIndex && !~stopInNonFinalStatusIndex && (change.operationType === 'insert' || (stopsBeforeChange?.at(-1)?.type === StopType.Delivery && stopsBeforeChange?.at(-1)?.status !== STOP_DELIVERY_STATUSES.at(-1)))) {
       this.log.debug('Setting load status to completed');
       Object.assign(setData, { status: 'Completed' });
     }
@@ -265,21 +269,42 @@ export class LoadService {
       `Stops updated. Calculating distance for Load ${load._id.toString()}.`,
     );
     let miles: number[] | void = [];
-    let prevStopLocation: GeoPointType | undefined = undefined;
     this.log.debug('Calculating distance by roads');
-    for (const stop of stops) {
-      if (prevStopLocation) {
-        const partRouteLength = await this.geoApiService.getDistance(
-          prevStopLocation,
-          stop.facility.facilityLocation,
-        );
-        if (partRouteLength === undefined) {
-          miles = undefined;
-          break;
+    for (let stopIndex = 0; stopIndex < stops.length - 1; stopIndex++) {
+      const stop = stops[stopIndex];
+      const nextStop = stops[stopIndex + 1];
+      let partRouteLength: number | void = undefined;
+
+      if (stopsBeforeChange) {
+        for (let i = 0; i < stopsBeforeChange.length - 1; i++) {
+          const stopBeforeChange = stopsBeforeChange[i];
+          if (stopBeforeChange._id && stopBeforeChange._id.toString() === stop.stopId?.toString()) {
+            const nextStopBeforeChange = stopsBeforeChange[i + 1];
+            if (
+              stopBeforeChange.facility.toString() === stop.facility.id.toString() &&
+              nextStopBeforeChange._id &&
+              nextStopBeforeChange._id.toString() === nextStop.stopId.toString() &&
+              nextStopBeforeChange.facility.toString() === nextStop.facility.id.toString()
+            ) {
+              partRouteLength = milesBeforeChange && milesBeforeChange[i];
+            }
+            break;
+          }
         }
-        miles.push(Number(partRouteLength));
       }
-      prevStopLocation = stop.facility.facilityLocation;
+
+      if (partRouteLength === undefined) {
+        partRouteLength = await this.geoApiService.getDistance(
+          stop.facility.facilityLocation,
+          nextStop.facility.facilityLocation,
+        );
+      }
+
+      if (partRouteLength === undefined) {
+        miles = undefined;
+        break;
+      }
+      miles.push(Number(partRouteLength));
     }
     Object.assign(setData, { miles });
     this.log.debug(`Calculated distance: ${miles}`);

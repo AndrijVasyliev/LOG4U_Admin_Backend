@@ -79,8 +79,8 @@ export interface CreateStopDeliveryDriversInfoDto {
 }
 
 interface CreateStopDto {
-  stopId?: string;
-  facility: string;
+  stopId?: string | ObjectId;
+  facility: string | ObjectId;
   addInfo?: string;
 }
 interface CreateStopPickUpDto extends CreateStopDto {
@@ -124,27 +124,32 @@ export interface CreateLoadDto {
   readonly bookedWith: string;
 }
 
+type UpdateStops = ((CreateStopPickUpDto | CreateStopDeliveryDto) & { _id: ObjectId })[];
+
 export interface StopChangeUpdateDocument {
   readonly operationType: 'update';
   readonly updateDescription: {
     readonly updatedFields: {
-      readonly stops?: Stops;
+      readonly stops?: UpdateStops;
       readonly __v?: number;
     };
   };
   readonly fullDocument: {
-    readonly stops?: Stops;
+    readonly stops?: UpdateStops;
+    readonly miles?: number[];
     readonly __v?: number;
   };
   readonly fullDocumentBeforeChange: {
-    readonly stops?: Stops;
+    readonly stops?: UpdateStops;
+    readonly miles?: number[];
     readonly __v?: number;
   };
 }
 export interface StopChangeInsertDocument {
   readonly operationType: 'insert';
   readonly fullDocument: {
-    readonly stops?: Stops;
+    readonly stops?: UpdateStops;
+    readonly miles?: number[];
     readonly __v?: number;
   };
 }
