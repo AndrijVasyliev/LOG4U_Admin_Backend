@@ -30,7 +30,7 @@ import { TruckService } from '../truck/truck.service';
 import { GoogleGeoApiService } from '../googleGeoApi/googleGeoApi.service';
 import { escapeForRegExp } from '../utils/escapeForRegExp';
 import { ChangeDocument, Queue } from '../utils/queue';
-import { GeoPointType, LoadStatus } from '../utils/general.dto';
+import { LoadStatus } from '../utils/general.dto';
 import { PushService } from '../push/push.service';
 
 const { ChangeStream } = mongo;
@@ -61,7 +61,20 @@ export class LoadService {
               },
               {
                 operationType: 'update',
-                'updateDescription.updatedFields.stops': { $exists: true },
+                $expr: {
+                  $anyElementTrue: {
+                    $map: {
+                      input: { $objectToArray: '$updateDescription.updatedFields' },
+                      as: 'field',
+                      in: {
+                        $regexMatch: {
+                          input: '$$field.k',
+                          regex: new RegExp('^stops(\\.\\d+.*)?$'),
+                        },
+                      },
+                    },
+                  },
+                },
               },
             ],
           },
@@ -73,10 +86,10 @@ export class LoadService {
             'fullDocument.__v': 1,
             'fullDocument.stops': 1,
             'fullDocument.miles': 1,
+            'fullDocument.truck': 1,
             'fullDocumentBeforeChange.__v': 1,
             'fullDocumentBeforeChange.stops': 1,
             'fullDocumentBeforeChange.miles': 1,
-            'updateDescription.updatedFields.stops': 1,
             'updateDescription.updatedFields.__v': 1,
           },
         },
@@ -121,8 +134,6 @@ export class LoadService {
             'fullDocumentBeforeChange.truck': 1,
             'fullDocumentBeforeChange.status': 1,
             'updateDescription.updatedFields.__v': 1,
-            'updateDescription.updatedFields.truck': 1,
-            'updateDescription.updatedFields.status': 1,
           },
         },
       ],
@@ -199,9 +210,9 @@ export class LoadService {
               stopsVer: '$__v', // Probably { $subtract: ['$__v', 0.5] },
             },
           },
-          /*{
+          {
             $unset: ['miles'], // ToDo probably null this on update stops field
-          },*/
+          },
         ],
       )
       .populate('stops');
@@ -221,6 +232,7 @@ export class LoadService {
 
     const stopsBeforeChange = change.operationType === 'update' ? change.fullDocumentBeforeChange.stops : undefined;
     const milesBeforeChange = change.operationType === 'update' ? change.fullDocumentBeforeChange.miles : undefined;
+    const stopsAfterChange = change.fullDocument.stops;
     const stops = load.stops;
     const firstStop = stops?.at(0);
     const lastStop = stops?.at(-1);
@@ -320,6 +332,41 @@ export class LoadService {
       this.log.debug(`Load ${change.documentKey._id} updated`);
     } else {
       this.log.warn(`Load ${change.documentKey._id} NOT updated`);
+    }
+
+    const stopBeforeChangeInNonFinalStatusIndex = stopsBeforeChange === undefined ? -1 : stopsBeforeChange.findIndex((stop) => (stop.type === StopType.PickUp && stop.status !== STOP_PICKUP_STATUSES.at(0) && stop.status !== STOP_PICKUP_STATUSES.at(-1)) || (stop.type === StopType.Delivery && stop.status !== STOP_DELIVERY_STATUSES.at(0) && stop.status !== STOP_DELIVERY_STATUSES.at(-1)));
+    const stopAfterChangeInNonFinalStatusIndex = stopsAfterChange === undefined ? -1 : stopsAfterChange?.findIndex((stop) => (stop.type === StopType.PickUp && stop.status !== STOP_PICKUP_STATUSES.at(0) && stop.status !== STOP_PICKUP_STATUSES.at(-1)) || (stop.type === StopType.Delivery && stop.status !== STOP_DELIVERY_STATUSES.at(0) && stop.status !== STOP_DELIVERY_STATUSES.at(-1)));
+    if (
+      stopsAfterChange &&
+      ~stopAfterChangeInNonFinalStatusIndex &&
+      stopsAfterChange[stopAfterChangeInNonFinalStatusIndex]?.status === 'GTG' &&
+      (!(stopsBeforeChange && ~stopBeforeChangeInNonFinalStatusIndex) || (stopsBeforeChange[stopBeforeChangeInNonFinalStatusIndex]._id.toString() !== stopsAfterChange[stopAfterChangeInNonFinalStatusIndex]._id.toString()) || (stopsBeforeChange[stopBeforeChangeInNonFinalStatusIndex].status !== stopsAfterChange[stopAfterChangeInNonFinalStatusIndex].status)) &&
+      change.fullDocument.truck
+    ) {
+      this.log.debug(
+        `Load ${change.documentKey._id} in progress is now on truck ${change.fullDocument.truck}`,
+      );
+
+      const truck = await this.truckService.findTruckById(
+        change.fullDocument.truck,
+      );
+      if (truck && truck.driver) {
+        const newPushMessage = await this.pushService.createPush({
+          to: truck.driver.id,
+          title: 'You are Good To Go.',
+          body: `Stop #${stopAfterChangeInNonFinalStatusIndex + 1} in Load #${load.loadNumber} is verified by dispatcher and you are good to go.`,
+          data: {
+            routeTo: `/home/loads?selectedLoadId=${change.documentKey._id}&renew=data`,
+          },
+        });
+        await this.pushService.updatePush(newPushMessage.id, {
+          state: 'Ready for send',
+        });
+      } else {
+        this.log.warn(
+          `Truck ${change.fullDocument.truck} not found or have no driver assigned`,
+        );
+      }
     }
   }
   private async onNewLoad(change: ChangeDocument & LoadChangeDocument) {
@@ -691,7 +738,7 @@ export class LoadService {
 
     stop.set('status', newStopStatus);
 
-    if (
+    /*if (
       newStopStatusIndex === STOP_PICKUP_STATUSES.length - 1 &&
       stopIndex !== load.stops.length - 1
     ) {
@@ -704,7 +751,7 @@ export class LoadService {
           nextStop.set('status', STOP_DELIVERY_STATUSES[1]);
           break;
       }
-    }
+    }*/
 
     await load.save();
 
@@ -751,7 +798,7 @@ export class LoadService {
 
     stop.set('status', updateLoadStopDeliveryStatusBodyDto.status);
 
-    if (
+    /*if (
       newStopStatusIndex === STOP_DELIVERY_STATUSES.length - 1 &&
       stopIndex !== load.stops.length - 1
     ) {
@@ -769,7 +816,7 @@ export class LoadService {
       stopIndex === load.stops.length - 1
     ) {
       load.set('status', 'Completed');
-    }
+    }*/
 
     await load.save();
 

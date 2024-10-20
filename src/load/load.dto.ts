@@ -130,13 +130,13 @@ export interface StopChangeUpdateDocument {
   readonly operationType: 'update';
   readonly updateDescription: {
     readonly updatedFields: {
-      readonly stops?: UpdateStops;
       readonly __v?: number;
     };
   };
   readonly fullDocument: {
     readonly stops?: UpdateStops;
     readonly miles?: number[];
+    readonly truck?: ObjectId;
     readonly __v?: number;
   };
   readonly fullDocumentBeforeChange: {
@@ -150,6 +150,7 @@ export interface StopChangeInsertDocument {
   readonly fullDocument: {
     readonly stops?: UpdateStops;
     readonly miles?: number[];
+    readonly truck?: ObjectId;
     readonly __v?: number;
   };
 }
@@ -162,8 +163,6 @@ export interface LoadChangeUpdateDocument {
   readonly operationType: 'update';
   readonly updateDescription: {
     readonly updatedFields: {
-      readonly status?: LoadStatus;
-      readonly truck?: ObjectId;
       readonly __v?: number;
     };
   };
