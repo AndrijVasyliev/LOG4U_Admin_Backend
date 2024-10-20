@@ -1,14 +1,11 @@
-import { mongo, ObjectId, PaginateModel, PaginateOptions } from 'mongoose';
+import { ObjectId, PaginateModel, PaginateOptions } from 'mongoose';
 import {
   Injectable,
   PreconditionFailedException,
   NotFoundException,
-  OnApplicationBootstrap,
-  OnModuleDestroy,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { ConfigService } from '@nestjs/config';
-import { SchedulerRegistry } from '@nestjs/schedule';
 import { Truck, TruckDocument } from './truck.schema';
 import {
   CreateTruckDto,
@@ -18,360 +15,28 @@ import {
   TruckResultForMapDto,
   UpdateTruckDto,
   CalculatedDistances,
-  TruckChangeDocument,
 } from './truck.dto';
 import { LoggerService } from '../logger';
 import { GoogleGeoApiService } from '../googleGeoApi/googleGeoApi.service';
-import { PushService } from '../push/push.service';
 import {
   EARTH_RADIUS_MILES,
   MONGO_CONNECTION_NAME,
-  TRUCK_SET_AVAIL_STATUS_JOB,
-  TRUCK_SEND_RENEW_LOCATION_PUSH_JOB,
 } from '../utils/constants';
 import { escapeForRegExp } from '../utils/escapeForRegExp';
 import { calcDistance } from '../utils/haversine.distance';
-import { ChangeDocument, Queue } from '../utils/queue';
-
-const { ChangeStream } = mongo;
 
 @Injectable()
-export class TruckService implements OnApplicationBootstrap, OnModuleDestroy {
-  private readonly trucksChangeStream?: InstanceType<typeof ChangeStream>;
-  private trucksQueue?: Queue<ChangeDocument & TruckChangeDocument>;
+export class TruckService {
   private readonly nearByRedundancyFactor: number;
-  private readonly resetToAvailableOlderThen: number;
-  private readonly locationUpdatedLaterThen: number;
   constructor(
     @InjectModel(Truck.name, MONGO_CONNECTION_NAME)
     private readonly truckModel: PaginateModel<TruckDocument>,
     private readonly geoApiService: GoogleGeoApiService,
-    private readonly pushService: PushService,
     private readonly configService: ConfigService,
     private readonly log: LoggerService,
-    private schedulerRegistry: SchedulerRegistry,
   ) {
     this.nearByRedundancyFactor =
       this.configService.get<number>('trucks.nearByRedundancyFactor') || 0;
-    this.resetToAvailableOlderThen = configService.get<number>(
-      'trucks.resetToAvailableWillBeOlderThen',
-    ) as number;
-    this.locationUpdatedLaterThen = configService.get<number>(
-      'trucks.sendRenewLocationPushOlderThen',
-    ) as number;
-    this.trucksChangeStream = truckModel.watch([
-      {
-        $match: {
-          $or: [
-            {
-              operationType: 'insert',
-              $or: [
-                {
-                  'fullDocument.availabilityAtLocal': {
-                    $exists: true,
-                    $ne: null,
-                  },
-                },
-                {
-                  'fullDocument.availabilityLocation': {
-                    $exists: true,
-                    $ne: null,
-                  },
-                },
-              ],
-            },
-            {
-              operationType: 'update',
-              $or: [
-                {
-                  'updateDescription.updatedFields.availabilityAtLocal': {
-                    $exists: true,
-                    $ne: null,
-                  },
-                },
-                {
-                  'updateDescription.updatedFields.availabilityLocation': {
-                    $exists: true,
-                    $ne: null,
-                  },
-                },
-              ],
-            },
-          ],
-        },
-      },
-      {
-        $project: {
-          operationType: 1,
-          'documentKey._id': 1,
-          'fullDocument.__v': 1,
-          'updateDescription.updatedFields.__v': 1,
-        },
-      },
-    ]);
-  }
-
-  onApplicationBootstrap(): void {
-    this.log.debug('Creating queue');
-    const stream = this?.trucksChangeStream;
-    if (stream) {
-      this.trucksQueue = new Queue<ChangeDocument & TruckChangeDocument>(
-        async (): Promise<ChangeDocument & TruckChangeDocument> => {
-          await stream.hasNext();
-          return stream.next() as unknown as Promise<
-            ChangeDocument & TruckChangeDocument
-          >;
-        },
-        this.onNewTruck.bind(this),
-        this.configService.get<number>('truckQueue.maxParallelTasks') as number,
-        this.configService.get<number>('truckQueue.taskTimeout') as number,
-        this.log || console.log,
-      );
-    }
-
-    this.log.debug('Starting set "Available" job');
-    const restartSetAvailableIntervalValue = this.configService.get<number>(
-      'trucks.taskSetAvailableInterval',
-    ) as number;
-    const setAvailInterval = setInterval(() => {
-      this.resetToAvailableStatus.bind(this)();
-    }, restartSetAvailableIntervalValue);
-    this.schedulerRegistry.addInterval(
-      TRUCK_SET_AVAIL_STATUS_JOB,
-      setAvailInterval,
-    );
-
-    this.log.debug('Starting send renew location push job');
-    const restartSendPushIntervalValue = this.configService.get<number>(
-      'trucks.taskSendRenewLocationPushInterval',
-    ) as number;
-    const setSendPushInterval = setInterval(() => {
-      this.sendRenewLocationPush.bind(this)();
-    }, restartSendPushIntervalValue);
-    this.schedulerRegistry.addInterval(
-      TRUCK_SEND_RENEW_LOCATION_PUSH_JOB,
-      setSendPushInterval,
-    );
-  }
-
-  async onModuleDestroy(): Promise<void> {
-    this.log.debug('Stopping queue');
-    await this?.trucksQueue?.stop();
-    this.log.debug('Closing change stream');
-    await this?.trucksChangeStream?.close();
-    this.log.debug('Truck change stream is closed');
-    this.log.debug('Stopping set "Available" status job');
-    clearInterval(
-      this.schedulerRegistry.getInterval(TRUCK_SET_AVAIL_STATUS_JOB),
-    );
-    this.log.debug('Stopping send update location push job');
-    clearInterval(
-      this.schedulerRegistry.getInterval(TRUCK_SEND_RENEW_LOCATION_PUSH_JOB),
-    );
-  }
-
-  private async onNewTruck(change: ChangeDocument & TruckChangeDocument) {
-    this.log.info(`Change ${JSON.stringify(change)}`);
-    const version =
-      (change.operationType === 'update' &&
-        change?.updateDescription?.updatedFields?.__v) ||
-      (change.operationType === 'insert' && change?.fullDocument.__v);
-    if (!version && version !== 0) {
-      this.log.info('No version field in changed data');
-      return;
-    }
-    const truck = await this.truckModel.findOneAndUpdate(
-      {
-        _id: change.documentKey._id,
-        $or: [
-          { availabilityAtVer: { $lte: version - 1 } },
-          { availabilityAtVer: { $exists: false } },
-        ],
-      },
-      [
-        {
-          $set: {
-            availabilityAtVer: '$__v',
-          },
-        },
-      ],
-    );
-    if (!truck) {
-      this.log.info('Truck not found');
-      return;
-    }
-    this.log.debug(
-      `Availability data updated. Calculating "availabilityAt" for Truck ${truck._id.toString()}.`,
-    );
-    const location = truck.availabilityLocation;
-    if (!location) {
-      this.log.warn(`No will be available location in Truck ${truck._id}`);
-    }
-    const date = truck.availabilityAtLocal;
-    if (!date) {
-      this.log.warn('availabilityAtLocal is empty');
-      return;
-    }
-    const timeZoneData = await this.geoApiService.getTimeZone(location, date);
-    if (!timeZoneData) {
-      this.log.warn('TimeZone is empty');
-      return;
-    }
-
-    const correctedTimestamp = new Date(
-      date.getTime() - (timeZoneData.offset + timeZoneData.dst) * 1000,
-    );
-    const correctedTimeZoneData = await this.geoApiService.getTimeZone(
-      location,
-      correctedTimestamp,
-    );
-    if (!correctedTimeZoneData) {
-      this.log.warn('TimeZone is empty');
-      return;
-    }
-    let availabilityCorrection = 0;
-    if (timeZoneData.dst && !correctedTimeZoneData.dst) {
-      availabilityCorrection = -timeZoneData.dst;
-    }
-    if (!timeZoneData.dst && correctedTimeZoneData.dst) {
-      availabilityCorrection = correctedTimeZoneData.dst;
-    }
-    let availabilityAt: Date;
-    if (availabilityCorrection) {
-      availabilityAt = new Date(
-        correctedTimestamp.getTime() + availabilityCorrection * 1000,
-      );
-    } else {
-      availabilityAt = correctedTimestamp;
-    }
-
-    if (availabilityAt instanceof Date && !isNaN(availabilityAt.getTime())) {
-      const updated = await this.truckModel.findOneAndUpdate(
-        {
-          _id: change.documentKey._id,
-          availabilityAtVer: { $lte: truck.__v },
-        },
-        [
-          {
-            $set: {
-              availabilityAtVer: truck.__v,
-              availabilityAt,
-            },
-          },
-        ],
-      );
-      if (updated) {
-        this.log.debug(`Truck ${change.documentKey._id} updated`);
-      } else {
-        this.log.warn(`Truck ${change.documentKey._id} NOT updated`);
-      }
-    }
-  }
-
-  private async resetToAvailableStatus(): Promise<void> {
-    this.log.info(
-      'Setting "Available" status to "Will be available" from past',
-    );
-    const willBeAvailableLaterThenDate = new Date(
-      Date.now() - this.resetToAvailableOlderThen,
-    );
-    this.log.info(
-      `Try to set "Available" to trucks "Will be available" later then ${willBeAvailableLaterThenDate}`,
-    );
-    const result = await this.truckModel.updateMany(
-      {
-        status: { $eq: 'Will be available' },
-        availabilityAt: { $lte: willBeAvailableLaterThenDate },
-      },
-      [
-        {
-          $set: {
-            status: 'Available',
-            searchLocation: '$lastLocation',
-          },
-        },
-        {
-          $unset: [
-            'availabilityLocation',
-            'availabilityAt',
-            'availabilityAtLocal',
-          ],
-        },
-      ],
-    );
-    this.log.info(
-      `Updated ${result.modifiedCount === 1 ? '1 truck' : result.modifiedCount + ' trucks'} status`,
-    );
-    return;
-  }
-
-  private async sendRenewLocationPush(): Promise<void> {
-    let wasFound = false;
-    let processedCount = 0;
-    this.log.info('Starting to find trucks and send push`s');
-    do {
-      const locationUpdatedLaterThenDate = new Date(
-        Date.now() - this.locationUpdatedLaterThen,
-      );
-      this.log.info(
-        `Finding truck with location updated later then ${locationUpdatedLaterThenDate}`,
-      );
-      const truck = await this.truckModel.findOneAndUpdate(
-        {
-          status: 'Available',
-          $and: [
-            {
-              $or: [
-                { locationUpdatedAt: { $exists: false } },
-                { locationUpdatedAt: { $eq: null } },
-                { locationUpdatedAt: { $lte: locationUpdatedLaterThenDate } },
-              ],
-            },
-            {
-              $or: [
-                { renewLocationPushMessageAt: { $exists: false } },
-                { renewLocationPushMessageAt: { $eq: null } },
-                {
-                  $expr: {
-                    $lt: ['$renewLocationPushMessageAt', '$locationUpdatedAt'],
-                  },
-                },
-              ],
-            },
-          ],
-        },
-        [
-          {
-            $set: {
-              renewLocationPushMessageAt: new Date(),
-              status: 'Not Available',
-            },
-          },
-        ],
-      );
-      if (truck) {
-        this.log.info(
-          `Found truck: ${truck._id} with location updated ${truck.locationUpdatedAt}`,
-        );
-        wasFound = true;
-        const driverId = truck.driver?._id.toString();
-        if (driverId) {
-          const newPushMessage = await this.pushService.createPush({
-            to: driverId,
-            title: 'Please update your truck status.',
-            body: 'To receive a load offer, please update your app by clicking on this message and setting your status to Available.',
-          });
-          await this.pushService.updatePush(newPushMessage.id, {
-            state: 'Ready for send',
-          });
-        }
-        ++processedCount;
-      } else {
-        wasFound = false;
-      }
-    } while (wasFound);
-    this.log.info(`Processed count ${processedCount}`);
-    return;
   }
 
   private async findTruckDocumentById(

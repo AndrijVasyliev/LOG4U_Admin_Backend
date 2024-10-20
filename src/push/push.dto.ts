@@ -19,6 +19,35 @@ export interface CreatePushDto {
   readonly badge?: number;
 }
 
+export interface PushChangeUpdateDocument {
+  readonly operationType: 'update';
+  readonly updateDescription: {
+    readonly updatedFields: {
+      readonly state?: PushState;
+      readonly __v?: number;
+    };
+  };
+  readonly fullDocument: {
+    // readonly field?: Type;
+    readonly __v?: number;
+  };
+  readonly fullDocumentBeforeChange: {
+    // readonly field?: Type;
+    readonly __v?: number;
+  };
+}
+export interface PushChangeInsertDocument {
+  readonly operationType: 'insert';
+  readonly fullDocument: {
+    // readonly field?: Type;
+    readonly __v?: number;
+  };
+}
+
+export type PushChangeDocument =
+  | PushChangeUpdateDocument
+  | PushChangeInsertDocument;
+
 export interface UpdatePushDto {
   readonly state?: PushState;
   readonly title?: string;

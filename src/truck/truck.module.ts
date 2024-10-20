@@ -3,6 +3,8 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { TruckController } from './truck.controller';
 import { Truck, TruckSchema } from './truck.schema';
 import { TruckService } from './truck.service';
+import { TruckWorkerService } from './truck.worker.service';
+import { TruckJobService } from './truck.job.service';
 import { GoogleGeoApiModule } from '../googleGeoApi/googleGeoApi.module';
 import { MONGO_CONNECTION_NAME } from '../utils/constants';
 import { PushModule } from '../push/push.module';
@@ -18,6 +20,6 @@ import { PushModule } from '../push/push.module';
   ],
   exports: [TruckService],
   controllers: [TruckController],
-  providers: [TruckService],
+  providers: [TruckService, TruckWorkerService, TruckJobService],
 })
 export class TruckModule {}

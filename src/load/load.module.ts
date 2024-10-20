@@ -3,6 +3,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { LoadController } from './load.controller';
 import { Load, LoadSchema } from './load.schema';
 import { LoadService } from './load.service';
+import { LoadWorkerService } from './load.worker.service';
 import { TruckModule } from '../truck/truck.module';
 import { GoogleGeoApiModule } from '../googleGeoApi/googleGeoApi.module';
 import { MONGO_CONNECTION_NAME } from '../utils/constants';
@@ -20,6 +21,6 @@ import { PushModule } from '../push/push.module';
   ],
   exports: [LoadService],
   controllers: [LoadController],
-  providers: [LoadService],
+  providers: [LoadService, LoadWorkerService],
 })
 export class LoadModule {}

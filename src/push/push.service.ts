@@ -5,10 +5,8 @@ import {
   ExpoPushReceiptId,
   ExpoPushTicket,
 } from 'expo-server-sdk';
-import { mongo, PaginateModel, PaginateOptions } from 'mongoose';
+import { PaginateModel, PaginateOptions } from 'mongoose';
 import {
-  OnApplicationBootstrap,
-  OnModuleDestroy,
   Injectable,
   Inject,
   forwardRef,
@@ -16,7 +14,6 @@ import {
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { ConfigService } from '@nestjs/config';
-import { SchedulerRegistry } from '@nestjs/schedule';
 // import { HealthIndicatorResult } from '@nestjs/terminus';
 import { Push, PushDocument } from './push.schema';
 import {
@@ -28,23 +25,12 @@ import {
 } from './push.dto';
 import { PersonService } from '../person/person.service';
 import { LoggerService } from '../logger';
-import {
-  MONGO_CONNECTION_NAME,
-  PUSH_QUEUE_ORPHANED_JOB,
-  PUSH_QUEUE_START_RECEIPT_JOB,
-} from '../utils/constants';
+import { MONGO_CONNECTION_NAME } from '../utils/constants';
 import { escapeForRegExp } from '../utils/escapeForRegExp';
-import { ChangeDocument, Queue } from '../utils/queue';
-
-const { ChangeStream } = mongo;
 
 @Injectable()
-export class PushService implements OnApplicationBootstrap, OnModuleDestroy {
+export class PushService {
   private readonly expo?: Expo;
-  private readonly changeStream?: InstanceType<typeof ChangeStream>;
-  private queue?: Queue<ChangeDocument>;
-  private readonly restartTasksOlder: number;
-  private readonly getReceiptForTasksOlder: number;
   constructor(
     @InjectModel(Push.name, MONGO_CONNECTION_NAME)
     private readonly pushModel: PaginateModel<PushDocument>,
@@ -52,246 +38,9 @@ export class PushService implements OnApplicationBootstrap, OnModuleDestroy {
     private readonly personService: PersonService,
     private readonly configService: ConfigService,
     private readonly log: LoggerService,
-    private schedulerRegistry: SchedulerRegistry,
   ) {
     const accessToken = this.configService.get<string>('push.accessToken');
-    this.restartTasksOlder = configService.get<number>(
-      'pushQueue.restartTasksOlder',
-    ) as number;
-    this.getReceiptForTasksOlder = this.configService.get<number>(
-      'pushQueue.startReceiptForTasksOlder',
-    ) as number;
-
     this.expo = new Expo({ accessToken });
-    this.changeStream = pushModel.watch([
-      {
-        $match: {
-          operationType: 'update',
-          $or: [
-            { 'updateDescription.updatedFields.state': 'Ready for send' },
-            {
-              'updateDescription.updatedFields.state':
-                'Ready for receiving receipt',
-            },
-          ],
-        },
-      },
-      {
-        $project: {
-          'documentKey._id': 1,
-          'updateDescription.updatedFields.state': 1,
-        },
-      },
-    ]);
-  }
-
-  onApplicationBootstrap(): void {
-    this.log.debug('Creating queue');
-    const stream = this?.changeStream;
-    if (stream) {
-      this.queue = new Queue<ChangeDocument>(
-        async (): Promise<ChangeDocument> => {
-          await stream.hasNext();
-          return stream.next() as unknown as Promise<ChangeDocument>;
-        },
-        (change: ChangeDocument) => {
-          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-          // @ts-expect-error
-          switch (change?.updateDescription?.updatedFields?.state) {
-            case 'Ready for send':
-              return this.onNewPush.call(this, change);
-            case 'Ready for receiving receipt':
-              return this.onGetReceipt.call(this, change);
-            default:
-              return Promise.resolve(undefined);
-          }
-        },
-        this.configService.get<number>('pushQueue.maxParallelTasks') as number,
-        this.configService.get<number>('pushQueue.taskTimeout') as number,
-        this.log || console.log,
-      );
-    }
-    this.log.debug('Starting jobs');
-    const startReceiptIntervalValue = this.configService.get<number>(
-      'pushQueue.taskStartReceiptInterval',
-    ) as number;
-    const restartIntervalValue = this.configService.get<number>(
-      'pushQueue.taskRestartInterval',
-    ) as number;
-    const startReceiptInterval = setInterval(() => {
-      this.startReceivingReceipt.bind(this)();
-    }, startReceiptIntervalValue);
-    this.schedulerRegistry.addInterval(
-      PUSH_QUEUE_START_RECEIPT_JOB,
-      startReceiptInterval,
-    );
-    const restartInterval = setInterval(() => {
-      this.restartOrphaned.bind(this)();
-    }, restartIntervalValue);
-    this.schedulerRegistry.addInterval(
-      PUSH_QUEUE_ORPHANED_JOB,
-      restartInterval,
-    );
-  }
-
-  async onModuleDestroy(): Promise<void> {
-    this.log.debug('Stopping start receipt job');
-    clearInterval(
-      this.schedulerRegistry.getInterval(PUSH_QUEUE_START_RECEIPT_JOB),
-    );
-    this.log.debug('Stopping restart job');
-    clearInterval(this.schedulerRegistry.getInterval(PUSH_QUEUE_ORPHANED_JOB));
-    this.log.debug('Stopping queue');
-    await this?.queue?.stop();
-    this.log.debug('Closing change stream');
-    await this?.changeStream?.close();
-    this.log.debug('Push change stream is closed');
-  }
-
-  private async onNewPush(change: ChangeDocument) {
-    this.log.info(`Change ${JSON.stringify(change)}`);
-    const push = await this.pushModel.findOneAndUpdate(
-      { _id: change.documentKey._id, state: 'Ready for send' },
-      {
-        state: 'Processing send',
-      },
-    );
-    this.log.info(`Doc ${push?._id}`);
-    if (push) {
-      try {
-        if (!push?.to?.pushToken) {
-          throw new Error('No destination push token');
-        }
-        const sendPushResult = await this.sendPush({
-          to: push.to.pushToken,
-          data: push.data,
-          title: push.title,
-          subtitle: push.subtitle,
-          body: push.body,
-          badge: push.badge,
-          sound: 'default',
-          priority: 'default',
-        });
-        push.set('sendResult', sendPushResult[0]);
-        push.set('state', 'Sent for deliver');
-      } catch (error) {
-        push.set('sendResult', error);
-        push.set('state', 'Error sending');
-      }
-      try {
-        this.log.debug('Saving Push');
-        await push.save();
-        this.log.debug('Push updated');
-      } catch (error) {
-        if (error instanceof Error) {
-          this.log.error(`Error sending push ${change.documentKey._id}`, error);
-        } else {
-          this.log.error(`Error sending push ${JSON.stringify(error)}`);
-        }
-      }
-    }
-  }
-
-  private async onGetReceipt(change: ChangeDocument) {
-    this.log.info(`Change ${JSON.stringify(change)}`);
-    const push = await this.pushModel.findOneAndUpdate(
-      { _id: change.documentKey._id, state: 'Ready for receiving receipt' },
-      {
-        state: 'Processing receiving receipt',
-      },
-    );
-    this.log.info(`Doc ${push?._id}`);
-    if (push) {
-      try {
-        if (!push?.sendResult?.id) {
-          throw new Error('No receipt id in send result');
-        }
-        const receiptResult = (await this.getReceipt(push.sendResult.id))[
-          push.sendResult.id
-        ];
-        if (receiptResult) {
-          push.set('receiptResult', receiptResult);
-          if (receiptResult.status === 'ok') {
-            push.set('state', 'Sent to user');
-          } else {
-            push.set('state', 'Error from receipt');
-            const person = push.to;
-            person.set('pushToken', undefined);
-            await person.save();
-          }
-        } else {
-          throw new Error('No receipt');
-        }
-      } catch (error) {
-        push.set('sendResult', error);
-        push.set('state', 'Error receiving receipt');
-      }
-      try {
-        this.log.debug('Saving Push');
-        await push.save();
-        this.log.debug('Push updated');
-      } catch (error) {
-        if (error instanceof Error) {
-          this.log.error(`Error sending push ${change.documentKey._id}`, error);
-        } else {
-          this.log.error(`Error sending push ${JSON.stringify(error)}`);
-        }
-      }
-    }
-  }
-
-  private async restartOrphaned(): Promise<void> {
-    this.log.info('Restarting orphaned jobs');
-    const olderThenDate = new Date(Date.now() - this.restartTasksOlder);
-    this.log.info(`Try to restart items, older then ${olderThenDate}`);
-    const result = await this.pushModel.updateMany(
-      {
-        $or: [
-          { state: { $eq: 'Processing send' } },
-          { state: { $eq: 'Processing receiving receipt' } },
-        ],
-        updated_at: { $lte: olderThenDate },
-      },
-      [
-        {
-          $set: {
-            state: {
-              $switch: {
-                branches: [
-                  {
-                    case: { $eq: ['$state', 'Processing send'] },
-                    then: 'Ready for send',
-                  },
-                  {
-                    case: { $eq: ['$state', 'Processing receiving receipt'] },
-                    then: 'Ready for receiving receipt',
-                  },
-                ],
-              },
-            },
-          },
-        },
-      ],
-    );
-    this.log.info(`Restarted ${result.modifiedCount}`);
-    return;
-  }
-
-  private async startReceivingReceipt(): Promise<void> {
-    this.log.info('Starting to receive receipts');
-    const olderThenDate = new Date(Date.now() - this.getReceiptForTasksOlder);
-    this.log.info(
-      `Try to start to receive receipts for items, older then ${olderThenDate}`,
-    );
-    const result = await this.pushModel.updateMany(
-      {
-        state: { $eq: 'Sent for deliver' },
-        updated_at: { $lte: olderThenDate },
-      },
-      { $set: { state: 'Ready for receiving receipt' } },
-    );
-    this.log.info(`Started ${result.modifiedCount}`);
-    return;
   }
 
   async sendPush(
@@ -310,6 +59,7 @@ export class PushService implements OnApplicationBootstrap, OnModuleDestroy {
     }
     return {};
   }
+
   /*async checkConnectivity(key: string): Promise<HealthIndicatorResult> {
     try {
         return { [key]: { status: 'up' } };

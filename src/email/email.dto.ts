@@ -1,8 +1,8 @@
-import { PaginateResult } from 'mongoose';
+import { ObjectId, PaginateResult } from 'mongoose';
 import { Email, To } from './email.schema';
 import {
   EmailState,
-  EmailToType,
+  EmailToType, LoadStatus,
   PaginatedResultDto,
   Query,
 } from '../utils/general.dto';
@@ -25,6 +25,34 @@ export interface CreateEmailDto {
   readonly text: string;
   readonly html?: string;
 }
+
+export interface EmailChangeUpdateDocument {
+  readonly operationType: 'update';
+  readonly updateDescription: {
+    readonly updatedFields: {
+      readonly __v?: number;
+    };
+  };
+  readonly fullDocument: {
+    // readonly field?: Type;
+    readonly __v?: number;
+  };
+  readonly fullDocumentBeforeChange: {
+    // readonly field?: Type;
+    readonly __v?: number;
+  };
+}
+export interface EmailChangeInsertDocument {
+  readonly operationType: 'insert';
+  readonly fullDocument: {
+    // readonly field?: Type;
+    readonly __v?: number;
+  };
+}
+
+export type EmailChangeDocument =
+  | EmailChangeUpdateDocument
+  | EmailChangeInsertDocument;
 
 export interface UpdateEmailDto {
   readonly state?: EmailState;
