@@ -16,7 +16,9 @@ import { ChangeDocument, Queue } from '../utils/queue';
 const { ChangeStream } = mongo;
 
 @Injectable()
-export class TruckWorkerService implements OnApplicationBootstrap, OnModuleDestroy {
+export class TruckWorkerService
+  implements OnApplicationBootstrap, OnModuleDestroy
+{
   private readonly trucksChangeStream?: InstanceType<typeof ChangeStream>;
   private trucksQueue?: Queue<ChangeDocument & TruckChangeDocument>;
   constructor(

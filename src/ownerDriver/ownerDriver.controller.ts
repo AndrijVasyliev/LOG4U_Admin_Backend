@@ -37,9 +37,7 @@ export class OwnerDriverController {
 
   @Get()
   async getOwnerDrivers(
-    @Query(
-      new QueryParamsPipe(OwnerDriverQueryParamsSchema),
-    )
+    @Query(new QueryParamsPipe(OwnerDriverQueryParamsSchema))
     ownerDriverQuery: OwnerDriverQuery,
   ): Promise<PaginatedOwnerDriverResultDto> {
     return this.ownerDriverService.getOwnerDrivers(ownerDriverQuery);

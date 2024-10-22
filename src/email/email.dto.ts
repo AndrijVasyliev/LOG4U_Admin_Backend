@@ -2,7 +2,8 @@ import { ObjectId, PaginateResult } from 'mongoose';
 import { Email, To } from './email.schema';
 import {
   EmailState,
-  EmailToType, LoadStatus,
+  EmailToType,
+  LoadStatus,
   PaginatedResultDto,
   Query,
 } from '../utils/general.dto';

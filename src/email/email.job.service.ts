@@ -15,7 +15,9 @@ import {
 } from '../utils/constants';
 
 @Injectable()
-export class EmailJobService implements OnApplicationBootstrap, OnModuleDestroy {
+export class EmailJobService
+  implements OnApplicationBootstrap, OnModuleDestroy
+{
   private readonly restartTasksOlder: number;
   constructor(
     @InjectModel(Email.name, MONGO_CONNECTION_NAME)

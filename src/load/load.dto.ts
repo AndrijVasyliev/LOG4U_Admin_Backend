@@ -124,7 +124,9 @@ export interface CreateLoadDto {
   readonly bookedWith: string;
 }
 
-type UpdateStops = ((CreateStopPickUpDto | CreateStopDeliveryDto) & { _id: ObjectId })[];
+type UpdateStops = ((CreateStopPickUpDto | CreateStopDeliveryDto) & {
+  _id: ObjectId;
+})[];
 
 export interface StopChangeUpdateDocument {
   readonly operationType: 'update';

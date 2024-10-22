@@ -10,15 +10,15 @@ import { Push, PushDocument } from './push.schema';
 import { PushChangeDocument } from './push.dto';
 import { PushService } from './push.service';
 import { LoggerService } from '../logger';
-import {
-  MONGO_CONNECTION_NAME,
-} from '../utils/constants';
+import { MONGO_CONNECTION_NAME } from '../utils/constants';
 import { ChangeDocument, Queue } from '../utils/queue';
 
 const { ChangeStream } = mongo;
 
 @Injectable()
-export class PushWorkerService implements OnApplicationBootstrap, OnModuleDestroy {
+export class PushWorkerService
+  implements OnApplicationBootstrap, OnModuleDestroy
+{
   private readonly changeStream?: InstanceType<typeof ChangeStream>;
   private queue?: Queue<ChangeDocument & PushChangeDocument>;
   constructor(
@@ -57,7 +57,9 @@ export class PushWorkerService implements OnApplicationBootstrap, OnModuleDestro
       this.queue = new Queue<ChangeDocument & PushChangeDocument>(
         async (): Promise<ChangeDocument & PushChangeDocument> => {
           await stream.hasNext();
-          return stream.next() as unknown as Promise<ChangeDocument & PushChangeDocument>;
+          return stream.next() as unknown as Promise<
+            ChangeDocument & PushChangeDocument
+          >;
         },
         (change: ChangeDocument & PushChangeDocument) => {
           if (change.operationType === 'insert') {
@@ -145,9 +147,9 @@ export class PushWorkerService implements OnApplicationBootstrap, OnModuleDestro
         if (!push?.sendResult?.id) {
           throw new Error('No receipt id in send result');
         }
-        const receiptResult = (await this.pushService.getReceipt(push.sendResult.id))[
-          push.sendResult.id
-          ];
+        const receiptResult = (
+          await this.pushService.getReceipt(push.sendResult.id)
+        )[push.sendResult.id];
         if (receiptResult) {
           push.set('receiptResult', receiptResult);
           if (receiptResult.status === 'ok') {

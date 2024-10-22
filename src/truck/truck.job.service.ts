@@ -17,7 +17,9 @@ import {
 } from '../utils/constants';
 
 @Injectable()
-export class TruckJobService implements OnApplicationBootstrap, OnModuleDestroy {
+export class TruckJobService
+  implements OnApplicationBootstrap, OnModuleDestroy
+{
   private readonly resetToAvailableOlderThen: number;
   private readonly locationUpdatedLaterThen: number;
   constructor(

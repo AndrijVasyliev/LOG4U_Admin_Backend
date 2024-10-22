@@ -18,10 +18,7 @@ import {
 } from './truck.dto';
 import { LoggerService } from '../logger';
 import { GoogleGeoApiService } from '../googleGeoApi/googleGeoApi.service';
-import {
-  EARTH_RADIUS_MILES,
-  MONGO_CONNECTION_NAME,
-} from '../utils/constants';
+import { EARTH_RADIUS_MILES, MONGO_CONNECTION_NAME } from '../utils/constants';
 import { escapeForRegExp } from '../utils/escapeForRegExp';
 import { calcDistance } from '../utils/haversine.distance';
 

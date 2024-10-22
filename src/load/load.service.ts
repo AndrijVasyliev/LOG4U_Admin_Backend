@@ -33,7 +33,7 @@ export class LoadService {
     private readonly loadModel: PaginateModel<LoadDocument>,
     private readonly truckService: TruckService,
     private readonly log: LoggerService,
-  ) { }
+  ) {}
 
   private async findLoadDocumentById(id: string): Promise<LoadDocument> {
     this.log.debug(`Searching for Load ${id}`);

@@ -66,12 +66,17 @@ export class CustomerController {
     @Body(new BodyValidationPipe(UpdateCustomerValidation))
     updateCustomerBodyDto: UpdateCustomerDto,
   ): Promise<CustomerResultDto> {
-    return this.customerService.updateCustomer(customerId, updateCustomerBodyDto);
+    return this.customerService.updateCustomer(
+      customerId,
+      updateCustomerBodyDto,
+    );
   }
 
   @Delete(':customerId')
   @Roles('Super Admin')
-  async deleteCustomer(@Param('customerId', MongoObjectIdPipe) customerId: string) {
+  async deleteCustomer(
+    @Param('customerId', MongoObjectIdPipe) customerId: string,
+  ) {
     return this.customerService.deleteCustomer(customerId);
   }
 }

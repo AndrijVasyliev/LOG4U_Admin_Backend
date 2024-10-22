@@ -7,10 +7,7 @@ import {
 import { InjectModel } from '@nestjs/mongoose';
 import { ConfigService } from '@nestjs/config';
 import { Load, LoadDocument, StopType, TimeFrameType } from './load.schema';
-import {
-  StopChangeDocument,
-  LoadChangeDocument,
-} from './load.dto';
+import { StopChangeDocument, LoadChangeDocument } from './load.dto';
 import { LoggerService } from '../logger';
 import {
   MONGO_CONNECTION_NAME,
@@ -26,7 +23,9 @@ import { PushService } from '../push/push.service';
 const { ChangeStream } = mongo;
 
 @Injectable()
-export class LoadWorkerService implements OnApplicationBootstrap, OnModuleDestroy {
+export class LoadWorkerService
+  implements OnApplicationBootstrap, OnModuleDestroy
+{
   private readonly stopsChangeStream?: InstanceType<typeof ChangeStream>;
   private readonly loadChangeStream?: InstanceType<typeof ChangeStream>;
   private stopsQueue?: Queue<ChangeDocument & StopChangeDocument>;
@@ -54,7 +53,9 @@ export class LoadWorkerService implements OnApplicationBootstrap, OnModuleDestro
                 $expr: {
                   $anyElementTrue: {
                     $map: {
-                      input: { $objectToArray: '$updateDescription.updatedFields' },
+                      input: {
+                        $objectToArray: '$updateDescription.updatedFields',
+                      },
                       as: 'field',
                       in: {
                         $regexMatch: {
@@ -212,7 +213,6 @@ export class LoadWorkerService implements OnApplicationBootstrap, OnModuleDestro
       return;
     }
 
-
     const filter: Record<string, any> = {
       _id: change.documentKey._id,
       stopsVer: { $lte: load.__v },
@@ -221,8 +221,14 @@ export class LoadWorkerService implements OnApplicationBootstrap, OnModuleDestro
       stopsVer: load.__v,
     };
 
-    const stopsBeforeChange = change.operationType === 'update' ? change.fullDocumentBeforeChange.stops : undefined;
-    const milesBeforeChange = change.operationType === 'update' ? change.fullDocumentBeforeChange.miles : undefined;
+    const stopsBeforeChange =
+      change.operationType === 'update'
+        ? change.fullDocumentBeforeChange.stops
+        : undefined;
+    const milesBeforeChange =
+      change.operationType === 'update'
+        ? change.fullDocumentBeforeChange.miles
+        : undefined;
     const stopsAfterChange = change.fullDocument.stops;
     const stops = load.stops;
     const firstStop = stops?.at(0);
@@ -239,30 +245,61 @@ export class LoadWorkerService implements OnApplicationBootstrap, OnModuleDestro
       (lastStop.timeFrame.type === TimeFrameType.FCFS
         ? lastStop.timeFrame.to
         : lastStop.timeFrame.at);
-    this.log.debug(`Setting stopsStart to ${stopsStart} and stopsEnd to ${stopsEnd}`);
-    Object.assign(setData, { stopsStart, stopsEnd});
+    this.log.debug(
+      `Setting stopsStart to ${stopsStart} and stopsEnd to ${stopsEnd}`,
+    );
+    Object.assign(setData, { stopsStart, stopsEnd });
 
     // Calculate stop status
-    const stopInNonFinalStatusIndex = stops.findIndex((stop) => (stop.type === StopType.PickUp && stop.status !== STOP_PICKUP_STATUSES.at(0) && stop.status !== STOP_PICKUP_STATUSES.at(-1)) || (stop.type === StopType.Delivery && stop.status !== STOP_DELIVERY_STATUSES.at(0) && stop.status !== STOP_DELIVERY_STATUSES.at(-1)));
-    const firstStopInNewStatusIndex = stops.findIndex((stop) => (stop.type === StopType.PickUp && stop.status === STOP_PICKUP_STATUSES.at(0)) || (stop.type === StopType.Delivery && stop.status === STOP_DELIVERY_STATUSES.at(0)));
+    const stopInNonFinalStatusIndex = stops.findIndex(
+      (stop) =>
+        (stop.type === StopType.PickUp &&
+          stop.status !== STOP_PICKUP_STATUSES.at(0) &&
+          stop.status !== STOP_PICKUP_STATUSES.at(-1)) ||
+        (stop.type === StopType.Delivery &&
+          stop.status !== STOP_DELIVERY_STATUSES.at(0) &&
+          stop.status !== STOP_DELIVERY_STATUSES.at(-1)),
+    );
+    const firstStopInNewStatusIndex = stops.findIndex(
+      (stop) =>
+        (stop.type === StopType.PickUp &&
+          stop.status === STOP_PICKUP_STATUSES.at(0)) ||
+        (stop.type === StopType.Delivery &&
+          stop.status === STOP_DELIVERY_STATUSES.at(0)),
+    );
 
-    if (!~stopInNonFinalStatusIndex && ~firstStopInNewStatusIndex && firstStopInNewStatusIndex !== 0) {
+    if (
+      !~stopInNonFinalStatusIndex &&
+      ~firstStopInNewStatusIndex &&
+      firstStopInNewStatusIndex !== 0
+    ) {
       const stopToNextStatus = stops[firstStopInNewStatusIndex];
       let nextStopStatus: string | undefined;
       switch (stopToNextStatus.type) {
         case StopType.PickUp:
           nextStopStatus = STOP_PICKUP_STATUSES.at(1);
           break;
-        case StopType.Delivery :
+        case StopType.Delivery:
           nextStopStatus = STOP_DELIVERY_STATUSES.at(1);
           break;
       }
       if (nextStopStatus) {
-        this.log.debug(`Setting stop at index [${firstStopInNewStatusIndex}] to ${nextStopStatus} status`);
-        Object.assign(filter, { 'stops._id': stops[firstStopInNewStatusIndex]._id });
+        this.log.debug(
+          `Setting stop at index [${firstStopInNewStatusIndex}] to ${nextStopStatus} status`,
+        );
+        Object.assign(filter, {
+          'stops._id': stops[firstStopInNewStatusIndex]._id,
+        });
         Object.assign(setData, { 'stops.$.status': nextStopStatus });
       }
-    } else if (load.status !== 'Completed' && !~firstStopInNewStatusIndex && !~stopInNonFinalStatusIndex && (change.operationType === 'insert' || (stopsBeforeChange?.at(-1)?.type === StopType.Delivery && stopsBeforeChange?.at(-1)?.status !== STOP_DELIVERY_STATUSES.at(-1)))) {
+    } else if (
+      load.status !== 'Completed' &&
+      !~firstStopInNewStatusIndex &&
+      !~stopInNonFinalStatusIndex &&
+      (change.operationType === 'insert' ||
+        (stopsBeforeChange?.at(-1)?.type === StopType.Delivery &&
+          stopsBeforeChange?.at(-1)?.status !== STOP_DELIVERY_STATUSES.at(-1)))
+    ) {
       this.log.debug('Setting load status to completed');
       Object.assign(setData, { status: 'Completed' });
     }
@@ -281,13 +318,19 @@ export class LoadWorkerService implements OnApplicationBootstrap, OnModuleDestro
       if (stopsBeforeChange) {
         for (let i = 0; i < stopsBeforeChange.length - 1; i++) {
           const stopBeforeChange = stopsBeforeChange[i];
-          if (stopBeforeChange._id && stopBeforeChange._id.toString() === stop.stopId?.toString()) {
+          if (
+            stopBeforeChange._id &&
+            stopBeforeChange._id.toString() === stop.stopId?.toString()
+          ) {
             const nextStopBeforeChange = stopsBeforeChange[i + 1];
             if (
-              stopBeforeChange.facility.toString() === stop.facility.id.toString() &&
+              stopBeforeChange.facility.toString() ===
+                stop.facility.id.toString() &&
               nextStopBeforeChange._id &&
-              nextStopBeforeChange._id.toString() === nextStop.stopId.toString() &&
-              nextStopBeforeChange.facility.toString() === nextStop.facility.id.toString()
+              nextStopBeforeChange._id.toString() ===
+                nextStop.stopId.toString() &&
+              nextStopBeforeChange.facility.toString() ===
+                nextStop.facility.id.toString()
             ) {
               partRouteLength = milesBeforeChange && milesBeforeChange[i];
             }
@@ -325,13 +368,44 @@ export class LoadWorkerService implements OnApplicationBootstrap, OnModuleDestro
       this.log.warn(`Load ${change.documentKey._id} NOT updated`);
     }
 
-    const stopBeforeChangeInNonFinalStatusIndex = stopsBeforeChange === undefined ? -1 : stopsBeforeChange.findIndex((stop) => (stop.type === StopType.PickUp && stop.status !== STOP_PICKUP_STATUSES.at(0) && stop.status !== STOP_PICKUP_STATUSES.at(-1)) || (stop.type === StopType.Delivery && stop.status !== STOP_DELIVERY_STATUSES.at(0) && stop.status !== STOP_DELIVERY_STATUSES.at(-1)));
-    const stopAfterChangeInNonFinalStatusIndex = stopsAfterChange === undefined ? -1 : stopsAfterChange?.findIndex((stop) => (stop.type === StopType.PickUp && stop.status !== STOP_PICKUP_STATUSES.at(0) && stop.status !== STOP_PICKUP_STATUSES.at(-1)) || (stop.type === StopType.Delivery && stop.status !== STOP_DELIVERY_STATUSES.at(0) && stop.status !== STOP_DELIVERY_STATUSES.at(-1)));
+    const stopBeforeChangeInNonFinalStatusIndex =
+      stopsBeforeChange === undefined
+        ? -1
+        : stopsBeforeChange.findIndex(
+            (stop) =>
+              (stop.type === StopType.PickUp &&
+                stop.status !== STOP_PICKUP_STATUSES.at(0) &&
+                stop.status !== STOP_PICKUP_STATUSES.at(-1)) ||
+              (stop.type === StopType.Delivery &&
+                stop.status !== STOP_DELIVERY_STATUSES.at(0) &&
+                stop.status !== STOP_DELIVERY_STATUSES.at(-1)),
+          );
+    const stopAfterChangeInNonFinalStatusIndex =
+      stopsAfterChange === undefined
+        ? -1
+        : stopsAfterChange?.findIndex(
+            (stop) =>
+              (stop.type === StopType.PickUp &&
+                stop.status !== STOP_PICKUP_STATUSES.at(0) &&
+                stop.status !== STOP_PICKUP_STATUSES.at(-1)) ||
+              (stop.type === StopType.Delivery &&
+                stop.status !== STOP_DELIVERY_STATUSES.at(0) &&
+                stop.status !== STOP_DELIVERY_STATUSES.at(-1)),
+          );
     if (
       stopsAfterChange &&
       ~stopAfterChangeInNonFinalStatusIndex &&
-      stopsAfterChange[stopAfterChangeInNonFinalStatusIndex]?.status === 'GTG' &&
-      (!(stopsBeforeChange && ~stopBeforeChangeInNonFinalStatusIndex) || (stopsBeforeChange[stopBeforeChangeInNonFinalStatusIndex]._id.toString() !== stopsAfterChange[stopAfterChangeInNonFinalStatusIndex]._id.toString()) || (stopsBeforeChange[stopBeforeChangeInNonFinalStatusIndex].status !== stopsAfterChange[stopAfterChangeInNonFinalStatusIndex].status)) &&
+      stopsAfterChange[stopAfterChangeInNonFinalStatusIndex]?.status ===
+        'GTG' &&
+      (!(stopsBeforeChange && ~stopBeforeChangeInNonFinalStatusIndex) ||
+        stopsBeforeChange[
+          stopBeforeChangeInNonFinalStatusIndex
+        ]._id.toString() !==
+          stopsAfterChange[
+            stopAfterChangeInNonFinalStatusIndex
+          ]._id.toString() ||
+        stopsBeforeChange[stopBeforeChangeInNonFinalStatusIndex].status !==
+          stopsAfterChange[stopAfterChangeInNonFinalStatusIndex].status) &&
       change.fullDocument.truck
     ) {
       this.log.debug(
@@ -403,7 +477,7 @@ export class LoadWorkerService implements OnApplicationBootstrap, OnModuleDestro
       change.operationType === 'update' &&
       change.fullDocument.status !== change.fullDocumentBeforeChange.status &&
       change.fullDocument.truck?.toString() ===
-      change.fullDocumentBeforeChange.truck?.toString() &&
+        change.fullDocumentBeforeChange.truck?.toString() &&
       change.fullDocument.truck &&
       change.fullDocumentBeforeChange.status === 'In Progress'
     ) {
@@ -430,7 +504,7 @@ export class LoadWorkerService implements OnApplicationBootstrap, OnModuleDestro
     if (
       change.operationType === 'update' &&
       change.fullDocument.truck?.toString() !==
-      change.fullDocumentBeforeChange.truck?.toString() &&
+        change.fullDocumentBeforeChange.truck?.toString() &&
       change.fullDocumentBeforeChange.truck &&
       change.fullDocumentBeforeChange.status === 'In Progress'
     ) {
@@ -457,11 +531,11 @@ export class LoadWorkerService implements OnApplicationBootstrap, OnModuleDestro
 
     if (
       ((change.operationType === 'update' &&
-          (change.fullDocument.truck?.toString() !==
-            change.fullDocumentBeforeChange.truck?.toString() ||
-            change.fullDocument.status !==
+        (change.fullDocument.truck?.toString() !==
+          change.fullDocumentBeforeChange.truck?.toString() ||
+          change.fullDocument.status !==
             change.fullDocumentBeforeChange.status) &&
-          newTruckActivatedLoadId?.toString() !==
+        newTruckActivatedLoadId?.toString() !==
           change.documentKey._id?.toString()) ||
         (change.operationType === 'insert' && change.fullDocument.truck)) &&
       change.fullDocument.status !== 'TONU' &&
@@ -477,7 +551,7 @@ export class LoadWorkerService implements OnApplicationBootstrap, OnModuleDestro
       } else if (
         currentTruckLoadUpdateInvoked &&
         newTruckActivatedLoadId?.toString() !==
-        change.documentKey._id?.toString()
+          change.documentKey._id?.toString()
       ) {
         newLoadStatus = 'Planned';
       } else {
@@ -522,9 +596,9 @@ export class LoadWorkerService implements OnApplicationBootstrap, OnModuleDestro
 
     if (
       ((change.operationType === 'update' &&
-          (change.fullDocument.truck?.toString() !==
-            change.fullDocumentBeforeChange.truck?.toString() ||
-            change.fullDocument.status !==
+        (change.fullDocument.truck?.toString() !==
+          change.fullDocumentBeforeChange.truck?.toString() ||
+          change.fullDocument.status !==
             change.fullDocumentBeforeChange.status)) ||
         change.operationType === 'insert') &&
       change.fullDocument.status === 'In Progress' &&
@@ -554,15 +628,15 @@ export class LoadWorkerService implements OnApplicationBootstrap, OnModuleDestro
 
     if (
       ((change.operationType === 'update' &&
-          (change.fullDocument.truck?.toString() !==
-            change.fullDocumentBeforeChange.truck?.toString() ||
-            change.fullDocument.status !==
+        (change.fullDocument.truck?.toString() !==
+          change.fullDocumentBeforeChange.truck?.toString() ||
+          change.fullDocument.status !==
             change.fullDocumentBeforeChange.status)) ||
         change.operationType === 'insert') &&
       change.fullDocument.truck &&
       (change.fullDocument.status === 'In Progress' ||
         newTruckActivatedLoadId?.toString() ===
-        change.documentKey._id?.toString())
+          change.documentKey._id?.toString())
     ) {
       this.log.debug(
         `Load ${change.documentKey._id} in progress is now on truck ${change.fullDocument.truck}`,

@@ -66,12 +66,17 @@ export class FacilityController {
     @Body(new BodyValidationPipe(UpdateFacilityValidation))
     updateFacilityBodyDto: UpdateFacilityDto,
   ): Promise<FacilityResultDto> {
-    return this.facilityService.updateFacility(facilityId, updateFacilityBodyDto);
+    return this.facilityService.updateFacility(
+      facilityId,
+      updateFacilityBodyDto,
+    );
   }
 
   @Delete(':facilityId')
   @Roles('Super Admin')
-  async deleteFacility(@Param('facilityId', MongoObjectIdPipe) facilityId: string) {
+  async deleteFacility(
+    @Param('facilityId', MongoObjectIdPipe) facilityId: string,
+  ) {
     return this.facilityService.deleteFacility(facilityId);
   }
 }

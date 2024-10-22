@@ -16,7 +16,9 @@ import { ChangeDocument, Queue } from '../utils/queue';
 const { ChangeStream } = mongo;
 
 @Injectable()
-export class EmailWorkerService implements OnApplicationBootstrap, OnModuleDestroy {
+export class EmailWorkerService
+  implements OnApplicationBootstrap, OnModuleDestroy
+{
   private readonly changeStream?: InstanceType<typeof ChangeStream>;
   private queue?: Queue<ChangeDocument & EmailChangeDocument>;
   constructor(
@@ -44,7 +46,9 @@ export class EmailWorkerService implements OnApplicationBootstrap, OnModuleDestr
       this.queue = new Queue<ChangeDocument & EmailChangeDocument>(
         async (): Promise<ChangeDocument & EmailChangeDocument> => {
           await stream.hasNext();
-          return stream.next() as unknown as Promise<ChangeDocument & EmailChangeDocument>;
+          return stream.next() as unknown as Promise<
+            ChangeDocument & EmailChangeDocument
+          >;
         },
         this.onNewEmail.bind(this),
         this.configService.get<number>('emailQueue.maxParallelTasks') as number,
