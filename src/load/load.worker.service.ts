@@ -220,6 +220,7 @@ export class LoadWorkerService
     const setData: Record<string, any> = {
       stopsVer: load.__v,
     };
+    let newStatus: LoadStatus | void = undefined;
 
     const stopsBeforeChange =
       change.operationType === 'update'
@@ -301,7 +302,7 @@ export class LoadWorkerService
           stopsBeforeChange?.at(-1)?.status !== STOP_DELIVERY_STATUSES.at(-1)))
     ) {
       this.log.debug('Setting load status to completed');
-      Object.assign(setData, { status: 'Completed' });
+      newStatus = 'Completed';
     }
 
     // Calculate stop distances
@@ -364,6 +365,25 @@ export class LoadWorkerService
     );
     if (updated) {
       this.log.debug(`Load ${change.documentKey._id} updated`);
+      if (newStatus) {
+        updated.set('status', newStatus);
+        try {
+          await updated.save();
+          this.log.debug(
+            `State ${newStatus} set to Load ${change.documentKey._id}`,
+          );
+        } catch (error) {
+          if (error instanceof Error) {
+            this.log.debug(
+              `Load ${change.documentKey._id} not saved: ${error.message}`,
+            );
+          } else {
+            this.log.debug(
+              `Load ${change.documentKey._id} not saved: ${JSON.stringify(error)}`,
+            );
+          }
+        }
+      }
     } else {
       this.log.warn(`Load ${change.documentKey._id} NOT updated`);
     }
@@ -493,9 +513,21 @@ export class LoadWorkerService
           `Changing load status from ${loadToInProgress.status} to In Progress for ${loadToInProgress._id}`,
         );
         loadToInProgress.set('status', 'In Progress');
-        await loadToInProgress.save();
-        newTruckActivatedLoadId = loadToInProgress._id;
-        this.log.debug(`Load ${loadToInProgress._id} saved`);
+        try {
+          await loadToInProgress.save();
+          newTruckActivatedLoadId = loadToInProgress._id;
+          this.log.debug(`Load ${loadToInProgress._id} saved`);
+        } catch (error) {
+          if (error instanceof Error) {
+            this.log.debug(
+              `Load ${loadToInProgress._id} not saved: ${error.message}`,
+            );
+          } else {
+            this.log.debug(
+              `Load ${loadToInProgress._id} not saved: ${JSON.stringify(error)}`,
+            );
+          }
+        }
       } else {
         truckIdsToAvailable.add(change.fullDocument.truck.toString());
       }
@@ -519,9 +551,21 @@ export class LoadWorkerService
           `Changing load status from ${loadToInProgress.status} to In Progress for ${loadToInProgress._id}`,
         );
         loadToInProgress.set('status', 'In Progress');
-        await loadToInProgress.save();
-        oldTruckActivatedLoadId = loadToInProgress._id;
-        this.log.debug(`Load ${loadToInProgress._id} saved`);
+        try {
+          await loadToInProgress.save();
+          oldTruckActivatedLoadId = loadToInProgress._id;
+          this.log.debug(`Load ${loadToInProgress._id} saved`);
+        } catch (error) {
+          if (error instanceof Error) {
+            this.log.debug(
+              `Load ${loadToInProgress._id} not saved: ${error.message}`,
+            );
+          } else {
+            this.log.debug(
+              `Load ${loadToInProgress._id} not saved: ${JSON.stringify(error)}`,
+            );
+          }
+        }
       } else {
         truckIdsToAvailable.add(
           change.fullDocumentBeforeChange.truck.toString(),
@@ -610,19 +654,39 @@ export class LoadWorkerService
     if (truckIdsToAvailable.size > 0) {
       for (const truckId of truckIdsToAvailable) {
         this.log.debug(`Setting Available state to truck ${truckId}`);
-        await this.truckService.updateTruck(truckId, {
-          status: 'Available',
-        });
-        this.log.debug(`Truck ${truckId} updated`);
+        try {
+          await this.truckService.updateTruck(truckId, {
+            status: 'Available',
+          });
+          this.log.debug(`Truck ${truckId} updated`);
+        } catch (error) {
+          if (error instanceof Error) {
+            this.log.debug(`Truck ${truckId} not undated: ${error.message}`);
+          } else {
+            this.log.debug(
+              `Truck ${truckId} not undated: ${JSON.stringify(error)}`,
+            );
+          }
+        }
       }
     }
     if (truckIdsToOnRoute.size > 0) {
       for (const truckId of truckIdsToOnRoute) {
         this.log.debug(`Setting On route state to truck ${truckId}`);
-        await this.truckService.updateTruck(truckId, {
-          status: 'On route',
-        });
-        this.log.debug(`Truck ${truckId} updated`);
+        try {
+          await this.truckService.updateTruck(truckId, {
+            status: 'On route',
+          });
+          this.log.debug(`Truck ${truckId} updated`);
+        } catch (error) {
+          if (error instanceof Error) {
+            this.log.debug(`Truck ${truckId} not undated: ${error.message}`);
+          } else {
+            this.log.debug(
+              `Truck ${truckId} not undated: ${JSON.stringify(error)}`,
+            );
+          }
+        }
       }
     }
 
