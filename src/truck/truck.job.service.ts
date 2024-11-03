@@ -167,6 +167,12 @@ export class TruckJobService
             to: driverId,
             title: 'Please update your truck status.',
             body: 'To receive a load offer, please update your app by clicking on this message and setting your status to Available.',
+            data: {
+              context: {
+                driverId: driverId,
+                truckId: truck.id,
+              },
+            },
           });
           await this.pushService.updatePush(newPushMessage.id, {
             state: 'Ready for send',

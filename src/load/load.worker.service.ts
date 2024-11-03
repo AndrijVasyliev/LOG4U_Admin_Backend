@@ -442,6 +442,13 @@ export class LoadWorkerService
           body: `Stop #${stopAfterChangeInNonFinalStatusIndex + 1} in Load #${load.loadNumber} is verified by dispatcher and you are good to go.`,
           data: {
             routeTo: `/home/loads?selectedLoadId=${change.documentKey._id}&renew=data`,
+            context: {
+              driverId: truck.driver.id,
+              truckId: truck.id,
+              loadId: change.documentKey._id,
+              stopId:
+                stopsAfterChange[stopAfterChangeInNonFinalStatusIndex]._id,
+            },
           },
         });
         await this.pushService.updatePush(newPushMessage.id, {
@@ -716,6 +723,11 @@ export class LoadWorkerService
           body: `Load #${load.loadNumber} is assigned to truck #${truck.truckNumber} and transferred to "In Progress".`,
           data: {
             routeTo: `/home/loads?selectedLoadId=${change.documentKey._id}&renew=data`,
+            context: {
+              driverId: truck.driver.id,
+              truckId: truck.id,
+              loadId: change.documentKey._id,
+            },
           },
         });
         await this.pushService.updatePush(newPushMessage.id, {
