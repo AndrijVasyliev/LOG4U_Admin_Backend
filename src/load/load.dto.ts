@@ -54,7 +54,7 @@ interface CreateTimeFrameDirectDto {
 }
 
 interface CreateFreightDto {
-  freightId?: string;
+  freightId: string;
   pieces: number;
   unitOfWeight: UnitOfWeight;
   weight: number;
@@ -102,6 +102,7 @@ interface CreateStopDeliveryDto extends CreateStopDto {
     | CreateTimeFrameFCFSDto
     | CreateTimeFrameAPPTDto
     | CreateTimeFrameDirectDto;
+  bolList: string[];
 }
 
 export type Stops = (CreateStopPickUpDto | CreateStopDeliveryDto)[];
@@ -271,7 +272,7 @@ class TimeFrameResultDto {
 class FreightResultDto {
   static fromFreightModel(freight: Freight): FreightResultDto {
     return {
-      freightId: freight.freightId.toString(),
+      freightId: freight.freightId,
       pieces: freight.pieces,
       unitOfWeight: freight.unitOfWeight,
       weight: freight.weight,
@@ -414,6 +415,7 @@ class StopDeliveryResultDto extends StopResultDto {
       ...stopResult,
       status: stop.status,
       timeFrame,
+      bolList: stop.bolList,
     };
     if (driversInfo) {
       result = { ...result, driversInfo };
@@ -424,6 +426,7 @@ class StopDeliveryResultDto extends StopResultDto {
   readonly status: StopDeliveryStatus;
   readonly driversInfo?: StopDeliveryDriversInfoResultDto[];
   readonly timeFrame: TimeFrameFCFSResultDto | TimeFrameResultDto;
+  readonly bolList: string[];
 }
 
 export class LoadResultDto {

@@ -31,7 +31,7 @@ const TimeFrameDirectValidation = Joi.object({
 });
 
 const FreightValidation = Joi.object({
-  freightId: Joi.string().optional(),
+  freightId: Joi.string().required(),
   pieces: Joi.number().integer().min(1).required(),
   unitOfWeight: Joi.string()
     .valid(...UNITS_OF_WEIGHT)
@@ -91,6 +91,10 @@ const StopDeliveryValidation = StopValidation.append({
     TimeFrameAPPTValidation,
     TimeFrameDirectValidation,
   ).required(),
+  bolList: Joi.array()
+    .items(MongoObjectIdValidation.required())
+    .min(1)
+    .required(),
 });
 
 export const CreateLoadValidation = Joi.object({

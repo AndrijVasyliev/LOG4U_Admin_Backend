@@ -163,10 +163,10 @@ export class Freight {
     required: false,
     virtual: true,
     set: function (value: string) {
-      (this as any).set({ _id: value });
+      (this as Freight & Document).set({ _id: value });
     },
     get: function (): string {
-      return `${(this as any)._id}`;
+      return `${(this as Freight & Document)._id.toString()}`;
     },
   })
   freightId: string;
@@ -207,10 +207,10 @@ export class Stop {
     required: false,
     virtual: true,
     set: function (value: string) {
-      (this as any).set({ _id: value });
+      (this as Stop & Document).set({ _id: value });
     },
     get: function (): string {
-      return `${(this as any)._id}`;
+      return `${(this as Stop & Document)._id.toString()}`;
     },
   })
   stopId: string;
@@ -260,10 +260,10 @@ export class StopPickUpDriversInfo {
     required: false,
     virtual: true,
     set: function (value: string) {
-      (this as any).set({ _id: value });
+      (this as StopPickUpDriversInfo & Document).set({ _id: value });
     },
     get: function (): string {
-      return `${(this as any)._id}`;
+      return `${(this as StopPickUpDriversInfo & Document)._id.toString()}`;
     },
   })
   driversInfoId: string;
@@ -336,10 +336,10 @@ export class StopDeliveryDriversInfo {
     required: false,
     virtual: true,
     set: function (value: string) {
-      (this as any).set({ _id: value });
+      (this as StopDeliveryDriversInfo & Document).set({ _id: value });
     },
     get: function (): string {
-      return `${(this as any)._id}`;
+      return `${(this as StopDeliveryDriversInfo & Document)._id.toString()}`;
     },
   })
   driversInfoId: string;
@@ -382,6 +382,12 @@ export class StopDelivery {
         TimeFrameFCFS & { type: TimeFrameType.FCFS } & Document)
     | (TimeFrameDelivery &
         TimeFrameAPPT & { type: TimeFrameType.APPT } & Document);
+
+  @Prop({
+    required: true,
+    type: [String],
+  })
+  bolList: string[];
 
   _id: ObjectId;
 }
