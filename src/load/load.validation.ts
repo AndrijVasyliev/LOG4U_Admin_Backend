@@ -176,6 +176,23 @@ export const CreateLoadValidation = Joi.object({
       }
       return value;
     })
+    .custom((value: Stops) => {
+      const freightIdList = value
+        ?.filter((stop) => stop.type === StopType.PickUp)
+        .flatMap((stop, stopIndex: number) =>
+          stop.freightList.map((freight) => freight.freightId),
+        );
+      value.forEach((stop) => {
+        if (stop.type === StopType.PickUp) {
+          stop.driversInfo = stop?.driversInfo?.filter((driversInfoItem) => freightIdList?.includes(driversInfoItem.bol));
+        }
+        if (stop.type === StopType.Delivery ) {
+          stop.driversInfo = stop?.driversInfo?.filter((driversInfoItem) => freightIdList?.includes(driversInfoItem.bol));
+          stop.bolList = stop?.bolList?.filter((bolItemId) => freightIdList?.includes(bolItemId));
+        }
+      });
+      return value;
+    })
     .required(),
   weight: Joi.string().required(),
   truckType: Joi.array()
