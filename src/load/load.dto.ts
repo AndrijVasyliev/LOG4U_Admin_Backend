@@ -228,6 +228,7 @@ export interface LoadQuerySearch {
   readonly bookedByCompany?: string;
   readonly checkInAs?: string;
   readonly truckNumber?: number;
+  readonly trucksIds?: string[];
 }
 
 export interface LoadQueryOrder

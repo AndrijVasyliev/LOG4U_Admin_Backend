@@ -127,6 +127,30 @@ export class MobileAppController {
     return this.coordinatorService.findCoordinatorById(person.id);
   }
 
+  @Get('loads')
+  @Roles('Owner', 'OwnerDriver')
+  async getLoads(
+    @Req() request: Request,
+    @Query(new QueryParamsPipe(MobileLoadQueryParamsSchema))
+      loadQuery: MobileLoadQuery,
+  ): Promise<PaginatedLoadResultDto> {
+    const { user: person } = request as unknown as {
+      user: PersonAuthResultDto;
+    };
+    const owner = await this.ownerService.findOwnerById(person.id);
+    if (!owner.ownTrucks || owner.ownTrucks.length < 1) {
+      throw new PreconditionFailedException(
+        `Owner ${owner.fullName} own no trucks`,
+      );
+    }
+    return this.loadService.getLoads({
+      orderby: 'loadNumber',
+      direction: 'desc',
+      search: { trucksIds: owner.ownTrucks.map((truck) => truck.id) },
+      ...loadQuery,
+    });
+  }
+
   @Get(['getLoad', 'load'])
   @Roles('Driver', 'OwnerDriver', 'CoordinatorDriver')
   async getLoad(
@@ -140,7 +164,7 @@ export class MobileAppController {
     const driver = await this.driverService.findDriverById(person.id);
     if (!driver.driveTrucks || driver.driveTrucks.length !== 1) {
       throw new PreconditionFailedException(
-        `Driver ${driver.fullName} have no trucks`,
+        `Driver ${driver.fullName} drive no trucks`,
       );
     }
     return this.loadService.getLoads({

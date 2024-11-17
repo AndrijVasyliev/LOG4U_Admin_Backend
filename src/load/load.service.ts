@@ -61,6 +61,7 @@ export class LoadService {
           entry[0] !== 'status' &&
           entry[0] !== 'loadNumber' &&
           entry[0] !== 'truckNumber' &&
+          entry[0] !== 'trucksIds' &&
           (documentQuery[entry[0]] = {
             $regex: new RegExp(escapeForRegExp(entry[1]), 'i'),
           });
@@ -82,6 +83,11 @@ export class LoadService {
       );
       documentQuery.truck = {
         $eq: truck.id,
+      };
+    }
+    if (query?.search?.trucksIds) {
+      documentQuery.truck = {
+        $in: query?.search?.trucksIds,
       };
     }
 
