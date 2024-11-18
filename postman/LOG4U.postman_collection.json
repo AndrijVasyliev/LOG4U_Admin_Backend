@@ -3867,13 +3867,53 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{origin}}/mobileApp/loads?limit=15&offset=0",
+							"raw": "{{origin}}/mobileApp/loadsByOwner?limit=15&offset=0",
 							"host": [
 								"{{origin}}"
 							],
 							"path": [
 								"mobileApp",
-								"loads"
+								"loadsByOwner"
+							],
+							"query": [
+								{
+									"key": "limit",
+									"value": "15"
+								},
+								{
+									"key": "offset",
+									"value": "0"
+								},
+								{
+									"key": "orderby",
+									"value": "loadNumber",
+									"description": "'loadNumber','pickDate','deliverDate','weight','rate','bookedByCompany','checkInAs'",
+									"disabled": true
+								},
+								{
+									"key": "direction",
+									"value": "desc",
+									"description": "asc or desc",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "List Loads (Coordinator)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{origin}}/mobileApp/loadsByCoordinator?limit=15&offset=0",
+							"host": [
+								"{{origin}}"
+							],
+							"path": [
+								"mobileApp",
+								"loadsByCoordinator"
 							],
 							"query": [
 								{
@@ -4403,12 +4443,12 @@
 				"basic": [
 					{
 						"key": "password",
-						"value": "superpass",
+						"value": "{{mobile_password}}",
 						"type": "string"
 					},
 					{
 						"key": "username",
-						"value": "MegoMan",
+						"value": "{{mobile_username}}",
 						"type": "string"
 					}
 				]
@@ -4603,6 +4643,28 @@
 			"value": "4ulogisticsllc@gmail.com",
 			"type": "string",
 			"disabled": true
+		},
+		{
+			"key": "mobile_username",
+			"value": "AlexSS",
+			"type": "string",
+			"disabled": true
+		},
+		{
+			"key": "mobile_password",
+			"value": "AlexSS",
+			"type": "string",
+			"disabled": true
+		},
+		{
+			"key": "mobile_username",
+			"value": "MegoMan",
+			"type": "string"
+		},
+		{
+			"key": "mobile_password",
+			"value": "superpass",
+			"type": "string"
 		}
 	]
 }
