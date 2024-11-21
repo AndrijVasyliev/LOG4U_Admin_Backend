@@ -132,7 +132,7 @@ export class MobileAppController {
   async getOwnersLoads(
     @Req() request: Request,
     @Query(new QueryParamsPipe(MobileLoadQueryParamsSchema))
-      loadQuery: MobileLoadQuery,
+    loadQuery: MobileLoadQuery,
   ): Promise<PaginatedLoadResultDto> {
     const { user: person } = request as unknown as {
       user: PersonAuthResultDto;
@@ -156,13 +156,18 @@ export class MobileAppController {
   async getCoordinatorsLoads(
     @Req() request: Request,
     @Query(new QueryParamsPipe(MobileLoadQueryParamsSchema))
-      loadQuery: MobileLoadQuery,
+    loadQuery: MobileLoadQuery,
   ): Promise<PaginatedLoadResultDto> {
     const { user: person } = request as unknown as {
       user: PersonAuthResultDto;
     };
-    const coordinator = await this.coordinatorService.findCoordinatorById(person.id);
-    if (!coordinator.coordinateTrucks || coordinator.coordinateTrucks.length < 1) {
+    const coordinator = await this.coordinatorService.findCoordinatorById(
+      person.id,
+    );
+    if (
+      !coordinator.coordinateTrucks ||
+      coordinator.coordinateTrucks.length < 1
+    ) {
       throw new PreconditionFailedException(
         `Owner ${coordinator.fullName} own no trucks`,
       );
@@ -170,7 +175,9 @@ export class MobileAppController {
     return this.loadService.getLoads({
       orderby: 'loadNumber',
       direction: 'desc',
-      search: { trucksIds: coordinator.coordinateTrucks.map((truck) => truck.id) },
+      search: {
+        trucksIds: coordinator.coordinateTrucks.map((truck) => truck.id),
+      },
       ...loadQuery,
     });
   }

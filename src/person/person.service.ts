@@ -189,8 +189,13 @@ export class PersonService {
 
     if (person.pushToken) {
       this.log.debug('Removing  push token from other persons');
-      const removedResult = await this.personModel.updateMany({ pushToken: { $eq: person.pushToken } }, { $unset: { pushToken: 1 } });
-      this.log.debug(`Push token removed from ${removedResult.modifiedCount} persons`);
+      const removedResult = await this.personModel.updateMany(
+        { pushToken: { $eq: person.pushToken } },
+        { $unset: { pushToken: 1 } },
+      );
+      this.log.debug(
+        `Push token removed from ${removedResult.modifiedCount} person(s)`,
+      );
     }
 
     this.log.debug('Saving Person');
