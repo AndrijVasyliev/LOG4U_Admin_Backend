@@ -51,7 +51,7 @@ export class CustomerController {
   }
 
   @Post()
-  @Roles('Super Admin')
+  // @Roles('Super Admin')
   async createCustomer(
     @Body(new BodyValidationPipe(CreateCustomerValidation))
     createCustomerBodyDto: CreateCustomerDto,
