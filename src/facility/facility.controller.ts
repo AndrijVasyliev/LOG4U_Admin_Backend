@@ -51,7 +51,7 @@ export class FacilityController {
   }
 
   @Post()
-  @Roles('Super Admin')
+  // @Roles('Super Admin')
   async createFacility(
     @Body(new BodyValidationPipe(CreateFacilityValidation))
     createFacilityBodyDto: CreateFacilityDto,
