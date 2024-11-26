@@ -60,7 +60,7 @@ export class CustomerController {
   }
 
   @Patch(':customerId')
-  @Roles('Super Admin')
+  // @Roles('Super Admin')
   async updateCustomer(
     @Param('customerId', MongoObjectIdPipe) customerId: string,
     @Body(new BodyValidationPipe(UpdateCustomerValidation))
@@ -73,7 +73,7 @@ export class CustomerController {
   }
 
   @Delete(':customerId')
-  @Roles('Super Admin')
+  // @Roles('Super Admin')
   async deleteCustomer(
     @Param('customerId', MongoObjectIdPipe) customerId: string,
   ) {

@@ -60,7 +60,7 @@ export class FacilityController {
   }
 
   @Patch(':facilityId')
-  @Roles('Super Admin')
+  // @Roles('Super Admin')
   async updateFacility(
     @Param('facilityId', MongoObjectIdPipe) facilityId: string,
     @Body(new BodyValidationPipe(UpdateFacilityValidation))
@@ -73,7 +73,7 @@ export class FacilityController {
   }
 
   @Delete(':facilityId')
-  @Roles('Super Admin')
+  // @Roles('Super Admin')
   async deleteFacility(
     @Param('facilityId', MongoObjectIdPipe) facilityId: string,
   ) {
