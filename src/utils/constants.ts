@@ -17,7 +17,7 @@ export const MONGO_FILE_BUCKET_NAME = 'fs';
 export const PATHPARAM_VALIDATION_ERROR = 'Pathparam validation error';
 export const WS_MESSAGE_VALIDATION_ERROR = 'Message validation error';
 export const BODY_VALIDATION_ERROR = 'Body validation error';
-export const MIN_FILE_COMMENT_LENGTH = 3;
+export const MIN_FILE_COMMENT_LENGTH = 1;
 export const MAX_FILE_COMMENT_LENGTH = 30;
 // Auth
 export const IS_PUBLIC_KEY = 'isPublic';
