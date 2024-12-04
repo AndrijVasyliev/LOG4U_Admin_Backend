@@ -60,12 +60,12 @@ export class LoggerModule
 
   private logStringFormat = printf((info): string => {
     const { level, message, timestamp, ...metadata } = info;
-    let log = `${(timestamp as string || new Date().toJSON())
+    let log = `${((timestamp as string) || new Date().toJSON())
       .replace('T', ' ')
       .substring(
         0,
         19,
-      )} [${level}]${grey(info[CONTEXT] ? ' (' + info[CONTEXT] + ')' : '')} ${cyan(info[REQUEST_ID] as string || '')}: ${message}`;
+      )} [${level}]${grey(info[CONTEXT] ? ' (' + info[CONTEXT] + ')' : '')} ${cyan((info[REQUEST_ID] as string) || '')}: ${message}`;
     if (Object.keys(metadata).length) {
       log += ` ${stringify(metadata, replacer)}`;
     }

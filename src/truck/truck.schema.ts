@@ -3,6 +3,7 @@ import { Document, ObjectId, Schema as MongooseSchema } from 'mongoose';
 import {
   COORDINATOR_TYPES,
   DRIVER_TYPES,
+  LOCATION_UPDATERS,
   OWNER_TYPES,
   TRUCK_CERTIFICATES,
   TRUCK_CROSSBORDERS,
@@ -12,6 +13,7 @@ import {
 } from '../utils/constants';
 import {
   GeoPointType,
+  LocationUpdaters,
   MongoGeoPointType,
   TruckCertificate,
   TruckCrossborder,
@@ -61,6 +63,13 @@ export class Truck {
     },
   })
   lastLocation?: GeoPointType;
+
+  @Prop({
+    required: false,
+    type: String,
+    enum: LOCATION_UPDATERS,
+  })
+  locationUpdatedBy?: LocationUpdaters;
 
   /*@Prop({
     required: false,

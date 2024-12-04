@@ -105,6 +105,12 @@ export const CUSTOMER_TYPES = [
   'OTHER',
 ] as const;
 
+export const LOCATION_UPDATERS = [
+  'Tracking app',
+  'Manually from app',
+  'Manually from admin',
+] as const;
+
 export const TRUCK_TYPES = [
   'Cargo van',
   'Reefer van',

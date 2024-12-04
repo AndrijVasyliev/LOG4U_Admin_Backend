@@ -78,6 +78,12 @@ export class TruckController {
         reservedBy: undefined,
       };
     }
+    if (createTruckBodyDto.lastLocation) {
+      newValues = {
+        ...createTruckBodyDto,
+        locationUpdatedBy: 'Manually from admin',
+      };
+    }
     return this.truckService.createTruck(newValues);
   }
 
@@ -99,6 +105,12 @@ export class TruckController {
         ...updateTruckBodyDto,
         reservedAt: undefined,
         reservedBy: undefined,
+      };
+    }
+    if (updateTruckBodyDto.lastLocation) {
+      newValues = {
+        ...updateTruckBodyDto,
+        locationUpdatedBy: 'Manually from admin',
       };
     }
     return this.truckService.updateTruck(truckId, newValues);

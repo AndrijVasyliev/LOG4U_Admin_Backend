@@ -21,6 +21,7 @@ import {
   UNITS_OF_WEIGHT,
   UNITS_OF_LENGTH,
   ORDER_VALUES,
+  LOCATION_UPDATERS,
 } from './constants';
 
 export type GeoPointType = LatLngArray;
@@ -38,6 +39,7 @@ export type MobileRole = (typeof MOBILE_ROLES)[number];
 export type AdminRole = (typeof ADMIN_ROLES)[number];
 export type UserRole = (typeof USER_ROLES)[number];
 export type CustomerType = (typeof CUSTOMER_TYPES)[number];
+export type LocationUpdaters = (typeof LOCATION_UPDATERS)[number];
 export type TruckType = (typeof TRUCK_TYPES)[number];
 export type TruckStatus = (typeof TRUCK_STATUSES)[number];
 export type TruckCrossborder = (typeof TRUCK_CROSSBORDERS)[number];

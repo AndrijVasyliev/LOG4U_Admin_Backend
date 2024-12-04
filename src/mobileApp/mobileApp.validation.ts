@@ -67,6 +67,7 @@ export const MobileSetStopDeliveryDriversInfoValidation = Joi.array()
   .required();
 
 export const MobileUpdateTruckValidation = Joi.object({
+  lastLocation: GeoPointBodyValidation.optional(),
   status: Joi.string()
     .valid(...TRUCK_STATUSES)
     .optional(),

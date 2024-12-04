@@ -2,6 +2,7 @@ import { PaginateResult } from 'mongoose';
 import { Truck } from './truck.schema';
 import {
   GeoPointType,
+  LocationUpdaters,
   PaginatedResultDto,
   Query,
   TruckCertificate,
@@ -19,6 +20,7 @@ export interface CreateTruckDto {
   readonly truckNumber: number;
   readonly status: TruckStatus;
   readonly lastLocation?: GeoPointType;
+  readonly locationUpdatedBy?: LocationUpdaters;
   readonly availabilityLocation?: GeoPointType;
   readonly availabilityAtLocal?: Date;
   readonly crossborder: TruckCrossborder;
@@ -69,6 +71,7 @@ export interface UpdateTruckDto {
   readonly truckNumber?: number;
   readonly status?: TruckStatus;
   readonly lastLocation?: GeoPointType;
+  readonly locationUpdatedBy?: LocationUpdaters;
   readonly availabilityLocation?: GeoPointType;
   readonly availabilityAtLocal?: Date;
   readonly crossborder?: TruckCrossborder;
@@ -148,6 +151,7 @@ export class TruckResultDto {
       truckNumber: truck.truckNumber,
       status: truck.status,
       lastLocation: truck.lastLocation,
+      locationUpdatedBy: truck.locationUpdatedBy,
       locationUpdatedAt: truck.locationUpdatedAt,
       renewLocationPushMessageAt: truck.renewLocationPushMessageAt,
       availabilityLocation: truck.availabilityLocation,
@@ -196,6 +200,7 @@ export class TruckResultDto {
   readonly milesByRoads?: number;
   readonly milesHaversine?: number;
   readonly lastLocation?: GeoPointType;
+  readonly locationUpdatedBy?: LocationUpdaters;
   readonly locationUpdatedAt?: Date;
   readonly renewLocationPushMessageAt?: Date;
   readonly availabilityLocation?: GeoPointType;

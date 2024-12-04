@@ -326,7 +326,12 @@ export class MobileAppController {
         }`,
       );
     }
-    await this.truckService.updateTruck(truckId, updateTruckBodyDto);
+    await this.truckService.updateTruck(
+      truckId,
+      updateTruckBodyDto.lastLocation
+        ? { ...updateTruckBodyDto, locationUpdatedBy: 'Manually from app' }
+        : updateTruckBodyDto,
+    );
     return updateTruckBodyDto;
   }
 
@@ -360,6 +365,7 @@ export class MobileAppController {
         updateTruckLocationBodyDto.location.coords.latitude,
         updateTruckLocationBodyDto.location.coords.longitude,
       ],
+      locationUpdatedBy: 'Tracking app',
     });
     return;
   }
