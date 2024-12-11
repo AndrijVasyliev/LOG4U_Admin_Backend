@@ -44,6 +44,7 @@ async function bootstrap() {
           ],
           scriptSrc: ["'self'", "'unsafe-eval'", 'maps.googleapis.com'],
           workerSrc: ["'self'", 'blob:'],
+          frameSrc: ["'self'", 'blob:'],
           objectSrc: ["'self'", 'blob:'],
           imgSrc: [
             "'self'",
