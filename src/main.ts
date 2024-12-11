@@ -40,14 +40,14 @@ async function bootstrap() {
             // '*.gstatic.com',
             // '*',
           ],
-          connectSrc: ["'self'", '*.gstatic.com', '*.googleapis.com'],
+          connectSrc: ["'self'", 'data:', '*.gstatic.com', '*.googleapis.com'],
           fontSrc: [
             "'self'",
             'fonts.googleapis.com',
             'fonts.gstatic.com',
             // 'maps.gstatic.com',
           ],
-          scriptSrc: ["'self'", 'maps.googleapis.com'],
+          scriptSrc: ["'self'", 'unsafe-eval', 'maps.googleapis.com'],
           workerSrc: ["'self'", 'blob:'],
           objectSrc: ["'self'", 'blob:'],
           imgSrc: [
