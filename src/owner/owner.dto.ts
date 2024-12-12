@@ -1,4 +1,4 @@
-import { PaginateResult } from 'mongoose';
+import { PaginateResult, Types } from 'mongoose';
 import { Owner } from './owner.schema';
 import {
   LangPriority,
@@ -102,7 +102,7 @@ export class OwnerResultDto {
       owner.drivers.length > 0 &&
       owner.drivers.map((driver) => DriverResultDto.fromDriverModel(driver));
     let result: OwnerResultDto = {
-      id: owner._id.toString(),
+      id: owner._id,
       type: owner.type,
       fullName: owner.fullName,
       birthDate: owner.birthDate,
@@ -136,7 +136,7 @@ export class OwnerResultDto {
     return result;
   }
 
-  readonly id: string;
+  readonly id: Types.ObjectId;
   readonly type: PersonType;
   readonly fullName: string;
   readonly birthDate: Date;

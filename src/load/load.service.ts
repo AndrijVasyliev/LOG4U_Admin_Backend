@@ -1,4 +1,4 @@
-import { PaginateModel, PaginateOptions } from 'mongoose';
+import { PaginateModel, PaginateOptions, Types } from 'mongoose';
 import {
   Injectable,
   NotFoundException,
@@ -35,7 +35,7 @@ export class LoadService {
     private readonly log: LoggerService,
   ) {}
 
-  private async findLoadDocumentById(id: string): Promise<LoadDocument> {
+  private async findLoadDocumentById(id: Types.ObjectId): Promise<LoadDocument> {
     this.log.debug(`Searching for Load ${id}`);
     const load = await this.loadModel.findOne({ _id: id });
     if (!load) {
@@ -45,7 +45,7 @@ export class LoadService {
     return load;
   }
 
-  async findLoadById(id: string): Promise<LoadResultDto> {
+  async findLoadById(id: Types.ObjectId): Promise<LoadResultDto> {
     const load = await this.findLoadDocumentById(id);
     return LoadResultDto.fromLoadModel(load);
   }
@@ -123,7 +123,7 @@ export class LoadService {
   }
 
   async updateLoad(
-    id: string,
+    id: Types.ObjectId,
     updateLoadDto: UpdateLoadDto,
   ): Promise<LoadResultDto> {
     const load = await this.findLoadDocumentById(id);
@@ -141,8 +141,8 @@ export class LoadService {
   }
 
   async updateLoadStopPickUpStatus(
-    id: string,
-    stopId: string,
+    id: Types.ObjectId,
+    stopId: Types.ObjectId,
     updateLoadStopPickUpStatusBodyDto: UpdateLoadStopPickUpStatusDto,
   ): Promise<LoadResultDto> {
     const load = await this.findLoadDocumentById(id);
@@ -201,8 +201,8 @@ export class LoadService {
   }
 
   async updateLoadStopDeliveryStatus(
-    id: string,
-    stopId: string,
+    id: Types.ObjectId,
+    stopId: Types.ObjectId,
     updateLoadStopDeliveryStatusBodyDto: UpdateLoadStopDeliveryStatusDto,
   ): Promise<LoadResultDto> {
     const load = await this.findLoadDocumentById(id);
@@ -266,8 +266,8 @@ export class LoadService {
   }
 
   async setStopPickUpDriversInfo(
-    id: string,
-    stopId: string,
+    id: Types.ObjectId,
+    stopId: Types.ObjectId,
     setStopPickUpDriversInfoDto: CreateStopPickUpDriversInfoDto[],
   ): Promise<LoadResultDto> {
     const load = await this.findLoadDocumentById(id);
@@ -297,8 +297,8 @@ export class LoadService {
   }
 
   async setStopDeliveryDriversInfo(
-    id: string,
-    stopId: string,
+    id: Types.ObjectId,
+    stopId: Types.ObjectId,
     setStopDeliveryDriversInfoDto: CreateStopDeliveryDriversInfoDto[],
   ): Promise<LoadResultDto> {
     const load = await this.findLoadDocumentById(id);
@@ -327,7 +327,7 @@ export class LoadService {
     return LoadResultDto.fromLoadModel(load);
   }
 
-  async deleteLoad(id: string): Promise<LoadResultDto> {
+  async deleteLoad(id: Types.ObjectId): Promise<LoadResultDto> {
     const load = await this.findLoadDocumentById(id);
 
     this.log.debug(`Deleting Load ${load._id}`);

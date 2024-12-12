@@ -1,4 +1,4 @@
-import { PaginateResult } from 'mongoose';
+import { PaginateResult, Types } from 'mongoose';
 import { Coordinator } from './coordinator.schema';
 import {
   LangPriority,
@@ -30,32 +30,10 @@ export interface CreateCoordinatorDto {
   readonly notes?: string;
   readonly appLogin?: string;
   readonly appPass?: string;
-  readonly owner: string;
+  readonly owner: Types.ObjectId;
 }
 
-export interface UpdateCoordinatorDto {
-  readonly fullName?: string;
-  readonly birthDate?: Date;
-  readonly citizenship?: string;
-  readonly languagePriority?: LangPriority;
-  readonly hiredBy?: string;
-  readonly hireDate?: Date;
-  readonly snn?: string;
-  readonly company?: string;
-  readonly insurancePolicy?: string;
-  readonly insurancePolicyExp?: Date;
-  readonly address?: string;
-  readonly phone?: string;
-  readonly phone2?: string;
-  readonly email?: string;
-  readonly emergencyContactName?: string;
-  readonly emergencyContactRel?: string;
-  readonly emergencyContactPhone?: string;
-  readonly notes?: string;
-  readonly appLogin?: string;
-  readonly appPass?: string;
-  readonly owner?: string;
-}
+export type UpdateCoordinatorDto = Partial<CreateCoordinatorDto>;
 
 export interface CoordinatorQuerySearch {
   readonly search?: string;
@@ -75,7 +53,7 @@ export interface CoordinatorQuerySearch {
   readonly emergencyContactPhone?: string;
   readonly appLogin?: string;
   readonly truckNumber?: number;
-  readonly owner?: string;
+  readonly owner?: Types.ObjectId;
 }
 
 export interface CoordinatorQueryOrder
@@ -99,7 +77,7 @@ export class CoordinatorResultDto {
         TruckResultDto.fromTruckModel(truck),
       );
     let result: CoordinatorResultDto = {
-      id: coordinator._id.toString(),
+      id: coordinator._id,
       type: coordinator.type,
       fullName: coordinator.fullName,
       birthDate: coordinator.birthDate,
@@ -130,7 +108,7 @@ export class CoordinatorResultDto {
     return result;
   }
 
-  readonly id: string;
+  readonly id: Types.ObjectId;
   readonly type: PersonType;
   readonly fullName: string;
   readonly birthDate: Date;

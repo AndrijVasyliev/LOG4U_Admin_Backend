@@ -1,5 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document, ObjectId, Schema as MongooseSchema } from 'mongoose';
+import { Document, Schema as MongooseSchema, Types } from 'mongoose';
 import { EMAIL_STATES, EMAIL_TO_TYPES } from '../utils/constants';
 import { EmailState, EmailToType } from '../utils/general.dto';
 import { UserDocument } from '../user/user.schema';
@@ -70,7 +70,9 @@ export class Email {
 
   updated_at: Date;
 
-  _id: ObjectId;
+  _id: Types.ObjectId;
+
+  readonly id: string;
 }
 
 export const EmailSchema = SchemaFactory.createForClass(Email);

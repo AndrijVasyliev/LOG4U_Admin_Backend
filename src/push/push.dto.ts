@@ -1,17 +1,17 @@
-import { PaginateResult } from 'mongoose';
+import { PaginateResult, Types } from 'mongoose';
 import { Push } from './push.schema';
 import { PushState, PaginatedResultDto, Query } from '../utils/general.dto';
 import { PersonResultDto } from '../person/person.dto';
 
-export interface SendPushDto {
-  to: string;
+/*export interface SendPushDto {
+  to: Types.ObjectId;
   sound: string;
   body: string;
   data?: Record<string, any>;
-}
+}*/
 
 export interface CreatePushDto {
-  readonly to: string;
+  readonly to: Types.ObjectId;
   readonly title?: string;
   readonly subtitle?: string;
   readonly body?: string;
@@ -76,7 +76,7 @@ export class PushResultDto {
   static fromPushModel(push: Push): PushResultDto {
     const person = push.to && PersonResultDto.fromPersonModel(push.to);
     return {
-      id: push._id.toString(),
+      id: push._id,
       state: push.state,
       to: person,
       title: push.title,
@@ -91,7 +91,7 @@ export class PushResultDto {
     };
   }
 
-  readonly id: string;
+  readonly id: Types.ObjectId;
   readonly state: PushState;
   readonly to: PersonResultDto;
   readonly title?: string;

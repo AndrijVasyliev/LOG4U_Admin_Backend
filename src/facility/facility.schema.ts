@@ -1,5 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document, ObjectId } from 'mongoose';
+import { Document, Types } from 'mongoose';
 import { GeoPointType, MongoGeoPointType } from '../utils/general.dto';
 import { GeoPointSchema } from '../location/location.schema';
 
@@ -45,7 +45,9 @@ export class Facility {
 
   updated_at: Date;
 
-  _id: ObjectId;
+  _id: Types.ObjectId;
+
+  readonly id: string;
 }
 
 export const FacilitySchema = SchemaFactory.createForClass(Facility);

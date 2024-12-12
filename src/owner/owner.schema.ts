@@ -1,5 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document, ObjectId } from 'mongoose';
+import { Document, Types } from 'mongoose';
 import {
   LANG_PRIORITIES,
   PERSON_TYPES,
@@ -100,7 +100,9 @@ export class Owner {
 
   updated_at: Date;
 
-  _id: ObjectId;
+  _id: Types.ObjectId;
+
+  readonly id: string;
 }
 
 export const OwnerSchema = SchemaFactory.createForClass(Owner);

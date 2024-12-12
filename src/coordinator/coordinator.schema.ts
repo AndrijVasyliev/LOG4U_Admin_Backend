@@ -1,5 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document, ObjectId, Schema as MongooseSchema } from 'mongoose';
+import { Document, Schema as MongooseSchema, Types } from 'mongoose';
 import { LANG_PRIORITIES, OWNER_TYPES, PERSON_TYPES } from '../utils/constants';
 import { LangPriority, PersonType } from '../utils/general.dto';
 import { OwnerDocument } from '../owner/owner.schema';
@@ -100,7 +100,9 @@ export class Coordinator {
 
   updated_at: Date;
 
-  _id: ObjectId;
+  _id: Types.ObjectId;
+
+  readonly id: string;
 }
 
 export const CoordinatorSchema = SchemaFactory.createForClass(Coordinator);

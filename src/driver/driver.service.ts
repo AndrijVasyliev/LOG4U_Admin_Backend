@@ -1,4 +1,4 @@
-import { PaginateModel, PaginateOptions } from 'mongoose';
+import { PaginateModel, PaginateOptions, Types } from 'mongoose';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Driver, DriverDocument } from './driver.schema';
@@ -23,7 +23,7 @@ export class DriverService {
     private readonly log: LoggerService,
   ) {}
 
-  private async findDriverDocumentById(id: string): Promise<DriverDocument> {
+  private async findDriverDocumentById(id: Types.ObjectId): Promise<DriverDocument> {
     this.log.debug(`Searching for Driver ${id}`);
     const driver = await this.driverModel
       .findOne({
@@ -38,7 +38,7 @@ export class DriverService {
     return driver;
   }
 
-  async findDriverById(id: string): Promise<DriverResultDto> {
+  async findDriverById(id: Types.ObjectId): Promise<DriverResultDto> {
     const driver = await this.findDriverDocumentById(id);
     return DriverResultDto.fromDriverModel(driver);
   }
@@ -132,7 +132,7 @@ export class DriverService {
   }
 
   async updateDriver(
-    id: string,
+    id: Types.ObjectId,
     updateDriverDto: UpdateDriverDto,
   ): Promise<DriverResultDto> {
     const driver = await this.findDriverDocumentById(id);
@@ -145,7 +145,7 @@ export class DriverService {
     return DriverResultDto.fromDriverModel(driver);
   }
 
-  async deleteDriver(id: string): Promise<DriverResultDto> {
+  async deleteDriver(id: Types.ObjectId): Promise<DriverResultDto> {
     const driver = await this.findDriverDocumentById(id);
 
     this.log.debug(`Deleting Driver ${driver._id}`);

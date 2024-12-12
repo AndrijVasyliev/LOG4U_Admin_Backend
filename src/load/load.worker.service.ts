@@ -1,4 +1,4 @@
-import { mongo, PaginateModel, ObjectId } from 'mongoose';
+import { mongo, PaginateModel, ObjectId, Types } from 'mongoose';
 import {
   Injectable,
   OnApplicationBootstrap,
@@ -497,8 +497,8 @@ export class LoadWorkerService
     let newTruckActivatedLoadId: ObjectId | null = null;
     let currentTruckLoadUpdateInvoked = false;
 
-    const truckIdsToOnRoute = new Set<string>();
-    const truckIdsToAvailable = new Set<string>();
+    const truckIdsToOnRoute = new Set<Types.ObjectId>();
+    const truckIdsToAvailable = new Set<Types.ObjectId>();
 
     if (
       change.operationType === 'update' &&
@@ -536,7 +536,7 @@ export class LoadWorkerService
           }
         }
       } else {
-        truckIdsToAvailable.add(change.fullDocument.truck.toString());
+        truckIdsToAvailable.add(change.fullDocument.truck);
       }
     }
 
@@ -575,7 +575,7 @@ export class LoadWorkerService
         }
       } else {
         truckIdsToAvailable.add(
-          change.fullDocumentBeforeChange.truck.toString(),
+          change.fullDocumentBeforeChange.truck,
         );
       }
     }
@@ -619,8 +619,8 @@ export class LoadWorkerService
         );
         if (change.fullDocument.truck && newLoadStatus === 'In Progress') {
           newTruckActivatedLoadId = change.documentKey._id;
-          truckIdsToOnRoute.add(change.fullDocument.truck.toString());
-          truckIdsToAvailable.delete(change.fullDocument.truck.toString());
+          truckIdsToOnRoute.add(change.fullDocument.truck);
+          truckIdsToAvailable.delete(change.fullDocument.truck);
         }
 
         const updated = await this.loadModel.findOneAndUpdate(
@@ -655,7 +655,7 @@ export class LoadWorkerService
       change.fullDocument.status === 'In Progress' &&
       change.fullDocument.truck
     ) {
-      truckIdsToOnRoute.add(change.fullDocument.truck.toString());
+      truckIdsToOnRoute.add(change.fullDocument.truck);
     }
 
     if (truckIdsToAvailable.size > 0) {

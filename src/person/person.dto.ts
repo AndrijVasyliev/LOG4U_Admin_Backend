@@ -1,6 +1,6 @@
 import { Person } from './person.schema';
 import { PaginatedResultDto, PersonType, Query } from '../utils/general.dto';
-import { PaginateResult } from 'mongoose';
+import { PaginateResult, Types } from 'mongoose';
 
 export interface UpdatePersonSettingsDto {
   readonly isAppInDebugMode?: boolean;
@@ -24,7 +24,7 @@ export interface PersonQuery
 export class PersonAuthResultDto {
   static fromPersonModel(person: Person): PersonAuthResultDto {
     return {
-      id: person._id.toString(),
+      id: person._id,
       type: person.type,
       fullName: person.fullName,
       isAppInDebugMode: person.isAppInDebugMode,
@@ -35,7 +35,7 @@ export class PersonAuthResultDto {
     };
   }
 
-  readonly id: string;
+  readonly id: Types.ObjectId;
   readonly type: PersonType;
   readonly fullName: string;
   readonly isAppInDebugMode?: boolean;
@@ -48,7 +48,7 @@ export class PersonAuthResultDto {
 export class PersonResultDto {
   static fromPersonModel(person: Person): PersonResultDto {
     return {
-      id: person._id.toString(),
+      id: person._id,
       type: person.type,
       fullName: person.fullName,
       isAppInDebugMode: person.isAppInDebugMode,
@@ -66,7 +66,7 @@ export class PersonResultDto {
     };
   }
 
-  readonly id: string;
+  readonly id: Types.ObjectId;
   readonly type: PersonType;
   readonly fullName: string;
   readonly isAppInDebugMode?: boolean;

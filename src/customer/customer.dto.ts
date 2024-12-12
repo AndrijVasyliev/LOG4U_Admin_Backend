@@ -1,4 +1,4 @@
-import { PaginateResult } from 'mongoose';
+import { PaginateResult, Types } from 'mongoose';
 import { Customer } from './customer.schema';
 import { Query, PaginatedResultDto, CustomerType } from '../utils/general.dto';
 
@@ -16,19 +16,7 @@ export interface CreateCustomerDto {
   readonly website?: string;
 }
 
-export interface UpdateCustomerDto {
-  readonly name?: string;
-  readonly type?: CustomerType;
-  readonly address?: string;
-  readonly address2?: string;
-  readonly city?: string;
-  readonly state?: string;
-  readonly zipCode?: string;
-  readonly phone?: string;
-  readonly fax?: string;
-  readonly email?: string;
-  readonly website?: string;
-}
+export type UpdateCustomerDto = Partial<CreateCustomerDto>;
 
 export interface CustomerQuerySearch {
   readonly search?: string;
@@ -57,7 +45,7 @@ export interface CustomerQuery
 export class CustomerResultDto {
   static fromCustomerModel(customer: Customer): CustomerResultDto {
     return {
-      id: customer._id.toString(),
+      id: customer._id,
       name: customer.name,
       type: customer.type,
       address: customer.address,
@@ -72,7 +60,7 @@ export class CustomerResultDto {
     };
   }
 
-  readonly id: string;
+  readonly id: Types.ObjectId;
   readonly name: string;
   readonly type: CustomerType;
   readonly address: string;

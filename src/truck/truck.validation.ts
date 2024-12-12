@@ -14,7 +14,7 @@ import {
   GeoPointBodyValidation,
 } from '../location/location.validation';
 
-export const CreateTruckValidation = Joi.object({
+export const CreateTruckValidationSchema = Joi.object({
   truckNumber: Joi.number().min(0).required(),
   status: Joi.string()
     .valid(...TRUCK_STATUSES)
@@ -54,8 +54,8 @@ export const CreateTruckValidation = Joi.object({
   reservedAt: Joi.alternatives(null, Joi.date().iso().required()).optional(),
 });
 
-export const UpdateTruckValidation = CreateTruckValidation.fork(
-  Object.keys(CreateTruckValidation.describe().keys),
+export const UpdateTruckValidation = CreateTruckValidationSchema.fork(
+  Object.keys(CreateTruckValidationSchema.describe().keys),
   (schema) => schema.optional(),
 );
 

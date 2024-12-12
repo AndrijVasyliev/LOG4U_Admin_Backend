@@ -1,4 +1,4 @@
-import { PaginateResult } from 'mongoose';
+import { PaginateResult, Types } from 'mongoose';
 import { Truck } from './truck.schema';
 import {
   GeoPointType,
@@ -37,11 +37,11 @@ export interface CreateTruckDto {
   readonly licencePlate: string;
   readonly insideDims: string;
   readonly doorDims: string;
-  readonly owner: string;
-  readonly coordinator?: string;
-  readonly driver?: string;
+  readonly owner: Types.ObjectId;
+  readonly coordinator?: Types.ObjectId;
+  readonly driver?: Types.ObjectId;
   readonly reservedAt?: Date;
-  readonly reservedBy?: string;
+  readonly reservedBy?: Types.ObjectId;
 }
 
 export interface TruckChangeUpdateDocument {
@@ -67,33 +67,7 @@ export type TruckChangeDocument =
   | TruckChangeUpdateDocument
   | TruckChangeInsertDocument;
 
-export interface UpdateTruckDto {
-  readonly truckNumber?: number;
-  readonly status?: TruckStatus;
-  readonly lastLocation?: GeoPointType;
-  readonly locationUpdatedBy?: LocationUpdaters;
-  readonly availabilityLocation?: GeoPointType;
-  readonly availabilityAtLocal?: Date;
-  readonly crossborder?: TruckCrossborder;
-  readonly certificate?: TruckCertificate;
-  readonly type?: TruckType;
-  readonly equipment?: TruckEquipment[];
-  readonly payload?: number;
-  readonly grossWeight?: string;
-  readonly make?: string;
-  readonly model?: string;
-  readonly year?: number;
-  readonly color?: string;
-  readonly vinCode?: string;
-  readonly licencePlate?: string;
-  readonly insideDims?: string;
-  readonly doorDims?: string;
-  readonly owner?: string;
-  readonly coordinator?: string;
-  readonly driver?: string;
-  readonly reservedAt?: Date;
-  readonly reservedBy?: string;
-}
+export type UpdateTruckDto = Partial<CreateTruckDto>;
 
 export interface TruckQuerySearch {
   readonly search?: string;
@@ -147,7 +121,7 @@ export class TruckResultDto {
     const reservedBy =
       truck.reservedBy && UserResultDto.fromUserModel(truck.reservedBy);
     let result: TruckResultDto = {
-      id: truck._id.toString(),
+      id: truck._id,
       truckNumber: truck.truckNumber,
       status: truck.status,
       lastLocation: truck.lastLocation,
@@ -194,7 +168,7 @@ export class TruckResultDto {
     return result;
   }
 
-  readonly id: string;
+  readonly id: Types.ObjectId;
   readonly truckNumber: number;
   readonly status: TruckStatus;
   readonly milesByRoads?: number;
@@ -262,14 +236,14 @@ export class PaginatedTruckResultDto extends PaginatedResultDto<TruckResultDto> 
 export class TruckResultForMapDto {
   static fromTruckForMapModel(truck: Truck): TruckResultForMapDto {
     return {
-      id: truck._id.toString(),
+      id: truck._id,
       truckNumber: truck.truckNumber,
       status: truck.status,
       lastLocation: truck.lastLocation,
     };
   }
 
-  readonly id: string;
+  readonly id: Types.ObjectId;
   readonly truckNumber: number;
   readonly status: TruckStatus;
   readonly lastLocation?: GeoPointType;

@@ -13,10 +13,12 @@ export const DB_CHECK_TIMEOUT = 500;
 export const MONGO_UNIQUE_INDEX_CONFLICT = 11000;
 export const UNIQUE_CONSTRAIN_ERROR = 'Unique constrain error';
 export const MONGO_FILE_BUCKET_NAME = 'fs';
-// Validation
+// Validation & Transform
+export const VALIDATION_ERROR = 'Pathparam validation error';
 export const PATHPARAM_VALIDATION_ERROR = 'Pathparam validation error';
 export const WS_MESSAGE_VALIDATION_ERROR = 'Message validation error';
 export const BODY_VALIDATION_ERROR = 'Body validation error';
+export const BODY_TRANSFORM_ERROR = 'Body transform error';
 export const MIN_FILE_COMMENT_LENGTH = 1;
 export const MAX_FILE_COMMENT_LENGTH = 30;
 // Auth
@@ -93,7 +95,7 @@ export const EMAIL_STATES = [
 ] as const;
 export const EMAIL_TO_TYPES = ['User', 'Person'] as const;
 
-export const FILE_OF_TYPES = ['Truck', 'Person', 'Load'] as const;
+export const FILE_OF_TYPES = ['Truck', 'Person', 'Load', 'User'] as const;
 
 export const CUSTOMER_TYPES = [
   'BROKER DOMESTIC',

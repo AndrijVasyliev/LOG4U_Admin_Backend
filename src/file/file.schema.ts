@@ -1,5 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document, ObjectId, Schema as MongooseSchema } from 'mongoose';
+import { Document, Schema as MongooseSchema, Types } from 'mongoose';
 
 import { FILE_OF_TYPES, MONGO_FILE_BUCKET_NAME } from '../utils/constants';
 import { TruckDocument } from '../truck/truck.schema';
@@ -112,7 +112,9 @@ export class File {
 
   uploadDate: Date;
 
-  _id: ObjectId;
+  _id: Types.ObjectId;
+
+  readonly id: string;
 }
 
 export const FileSchema = SchemaFactory.createForClass(File);

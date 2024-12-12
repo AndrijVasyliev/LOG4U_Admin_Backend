@@ -1,5 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document, ObjectId } from 'mongoose';
+import { Document, Types } from 'mongoose';
 import { CUSTOMER_TYPES } from '../utils/constants';
 import { CustomerType } from '../utils/general.dto';
 
@@ -48,7 +48,9 @@ export class Customer {
 
   updated_at: Date;
 
-  _id: ObjectId;
+  _id: Types.ObjectId;
+
+  readonly id: string;
 }
 
 export const CustomerSchema = SchemaFactory.createForClass(Customer);

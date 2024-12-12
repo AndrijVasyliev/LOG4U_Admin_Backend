@@ -8,6 +8,7 @@ import {
   Patch,
   Delete,
 } from '@nestjs/common';
+import { Types } from 'mongoose';
 import {
   CreateDriverDto,
   DriverQuery,
@@ -22,9 +23,9 @@ import {
   DriverQueryParamsSchema,
 } from './driver.validation';
 import { LoggerService } from '../logger';
-import { BodyValidationPipe } from '../utils/bodyValidate.pipe';
+import { BodySchemaPipe } from '../utils/bodyValidate.pipe';
 import { MongoObjectIdPipe } from '../utils/idValidate.pipe';
-import { QueryParamsPipe } from '../utils/queryParamsValidate.pipe';
+import { QueryParamsSchemaPipe } from '../utils/queryParamsValidate.pipe';
 import { Roles } from '../auth/auth.decorator';
 
 @Controller('driver')
@@ -37,7 +38,7 @@ export class DriverController {
 
   @Get()
   async getDrivers(
-    @Query(new QueryParamsPipe(DriverQueryParamsSchema))
+    @Query(new QueryParamsSchemaPipe(DriverQueryParamsSchema))
     driverQuery: DriverQuery,
   ): Promise<PaginatedDriverResultDto> {
     return this.driverService.getDrivers(driverQuery);
@@ -45,14 +46,14 @@ export class DriverController {
 
   @Get(':driverId')
   async getDriver(
-    @Param('driverId', MongoObjectIdPipe) driverId: string,
+    @Param('driverId', MongoObjectIdPipe) driverId: Types.ObjectId,
   ): Promise<DriverResultDto> {
     return this.driverService.findDriverById(driverId);
   }
 
   @Post()
   async createDriver(
-    @Body(new BodyValidationPipe(CreateDriverValidation))
+    @Body(new BodySchemaPipe(CreateDriverValidation))
     createDriverBodyDto: CreateDriverDto,
   ): Promise<DriverResultDto> {
     return this.driverService.createDriver(createDriverBodyDto);
@@ -60,15 +61,15 @@ export class DriverController {
 
   @Patch(':driverId')
   async updateDriver(
-    @Param('driverId', MongoObjectIdPipe) driverId: string,
-    @Body(new BodyValidationPipe(UpdateDriverValidation))
+    @Param('driverId', MongoObjectIdPipe) driverId: Types.ObjectId,
+    @Body(new BodySchemaPipe(UpdateDriverValidation))
     updateDriverBodyDto: UpdateDriverDto,
   ): Promise<DriverResultDto> {
     return this.driverService.updateDriver(driverId, updateDriverBodyDto);
   }
 
   @Delete(':driverId')
-  async deleteDriver(@Param('driverId', MongoObjectIdPipe) driverId: string) {
+  async deleteDriver(@Param('driverId', MongoObjectIdPipe) driverId: Types.ObjectId) {
     return this.driverService.deleteDriver(driverId);
   }
 }

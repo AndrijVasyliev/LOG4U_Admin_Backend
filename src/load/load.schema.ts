@@ -1,5 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document, ObjectId, Schema as MongooseSchema } from 'mongoose';
+import { Document, Schema as MongooseSchema, Types } from 'mongoose';
 import {
   DEFAULT_CHECK_IN_AS,
   LOAD_STATUSES,
@@ -162,16 +162,18 @@ export class Freight {
   @Prop({
     required: false,
     virtual: true,
-    set: function (value: string) {
+    set: function (value: Types.ObjectId) {
       (this as Freight & Document).set({ _id: value });
     },
-    get: function (): string {
-      return `${(this as Freight & Document)._id.toString()}`;
+    get: function (): Types.ObjectId {
+      return (this as Freight & Document)._id;
     },
   })
-  freightId: string;
+  freightId: Types.ObjectId;
 
-  _id: ObjectId;
+  _id: Types.ObjectId;
+
+  readonly id: string;
 }
 
 const FreightSchema = SchemaFactory.createForClass(Freight);
@@ -206,16 +208,18 @@ export class Stop {
   @Prop({
     required: false,
     virtual: true,
-    set: function (value: string) {
+    set: function (value: Types.ObjectId) {
       (this as Stop & Document).set({ _id: value });
     },
-    get: function (): string {
-      return `${(this as Stop & Document)._id.toString()}`;
+    get: function (): Types.ObjectId {
+      return (this as Stop & Document)._id;
     },
   })
-  stopId: string;
+  stopId: Types.ObjectId;
 
-  _id: ObjectId;
+  _id: Types.ObjectId;
+
+  readonly id: string;
 }
 
 @Schema({
@@ -259,16 +263,18 @@ export class StopPickUpDriversInfo {
   @Prop({
     required: false,
     virtual: true,
-    set: function (value: string) {
+    set: function (value: Types.ObjectId) {
       (this as StopPickUpDriversInfo & Document).set({ _id: value });
     },
-    get: function (): string {
-      return `${(this as StopPickUpDriversInfo & Document)._id.toString()}`;
+    get: function (): Types.ObjectId {
+      return (this as StopPickUpDriversInfo & Document)._id;
     },
   })
-  driversInfoId: string;
+  driversInfoId: Types.ObjectId;
 
-  _id: ObjectId;
+  _id: Types.ObjectId;
+
+  readonly id: string;
 }
 const StopPickUpDriversInfoSchema = SchemaFactory.createForClass(
   StopPickUpDriversInfo,
@@ -313,7 +319,9 @@ export class StopPickUp {
   })
   freightList: (Freight & Document)[];
 
-  _id: ObjectId;
+  _id: Types.ObjectId;
+
+  readonly id: string;
 }
 
 @Schema({
@@ -335,16 +343,18 @@ export class StopDeliveryDriversInfo {
   @Prop({
     required: false,
     virtual: true,
-    set: function (value: string) {
+    set: function (value: Types.ObjectId) {
       (this as StopDeliveryDriversInfo & Document).set({ _id: value });
     },
-    get: function (): string {
-      return `${(this as StopDeliveryDriversInfo & Document)._id.toString()}`;
+    get: function (): Types.ObjectId {
+      return (this as StopDeliveryDriversInfo & Document)._id;
     },
   })
-  driversInfoId: string;
+  driversInfoId: Types.ObjectId;
 
-  _id: ObjectId;
+  _id: Types.ObjectId;
+
+  readonly id: string;
 }
 const StopDeliveryDriversInfoSchema = SchemaFactory.createForClass(
   StopDeliveryDriversInfo,
@@ -389,7 +399,9 @@ export class StopDelivery {
   })
   bolList: string[];
 
-  _id: ObjectId;
+  _id: Types.ObjectId;
+
+  readonly id: string;
 }
 /*export type StopPickUpType = Omit<InstanceType<typeof Stop>, 'type'> &
   InstanceType<typeof StopPickUp> & { type: StopType.PickUp };
@@ -542,7 +554,9 @@ export class Load {
 
   updated_at: Date;
 
-  _id: ObjectId;
+  _id: Types.ObjectId;
+
+  readonly id: string;
 }
 
 export const LoadSchema = SchemaFactory.createForClass(Load);

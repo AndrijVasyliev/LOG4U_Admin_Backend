@@ -1,4 +1,4 @@
-import { PaginateModel, PaginateOptions } from 'mongoose';
+import { PaginateModel, PaginateOptions, Types } from 'mongoose';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { LoggerService } from '../logger';
@@ -28,7 +28,7 @@ export class CoordinatorService {
   ) {}
 
   private async findCoordinatorDocumentById(
-    id: string,
+    id: Types.ObjectId,
   ): Promise<CoordinatorDocument> {
     this.log.debug(`Searching for Coordinator ${id}`);
     const coordinator = await this.coordinatorModel
@@ -45,7 +45,7 @@ export class CoordinatorService {
     return coordinator.populate('coordinateTrucks');
   }
 
-  async findCoordinatorById(id: string): Promise<CoordinatorResultDto> {
+  async findCoordinatorById(id: Types.ObjectId): Promise<CoordinatorResultDto> {
     const coordinator = await this.findCoordinatorDocumentById(id);
     return CoordinatorResultDto.fromCoordinatorModel(coordinator);
   }
@@ -139,7 +139,7 @@ export class CoordinatorService {
   }
 
   async updateCoordinator(
-    id: string,
+    id: Types.ObjectId,
     updateCoordinatorDto: UpdateCoordinatorDto,
   ): Promise<CoordinatorResultDto> {
     const coordinator = await this.findCoordinatorDocumentById(id);
@@ -158,7 +158,7 @@ export class CoordinatorService {
     return CoordinatorResultDto.fromCoordinatorModel(coordinator);
   }
 
-  async deleteCoordinator(id: string): Promise<CoordinatorResultDto> {
+  async deleteCoordinator(id: Types.ObjectId): Promise<CoordinatorResultDto> {
     const coordinator = await this.findCoordinatorDocumentById(id);
 
     this.log.debug(`Deleting Coordinator ${coordinator._id}`);

@@ -8,6 +8,7 @@ import {
   Patch,
   Delete,
 } from '@nestjs/common';
+import { Types } from 'mongoose';
 import {
   CreateLoadDto,
   LoadQuery,
@@ -15,7 +16,7 @@ import {
   PaginatedLoadResultDto,
   UpdateLoadDto,
 } from './load.dto';
-import { BodyValidationPipe } from '../utils/bodyValidate.pipe';
+import { BodySchemaPipe } from '../utils/bodyValidate.pipe';
 import { LoadService } from './load.service';
 import { LoggerService } from '../logger';
 import {
@@ -24,7 +25,7 @@ import {
   LoadQueryParamsSchema,
 } from './load.validation';
 import { MongoObjectIdPipe } from '../utils/idValidate.pipe';
-import { QueryParamsPipe } from '../utils/queryParamsValidate.pipe';
+import { QueryParamsSchemaPipe } from '../utils/queryParamsValidate.pipe';
 import { Roles } from '../auth/auth.decorator';
 
 @Controller('load')
@@ -37,7 +38,7 @@ export class LoadController {
 
   @Get()
   async getLoads(
-    @Query(new QueryParamsPipe(LoadQueryParamsSchema))
+    @Query(new QueryParamsSchemaPipe(LoadQueryParamsSchema))
     loadQuery: LoadQuery,
   ): Promise<PaginatedLoadResultDto> {
     return this.loadService.getLoads(loadQuery);
@@ -45,14 +46,14 @@ export class LoadController {
 
   @Get(':loadId')
   async getLoad(
-    @Param('loadId', MongoObjectIdPipe) loadId: string,
+    @Param('loadId', MongoObjectIdPipe) loadId: Types.ObjectId,
   ): Promise<LoadResultDto> {
     return this.loadService.findLoadById(loadId);
   }
 
   @Post()
   async createLoad(
-    @Body(new BodyValidationPipe(CreateLoadValidation))
+    @Body(new BodySchemaPipe(CreateLoadValidation))
     createLoadBodyDto: CreateLoadDto,
   ): Promise<LoadResultDto> {
     return this.loadService.createLoad(createLoadBodyDto);
@@ -60,15 +61,15 @@ export class LoadController {
 
   @Patch(':loadId')
   async updateLoad(
-    @Param('loadId', MongoObjectIdPipe) loadId: string,
-    @Body(new BodyValidationPipe(UpdateLoadValidation))
+    @Param('loadId', MongoObjectIdPipe) loadId: Types.ObjectId,
+    @Body(new BodySchemaPipe(UpdateLoadValidation))
     updateLoadBodyDto: UpdateLoadDto,
   ): Promise<LoadResultDto> {
     return this.loadService.updateLoad(loadId, updateLoadBodyDto);
   }
 
   @Delete(':loadId')
-  async deleteLoad(@Param('loadId', MongoObjectIdPipe) loadId: string) {
+  async deleteLoad(@Param('loadId', MongoObjectIdPipe) loadId: Types.ObjectId) {
     return this.loadService.deleteLoad(loadId);
   }
 }

@@ -1,4 +1,4 @@
-import { PaginateModel, PaginateOptions } from 'mongoose';
+import { PaginateModel, PaginateOptions, Types } from 'mongoose';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { LoggerService } from '../logger';
@@ -23,7 +23,7 @@ export class LocationService {
   ) {}
 
   private async findLocationDocumentById(
-    id: string,
+    id: Types.ObjectId,
   ): Promise<LocationDocument> {
     this.log.debug(`Searching for Location ${id}`);
     const location = await this.locationModel.findOne({ _id: id });
@@ -35,7 +35,7 @@ export class LocationService {
     return location;
   }
 
-  async findLocationById(id: string): Promise<LocationResultDto> {
+  async findLocationById(id: Types.ObjectId): Promise<LocationResultDto> {
     const location = await this.findLocationDocumentById(id);
     return LocationResultDto.fromLocationModel(location);
   }
@@ -150,7 +150,7 @@ export class LocationService {
   }
 
   async updateLocation(
-    id: string,
+    id: Types.ObjectId,
     updateLocationDto: UpdateLocationDto,
   ): Promise<LocationResultDto> {
     const location = await this.findLocationDocumentById(id);
@@ -163,7 +163,7 @@ export class LocationService {
     return LocationResultDto.fromLocationModel(location);
   }
 
-  async deleteLocation(id: string): Promise<LocationResultDto> {
+  async deleteLocation(id: Types.ObjectId): Promise<LocationResultDto> {
     const location = await this.findLocationDocumentById(id);
 
     this.log.debug(`Deleting Location ${location._id}`);

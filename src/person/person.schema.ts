@@ -1,5 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document, ObjectId, Schema as MongooseSchema } from 'mongoose';
+import { Document, Schema as MongooseSchema, Types } from 'mongoose';
 import { PERSON_TYPES } from '../utils/constants';
 import { PersonType } from '../utils/general.dto';
 import { hash } from '../utils/hash';
@@ -69,7 +69,9 @@ export class Person {
 
   updated_at: Date;
 
-  _id: ObjectId;
+  _id: Types.ObjectId;
+
+  readonly id: string;
 }
 
 export const PersonSchema = SchemaFactory.createForClass(Person);

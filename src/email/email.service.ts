@@ -1,5 +1,5 @@
 import { Transporter, createTransport } from 'nodemailer';
-import { PaginateModel, PaginateOptions } from 'mongoose';
+import { PaginateModel, PaginateOptions, Types } from 'mongoose';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { ConfigService } from '@nestjs/config';
@@ -100,7 +100,7 @@ export class EmailService {
     return { [key]: { status: 'down' } };
   }
 
-  private async findEmailDocumentById(id: string): Promise<EmailDocument> {
+  private async findEmailDocumentById(id: Types.ObjectId): Promise<EmailDocument> {
     this.log.debug(`Searching for Email ${id}`);
     const email = await this.emailModel.findOne({ _id: id }).populate('to.to');
     if (!email) {
@@ -111,7 +111,7 @@ export class EmailService {
     return email;
   }
 
-  async findEmailById(id: string): Promise<EmailResultDto> {
+  async findEmailById(id: Types.ObjectId): Promise<EmailResultDto> {
     const email = await this.findEmailDocumentById(id);
     return EmailResultDto.fromEmailModel(email);
   }
@@ -171,7 +171,7 @@ export class EmailService {
   }
 
   async updateEmail(
-    id: string,
+    id: Types.ObjectId,
     updateEmailDto: UpdateEmailDto,
   ): Promise<EmailResultDto> {
     const email = await this.findEmailDocumentById(id);
@@ -184,7 +184,7 @@ export class EmailService {
     return EmailResultDto.fromEmailModel(email);
   }
 
-  async deleteEmail(id: string): Promise<EmailResultDto> {
+  async deleteEmail(id: Types.ObjectId): Promise<EmailResultDto> {
     const email = await this.findEmailDocumentById(id);
 
     this.log.debug(`Deleting Email ${email._id}`);

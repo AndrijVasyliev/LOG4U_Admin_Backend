@@ -10,6 +10,7 @@ import {
   Param,
 } from '@nestjs/common';
 import { Request } from 'express';
+import { Types } from 'mongoose';
 import { LoggerService } from '../logger';
 import { Public, Roles } from '../auth/auth.decorator';
 import { AuthDataDto, AuthDto, MobileLoadQuery } from './mobileApp.dto';
@@ -42,11 +43,18 @@ import {
   MobileUpdateLoadStopDeliveryStatusValidation,
   MobileSetStopPickUpDriversInfoValidation,
   MobileSetStopDeliveryDriversInfoValidation,
+  MobileDeviceIdValidationSchema,
 } from './mobileApp.validation';
-import { QueryParamsPipe } from '../utils/queryParamsValidate.pipe';
-import { BodyValidationPipe } from '../utils/bodyValidate.pipe';
+import { QueryParamsSchemaPipe } from '../utils/queryParamsValidate.pipe';
+import { BodySchemaPipe } from '../utils/bodyValidate.pipe';
+import { BodyTransformPipe } from '../utils/bodyTransform.pipe';
 import { MongoObjectIdPipe } from '../utils/idValidate.pipe';
 import { MOBILE_PATH_PREFIX } from '../utils/constants';
+import {
+  SetUpdatedByToAdmin,
+  SetUpdatedByToApp,
+} from '../truck/truck.transformation';
+import { GetTruckId, TransformToUpdateDto } from './mobileApp.transformation';
 
 // ToDo stripe responses of redundant data
 @Controller(`${MOBILE_PATH_PREFIX}`)
@@ -65,7 +73,7 @@ export class MobileAppController {
   @Roles('Driver', 'Owner', 'OwnerDriver', 'Coordinator', 'CoordinatorDriver')
   async setAuth(
     @Req() request: Request,
-    @Body(new BodyValidationPipe(MobileAuthValidation))
+    @Body(new BodySchemaPipe(MobileAuthValidation))
     authDto: AuthDto,
   ): Promise<PersonAuthResultDto> {
     const { user: person } = request as unknown as {
@@ -90,7 +98,7 @@ export class MobileAppController {
   @Roles('Driver', 'Owner', 'OwnerDriver', 'Coordinator', 'CoordinatorDriver')
   async setAppData(
     @Req() request: Request,
-    @Body(new BodyValidationPipe(MobileAuthDataValidation))
+    @Body(new BodySchemaPipe(MobileAuthDataValidation))
     authDataDto: AuthDataDto,
   ): Promise<void> {
     const { user: person } = request as unknown as {
@@ -131,7 +139,7 @@ export class MobileAppController {
   @Roles('Owner', 'OwnerDriver')
   async getOwnersLoads(
     @Req() request: Request,
-    @Query(new QueryParamsPipe(MobileLoadQueryParamsSchema))
+    @Query(new QueryParamsSchemaPipe(MobileLoadQueryParamsSchema))
     loadQuery: MobileLoadQuery,
   ): Promise<PaginatedLoadResultDto> {
     const { user: person } = request as unknown as {
@@ -155,7 +163,7 @@ export class MobileAppController {
   @Roles('Coordinator', 'CoordinatorDriver')
   async getCoordinatorsLoads(
     @Req() request: Request,
-    @Query(new QueryParamsPipe(MobileLoadQueryParamsSchema))
+    @Query(new QueryParamsSchemaPipe(MobileLoadQueryParamsSchema))
     loadQuery: MobileLoadQuery,
   ): Promise<PaginatedLoadResultDto> {
     const { user: person } = request as unknown as {
@@ -186,7 +194,7 @@ export class MobileAppController {
   @Roles('Driver', 'OwnerDriver', 'CoordinatorDriver')
   async getLoad(
     @Req() request: Request,
-    @Query(new QueryParamsPipe(MobileLoadQueryParamsSchema))
+    @Query(new QueryParamsSchemaPipe(MobileLoadQueryParamsSchema))
     loadQuery: MobileLoadQuery,
   ): Promise<PaginatedLoadResultDto> {
     const { user: person } = request as unknown as {
@@ -210,9 +218,9 @@ export class MobileAppController {
   @Roles('Driver', 'OwnerDriver', 'CoordinatorDriver')
   async updateLoadStopPickUpStatus(
     @Req() request: Request,
-    @Param('loadId', MongoObjectIdPipe) loadId: string,
-    @Param('stopId', MongoObjectIdPipe) stopId: string,
-    @Body(new BodyValidationPipe(MobileUpdateLoadStopPickUpStatusValidation))
+    @Param('loadId', MongoObjectIdPipe) loadId: Types.ObjectId,
+    @Param('stopId', MongoObjectIdPipe) stopId: Types.ObjectId,
+    @Body(new BodySchemaPipe(MobileUpdateLoadStopPickUpStatusValidation))
     updateLoadStopPickUpStatusBodyDto: UpdateLoadStopPickUpStatusDto,
   ): Promise<LoadResultDto> {
     const { user: person } = request as unknown as {
@@ -235,9 +243,9 @@ export class MobileAppController {
   @Roles('Driver', 'OwnerDriver', 'CoordinatorDriver')
   async updateLoadStopDeliveryStatus(
     @Req() request: Request,
-    @Param('loadId', MongoObjectIdPipe) loadId: string,
-    @Param('stopId', MongoObjectIdPipe) stopId: string,
-    @Body(new BodyValidationPipe(MobileUpdateLoadStopDeliveryStatusValidation))
+    @Param('loadId', MongoObjectIdPipe) loadId: Types.ObjectId,
+    @Param('stopId', MongoObjectIdPipe) stopId: Types.ObjectId,
+    @Body(new BodySchemaPipe(MobileUpdateLoadStopDeliveryStatusValidation))
     updateLoadStopDeliveryStatusBodyDto: UpdateLoadStopDeliveryStatusDto,
   ): Promise<LoadResultDto> {
     const { user: person } = request as unknown as {
@@ -260,9 +268,9 @@ export class MobileAppController {
   @Roles('Driver', 'OwnerDriver', 'CoordinatorDriver')
   async updateLoadStopPickUpDriversInfo(
     @Req() request: Request,
-    @Param('loadId', MongoObjectIdPipe) loadId: string,
-    @Param('stopId', MongoObjectIdPipe) stopId: string,
-    @Body(new BodyValidationPipe(MobileSetStopPickUpDriversInfoValidation))
+    @Param('loadId', MongoObjectIdPipe) loadId: Types.ObjectId,
+    @Param('stopId', MongoObjectIdPipe) stopId: Types.ObjectId,
+    @Body(new BodySchemaPipe(MobileSetStopPickUpDriversInfoValidation))
     setStopPickUpDriversInfoDto: CreateStopPickUpDriversInfoDto[],
   ): Promise<LoadResultDto> {
     const { user: person } = request as unknown as {
@@ -285,9 +293,9 @@ export class MobileAppController {
   @Roles('Driver', 'OwnerDriver', 'CoordinatorDriver')
   async updateLoadStopDeliveryDriversInfo(
     @Req() request: Request,
-    @Param('loadId', MongoObjectIdPipe) loadId: string,
-    @Param('stopId', MongoObjectIdPipe) stopId: string,
-    @Body(new BodyValidationPipe(MobileSetStopDeliveryDriversInfoValidation))
+    @Param('loadId', MongoObjectIdPipe) loadId: Types.ObjectId,
+    @Param('stopId', MongoObjectIdPipe) stopId: Types.ObjectId,
+    @Body(new BodySchemaPipe(MobileSetStopDeliveryDriversInfoValidation))
     setStopDeliveryDriversInfoDto: CreateStopDeliveryDriversInfoDto[],
   ): Promise<LoadResultDto> {
     const { user: person } = request as unknown as {
@@ -310,10 +318,13 @@ export class MobileAppController {
   @Roles('Driver', 'Owner', 'OwnerDriver', 'CoordinatorDriver')
   async updateTrucks(
     @Req() request: Request,
-    @Param('truckId', MongoObjectIdPipe) truckId: string,
-    @Body(new BodyValidationPipe(MobileUpdateTruckValidation))
+    @Param('truckId', MongoObjectIdPipe) truckId: Types.ObjectId,
+    @Body(
+      new BodySchemaPipe(MobileUpdateTruckValidation),
+      new BodyTransformPipe(SetUpdatedByToApp),
+    )
     updateTruckBodyDto: UpdateTruckDto,
-  ): Promise<UpdateTruckDto> {
+  ): Promise<void> {
     const { user: person } = request as unknown as {
       user: PersonAuthResultDto;
     };
@@ -326,47 +337,28 @@ export class MobileAppController {
         }`,
       );
     }
-    await this.truckService.updateTruck(
-      truckId,
-      updateTruckBodyDto.lastLocation
-        ? { ...updateTruckBodyDto, locationUpdatedBy: 'Manually from app' }
-        : updateTruckBodyDto,
-    );
-    return updateTruckBodyDto;
+    await this.truckService.updateTruck(truckId, updateTruckBodyDto);
+    return;
   }
 
   @Public()
   @Post('setTruckLocation')
   // @Roles('Driver', /*'Owner',*/ 'OwnerDriver', 'CoordinatorDriver')
   async setTruckLocation(
-    @Req() request: Request,
-    @Body(new BodyValidationPipe(MobileUpdateTruckLocationValidation))
-    updateTruckLocationBodyDto: {
-      deviceId: string;
-      location: { coords: { latitude: number; longitude: number } };
-    },
+    @Body(
+      'deviceId',
+      new BodySchemaPipe(MobileDeviceIdValidationSchema),
+      GetTruckId,
+    )
+    truckId: Types.ObjectId,
+    @Body(
+      new BodySchemaPipe(MobileUpdateTruckLocationValidation),
+      new BodyTransformPipe(TransformToUpdateDto),
+      new BodyTransformPipe(SetUpdatedByToAdmin),
+    )
+    updateTruckBodyDto: UpdateTruckDto,
   ): Promise<void> {
-    const person = await this.personService.getPersonByDeviceId(
-      updateTruckLocationBodyDto.deviceId,
-    );
-    if (!person) {
-      throw new PreconditionFailedException(
-        `Driver with deviceId ${updateTruckLocationBodyDto.deviceId} does not found`,
-      );
-    }
-    const driver = await this.driverService.findDriverById(person.id);
-    if (!driver.driveTrucks || driver.driveTrucks.length !== 1) {
-      throw new PreconditionFailedException(
-        `Driver ${driver.fullName} have no trucks`,
-      );
-    }
-    await this.truckService.updateTruck(driver.driveTrucks[0].id, {
-      lastLocation: [
-        updateTruckLocationBodyDto.location.coords.latitude,
-        updateTruckLocationBodyDto.location.coords.longitude,
-      ],
-      locationUpdatedBy: 'Tracking app',
-    });
+    await this.truckService.updateTruck(truckId, updateTruckBodyDto);
     return;
   }
 }

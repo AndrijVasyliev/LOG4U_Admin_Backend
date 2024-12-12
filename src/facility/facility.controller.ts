@@ -8,6 +8,7 @@ import {
   Patch,
   Delete,
 } from '@nestjs/common';
+import { Types } from 'mongoose';
 import {
   CreateFacilityDto,
   FacilityQuery,
@@ -15,7 +16,7 @@ import {
   PaginatedFacilityResultDto,
   UpdateFacilityDto,
 } from './facility.dto';
-import { BodyValidationPipe } from '../utils/bodyValidate.pipe';
+import { BodySchemaPipe } from '../utils/bodyValidate.pipe';
 import { FacilityService } from './facility.service';
 import { LoggerService } from '../logger';
 import {
@@ -24,7 +25,7 @@ import {
   FacilityQueryParamsSchema,
 } from './facility.validation';
 import { MongoObjectIdPipe } from '../utils/idValidate.pipe';
-import { QueryParamsPipe } from '../utils/queryParamsValidate.pipe';
+import { QueryParamsSchemaPipe } from '../utils/queryParamsValidate.pipe';
 import { Roles } from '../auth/auth.decorator';
 
 @Controller('facility')
@@ -37,7 +38,7 @@ export class FacilityController {
 
   @Get()
   async getFacilities(
-    @Query(new QueryParamsPipe(FacilityQueryParamsSchema))
+    @Query(new QueryParamsSchemaPipe(FacilityQueryParamsSchema))
     facilityQuery: FacilityQuery,
   ): Promise<PaginatedFacilityResultDto> {
     return this.facilityService.getFacilities(facilityQuery);
@@ -45,7 +46,7 @@ export class FacilityController {
 
   @Get(':facilityId')
   async getFacility(
-    @Param('facilityId', MongoObjectIdPipe) facilityId: string,
+    @Param('facilityId', MongoObjectIdPipe) facilityId: Types.ObjectId,
   ): Promise<FacilityResultDto> {
     return this.facilityService.findFacilityById(facilityId);
   }
@@ -53,7 +54,7 @@ export class FacilityController {
   @Post()
   // @Roles('Super Admin')
   async createFacility(
-    @Body(new BodyValidationPipe(CreateFacilityValidation))
+    @Body(new BodySchemaPipe(CreateFacilityValidation))
     createFacilityBodyDto: CreateFacilityDto,
   ): Promise<FacilityResultDto> {
     return this.facilityService.createFacility(createFacilityBodyDto);
@@ -62,8 +63,8 @@ export class FacilityController {
   @Patch(':facilityId')
   // @Roles('Super Admin')
   async updateFacility(
-    @Param('facilityId', MongoObjectIdPipe) facilityId: string,
-    @Body(new BodyValidationPipe(UpdateFacilityValidation))
+    @Param('facilityId', MongoObjectIdPipe) facilityId: Types.ObjectId,
+    @Body(new BodySchemaPipe(UpdateFacilityValidation))
     updateFacilityBodyDto: UpdateFacilityDto,
   ): Promise<FacilityResultDto> {
     return this.facilityService.updateFacility(
@@ -75,7 +76,7 @@ export class FacilityController {
   @Delete(':facilityId')
   // @Roles('Super Admin')
   async deleteFacility(
-    @Param('facilityId', MongoObjectIdPipe) facilityId: string,
+    @Param('facilityId', MongoObjectIdPipe) facilityId: Types.ObjectId,
   ) {
     return this.facilityService.deleteFacility(facilityId);
   }

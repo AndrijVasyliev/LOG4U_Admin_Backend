@@ -1,5 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document, ObjectId, Schema as MongooseSchema } from 'mongoose';
+import { Document, Schema as MongooseSchema, Types } from 'mongoose';
 import {
   COORDINATOR_TYPES,
   DRIVER_TYPES,
@@ -129,7 +129,9 @@ export class OwnerDriver {
 
   updated_at: Date;
 
-  _id: ObjectId;
+  _id: Types.ObjectId;
+
+  readonly id: string;
 }
 
 export const OwnerDriverSchema = SchemaFactory.createForClass(OwnerDriver);

@@ -1,5 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document, ObjectId, Schema as MongooseSchema } from 'mongoose';
+import { Document, Schema as MongooseSchema, Types } from 'mongoose';
 import { PUSH_STATES } from '../utils/constants';
 import { PushState } from '../utils/general.dto';
 import { PersonDocument } from '../person/person.schema';
@@ -49,7 +49,9 @@ export class Push {
 
   updated_at: Date;
 
-  _id: ObjectId;
+  _id: Types.ObjectId;
+
+  readonly id: string;
 }
 
 export const PushSchema = SchemaFactory.createForClass(Push);

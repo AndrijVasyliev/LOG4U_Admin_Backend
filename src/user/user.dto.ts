@@ -1,7 +1,6 @@
-import { PaginateResult } from 'mongoose';
+import { PaginateResult, Types } from 'mongoose';
 import { User } from './user.schema';
 import { Query, PaginatedResultDto, AdminRole } from '../utils/general.dto';
-import { CoordinatorQuerySearch } from '../coordinator/coordinator.dto';
 
 export interface CreateUserDto {
   readonly fullName: string;
@@ -39,7 +38,7 @@ export interface UserQuery extends Query<UserQuerySearch, UserQueryOrder> {}
 export class UserResultDto {
   static fromUserModel(user: User): UserResultDto {
     return {
-      id: user._id.toString(),
+      id: user._id,
       fullName: user.fullName,
       phone: user.phone,
       userRole: user.userRole,
@@ -48,7 +47,7 @@ export class UserResultDto {
     };
   }
 
-  readonly id: string;
+  readonly id: Types.ObjectId;
   readonly fullName: string;
   readonly phone?: string;
   readonly userRole: AdminRole;

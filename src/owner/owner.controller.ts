@@ -8,6 +8,7 @@ import {
   Patch,
   Delete,
 } from '@nestjs/common';
+import { Types } from 'mongoose';
 import {
   CreateOwnerDto,
   OwnerQuery,
@@ -15,7 +16,7 @@ import {
   PaginatedOwnerResultDto,
   UpdateOwnerDto,
 } from './owner.dto';
-import { BodyValidationPipe } from '../utils/bodyValidate.pipe';
+import { BodySchemaPipe } from '../utils/bodyValidate.pipe';
 import { OwnerService } from './owner.service';
 import { LoggerService } from '../logger';
 import {
@@ -24,7 +25,7 @@ import {
   OwnerQueryParamsSchema,
 } from './owner.validation';
 import { MongoObjectIdPipe } from '../utils/idValidate.pipe';
-import { QueryParamsPipe } from '../utils/queryParamsValidate.pipe';
+import { QueryParamsSchemaPipe } from '../utils/queryParamsValidate.pipe';
 import { Roles } from '../auth/auth.decorator';
 
 @Controller('owner')
@@ -37,7 +38,7 @@ export class OwnerController {
 
   @Get()
   async getOwners(
-    @Query(new QueryParamsPipe(OwnerQueryParamsSchema))
+    @Query(new QueryParamsSchemaPipe(OwnerQueryParamsSchema))
     ownerQuery: OwnerQuery,
   ): Promise<PaginatedOwnerResultDto> {
     return this.ownerService.getOwners(ownerQuery);
@@ -45,14 +46,14 @@ export class OwnerController {
 
   @Get(':ownerId')
   async getOwner(
-    @Param('ownerId', MongoObjectIdPipe) ownerId: string,
+    @Param('ownerId', MongoObjectIdPipe) ownerId: Types.ObjectId,
   ): Promise<OwnerResultDto> {
     return this.ownerService.findOwnerById(ownerId);
   }
 
   @Post()
   async createOwner(
-    @Body(new BodyValidationPipe(CreateOwnerValidation))
+    @Body(new BodySchemaPipe(CreateOwnerValidation))
     createOwnerBodyDto: CreateOwnerDto,
   ): Promise<OwnerResultDto> {
     return this.ownerService.createOwner(createOwnerBodyDto);
@@ -60,15 +61,15 @@ export class OwnerController {
 
   @Patch(':ownerId')
   async updateOwner(
-    @Param('ownerId', MongoObjectIdPipe) ownerId: string,
-    @Body(new BodyValidationPipe(UpdateOwnerValidation))
+    @Param('ownerId', MongoObjectIdPipe) ownerId: Types.ObjectId,
+    @Body(new BodySchemaPipe(UpdateOwnerValidation))
     updateOwnerBodyDto: UpdateOwnerDto,
   ): Promise<OwnerResultDto> {
     return this.ownerService.updateOwner(ownerId, updateOwnerBodyDto);
   }
 
   @Delete(':ownerId')
-  async deleteOwner(@Param('ownerId', MongoObjectIdPipe) ownerId: string) {
+  async deleteOwner(@Param('ownerId', MongoObjectIdPipe) ownerId: Types.ObjectId) {
     return this.ownerService.deleteOwner(ownerId);
   }
 }

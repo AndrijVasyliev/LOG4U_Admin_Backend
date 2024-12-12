@@ -4,16 +4,16 @@ import {
   ArgumentMetadata,
   BadRequestException,
 } from '@nestjs/common';
-import { ObjectSchema, ArraySchema } from 'joi';
+import { ObjectSchema, ArraySchema, StringSchema } from 'joi';
 import { BODY_VALIDATION_ERROR } from './constants';
 
 @Injectable()
-export class BodyValidationPipe implements PipeTransform {
-  constructor(private schema: ObjectSchema | ArraySchema) {}
+export class BodySchemaPipe<T = any, R = any> implements PipeTransform<T, R> {
+  constructor(private schema: ObjectSchema | ArraySchema | StringSchema) {}
 
-  transform(value: any, metadata: ArgumentMetadata) {
+  transform(value: T, metadata: ArgumentMetadata): R {
     if (metadata.type !== 'body') {
-      return value;
+      return value as unknown as R;
     }
     const { error, value: transformedValue } = this.schema.validate(value, {
       abortEarly: false,

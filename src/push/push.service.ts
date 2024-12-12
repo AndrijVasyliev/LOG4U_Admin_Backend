@@ -5,7 +5,7 @@ import {
   ExpoPushReceiptId,
   ExpoPushTicket,
 } from 'expo-server-sdk';
-import { PaginateModel, PaginateOptions } from 'mongoose';
+import { PaginateModel, PaginateOptions, Types } from 'mongoose';
 import {
   Injectable,
   Inject,
@@ -78,7 +78,7 @@ export class PushService {
     return { [key]: { status: 'down' } };
   }*/
 
-  private async findPushDocumentById(id: string): Promise<PushDocument> {
+  private async findPushDocumentById(id: Types.ObjectId): Promise<PushDocument> {
     this.log.debug(`Searching for Push ${id}`);
     const push = await this.pushModel.findOne({ _id: id });
     if (!push) {
@@ -89,7 +89,7 @@ export class PushService {
     return push;
   }
 
-  async findPushById(id: string): Promise<PushResultDto> {
+  async findPushById(id: Types.ObjectId): Promise<PushResultDto> {
     const push = await this.findPushDocumentById(id);
     return PushResultDto.fromPushModel(push);
   }
@@ -158,7 +158,7 @@ export class PushService {
   }
 
   async updatePush(
-    id: string,
+    id: Types.ObjectId,
     updatePushDto: UpdatePushDto,
   ): Promise<PushResultDto> {
     const push = await this.findPushDocumentById(id);
@@ -171,7 +171,7 @@ export class PushService {
     return PushResultDto.fromPushModel(push);
   }
 
-  async deletePush(id: string): Promise<PushResultDto> {
+  async deletePush(id: Types.ObjectId): Promise<PushResultDto> {
     const push = await this.findPushDocumentById(id);
 
     this.log.debug(`Deleting Push ${push._id}`);

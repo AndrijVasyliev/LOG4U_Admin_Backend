@@ -1,5 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document, ObjectId } from 'mongoose';
+import { Document, Types } from 'mongoose';
 import { ADMIN_ROLES } from '../utils/constants';
 import { AdminRole } from '../utils/general.dto';
 import { hash } from '../utils/hash';
@@ -37,7 +37,9 @@ export class User {
 
   updated_at: Date;
 
-  _id: ObjectId;
+  _id: Types.ObjectId;
+
+  readonly id: string;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

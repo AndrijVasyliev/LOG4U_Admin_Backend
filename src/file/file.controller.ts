@@ -13,18 +13,19 @@ import {
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { Response } from 'express';
+import { Types } from 'mongoose';
 import {
   CreateFileDto,
   FileQuery,
   FileResultDto,
   PaginatedFileResultDto,
 } from './file.dto';
-import { BodyValidationPipe } from '../utils/bodyValidate.pipe';
+import { BodySchemaPipe } from '../utils/bodyValidate.pipe';
 import { FileService } from './file.service';
 import { LoggerService } from '../logger';
 import { CreateFileValidation, FileQueryParamsSchema } from './file.validation';
 import { MongoObjectIdPipe } from '../utils/idValidate.pipe';
-import { QueryParamsPipe } from '../utils/queryParamsValidate.pipe';
+import { QueryParamsSchemaPipe } from '../utils/queryParamsValidate.pipe';
 import { Roles } from '../auth/auth.decorator';
 import { MOBILE_PATH_PREFIX } from '../utils/constants';
 
@@ -46,7 +47,7 @@ export class FileController {
 
   @Get()
   async getFiles(
-    @Query(new QueryParamsPipe(FileQueryParamsSchema))
+    @Query(new QueryParamsSchemaPipe(FileQueryParamsSchema))
     fileQuery: FileQuery,
   ): Promise<PaginatedFileResultDto> {
     return this.fileService.getFiles(fileQuery);
@@ -54,14 +55,14 @@ export class FileController {
 
   @Get(':fileId')
   async getFile(
-    @Param('fileId', MongoObjectIdPipe) fileId: string,
+    @Param('fileId', MongoObjectIdPipe) fileId: Types.ObjectId,
   ): Promise<FileResultDto> {
     return this.fileService.findFileById(fileId);
   }
 
   @Get(':fileId/download')
   async downloadFile(
-    @Param('fileId', MongoObjectIdPipe) fileId: string,
+    @Param('fileId', MongoObjectIdPipe) fileId: Types.ObjectId,
     @Res({ passthrough: true }) res: Response,
   ): Promise<StreamableFile> {
     const file = await this.fileService.getFileStreamById(fileId);
@@ -75,7 +76,7 @@ export class FileController {
   @Post()
   @UseInterceptors(FileInterceptor('file'))
   async createFile(
-    @Body(new BodyValidationPipe(CreateFileValidation))
+    @Body(new BodySchemaPipe(CreateFileValidation))
     createFileBodyDto: CreateFileDto,
     @UploadedFile() file: Express.Multer.File,
   ): Promise<FileResultDto> {
@@ -83,7 +84,7 @@ export class FileController {
   }
 
   @Delete(':fileId')
-  async deleteFile(@Param('fileId', MongoObjectIdPipe) fileId: string) {
+  async deleteFile(@Param('fileId', MongoObjectIdPipe) fileId: Types.ObjectId) {
     return this.fileService.deleteFile(fileId);
   }
 }

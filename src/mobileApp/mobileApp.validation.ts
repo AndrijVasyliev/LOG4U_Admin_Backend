@@ -74,20 +74,24 @@ export const MobileUpdateTruckValidation = Joi.object({
   availabilityLocation: GeoPointBodyValidation.optional(),
   availabilityAtLocal: Joi.date().iso().optional(),
 });
+
+export const MobileDeviceIdValidationSchema = Joi.string().required();
+
 export const MobileUpdateTruckLocationValidation = Joi.object({
-  deviceId: Joi.string().required(),
   location: Joi.object({
     coords: Joi.object({
       latitude: LatitudeValidation,
       longitude: LongitudeValidation,
     })
-      .unknown(true)
+      // .unknown(true)
+      .options({ stripUnknown: { arrays: true, objects: true }})
       .required(),
   })
-    .unknown(true)
+    // .unknown(true)
     .required(),
 })
-  .unknown(true)
+  // .unknown(true)
+  .options({ stripUnknown: { arrays: true, objects: true }})
   .required();
 
 export const MobileLoadQueryParamsSchema = Joi.object({

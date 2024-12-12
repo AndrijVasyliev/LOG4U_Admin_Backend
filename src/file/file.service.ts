@@ -82,7 +82,7 @@ export class FileService {
     }
   }
 
-  private async findFileDocumentById(id: string): Promise<FileDocument> {
+  private async findFileDocumentById(id: Types.ObjectId): Promise<FileDocument> {
     this.log.debug(`Searching for File ${id}`);
     const file = await this.fileModel.findOne({ _id: id });
     if (!file) {
@@ -93,7 +93,7 @@ export class FileService {
     return file;
   }
 
-  async findFileById(id: string): Promise<FileResultDto> {
+  async findFileById(id: Types.ObjectId): Promise<FileResultDto> {
     const file = await this.findFileDocumentById(id);
     // const temp = await file.populate('metadata.linkedTo');
     return FileResultDto.fromFileModel(file);
@@ -158,7 +158,7 @@ export class FileService {
     return PaginatedFileResultDto.from(res);
   }
 
-  async getFileStreamById(fileId: string): Promise<DownloadFileResultDto> {
+  async getFileStreamById(fileId: Types.ObjectId): Promise<DownloadFileResultDto> {
     this.log.debug(`Getting file stream by id: ${fileId}`);
     const fileDocument = await this.findFileDocumentById(fileId);
     const fileStream: InstanceType<typeof GridFSBucketReadStream> =
@@ -175,14 +175,14 @@ export class FileService {
   ): Promise<FileResultDto> {
     this.log.debug(`Creating new File: ${JSON.stringify(createFileDto)}`);
 
-    const fileDocument = await this.findFileDocumentById(file.filename);
+    const fileDocument = await this.findFileDocumentById(new Types.ObjectId(file.filename));
     Object.assign(fileDocument.metadata, createFileDto);
     const savedFile = await fileDocument.save();
 
     return FileResultDto.fromFileModel(savedFile);
   }
 
-  async deleteFile(id: string): Promise<FileResultDto> {
+  async deleteFile(id: Types.ObjectId): Promise<FileResultDto> {
     const file = await this.findFileDocumentById(id);
 
     this.log.debug(`Deleting File ${file._id}`);

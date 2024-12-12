@@ -1,15 +1,15 @@
 import { Readable } from 'node:stream';
-import { PaginateResult } from 'mongoose';
+import { PaginateResult, Types } from 'mongoose';
 import { File } from './file.schema';
 import { FileOfType, PaginatedResultDto, Query } from '../utils/general.dto';
 
-export type FileParentRef = {
+/*export type FileParentRef = {
   readonly linkedTo: string;
   readonly fileOf: FileOfType;
-};
+};*/
 
 export interface CreateFileDto {
-  readonly linkedTo: string;
+  readonly linkedTo: Types.ObjectId;
   readonly fileOf: FileOfType;
   readonly comment?: string;
   readonly tags?: Map<string, string>;
@@ -19,7 +19,7 @@ export interface FileQuerySearch {
   // readonly search?: string;
   readonly filename?: string;
   readonly comment?: string;
-  readonly linkedTo: string;
+  readonly linkedTo: Types.ObjectId;
   readonly fileOf: FileOfType;
   readonly tags?: Map<string, string>;
 }
@@ -33,7 +33,7 @@ export interface FileQuery extends Query<FileQuerySearch, FileQueryOrder> {}
 export class FileResultDto {
   static fromFileModel(file: File): FileResultDto {
     return {
-      id: file._id.toString(),
+      id: file._id,
       filename: file.filename,
       contentType: file.metadata.contentType,
       contentLength: file.length,
@@ -43,7 +43,7 @@ export class FileResultDto {
     };
   }
 
-  readonly id: string;
+  readonly id: Types.ObjectId;
   readonly filename: string;
   readonly contentType: string;
   readonly contentLength: number;

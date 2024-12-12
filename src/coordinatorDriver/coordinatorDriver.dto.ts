@@ -1,4 +1,4 @@
-import { PaginateResult } from 'mongoose';
+import { PaginateResult, Types } from 'mongoose';
 import { CoordinatorDriver } from './coordinatorDriver.schema';
 import {
   LangPriority,
@@ -36,38 +36,10 @@ export interface CreateCoordinatorDriverDto {
   readonly notes?: string;
   readonly appLogin?: string;
   readonly appPass?: string;
-  readonly owner: string;
+  readonly owner: Types.ObjectId;
 }
 
-export interface UpdateCoordinatorDriverDto {
-  readonly fullName?: string;
-  readonly birthDate?: Date;
-  readonly citizenship?: string;
-  readonly languagePriority?: LangPriority;
-  readonly driverLicenceNumber?: string;
-  readonly driverLicenceState?: string;
-  readonly driverLicenceExp?: Date;
-  readonly idDocId?: string;
-  readonly idDocType?: string;
-  readonly idDocExp?: Date;
-  readonly hiredBy?: string;
-  readonly hireDate?: Date;
-  readonly snn?: string;
-  readonly company?: string;
-  readonly insurancePolicy?: string;
-  readonly insurancePolicyExp?: Date;
-  readonly address?: string;
-  readonly phone?: string;
-  readonly phone2?: string;
-  readonly email?: string;
-  readonly emergencyContactName?: string;
-  readonly emergencyContactRel?: string;
-  readonly emergencyContactPhone?: string;
-  readonly notes?: string;
-  readonly appLogin?: string;
-  readonly appPass?: string;
-  readonly owner?: string;
-}
+export type UpdateCoordinatorDriverDto = Partial<CreateCoordinatorDriverDto>;
 
 export interface CoordinatorDriverQuerySearch {
   readonly search?: string;
@@ -91,7 +63,7 @@ export interface CoordinatorDriverQuerySearch {
   readonly emergencyContactPhone?: string;
   readonly appLogin?: string;
   readonly truckNumber?: number;
-  readonly owner?: string;
+  readonly owner?: Types.ObjectId;
 }
 
 export interface CoordinatorDriverQueryOrder
@@ -129,7 +101,7 @@ export class CoordinatorDriverResultDto {
         TruckResultDto.fromTruckModel(truck),
       );
     let result: CoordinatorDriverResultDto = {
-      id: coordinatorDriver._id.toString(),
+      id: coordinatorDriver._id,
       type: coordinatorDriver.type,
       fullName: coordinatorDriver.fullName,
       birthDate: coordinatorDriver.birthDate,
@@ -169,7 +141,7 @@ export class CoordinatorDriverResultDto {
     return result;
   }
 
-  readonly id: string;
+  readonly id: Types.ObjectId;
   readonly type: PersonType;
   readonly fullName: string;
   readonly birthDate: Date;

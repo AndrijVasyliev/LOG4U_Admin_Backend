@@ -1,4 +1,4 @@
-import { PaginateModel, PaginateOptions } from 'mongoose';
+import { PaginateModel, PaginateOptions, Types } from 'mongoose';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { LoggerService } from '../logger';
@@ -24,7 +24,7 @@ export class PersonService {
     private readonly log: LoggerService,
   ) {}
 
-  private async findPersonDocumentById(id: string): Promise<PersonDocument> {
+  private async findPersonDocumentById(id: Types.ObjectId): Promise<PersonDocument> {
     this.log.debug(`Searching for Person ${id}`);
     const person = await this.personModel.findOne({
       _id: id,
@@ -36,7 +36,7 @@ export class PersonService {
     return person;
   }
 
-  async findPersonById(id: string): Promise<PersonResultDto> {
+  async findPersonById(id: Types.ObjectId): Promise<PersonResultDto> {
     const person = await this.findPersonDocumentById(id);
     return PersonResultDto.fromPersonModel(person);
   }
@@ -100,7 +100,7 @@ export class PersonService {
   }
 
   async updatePersonSettings(
-    id: string,
+    id: Types.ObjectId,
     updatePersonDto: UpdatePersonSettingsDto,
   ): Promise<PersonResultDto> {
     const person = await this.findPersonDocumentById(id);
@@ -146,7 +146,7 @@ export class PersonService {
   }
 
   async setDeviceId(
-    id: string,
+    id: Types.ObjectId,
     deviceId: string,
   ): Promise<PersonAuthResultDto> {
     this.log.debug(`Clearing existing deviceId: ${deviceId}`);
@@ -168,7 +168,7 @@ export class PersonService {
   }
 
   async setAppData(
-    id: string,
+    id: Types.ObjectId,
     authDataDto: AuthDataDto,
   ): Promise<PersonAuthResultDto> {
     const { token, deviceStatus, appPermissions } = authDataDto;

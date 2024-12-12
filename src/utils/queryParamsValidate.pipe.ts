@@ -9,7 +9,7 @@ import { Query } from './general.dto';
 import { DEFAULT_LIMIT, DEFAULT_OFFSET } from './constants';
 
 @Injectable()
-export class QueryParamsPipe<SearchType, OrderType>
+export class QueryParamsSchemaPipe<SearchType, OrderType>
   implements PipeTransform<any, Query<SearchType, OrderType>>
 {
   constructor(private schema: ObjectSchema | ArraySchema) {}

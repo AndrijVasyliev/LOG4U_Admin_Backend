@@ -1,4 +1,4 @@
-import { PaginateModel, PaginateOptions } from 'mongoose';
+import { PaginateModel, PaginateOptions, Types } from 'mongoose';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { LoggerService } from '../logger';
@@ -24,7 +24,7 @@ export class OwnerDriverService {
   ) {}
 
   private async findOwnerDriverDocumentById(
-    id: string,
+    id: Types.ObjectId,
   ): Promise<OwnerDriverDocument> {
     this.log.debug(`Searching for OwnerDriver ${id}`);
     const ownerDriver = await this.ownerDriverModel
@@ -44,7 +44,7 @@ export class OwnerDriverService {
     return ownerDriver;
   }
 
-  async findOwnerDriverById(id: string): Promise<OwnerDriverResultDto> {
+  async findOwnerDriverById(id: Types.ObjectId): Promise<OwnerDriverResultDto> {
     const ownerDriver = await this.findOwnerDriverDocumentById(id);
     return OwnerDriverResultDto.fromOwnerDriverModel(ownerDriver);
   }
@@ -134,7 +134,7 @@ export class OwnerDriverService {
   }
 
   async updateOwnerDriver(
-    id: string,
+    id: Types.ObjectId,
     updateOwnerDriverDto: UpdateOwnerDriverDto,
   ): Promise<OwnerDriverResultDto> {
     const ownerDriver = await this.findOwnerDriverDocumentById(id);
@@ -149,7 +149,7 @@ export class OwnerDriverService {
     return OwnerDriverResultDto.fromOwnerDriverModel(ownerDriver);
   }
 
-  async deleteOwnerDriver(id: string): Promise<OwnerDriverResultDto> {
+  async deleteOwnerDriver(id: Types.ObjectId): Promise<OwnerDriverResultDto> {
     const ownerDriver = await this.findOwnerDriverDocumentById(id);
 
     this.log.debug(`Deleting OwnerDriver ${ownerDriver._id}`);

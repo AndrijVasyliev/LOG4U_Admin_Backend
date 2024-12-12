@@ -8,6 +8,7 @@ import {
   Patch,
   Delete,
 } from '@nestjs/common';
+import { Types } from 'mongoose';
 import {
   CreateCoordinatorDriverDto,
   CoordinatorDriverQuery,
@@ -15,7 +16,7 @@ import {
   PaginatedCoordinatorDriverResultDto,
   UpdateCoordinatorDriverDto,
 } from './coordinatorDriver.dto';
-import { BodyValidationPipe } from '../utils/bodyValidate.pipe';
+import { BodySchemaPipe } from '../utils/bodyValidate.pipe';
 import { CoordinatorDriverService } from './coordinatorDriver.service';
 import { LoggerService } from '../logger';
 import {
@@ -24,7 +25,7 @@ import {
   CoordinatorDriverQueryParamsSchema,
 } from './coordinatorDriver.validation';
 import { MongoObjectIdPipe } from '../utils/idValidate.pipe';
-import { QueryParamsPipe } from '../utils/queryParamsValidate.pipe';
+import { QueryParamsSchemaPipe } from '../utils/queryParamsValidate.pipe';
 import { Roles } from '../auth/auth.decorator';
 
 @Controller('coordinatorDriver')
@@ -37,7 +38,7 @@ export class CoordinatorDriverController {
 
   @Get()
   async getCoordinatorDrivers(
-    @Query(new QueryParamsPipe(CoordinatorDriverQueryParamsSchema))
+    @Query(new QueryParamsSchemaPipe(CoordinatorDriverQueryParamsSchema))
     coordinatorDriverQuery: CoordinatorDriverQuery,
   ): Promise<PaginatedCoordinatorDriverResultDto> {
     return this.coordinatorDriverService.getCoordinatorDrivers(
@@ -48,7 +49,7 @@ export class CoordinatorDriverController {
   @Get(':coordinatorDriverId')
   async getCoordinatorDriver(
     @Param('coordinatorDriverId', MongoObjectIdPipe)
-    coordinatorDriverId: string,
+    coordinatorDriverId: Types.ObjectId,
   ): Promise<CoordinatorDriverResultDto> {
     return this.coordinatorDriverService.findCoordinatorDriverById(
       coordinatorDriverId,
@@ -57,7 +58,7 @@ export class CoordinatorDriverController {
 
   @Post()
   async createCoordinatorDriver(
-    @Body(new BodyValidationPipe(CreateCoordinatorDriverValidation))
+    @Body(new BodySchemaPipe(CreateCoordinatorDriverValidation))
     createCoordinatorDriverBodyDto: CreateCoordinatorDriverDto,
   ): Promise<CoordinatorDriverResultDto> {
     return this.coordinatorDriverService.createCoordinatorDriver(
@@ -68,8 +69,8 @@ export class CoordinatorDriverController {
   @Patch(':coordinatorDriverId')
   async updateCoordinatorDriver(
     @Param('coordinatorDriverId', MongoObjectIdPipe)
-    coordinatorDriverId: string,
-    @Body(new BodyValidationPipe(UpdateCoordinatorDriverValidation))
+    coordinatorDriverId: Types.ObjectId,
+    @Body(new BodySchemaPipe(UpdateCoordinatorDriverValidation))
     updateCoordinatorDriverBodyDto: UpdateCoordinatorDriverDto,
   ): Promise<CoordinatorDriverResultDto> {
     return this.coordinatorDriverService.updateCoordinatorDriver(
@@ -81,7 +82,7 @@ export class CoordinatorDriverController {
   @Delete(':coordinatorDriverId')
   async deleteCoordinatorDriver(
     @Param('coordinatorDriverId', MongoObjectIdPipe)
-    coordinatorDriverId: string,
+    coordinatorDriverId: Types.ObjectId,
   ) {
     return this.coordinatorDriverService.deleteCoordinatorDriver(
       coordinatorDriverId,

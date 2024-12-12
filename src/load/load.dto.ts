@@ -1,4 +1,4 @@
-import { PaginateResult, ObjectId } from 'mongoose';
+import { PaginateResult, Types } from 'mongoose';
 import {
   Freight,
   Load,
@@ -54,7 +54,7 @@ interface CreateTimeFrameDirectDto {
 }
 
 interface CreateFreightDto {
-  freightId: string;
+  freightId: Types.ObjectId;
   pieces: number;
   unitOfWeight: UnitOfWeight;
   weight: number;
@@ -63,7 +63,7 @@ interface CreateFreightDto {
 }
 
 export interface CreateStopPickUpDriversInfoDto {
-  driversInfoId?: string;
+  driversInfoId?: Types.ObjectId;
   pieces: number;
   unitOfWeight: UnitOfWeight;
   weight: number;
@@ -73,14 +73,14 @@ export interface CreateStopPickUpDriversInfoDto {
 }
 
 export interface CreateStopDeliveryDriversInfoDto {
-  driversInfoId?: string;
+  driversInfoId?: Types.ObjectId;
   bol: string;
   signedBy: string;
 }
 
 interface CreateStopDto {
-  stopId?: string | ObjectId;
-  facility: string | ObjectId;
+  stopId?: Types.ObjectId;
+  facility: Types.ObjectId;
   addInfo?: string;
 }
 interface CreateStopPickUpDto extends CreateStopDto {
@@ -102,7 +102,7 @@ interface CreateStopDeliveryDto extends CreateStopDto {
     | CreateTimeFrameFCFSDto
     | CreateTimeFrameAPPTDto
     | CreateTimeFrameDirectDto;
-  bolList: string[];
+  bolList: Types.ObjectId[];
 }
 
 export type Stops = (CreateStopPickUpDto | CreateStopDeliveryDto)[];
@@ -126,7 +126,7 @@ export interface CreateLoadDto {
 }
 
 type UpdateStops = ((CreateStopPickUpDto | CreateStopDeliveryDto) & {
-  _id: ObjectId;
+  _id: Types.ObjectId;
 })[];
 
 export interface StopChangeUpdateDocument {
@@ -139,7 +139,7 @@ export interface StopChangeUpdateDocument {
   readonly fullDocument: {
     readonly stops?: UpdateStops;
     readonly miles?: number[];
-    readonly truck?: ObjectId;
+    readonly truck?: Types.ObjectId;
     readonly __v?: number;
   };
   readonly fullDocumentBeforeChange: {
@@ -153,7 +153,7 @@ export interface StopChangeInsertDocument {
   readonly fullDocument: {
     readonly stops?: UpdateStops;
     readonly miles?: number[];
-    readonly truck?: ObjectId;
+    readonly truck?: Types.ObjectId;
     readonly __v?: number;
   };
 }
@@ -171,12 +171,12 @@ export interface LoadChangeUpdateDocument {
   };
   readonly fullDocument: {
     readonly status?: LoadStatus;
-    readonly truck?: ObjectId;
+    readonly truck?: Types.ObjectId;
     readonly __v?: number;
   };
   readonly fullDocumentBeforeChange: {
     readonly status?: LoadStatus;
-    readonly truck?: ObjectId;
+    readonly truck?: Types.ObjectId;
     readonly __v?: number;
   };
 }
@@ -184,7 +184,7 @@ export interface LoadChangeInsertDocument {
   readonly operationType: 'insert';
   readonly fullDocument: {
     readonly status?: LoadStatus;
-    readonly truck?: ObjectId;
+    readonly truck?: Types.ObjectId;
     readonly __v?: number;
   };
 }
@@ -228,7 +228,7 @@ export interface LoadQuerySearch {
   readonly bookedByCompany?: string;
   readonly checkInAs?: string;
   readonly truckNumber?: number;
-  readonly trucksIds?: string[];
+  readonly trucksIds?: Types.ObjectId[];
 }
 
 export interface LoadQueryOrder
@@ -282,7 +282,7 @@ class FreightResultDto {
     };
   }
 
-  readonly freightId: string;
+  readonly freightId: Types.ObjectId;
   readonly pieces: number;
   readonly unitOfWeight: UnitOfWeight;
   readonly weight: number;
@@ -295,7 +295,7 @@ class StopPickUpDriversInfoResultDto {
     stopPickUpDriversInfo: StopPickUpDriversInfo,
   ): StopPickUpDriversInfoResultDto {
     return {
-      driversInfoId: stopPickUpDriversInfo.driversInfoId.toString(),
+      driversInfoId: stopPickUpDriversInfo.driversInfoId,
       pieces: stopPickUpDriversInfo.pieces,
       unitOfWeight: stopPickUpDriversInfo.unitOfWeight,
       weight: stopPickUpDriversInfo.weight,
@@ -305,7 +305,7 @@ class StopPickUpDriversInfoResultDto {
     };
   }
 
-  readonly driversInfoId?: string;
+  readonly driversInfoId?: Types.ObjectId;
   readonly pieces: number;
   readonly unitOfWeight: UnitOfWeight;
   readonly weight: number;
@@ -319,13 +319,13 @@ class StopDeliveryDriversInfoResultDto {
     stopDeliveryDriversInfo: StopDeliveryDriversInfo,
   ): StopDeliveryDriversInfoResultDto {
     return {
-      driversInfoId: stopDeliveryDriversInfo.driversInfoId.toString(),
+      driversInfoId: stopDeliveryDriversInfo.driversInfoId,
       bol: stopDeliveryDriversInfo.bol,
       signedBy: stopDeliveryDriversInfo.signedBy,
     };
   }
 
-  readonly driversInfoId: string;
+  readonly driversInfoId: Types.ObjectId;
   readonly bol: string;
   readonly signedBy: string;
 }
@@ -335,7 +335,7 @@ class StopResultDto {
     const facility =
       stop.facility && FacilityResultDto.fromFacilityModel(stop.facility);
     let result: StopResultDto = {
-      stopId: stop.stopId.toString(),
+      stopId: stop.stopId,
       type: stop.type,
       addInfo: stop.addInfo,
     };
@@ -345,7 +345,7 @@ class StopResultDto {
     return result;
   }
 
-  readonly stopId: string;
+  readonly stopId: Types.ObjectId;
   readonly type: StopType;
   readonly facility?: FacilityResultDto;
   readonly addInfo?: string;
@@ -453,7 +453,7 @@ export class LoadResultDto {
       load.bookedWith && CustomerResultDto.fromCustomerModel(load.bookedWith);
 
     let result: LoadResultDto = {
-      id: load._id.toString(),
+      id: load._id,
       loadNumber: load.loadNumber,
       ref: load.ref,
       status: load.status,
@@ -497,7 +497,7 @@ export class LoadResultDto {
     return result;
   }
 
-  readonly id: string;
+  readonly id: Types.ObjectId;
   readonly loadNumber: number;
   readonly ref?: string[];
   readonly status: LoadStatus;

@@ -1,4 +1,4 @@
-import { PaginateModel, PaginateOptions } from 'mongoose';
+import { PaginateModel, PaginateOptions, Types } from 'mongoose';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { LoggerService } from '../logger';
@@ -27,7 +27,7 @@ export class CoordinatorDriverService {
   ) {}
 
   private async findCoordinatorDriverDocumentById(
-    id: string,
+    id: Types.ObjectId,
   ): Promise<CoordinatorDriverDocument> {
     this.log.debug(`Searching for CoordinatorDriver ${id}`);
     const coordinatorDriver = await this.coordinatorDriverModel
@@ -46,7 +46,7 @@ export class CoordinatorDriverService {
   }
 
   async findCoordinatorDriverById(
-    id: string,
+    id: Types.ObjectId,
   ): Promise<CoordinatorDriverResultDto> {
     const coordinatorDriver = await this.findCoordinatorDriverDocumentById(id);
     return CoordinatorDriverResultDto.fromCoordinatorDriverModel(
@@ -155,7 +155,7 @@ export class CoordinatorDriverService {
   }
 
   async updateCoordinatorDriver(
-    id: string,
+    id: Types.ObjectId,
     updateCoordinatorDriverDto: UpdateCoordinatorDriverDto,
   ): Promise<CoordinatorDriverResultDto> {
     const coordinatorDriver = await this.findCoordinatorDriverDocumentById(id);
@@ -177,7 +177,7 @@ export class CoordinatorDriverService {
   }
 
   async deleteCoordinatorDriver(
-    id: string,
+    id: Types.ObjectId,
   ): Promise<CoordinatorDriverResultDto> {
     const coordinatorDriver = await this.findCoordinatorDriverDocumentById(id);
 

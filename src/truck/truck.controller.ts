@@ -10,6 +10,7 @@ import {
   Req,
 } from '@nestjs/common';
 import { Request } from 'express';
+import { Types } from 'mongoose';
 import {
   CreateTruckDto,
   TruckQuery,
@@ -18,16 +19,18 @@ import {
   UpdateTruckDto,
   TruckResultForMapDto,
 } from './truck.dto';
-import { BodyValidationPipe } from '../utils/bodyValidate.pipe';
 import { TruckService } from './truck.service';
+import { SetUpdatedByToAdmin } from './truck.transformation';
 import { LoggerService } from '../logger';
 import {
-  CreateTruckValidation,
+  CreateTruckValidationSchema,
   UpdateTruckValidation,
   TruckQueryParamsSchema,
 } from './truck.validation';
 import { MongoObjectIdPipe } from '../utils/idValidate.pipe';
-import { QueryParamsPipe } from '../utils/queryParamsValidate.pipe';
+import { QueryParamsSchemaPipe } from '../utils/queryParamsValidate.pipe';
+import { BodySchemaPipe } from '../utils/bodyValidate.pipe';
+import { BodyTransformPipe } from '../utils/bodyTransform.pipe';
 import { Roles } from '../auth/auth.decorator';
 import { UserResultDto } from '../user/user.dto';
 
@@ -41,7 +44,7 @@ export class TruckController {
 
   @Get()
   async getTrucks(
-    @Query(new QueryParamsPipe(TruckQueryParamsSchema))
+    @Query(new QueryParamsSchemaPipe(TruckQueryParamsSchema))
     truckQuery: TruckQuery,
   ): Promise<PaginatedTruckResultDto> {
     return this.truckService.getTrucks(truckQuery);
@@ -54,7 +57,7 @@ export class TruckController {
 
   @Get(':truckId')
   async getTruck(
-    @Param('truckId', MongoObjectIdPipe) truckId: string,
+    @Param('truckId', MongoObjectIdPipe) truckId: Types.ObjectId,
   ): Promise<TruckResultDto> {
     return this.truckService.findTruckById(truckId);
   }
@@ -62,7 +65,10 @@ export class TruckController {
   @Post()
   async createTruck(
     @Req() request: Request,
-    @Body(new BodyValidationPipe(CreateTruckValidation))
+    @Body(
+      new BodySchemaPipe(CreateTruckValidationSchema),
+      new BodyTransformPipe(SetUpdatedByToAdmin),
+    )
     createTruckBodyDto: CreateTruckDto,
   ): Promise<TruckResultDto> {
     const { user } = request as unknown as {
@@ -78,20 +84,17 @@ export class TruckController {
         reservedBy: undefined,
       };
     }
-    if (createTruckBodyDto.lastLocation) {
-      newValues = {
-        ...createTruckBodyDto,
-        locationUpdatedBy: 'Manually from admin',
-      };
-    }
     return this.truckService.createTruck(newValues);
   }
 
   @Patch(':truckId')
   async updateTruck(
     @Req() request: Request,
-    @Param('truckId', MongoObjectIdPipe) truckId: string,
-    @Body(new BodyValidationPipe(UpdateTruckValidation))
+    @Param('truckId', MongoObjectIdPipe) truckId: Types.ObjectId,
+    @Body(
+      new BodySchemaPipe(UpdateTruckValidation),
+      new BodyTransformPipe(SetUpdatedByToAdmin),
+    )
     updateTruckBodyDto: UpdateTruckDto,
   ): Promise<TruckResultDto> {
     const { user } = request as unknown as {
@@ -107,17 +110,13 @@ export class TruckController {
         reservedBy: undefined,
       };
     }
-    if (updateTruckBodyDto.lastLocation) {
-      newValues = {
-        ...updateTruckBodyDto,
-        locationUpdatedBy: 'Manually from admin',
-      };
-    }
     return this.truckService.updateTruck(truckId, newValues);
   }
 
   @Delete(':truckId')
-  async deleteTruck(@Param('truckId', MongoObjectIdPipe) truckId: string) {
+  async deleteTruck(
+    @Param('truckId', MongoObjectIdPipe) truckId: Types.ObjectId,
+  ) {
     return this.truckService.deleteTruck(truckId);
   }
 }

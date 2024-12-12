@@ -1,5 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document, ObjectId, Schema as MongooseSchema } from 'mongoose';
+import { Document, Schema as MongooseSchema, Types } from 'mongoose';
 import {
   COORDINATOR_TYPES,
   DRIVER_TYPES,
@@ -22,7 +22,7 @@ import {
   TruckType,
 } from '../utils/general.dto';
 import {
-  GeoPointSchema /*, LocationDocument*/,
+  GeoPointSchema,
 } from '../location/location.schema';
 import { OwnerDocument } from '../owner/owner.schema';
 import { CoordinatorDocument } from '../coordinator/coordinator.schema';
@@ -223,7 +223,9 @@ export class Truck {
 
   updated_at: Date;
 
-  _id: ObjectId;
+  _id: Types.ObjectId;
+
+  readonly id: string;
 }
 
 export const TruckSchema = SchemaFactory.createForClass(Truck);

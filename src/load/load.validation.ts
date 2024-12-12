@@ -185,15 +185,15 @@ export const CreateLoadValidation = Joi.object({
       value.forEach((stop) => {
         if (stop.type === StopType.PickUp) {
           stop.driversInfo = stop?.driversInfo?.filter((driversInfoItem) =>
-            freightIdList?.includes(driversInfoItem.bol),
+            !!freightIdList?.find((freightId) => freightId.toString() === driversInfoItem.bol.toString()),
           );
         }
         if (stop.type === StopType.Delivery) {
           stop.driversInfo = stop?.driversInfo?.filter((driversInfoItem) =>
-            freightIdList?.includes(driversInfoItem.bol),
+            !!freightIdList?.find((freightId) => freightId.toString() === driversInfoItem.bol.toString()),
           );
           stop.bolList = stop?.bolList?.filter((bolItemId) =>
-            freightIdList?.includes(bolItemId),
+            !!freightIdList?.find((freightId) => freightId.toString() === bolItemId.toString()),
           );
         }
       });

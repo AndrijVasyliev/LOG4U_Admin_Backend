@@ -1,4 +1,4 @@
-import { PaginateModel, PaginateOptions } from 'mongoose';
+import { PaginateModel, PaginateOptions, Types } from 'mongoose';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { LoggerService } from '../logger';
@@ -22,7 +22,7 @@ export class CustomerService {
   ) {}
 
   private async findCustomerDocumentById(
-    id: string,
+    id: Types.ObjectId,
   ): Promise<CustomerDocument> {
     this.log.debug(`Searching for Customer ${id}`);
     const customer = await this.customerModel.findOne({ _id: id });
@@ -34,7 +34,7 @@ export class CustomerService {
     return customer;
   }
 
-  async findCustomerById(id: string): Promise<CustomerResultDto> {
+  async findCustomerById(id: Types.ObjectId): Promise<CustomerResultDto> {
     const customer = await this.findCustomerDocumentById(id);
     return CustomerResultDto.fromCustomerModel(customer);
   }
@@ -92,7 +92,7 @@ export class CustomerService {
   }
 
   async updateCustomer(
-    id: string,
+    id: Types.ObjectId,
     updateCustomerDto: UpdateCustomerDto,
   ): Promise<CustomerResultDto> {
     const customer = await this.findCustomerDocumentById(id);
@@ -105,7 +105,7 @@ export class CustomerService {
     return CustomerResultDto.fromCustomerModel(customer);
   }
 
-  async deleteCustomer(id: string): Promise<CustomerResultDto> {
+  async deleteCustomer(id: Types.ObjectId): Promise<CustomerResultDto> {
     const customer = await this.findCustomerDocumentById(id);
 
     this.log.debug(`Deleting Customer ${customer._id}`);

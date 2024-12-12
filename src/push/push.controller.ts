@@ -13,6 +13,7 @@ import {
   ExpoPushReceipt,
   ExpoPushTicket,
 } from 'expo-server-sdk';
+import { Types } from 'mongoose';
 import {
   CreatePushDto,
   PaginatedPushResultDto,
@@ -29,8 +30,8 @@ import {
 import { PushService } from './push.service';
 import { Roles } from '../auth/auth.decorator';
 import { LoggerService } from '../logger';
-import { BodyValidationPipe } from '../utils/bodyValidate.pipe';
-import { QueryParamsPipe } from '../utils/queryParamsValidate.pipe';
+import { BodySchemaPipe } from '../utils/bodyValidate.pipe';
+import { QueryParamsSchemaPipe } from '../utils/queryParamsValidate.pipe';
 import { MongoObjectIdPipe } from '../utils/idValidate.pipe';
 
 @Controller('push')
@@ -43,7 +44,7 @@ export class PushController {
 
   @Post('send')
   async sendPush(
-    @Body(new BodyValidationPipe(SendPushValidation))
+    @Body(new BodySchemaPipe(SendPushValidation))
     sendPushBodyDto: ExpoPushMessage & { _contentAvailable?: boolean },
   ): Promise<ExpoPushTicket[]> {
     return this.pushService.sendPush(sendPushBodyDto);
@@ -57,7 +58,7 @@ export class PushController {
 
   @Get()
   async getPushs(
-    @Query(new QueryParamsPipe(PushQueryParamsSchema))
+    @Query(new QueryParamsSchemaPipe(PushQueryParamsSchema))
     pushQuery: PushQuery,
   ): Promise<PaginatedPushResultDto> {
     return this.pushService.getPushs(pushQuery);
@@ -65,14 +66,14 @@ export class PushController {
 
   @Get(':pushId')
   async getPush(
-    @Param('pushId', MongoObjectIdPipe) pushId: string,
+    @Param('pushId', MongoObjectIdPipe) pushId: Types.ObjectId,
   ): Promise<PushResultDto> {
     return this.pushService.findPushById(pushId);
   }
 
   @Post()
   async createPush(
-    @Body(new BodyValidationPipe(CreatePushValidation))
+    @Body(new BodySchemaPipe(CreatePushValidation))
     createPushBodyDto: CreatePushDto,
   ): Promise<PushResultDto> {
     return this.pushService.createPush(createPushBodyDto);
@@ -80,15 +81,15 @@ export class PushController {
 
   @Patch(':pushId')
   async updatePush(
-    @Param('pushId', MongoObjectIdPipe) pushId: string,
-    @Body(new BodyValidationPipe(UpdatePushValidation))
+    @Param('pushId', MongoObjectIdPipe) pushId: Types.ObjectId,
+    @Body(new BodySchemaPipe(UpdatePushValidation))
     updatePushBodyDto: UpdatePushDto,
   ): Promise<PushResultDto> {
     return this.pushService.updatePush(pushId, updatePushBodyDto);
   }
 
   @Delete(':pushId')
-  async deletePush(@Param('pushId', MongoObjectIdPipe) pushId: string) {
+  async deletePush(@Param('pushId', MongoObjectIdPipe) pushId: Types.ObjectId) {
     return this.pushService.deletePush(pushId);
   }
 }

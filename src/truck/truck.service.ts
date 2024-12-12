@@ -1,4 +1,4 @@
-import { ObjectId, PaginateModel, PaginateOptions } from 'mongoose';
+import { ObjectId, PaginateModel, PaginateOptions, Types } from 'mongoose';
 import {
   Injectable,
   PreconditionFailedException,
@@ -37,7 +37,7 @@ export class TruckService {
   }
 
   private async findTruckDocumentById(
-    id: string | ObjectId,
+    id: Types.ObjectId,
   ): Promise<TruckDocument> {
     this.log.debug(`Searching for Truck ${id}`);
     const truck = await this.truckModel.findOne({ _id: id });
@@ -64,7 +64,9 @@ export class TruckService {
     return truck;
   }
 
-  async findTruckById(id: string | ObjectId): Promise<TruckResultDto> {
+  async findTruckById(
+    id: Types.ObjectId,
+  ): Promise<TruckResultDto> {
     const truck = await this.findTruckDocumentById(id);
     return TruckResultDto.fromTruckModel(truck);
   }
@@ -339,7 +341,7 @@ export class TruckService {
   }
 
   async updateTruck(
-    id: string | ObjectId,
+    id: Types.ObjectId,
     updateTruckDto: UpdateTruckDto,
   ): Promise<TruckResultDto> {
     const truck = await this.findTruckDocumentById(id);
@@ -420,7 +422,7 @@ export class TruckService {
     return TruckResultDto.fromTruckModel(truck);
   }
 
-  async deleteTruck(id: string): Promise<TruckResultDto> {
+  async deleteTruck(id: Types.ObjectId): Promise<TruckResultDto> {
     const truck = await this.findTruckDocumentById(id);
 
     this.log.debug(`Deleting Truck ${truck._id}`);

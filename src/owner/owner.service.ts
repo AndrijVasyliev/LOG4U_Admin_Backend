@@ -1,4 +1,4 @@
-import { PaginateModel, PaginateOptions } from 'mongoose';
+import { PaginateModel, PaginateOptions, Types } from 'mongoose';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { LoggerService } from '../logger';
@@ -23,7 +23,7 @@ export class OwnerService {
     private readonly log: LoggerService,
   ) {}
 
-  private async findOwnerDocumentById(id: string): Promise<OwnerDocument> {
+  private async findOwnerDocumentById(id: Types.ObjectId): Promise<OwnerDocument> {
     this.log.debug(`Searching for Owner ${id}`);
     const owner = await this.ownerModel
       .findOne({
@@ -40,7 +40,7 @@ export class OwnerService {
     return owner;
   }
 
-  async findOwnerById(id: string): Promise<OwnerResultDto> {
+  async findOwnerById(id: Types.ObjectId): Promise<OwnerResultDto> {
     const owner = await this.findOwnerDocumentById(id);
     return OwnerResultDto.fromOwnerModel(owner);
   }
@@ -117,7 +117,7 @@ export class OwnerService {
   }
 
   async updateOwner(
-    id: string,
+    id: Types.ObjectId,
     updateOwnerDto: UpdateOwnerDto,
   ): Promise<OwnerResultDto> {
     const owner = await this.findOwnerDocumentById(id);
@@ -130,7 +130,7 @@ export class OwnerService {
     return OwnerResultDto.fromOwnerModel(owner);
   }
 
-  async deleteOwner(id: string): Promise<OwnerResultDto> {
+  async deleteOwner(id: Types.ObjectId): Promise<OwnerResultDto> {
     const owner = await this.findOwnerDocumentById(id);
 
     this.log.debug(`Deleting Owner ${owner._id}`);

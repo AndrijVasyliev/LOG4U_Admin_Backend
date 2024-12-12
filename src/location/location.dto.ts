@@ -1,4 +1,4 @@
-import { PaginateResult } from 'mongoose';
+import { PaginateResult, Types } from 'mongoose';
 import { GeoLocation, GeometryLocation, Location } from './location.schema';
 import { Query, PaginatedResultDto, GeoPointType } from '../utils/general.dto';
 
@@ -103,7 +103,7 @@ export interface LocationQuery
 export class LocationResultDto {
   static fromLocationModel(location: Location): LocationResultDto {
     return {
-      id: location._id.toString(),
+      id: location._id,
       zipCode: location.zipCode,
       name: location.name,
       stateCode: location.stateCode,
@@ -112,7 +112,7 @@ export class LocationResultDto {
     };
   }
 
-  readonly id: string;
+  readonly id: Types.ObjectId;
   readonly zipCode: string;
   readonly name: string;
   readonly stateCode: string;

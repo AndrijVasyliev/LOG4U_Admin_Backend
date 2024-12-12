@@ -1,4 +1,4 @@
-import { PaginateResult } from 'mongoose';
+import { PaginateResult, Types } from 'mongoose';
 import { Driver } from './driver.schema';
 import {
   LangPriority,
@@ -32,34 +32,10 @@ export interface CreateDriverDto {
   readonly notes?: string;
   readonly appLogin?: string;
   readonly appPass?: string;
-  readonly owner: string;
+  readonly owner: Types.ObjectId;
 }
 
-export interface UpdateDriverDto {
-  readonly fullName?: string;
-  readonly birthDate?: Date;
-  readonly citizenship?: string;
-  readonly languagePriority?: LangPriority;
-  readonly driverLicenceNumber?: string;
-  readonly driverLicenceState?: string;
-  readonly driverLicenceExp?: Date;
-  readonly idDocId?: string;
-  readonly idDocType?: string;
-  readonly idDocExp?: Date;
-  readonly hiredBy?: string;
-  readonly hireDate?: Date;
-  readonly address?: string;
-  readonly phone?: string;
-  readonly phone2?: string;
-  readonly email?: string;
-  readonly emergencyContactName?: string;
-  readonly emergencyContactRel?: string;
-  readonly emergencyContactPhone?: string;
-  readonly notes?: string;
-  readonly appLogin?: string;
-  readonly appPass?: string;
-  readonly owner?: string;
-}
+export type UpdateDriverDto = Partial<CreateDriverDto>;
 
 export interface DriverQuerySearch {
   readonly search?: string;
@@ -81,7 +57,7 @@ export interface DriverQuerySearch {
   readonly emergencyContactPhone?: string;
   readonly appLogin?: string;
   readonly truckNumber?: number;
-  readonly owner?: string;
+  readonly owner?: Types.ObjectId;
 }
 
 export interface DriverQueryOrder
@@ -106,7 +82,7 @@ export class DriverResultDto {
       driver.driveTrucks.length > 0 &&
       driver.driveTrucks.map((truck) => TruckResultDto.fromTruckModel(truck));
     let result: DriverResultDto = {
-      id: driver._id.toString(),
+      id: driver._id,
       type: driver.type,
       fullName: driver.fullName,
       birthDate: driver.birthDate,
@@ -139,7 +115,7 @@ export class DriverResultDto {
     return result;
   }
 
-  readonly id: string;
+  readonly id: Types.ObjectId;
   readonly type: PersonType;
   readonly fullName: string;
   readonly birthDate?: Date;

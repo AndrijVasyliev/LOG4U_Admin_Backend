@@ -1,4 +1,4 @@
-import { PaginateResult } from 'mongoose';
+import { PaginateResult, Types } from 'mongoose';
 import { Facility } from './facility.schema';
 import { Query, PaginatedResultDto, GeoPointType } from '../utils/general.dto';
 
@@ -9,12 +9,7 @@ export interface CreateFacilityDto {
   readonly facilityLocation: GeoPointType;
 }
 
-export interface UpdateFacilityDto {
-  readonly name?: string;
-  readonly address?: string;
-  readonly address2?: string;
-  readonly facilityLocation?: GeoPointType;
-}
+export type UpdateFacilityDto = Partial<CreateFacilityDto>;
 
 export interface FacilityQuerySearch {
   readonly search?: string;
@@ -33,7 +28,7 @@ export interface FacilityQuery
 export class FacilityResultDto {
   static fromFacilityModel(facility: Facility): FacilityResultDto {
     return {
-      id: facility._id.toString(),
+      id: facility._id,
       name: facility.name,
       address: facility.address,
       address2: facility.address2,
@@ -41,7 +36,7 @@ export class FacilityResultDto {
     };
   }
 
-  readonly id: string;
+  readonly id: Types.ObjectId;
   readonly name: string;
   readonly address: string;
   readonly address2?: string;

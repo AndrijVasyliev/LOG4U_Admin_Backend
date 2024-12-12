@@ -1,4 +1,4 @@
-import { PaginateModel, PaginateOptions } from 'mongoose';
+import { PaginateModel, PaginateOptions, Types } from 'mongoose';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { LoggerService } from '../logger';
@@ -21,7 +21,7 @@ export class UserService {
     private readonly log: LoggerService,
   ) {}
 
-  private async findUserDocumentById(id: string): Promise<UserDocument> {
+  private async findUserDocumentById(id: Types.ObjectId): Promise<UserDocument> {
     this.log.debug(`Searching for User ${id}`);
     const user = await this.userModel.findOne({ _id: id });
     if (!user) {
@@ -49,7 +49,7 @@ export class UserService {
     return UserResultDto.fromUserModel(user);
   }
 
-  async findUserById(id: string): Promise<UserResultDto> {
+  async findUserById(id: Types.ObjectId): Promise<UserResultDto> {
     const user = await this.findUserDocumentById(id);
     return UserResultDto.fromUserModel(user);
   }
@@ -99,7 +99,7 @@ export class UserService {
   }
 
   async updateUser(
-    id: string,
+    id: Types.ObjectId,
     updateUserDto: UpdateUserDto,
   ): Promise<UserResultDto> {
     const user = await this.findUserDocumentById(id);
@@ -111,7 +111,7 @@ export class UserService {
     return UserResultDto.fromUserModel(user);
   }
 
-  async deleteUser(id: string): Promise<UserResultDto> {
+  async deleteUser(id: Types.ObjectId): Promise<UserResultDto> {
     const user = await this.findUserDocumentById(id);
 
     this.log.debug(`Deleting User ${user._id}`);

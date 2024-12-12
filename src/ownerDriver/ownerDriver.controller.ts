@@ -8,6 +8,7 @@ import {
   Patch,
   Delete,
 } from '@nestjs/common';
+import { Types } from 'mongoose';
 import {
   CreateOwnerDriverDto,
   OwnerDriverQuery,
@@ -15,7 +16,7 @@ import {
   PaginatedOwnerDriverResultDto,
   UpdateOwnerDriverDto,
 } from './ownerDriver.dto';
-import { BodyValidationPipe } from '../utils/bodyValidate.pipe';
+import { BodySchemaPipe } from '../utils/bodyValidate.pipe';
 import { OwnerDriverService } from './ownerDriver.service';
 import { LoggerService } from '../logger';
 import {
@@ -24,7 +25,7 @@ import {
   OwnerDriverQueryParamsSchema,
 } from './ownerDriver.validation';
 import { MongoObjectIdPipe } from '../utils/idValidate.pipe';
-import { QueryParamsPipe } from '../utils/queryParamsValidate.pipe';
+import { QueryParamsSchemaPipe } from '../utils/queryParamsValidate.pipe';
 import { Roles } from '../auth/auth.decorator';
 
 @Controller('ownerDriver')
@@ -37,7 +38,7 @@ export class OwnerDriverController {
 
   @Get()
   async getOwnerDrivers(
-    @Query(new QueryParamsPipe(OwnerDriverQueryParamsSchema))
+    @Query(new QueryParamsSchemaPipe(OwnerDriverQueryParamsSchema))
     ownerDriverQuery: OwnerDriverQuery,
   ): Promise<PaginatedOwnerDriverResultDto> {
     return this.ownerDriverService.getOwnerDrivers(ownerDriverQuery);
@@ -45,14 +46,14 @@ export class OwnerDriverController {
 
   @Get(':ownerDriverId')
   async getOwnerDriver(
-    @Param('ownerDriverId', MongoObjectIdPipe) ownerDriverId: string,
+    @Param('ownerDriverId', MongoObjectIdPipe) ownerDriverId: Types.ObjectId,
   ): Promise<OwnerDriverResultDto> {
     return this.ownerDriverService.findOwnerDriverById(ownerDriverId);
   }
 
   @Post()
   async createOwnerDriver(
-    @Body(new BodyValidationPipe(CreateOwnerDriverValidation))
+    @Body(new BodySchemaPipe(CreateOwnerDriverValidation))
     createOwnerDriverBodyDto: CreateOwnerDriverDto,
   ): Promise<OwnerDriverResultDto> {
     return this.ownerDriverService.createOwnerDriver(createOwnerDriverBodyDto);
@@ -60,8 +61,8 @@ export class OwnerDriverController {
 
   @Patch(':ownerDriverId')
   async updateOwnerDriver(
-    @Param('ownerDriverId', MongoObjectIdPipe) ownerDriverId: string,
-    @Body(new BodyValidationPipe(UpdateOwnerDriverValidation))
+    @Param('ownerDriverId', MongoObjectIdPipe) ownerDriverId: Types.ObjectId,
+    @Body(new BodySchemaPipe(UpdateOwnerDriverValidation))
     updateOwnerDriverBodyDto: UpdateOwnerDriverDto,
   ): Promise<OwnerDriverResultDto> {
     return this.ownerDriverService.updateOwnerDriver(
@@ -72,7 +73,7 @@ export class OwnerDriverController {
 
   @Delete(':ownerDriverId')
   async deleteOwnerDriver(
-    @Param('ownerDriverId', MongoObjectIdPipe) ownerDriverId: string,
+    @Param('ownerDriverId', MongoObjectIdPipe) ownerDriverId: Types.ObjectId,
   ) {
     return this.ownerDriverService.deleteOwnerDriver(ownerDriverId);
   }

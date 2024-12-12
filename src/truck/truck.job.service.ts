@@ -161,7 +161,7 @@ export class TruckJobService
           `Found truck: ${truck._id} with location updated ${truck.locationUpdatedAt}`,
         );
         wasFound = true;
-        const driverId = truck.driver?._id.toString();
+        const driverId = truck.driver?._id;
         if (driverId) {
           const newPushMessage = await this.pushService.createPush({
             to: driverId,

@@ -8,6 +8,7 @@ import {
   Patch,
   Delete,
 } from '@nestjs/common';
+import { Types } from 'mongoose';
 import {
   CreateEmailDto,
   EmailQuery,
@@ -25,8 +26,8 @@ import {
 } from './email.validation';
 import { Roles } from '../auth/auth.decorator';
 import { LoggerService } from '../logger';
-import { BodyValidationPipe } from '../utils/bodyValidate.pipe';
-import { QueryParamsPipe } from '../utils/queryParamsValidate.pipe';
+import { BodySchemaPipe } from '../utils/bodyValidate.pipe';
+import { QueryParamsSchemaPipe } from '../utils/queryParamsValidate.pipe';
 import { MongoObjectIdPipe } from '../utils/idValidate.pipe';
 
 @Controller('email')
@@ -39,7 +40,7 @@ export class EmailController {
 
   @Post('send')
   async sendMail(
-    @Body(new BodyValidationPipe(SendEmailValidation))
+    @Body(new BodySchemaPipe(SendEmailValidation))
     sendEmailBodyDto: SendEmailDto,
   ): Promise<Record<string, any>> {
     return this.emailService.sendMail(sendEmailBodyDto);
@@ -47,7 +48,7 @@ export class EmailController {
 
   @Get()
   async getEmails(
-    @Query(new QueryParamsPipe(EmailQueryParamsSchema))
+    @Query(new QueryParamsSchemaPipe(EmailQueryParamsSchema))
     emailQuery: EmailQuery,
   ): Promise<PaginatedEmailResultDto> {
     return this.emailService.getEmails(emailQuery);
@@ -55,14 +56,14 @@ export class EmailController {
 
   @Get(':emailId')
   async getEmail(
-    @Param('emailId', MongoObjectIdPipe) emailId: string,
+    @Param('emailId', MongoObjectIdPipe) emailId: Types.ObjectId,
   ): Promise<EmailResultDto> {
     return this.emailService.findEmailById(emailId);
   }
 
   @Post()
   async createEmail(
-    @Body(new BodyValidationPipe(CreateEmailValidation))
+    @Body(new BodySchemaPipe(CreateEmailValidation))
     createEmailBodyDto: CreateEmailDto,
   ): Promise<EmailResultDto> {
     return this.emailService.createEmail(createEmailBodyDto);
@@ -70,15 +71,15 @@ export class EmailController {
 
   @Patch(':emailId')
   async updateEmail(
-    @Param('emailId', MongoObjectIdPipe) emailId: string,
-    @Body(new BodyValidationPipe(UpdateEmailValidation))
+    @Param('emailId', MongoObjectIdPipe) emailId: Types.ObjectId,
+    @Body(new BodySchemaPipe(UpdateEmailValidation))
     updateEmailBodyDto: UpdateEmailDto,
   ): Promise<EmailResultDto> {
     return this.emailService.updateEmail(emailId, updateEmailBodyDto);
   }
 
   @Delete(':emailId')
-  async deleteEmail(@Param('emailId', MongoObjectIdPipe) emailId: string) {
+  async deleteEmail(@Param('emailId', MongoObjectIdPipe) emailId: Types.ObjectId) {
     return this.emailService.deleteEmail(emailId);
   }
 }

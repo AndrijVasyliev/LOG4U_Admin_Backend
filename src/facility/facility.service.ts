@@ -1,4 +1,4 @@
-import { PaginateModel, PaginateOptions } from 'mongoose';
+import { PaginateModel, PaginateOptions, Types } from 'mongoose';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { LoggerService } from '../logger';
@@ -22,7 +22,7 @@ export class FacilityService {
   ) {}
 
   private async findFacilityDocumentById(
-    id: string,
+    id: Types.ObjectId,
   ): Promise<FacilityDocument> {
     this.log.debug(`Searching for Facility ${id}`);
     const facility = await this.facilityModel.findOne({ _id: id });
@@ -34,7 +34,7 @@ export class FacilityService {
     return facility;
   }
 
-  async findFacilityById(id: string): Promise<FacilityResultDto> {
+  async findFacilityById(id: Types.ObjectId): Promise<FacilityResultDto> {
     const facility = await this.findFacilityDocumentById(id);
     return FacilityResultDto.fromFacilityModel(facility);
   }
@@ -100,7 +100,7 @@ export class FacilityService {
   }
 
   async updateFacility(
-    id: string,
+    id: Types.ObjectId,
     updateFacilityDto: UpdateFacilityDto,
   ): Promise<FacilityResultDto> {
     const facility = await this.findFacilityDocumentById(id);
@@ -113,7 +113,7 @@ export class FacilityService {
     return FacilityResultDto.fromFacilityModel(facility);
   }
 
-  async deleteFacility(id: string): Promise<FacilityResultDto> {
+  async deleteFacility(id: Types.ObjectId): Promise<FacilityResultDto> {
     const facility = await this.findFacilityDocumentById(id);
 
     this.log.debug(`Deleting Facility ${facility._id}`);

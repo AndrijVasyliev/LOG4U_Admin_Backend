@@ -10,6 +10,7 @@ import {
   Delete,
 } from '@nestjs/common';
 import { Request } from 'express';
+import { Types } from 'mongoose';
 import {
   CreateUserDto,
   UserQuery,
@@ -17,7 +18,7 @@ import {
   PaginatedUserResultDto,
   UpdateUserDto,
 } from './user.dto';
-import { BodyValidationPipe } from '../utils/bodyValidate.pipe';
+import { BodySchemaPipe } from '../utils/bodyValidate.pipe';
 import { UserService } from './user.service';
 import { LoggerService } from '../logger';
 import {
@@ -26,7 +27,7 @@ import {
   UserQueryParamsSchema,
 } from './user.validation';
 import { MongoObjectIdPipe } from '../utils/idValidate.pipe';
-import { QueryParamsPipe } from '../utils/queryParamsValidate.pipe';
+import { QueryParamsSchemaPipe } from '../utils/queryParamsValidate.pipe';
 import { Roles } from '../auth/auth.decorator';
 
 @Controller('user')
@@ -47,7 +48,7 @@ export class UserController {
 
   @Get()
   async getUsers(
-    @Query(new QueryParamsPipe(UserQueryParamsSchema))
+    @Query(new QueryParamsSchemaPipe(UserQueryParamsSchema))
     userQuery: UserQuery,
   ): Promise<PaginatedUserResultDto> {
     return this.userService.getUsers(userQuery);
@@ -55,7 +56,7 @@ export class UserController {
 
   @Get(':userId')
   async getUser(
-    @Param('userId', MongoObjectIdPipe) userId: string,
+    @Param('userId', MongoObjectIdPipe) userId: Types.ObjectId,
   ): Promise<UserResultDto> {
     return this.userService.findUserById(userId);
   }
@@ -63,7 +64,7 @@ export class UserController {
   @Post()
   @Roles('Super Admin')
   async createUser(
-    @Body(new BodyValidationPipe(CreateUserValidation))
+    @Body(new BodySchemaPipe(CreateUserValidation))
     createUserBodyDto: CreateUserDto,
   ): Promise<UserResultDto> {
     return this.userService.createUser(createUserBodyDto);
@@ -72,8 +73,8 @@ export class UserController {
   @Patch(':userId')
   @Roles('Super Admin')
   async updateUser(
-    @Param('userId', MongoObjectIdPipe) userId: string,
-    @Body(new BodyValidationPipe(UpdateUserValidation))
+    @Param('userId', MongoObjectIdPipe) userId: Types.ObjectId,
+    @Body(new BodySchemaPipe(UpdateUserValidation))
     updateUserBodyDto: UpdateUserDto,
   ): Promise<UserResultDto> {
     return this.userService.updateUser(userId, updateUserBodyDto);
@@ -81,7 +82,7 @@ export class UserController {
 
   @Delete(':userId')
   @Roles('Super Admin')
-  async deleteUser(@Param('userId', MongoObjectIdPipe) userId: string) {
+  async deleteUser(@Param('userId', MongoObjectIdPipe) userId: Types.ObjectId) {
     return this.userService.deleteUser(userId);
   }
 }

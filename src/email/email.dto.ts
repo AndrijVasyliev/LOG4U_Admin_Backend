@@ -1,9 +1,8 @@
-import { ObjectId, PaginateResult } from 'mongoose';
+import { PaginateResult, Types } from 'mongoose';
 import { Email, To } from './email.schema';
 import {
   EmailState,
   EmailToType,
-  LoadStatus,
   PaginatedResultDto,
   Query,
 } from '../utils/general.dto';
@@ -102,7 +101,7 @@ export class EmailResultDto {
   static fromEmailModel(email: Email): EmailResultDto {
     const to = email.to && email.to.map((to) => ToResultDto.fromToModel(to));
     return {
-      id: email._id.toString(),
+      id: email._id,
       state: email.state,
       from: email.from,
       to: to,
@@ -115,7 +114,7 @@ export class EmailResultDto {
     };
   }
 
-  readonly id: string;
+  readonly id: Types.ObjectId;
   readonly state: EmailState;
   readonly from: string;
   readonly to: ToResultDto[];

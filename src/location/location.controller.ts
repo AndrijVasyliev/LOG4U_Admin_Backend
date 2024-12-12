@@ -13,6 +13,7 @@ import {
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import * as readline from 'node:readline';
+import { Types } from 'mongoose';
 import {
   CreateLocationDto,
   LocationQuery,
@@ -20,7 +21,7 @@ import {
   PaginatedLocationResultDto,
   UpdateLocationDto,
 } from './location.dto';
-import { BodyValidationPipe } from '../utils/bodyValidate.pipe';
+import { BodySchemaPipe } from '../utils/bodyValidate.pipe';
 import { LocationService } from './location.service';
 import { LoggerService } from '../logger';
 import {
@@ -29,7 +30,7 @@ import {
   LocationQueryParamsSchema,
 } from './location.validation';
 import { MongoObjectIdPipe } from '../utils/idValidate.pipe';
-import { QueryParamsPipe } from '../utils/queryParamsValidate.pipe';
+import { QueryParamsSchemaPipe } from '../utils/queryParamsValidate.pipe';
 import { Readable } from 'node:stream';
 import { Roles } from '../auth/auth.decorator';
 import { GeoPointType } from '../utils/general.dto';
@@ -44,7 +45,7 @@ export class LocationController {
 
   @Get()
   async getLocations(
-    @Query(new QueryParamsPipe(LocationQueryParamsSchema))
+    @Query(new QueryParamsSchemaPipe(LocationQueryParamsSchema))
     locationQuery: LocationQuery,
   ): Promise<PaginatedLocationResultDto> {
     return this.locationService.getLocations(locationQuery);
@@ -52,14 +53,14 @@ export class LocationController {
 
   @Get(':locationId')
   async getLocation(
-    @Param('locationId', MongoObjectIdPipe) locationId: string,
+    @Param('locationId', MongoObjectIdPipe) locationId: Types.ObjectId,
   ): Promise<LocationResultDto> {
     return this.locationService.findLocationById(locationId);
   }
 
   @Post()
   async createLocation(
-    @Body(new BodyValidationPipe(CreateLocationValidation))
+    @Body(new BodySchemaPipe(CreateLocationValidation))
     createLocationBodyDto: CreateLocationDto,
   ): Promise<LocationResultDto> {
     return this.locationService.createLocation(createLocationBodyDto);
@@ -184,8 +185,8 @@ export class LocationController {
 
   @Patch(':locationId')
   async updateLocation(
-    @Param('locationId', MongoObjectIdPipe) locationId: string,
-    @Body(new BodyValidationPipe(UpdateLocationValidation))
+    @Param('locationId', MongoObjectIdPipe) locationId: Types.ObjectId,
+    @Body(new BodySchemaPipe(UpdateLocationValidation))
     updateLocationBodyDto: UpdateLocationDto,
   ): Promise<LocationResultDto> {
     return this.locationService.updateLocation(
@@ -196,7 +197,7 @@ export class LocationController {
 
   @Delete(':locationId')
   async deleteLocation(
-    @Param('locationId', MongoObjectIdPipe) locationId: string,
+    @Param('locationId', MongoObjectIdPipe) locationId: Types.ObjectId,
   ) {
     return this.locationService.deleteLocation(locationId);
   }

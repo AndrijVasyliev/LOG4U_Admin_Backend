@@ -8,6 +8,7 @@ import {
   Patch,
   Delete,
 } from '@nestjs/common';
+import { Types } from 'mongoose';
 import {
   CreateCoordinatorDto,
   CoordinatorQuery,
@@ -15,7 +16,7 @@ import {
   PaginatedCoordinatorResultDto,
   UpdateCoordinatorDto,
 } from './coordinator.dto';
-import { BodyValidationPipe } from '../utils/bodyValidate.pipe';
+import { BodySchemaPipe } from '../utils/bodyValidate.pipe';
 import { CoordinatorService } from './coordinator.service';
 import { LoggerService } from '../logger';
 import {
@@ -24,7 +25,7 @@ import {
   CoordinatorQueryParamsSchema,
 } from './coordinator.validation';
 import { MongoObjectIdPipe } from '../utils/idValidate.pipe';
-import { QueryParamsPipe } from '../utils/queryParamsValidate.pipe';
+import { QueryParamsSchemaPipe } from '../utils/queryParamsValidate.pipe';
 import { Roles } from '../auth/auth.decorator';
 
 @Controller('coordinator')
@@ -37,7 +38,7 @@ export class CoordinatorController {
 
   @Get()
   async getCoordinators(
-    @Query(new QueryParamsPipe(CoordinatorQueryParamsSchema))
+    @Query(new QueryParamsSchemaPipe(CoordinatorQueryParamsSchema))
     coordinatorQuery: CoordinatorQuery,
   ): Promise<PaginatedCoordinatorResultDto> {
     return this.coordinatorService.getCoordinators(coordinatorQuery);
@@ -45,14 +46,14 @@ export class CoordinatorController {
 
   @Get(':coordinatorId')
   async getCoordinator(
-    @Param('coordinatorId', MongoObjectIdPipe) coordinatorId: string,
+    @Param('coordinatorId', MongoObjectIdPipe) coordinatorId: Types.ObjectId,
   ): Promise<CoordinatorResultDto> {
     return this.coordinatorService.findCoordinatorById(coordinatorId);
   }
 
   @Post()
   async createCoordinator(
-    @Body(new BodyValidationPipe(CreateCoordinatorValidation))
+    @Body(new BodySchemaPipe(CreateCoordinatorValidation))
     createCoordinatorBodyDto: CreateCoordinatorDto,
   ): Promise<CoordinatorResultDto> {
     return this.coordinatorService.createCoordinator(createCoordinatorBodyDto);
@@ -60,8 +61,8 @@ export class CoordinatorController {
 
   @Patch(':coordinatorId')
   async updateCoordinator(
-    @Param('coordinatorId', MongoObjectIdPipe) coordinatorId: string,
-    @Body(new BodyValidationPipe(UpdateCoordinatorValidation))
+    @Param('coordinatorId', MongoObjectIdPipe) coordinatorId: Types.ObjectId,
+    @Body(new BodySchemaPipe(UpdateCoordinatorValidation))
     updateCoordinatorBodyDto: UpdateCoordinatorDto,
   ): Promise<CoordinatorResultDto> {
     return this.coordinatorService.updateCoordinator(
@@ -72,7 +73,7 @@ export class CoordinatorController {
 
   @Delete(':coordinatorId')
   async deleteCoordinator(
-    @Param('coordinatorId', MongoObjectIdPipe) coordinatorId: string,
+    @Param('coordinatorId', MongoObjectIdPipe) coordinatorId: Types.ObjectId,
   ) {
     return this.coordinatorService.deleteCoordinator(coordinatorId);
   }

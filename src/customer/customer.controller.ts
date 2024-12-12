@@ -8,6 +8,7 @@ import {
   Patch,
   Delete,
 } from '@nestjs/common';
+import { Types } from 'mongoose';
 import {
   CreateCustomerDto,
   CustomerQuery,
@@ -15,7 +16,7 @@ import {
   PaginatedCustomerResultDto,
   UpdateCustomerDto,
 } from './customer.dto';
-import { BodyValidationPipe } from '../utils/bodyValidate.pipe';
+import { BodySchemaPipe } from '../utils/bodyValidate.pipe';
 import { CustomerService } from './customer.service';
 import { LoggerService } from '../logger';
 import {
@@ -24,7 +25,7 @@ import {
   CustomerQueryParamsSchema,
 } from './customer.validation';
 import { MongoObjectIdPipe } from '../utils/idValidate.pipe';
-import { QueryParamsPipe } from '../utils/queryParamsValidate.pipe';
+import { QueryParamsSchemaPipe } from '../utils/queryParamsValidate.pipe';
 import { Roles } from '../auth/auth.decorator';
 
 @Controller('customer')
@@ -37,7 +38,7 @@ export class CustomerController {
 
   @Get()
   async getCustomers(
-    @Query(new QueryParamsPipe(CustomerQueryParamsSchema))
+    @Query(new QueryParamsSchemaPipe(CustomerQueryParamsSchema))
     customerQuery: CustomerQuery,
   ): Promise<PaginatedCustomerResultDto> {
     return this.customerService.getCustomers(customerQuery);
@@ -45,7 +46,7 @@ export class CustomerController {
 
   @Get(':customerId')
   async getCustomer(
-    @Param('customerId', MongoObjectIdPipe) customerId: string,
+    @Param('customerId', MongoObjectIdPipe) customerId: Types.ObjectId,
   ): Promise<CustomerResultDto> {
     return this.customerService.findCustomerById(customerId);
   }
@@ -53,7 +54,7 @@ export class CustomerController {
   @Post()
   // @Roles('Super Admin')
   async createCustomer(
-    @Body(new BodyValidationPipe(CreateCustomerValidation))
+    @Body(new BodySchemaPipe(CreateCustomerValidation))
     createCustomerBodyDto: CreateCustomerDto,
   ): Promise<CustomerResultDto> {
     return this.customerService.createCustomer(createCustomerBodyDto);
@@ -62,8 +63,8 @@ export class CustomerController {
   @Patch(':customerId')
   // @Roles('Super Admin')
   async updateCustomer(
-    @Param('customerId', MongoObjectIdPipe) customerId: string,
-    @Body(new BodyValidationPipe(UpdateCustomerValidation))
+    @Param('customerId', MongoObjectIdPipe) customerId: Types.ObjectId,
+    @Body(new BodySchemaPipe(UpdateCustomerValidation))
     updateCustomerBodyDto: UpdateCustomerDto,
   ): Promise<CustomerResultDto> {
     return this.customerService.updateCustomer(
@@ -75,7 +76,7 @@ export class CustomerController {
   @Delete(':customerId')
   // @Roles('Super Admin')
   async deleteCustomer(
-    @Param('customerId', MongoObjectIdPipe) customerId: string,
+    @Param('customerId', MongoObjectIdPipe) customerId: Types.ObjectId,
   ) {
     return this.customerService.deleteCustomer(customerId);
   }
