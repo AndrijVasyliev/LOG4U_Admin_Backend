@@ -10,27 +10,27 @@ import {
   UNITS_OF_LENGTH,
   UNITS_OF_WEIGHT,
 } from '../utils/constants';
-import { MongoObjectIdValidation } from '../utils/idValidate.pipe';
+import { MongoObjectIdValidationSchema } from '../utils/idValidate.pipe';
 
-const TimeFrameFCFSValidation = Joi.object({
+const TimeFrameFCFSValidationSchema = Joi.object({
   type: Joi.string().valid(TimeFrameType.FCFS).required(),
   from: Joi.date().iso().required(),
   to: Joi.date().iso().min(Joi.ref('from')).required(),
 });
-const TimeFrameAPPTValidation = Joi.object({
+const TimeFrameAPPTValidationSchema = Joi.object({
   type: Joi.string().valid(TimeFrameType.APPT).required(),
   at: Joi.date().iso().required(),
 });
-const TimeFrameASAPValidation = Joi.object({
+const TimeFrameASAPValidationSchema = Joi.object({
   type: Joi.string().valid(TimeFrameType.ASAP).required(),
   at: Joi.date().iso().required(),
 });
-const TimeFrameDirectValidation = Joi.object({
+const TimeFrameDirectValidationSchema = Joi.object({
   type: Joi.string().valid(TimeFrameType.Direct).required(),
   at: Joi.date().iso().required(),
 });
 
-const FreightValidation = Joi.object({
+const FreightValidationSchema = Joi.object({
   freightId: Joi.string().required(),
   pieces: Joi.number().integer().min(1).required(),
   unitOfWeight: Joi.string()
@@ -43,71 +43,71 @@ const FreightValidation = Joi.object({
   length: Joi.number().greater(0).required(),
 });
 
-export const StopPickUpDriversInfoValidation = Joi.object({
+export const StopPickUpDriversInfoValidationSchema = Joi.object({
   driversInfoId: Joi.string().optional(),
   pieces: Joi.number().integer().min(1).required(),
   unitOfWeight: Joi.string()
     .valid(...UNITS_OF_WEIGHT)
     .required(),
   weight: Joi.number().greater(0).required(),
-  bol: MongoObjectIdValidation.required(),
+  bol: MongoObjectIdValidationSchema.required(),
   seal: Joi.string().required(),
   addressIsCorrect: Joi.boolean().required(),
 });
 
-export const StopDeliveryDriversInfoValidation = Joi.object({
+export const StopDeliveryDriversInfoValidationSchema = Joi.object({
   driversInfoId: Joi.string().optional(),
-  bol: MongoObjectIdValidation.required(),
+  bol: MongoObjectIdValidationSchema.required(),
   signedBy: Joi.string().required(),
 });
 
-const StopValidation = Joi.object({
+const StopValidationSchema = Joi.object({
   stopId: Joi.string().optional(),
-  facility: MongoObjectIdValidation.required(),
+  facility: MongoObjectIdValidationSchema.required(),
   addInfo: Joi.string().allow('').optional(),
 });
 
-const StopPickUpValidation = StopValidation.append({
+const StopPickUpValidationSchema = StopValidationSchema.append({
   type: Joi.string().valid(StopType.PickUp).required(),
-  driversInfo: Joi.array().items(StopPickUpDriversInfoValidation).optional(),
+  driversInfo: Joi.array().items(StopPickUpDriversInfoValidationSchema).optional(),
   status: Joi.string()
     .valid(...STOP_PICKUP_STATUSES)
     .optional(),
   timeFrame: Joi.alternatives(
-    TimeFrameFCFSValidation,
-    TimeFrameAPPTValidation,
-    TimeFrameASAPValidation,
+    TimeFrameFCFSValidationSchema,
+    TimeFrameAPPTValidationSchema,
+    TimeFrameASAPValidationSchema,
   ).required(),
-  freightList: Joi.array().items(FreightValidation).min(1).required(),
+  freightList: Joi.array().items(FreightValidationSchema).min(1).required(),
 });
-const StopDeliveryValidation = StopValidation.append({
+const StopDeliveryValidationSchema = StopValidationSchema.append({
   type: Joi.string().valid(StopType.Delivery).required(),
-  driversInfo: Joi.array().items(StopDeliveryDriversInfoValidation).optional(),
+  driversInfo: Joi.array().items(StopDeliveryDriversInfoValidationSchema).optional(),
   status: Joi.string()
     .valid(...STOP_DELIVERY_STATUSES)
     .optional(),
   timeFrame: Joi.alternatives(
-    TimeFrameFCFSValidation,
-    TimeFrameAPPTValidation,
-    TimeFrameDirectValidation,
+    TimeFrameFCFSValidationSchema,
+    TimeFrameAPPTValidationSchema,
+    TimeFrameDirectValidationSchema,
   ).required(),
   bolList: Joi.array()
-    .items(MongoObjectIdValidation.required())
+    .items(MongoObjectIdValidationSchema.required())
     .min(1)
     .required(),
 });
 
-export const CreateLoadValidation = Joi.object({
+export const CreateLoadValidationSchema = Joi.object({
   ref: Joi.array().items(Joi.string().required()).min(1).max(3).required(),
   status: Joi.string()
     .valid(...LOAD_STATUSES)
     .required(),
   stops: Joi.array()
-    .ordered(StopPickUpValidation.required())
-    .items(StopPickUpValidation, StopDeliveryValidation.required())
+    .ordered(StopPickUpValidationSchema.required())
+    .items(StopPickUpValidationSchema, StopDeliveryValidationSchema.required())
     .custom((value: Stops) => {
       const lastItem = value[value.length - 1];
-      const validationResult = StopDeliveryValidation.validate(lastItem);
+      const validationResult = StopDeliveryValidationSchema.validate(lastItem);
       if (validationResult.error) {
         throw validationResult.error;
       }
@@ -212,16 +212,16 @@ export const CreateLoadValidation = Joi.object({
   rate: Joi.number().min(0).optional(),
   totalCharges: Joi.number().min(0).required(),
   currency: Joi.string().required(),
-  bookedByUser: MongoObjectIdValidation.required(),
+  bookedByUser: MongoObjectIdValidationSchema.required(),
   bookedByCompany: Joi.string().allow('').optional(),
-  assignTo: Joi.array().items(MongoObjectIdValidation).min(1).required(),
+  assignTo: Joi.array().items(MongoObjectIdValidationSchema).min(1).required(),
   checkInAs: Joi.string().allow('').optional(),
-  truck: Joi.alternatives(null, MongoObjectIdValidation).optional(),
-  bookedWith: MongoObjectIdValidation.required(),
+  truck: Joi.alternatives(null, MongoObjectIdValidationSchema).optional(),
+  bookedWith: MongoObjectIdValidationSchema.required(),
 });
 
-export const UpdateLoadValidation = CreateLoadValidation.fork(
-  Object.keys(CreateLoadValidation.describe().keys),
+export const UpdateLoadValidationSchema = CreateLoadValidationSchema.fork(
+  Object.keys(CreateLoadValidationSchema.describe().keys),
   (schema) => schema.optional(),
 );
 

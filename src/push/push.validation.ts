@@ -1,8 +1,8 @@
 import * as Joi from 'joi';
-import { MongoObjectIdValidation } from '../utils/idValidate.pipe';
+import { MongoObjectIdValidationSchema } from '../utils/idValidate.pipe';
 import { ORDER_VALUES, PUSH_STATES } from '../utils/constants';
 
-export const SendPushValidation = Joi.object({
+export const SendPushValidationSchema = Joi.object({
   to: Joi.string().required(),
   sound: Joi.string().optional(),
   title: Joi.string().optional(),
@@ -19,8 +19,8 @@ export const SendPushValidation = Joi.object({
   _contentAvailable: Joi.boolean().optional(),
 });
 
-export const CreatePushValidation = Joi.object({
-  to: MongoObjectIdValidation.required(),
+export const CreatePushValidationSchema = Joi.object({
+  to: MongoObjectIdValidationSchema.required(),
   title: Joi.string().optional(),
   subtitle: Joi.string().optional(),
   body: Joi.string().optional(),
@@ -28,7 +28,7 @@ export const CreatePushValidation = Joi.object({
   badge: Joi.number().optional(),
 });
 
-export const UpdatePushValidation = Joi.object({
+export const UpdatePushValidationSchema = Joi.object({
   state: Joi.string()
     .valid(...PUSH_STATES)
     .optional(),

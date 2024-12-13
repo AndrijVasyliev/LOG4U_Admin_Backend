@@ -1,7 +1,7 @@
 import * as Joi from 'joi';
 import { LANG_PRIORITIES, ORDER_VALUES } from '../utils/constants';
 
-export const CreateOwnerValidation = Joi.object({
+export const CreateOwnerValidationSchema = Joi.object({
   fullName: Joi.string().required(),
   birthDate: Joi.date().iso().required(),
   citizenship: Joi.string().required(),
@@ -26,8 +26,8 @@ export const CreateOwnerValidation = Joi.object({
   appPass: Joi.string().allow('').optional(),
 });
 
-export const UpdateOwnerValidation = CreateOwnerValidation.fork(
-  Object.keys(CreateOwnerValidation.describe().keys),
+export const UpdateOwnerValidationSchema = CreateOwnerValidationSchema.fork(
+  Object.keys(CreateOwnerValidationSchema.describe().keys),
   (schema) => schema.optional(),
 );
 

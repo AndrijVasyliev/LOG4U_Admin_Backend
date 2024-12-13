@@ -20,8 +20,8 @@ import { BodySchemaPipe } from '../utils/bodyValidate.pipe';
 import { FacilityService } from './facility.service';
 import { LoggerService } from '../logger';
 import {
-  CreateFacilityValidation,
-  UpdateFacilityValidation,
+  CreateFacilityValidationSchema,
+  UpdateFacilityValidationSchema,
   FacilityQueryParamsSchema,
 } from './facility.validation';
 import { MongoObjectIdPipe } from '../utils/idValidate.pipe';
@@ -54,7 +54,7 @@ export class FacilityController {
   @Post()
   // @Roles('Super Admin')
   async createFacility(
-    @Body(new BodySchemaPipe(CreateFacilityValidation))
+    @Body(new BodySchemaPipe(CreateFacilityValidationSchema))
     createFacilityBodyDto: CreateFacilityDto,
   ): Promise<FacilityResultDto> {
     return this.facilityService.createFacility(createFacilityBodyDto);
@@ -64,7 +64,7 @@ export class FacilityController {
   // @Roles('Super Admin')
   async updateFacility(
     @Param('facilityId', MongoObjectIdPipe) facilityId: Types.ObjectId,
-    @Body(new BodySchemaPipe(UpdateFacilityValidation))
+    @Body(new BodySchemaPipe(UpdateFacilityValidationSchema))
     updateFacilityBodyDto: UpdateFacilityDto,
   ): Promise<FacilityResultDto> {
     return this.facilityService.updateFacility(

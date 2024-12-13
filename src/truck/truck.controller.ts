@@ -24,7 +24,7 @@ import { SetUpdatedByToAdmin } from './truck.transformation';
 import { LoggerService } from '../logger';
 import {
   CreateTruckValidationSchema,
-  UpdateTruckValidation,
+  UpdateTruckValidationSchema,
   TruckQueryParamsSchema,
 } from './truck.validation';
 import { MongoObjectIdPipe } from '../utils/idValidate.pipe';
@@ -92,7 +92,7 @@ export class TruckController {
     @Req() request: Request,
     @Param('truckId', MongoObjectIdPipe) truckId: Types.ObjectId,
     @Body(
-      new BodySchemaPipe(UpdateTruckValidation),
+      new BodySchemaPipe(UpdateTruckValidationSchema),
       new BodyTransformPipe(SetUpdatedByToAdmin),
     )
     updateTruckBodyDto: UpdateTruckDto,

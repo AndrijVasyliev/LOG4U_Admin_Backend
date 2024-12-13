@@ -1,7 +1,7 @@
 import * as Joi from 'joi';
 import { CUSTOMER_TYPES, ORDER_VALUES } from '../utils/constants';
 
-export const CreateCustomerValidation = Joi.object({
+export const CreateCustomerValidationSchema = Joi.object({
   name: Joi.string().required(),
   type: Joi.string()
     .valid(...CUSTOMER_TYPES)
@@ -17,8 +17,8 @@ export const CreateCustomerValidation = Joi.object({
   website: Joi.string().allow('').optional(),
 });
 
-export const UpdateCustomerValidation = CreateCustomerValidation.fork(
-  Object.keys(CreateCustomerValidation.describe().keys),
+export const UpdateCustomerValidationSchema = CreateCustomerValidationSchema.fork(
+  Object.keys(CreateCustomerValidationSchema.describe().keys),
   (schema) => schema.optional(),
 );
 

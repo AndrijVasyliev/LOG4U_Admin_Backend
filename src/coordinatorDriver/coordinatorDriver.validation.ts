@@ -1,8 +1,8 @@
 import * as Joi from 'joi';
 import { LANG_PRIORITIES, ORDER_VALUES } from '../utils/constants';
-import { MongoObjectIdValidation } from '../utils/idValidate.pipe';
+import { MongoObjectIdValidationSchema } from '../utils/idValidate.pipe';
 
-export const CreateCoordinatorDriverValidation = Joi.object({
+export const CreateCoordinatorDriverValidationSchema = Joi.object({
   fullName: Joi.string().required(),
   birthDate: Joi.date().iso().required(),
   citizenship: Joi.string().required(),
@@ -31,12 +31,12 @@ export const CreateCoordinatorDriverValidation = Joi.object({
   notes: Joi.string().allow('').optional(),
   appLogin: Joi.string().allow('').optional(),
   appPass: Joi.string().allow('').optional(),
-  owner: MongoObjectIdValidation.required(),
+  owner: MongoObjectIdValidationSchema.required(),
 });
 
-export const UpdateCoordinatorDriverValidation =
-  CreateCoordinatorDriverValidation.fork(
-    Object.keys(CreateCoordinatorDriverValidation.describe().keys),
+export const UpdateCoordinatorDriverValidationSchema =
+  CreateCoordinatorDriverValidationSchema.fork(
+    Object.keys(CreateCoordinatorDriverValidationSchema.describe().keys),
     (schema) => schema.optional(),
   );
 
@@ -66,7 +66,7 @@ export const CoordinatorDriverQueryParamsSchema = Joi.object({
   emergencyContactPhone: Joi.string().optional(),
   appLogin: Joi.string().optional(),
   truckNumber: Joi.number().optional(),
-  owner: MongoObjectIdValidation.optional(),
+  owner: MongoObjectIdValidationSchema.optional(),
 })
   .keys({
     orderby: Joi.string().valid(

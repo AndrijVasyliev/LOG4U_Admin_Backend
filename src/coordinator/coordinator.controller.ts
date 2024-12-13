@@ -20,8 +20,8 @@ import { BodySchemaPipe } from '../utils/bodyValidate.pipe';
 import { CoordinatorService } from './coordinator.service';
 import { LoggerService } from '../logger';
 import {
-  CreateCoordinatorValidation,
-  UpdateCoordinatorValidation,
+  CreateCoordinatorValidationSchema,
+  UpdateCoordinatorValidationSchema,
   CoordinatorQueryParamsSchema,
 } from './coordinator.validation';
 import { MongoObjectIdPipe } from '../utils/idValidate.pipe';
@@ -53,7 +53,7 @@ export class CoordinatorController {
 
   @Post()
   async createCoordinator(
-    @Body(new BodySchemaPipe(CreateCoordinatorValidation))
+    @Body(new BodySchemaPipe(CreateCoordinatorValidationSchema))
     createCoordinatorBodyDto: CreateCoordinatorDto,
   ): Promise<CoordinatorResultDto> {
     return this.coordinatorService.createCoordinator(createCoordinatorBodyDto);
@@ -62,7 +62,7 @@ export class CoordinatorController {
   @Patch(':coordinatorId')
   async updateCoordinator(
     @Param('coordinatorId', MongoObjectIdPipe) coordinatorId: Types.ObjectId,
-    @Body(new BodySchemaPipe(UpdateCoordinatorValidation))
+    @Body(new BodySchemaPipe(UpdateCoordinatorValidationSchema))
     updateCoordinatorBodyDto: UpdateCoordinatorDto,
   ): Promise<CoordinatorResultDto> {
     return this.coordinatorService.updateCoordinator(

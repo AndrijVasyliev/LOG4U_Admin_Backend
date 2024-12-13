@@ -22,10 +22,10 @@ import {
   UpdatePushDto,
 } from './push.dto';
 import {
-  CreatePushValidation,
+  CreatePushValidationSchema,
   PushQueryParamsSchema,
-  SendPushValidation,
-  UpdatePushValidation,
+  SendPushValidationSchema,
+  UpdatePushValidationSchema,
 } from './push.validation';
 import { PushService } from './push.service';
 import { Roles } from '../auth/auth.decorator';
@@ -44,7 +44,7 @@ export class PushController {
 
   @Post('send')
   async sendPush(
-    @Body(new BodySchemaPipe(SendPushValidation))
+    @Body(new BodySchemaPipe(SendPushValidationSchema))
     sendPushBodyDto: ExpoPushMessage & { _contentAvailable?: boolean },
   ): Promise<ExpoPushTicket[]> {
     return this.pushService.sendPush(sendPushBodyDto);
@@ -73,7 +73,7 @@ export class PushController {
 
   @Post()
   async createPush(
-    @Body(new BodySchemaPipe(CreatePushValidation))
+    @Body(new BodySchemaPipe(CreatePushValidationSchema))
     createPushBodyDto: CreatePushDto,
   ): Promise<PushResultDto> {
     return this.pushService.createPush(createPushBodyDto);
@@ -82,7 +82,7 @@ export class PushController {
   @Patch(':pushId')
   async updatePush(
     @Param('pushId', MongoObjectIdPipe) pushId: Types.ObjectId,
-    @Body(new BodySchemaPipe(UpdatePushValidation))
+    @Body(new BodySchemaPipe(UpdatePushValidationSchema))
     updatePushBodyDto: UpdatePushDto,
   ): Promise<PushResultDto> {
     return this.pushService.updatePush(pushId, updatePushBodyDto);

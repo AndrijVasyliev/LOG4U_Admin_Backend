@@ -1,7 +1,7 @@
 import * as Joi from 'joi';
 import { ADMIN_ROLES, ORDER_VALUES } from '../utils/constants';
 
-export const CreateUserValidation = Joi.object({
+export const CreateUserValidationSchema = Joi.object({
   fullName: Joi.string().required(),
   phone: Joi.string().allow('').optional(),
   userRole: Joi.string()
@@ -12,8 +12,8 @@ export const CreateUserValidation = Joi.object({
   password: Joi.string().required(),
 });
 
-export const UpdateUserValidation = CreateUserValidation.fork(
-  Object.keys(CreateUserValidation.describe().keys),
+export const UpdateUserValidationSchema = CreateUserValidationSchema.fork(
+  Object.keys(CreateUserValidationSchema.describe().keys),
   (schema) => schema.optional(),
 );
 

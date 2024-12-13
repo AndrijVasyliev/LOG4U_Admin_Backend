@@ -20,8 +20,8 @@ import { BodySchemaPipe } from '../utils/bodyValidate.pipe';
 import { OwnerDriverService } from './ownerDriver.service';
 import { LoggerService } from '../logger';
 import {
-  CreateOwnerDriverValidation,
-  UpdateOwnerDriverValidation,
+  CreateOwnerDriverValidationSchema,
+  UpdateOwnerDriverValidationSchema,
   OwnerDriverQueryParamsSchema,
 } from './ownerDriver.validation';
 import { MongoObjectIdPipe } from '../utils/idValidate.pipe';
@@ -53,7 +53,7 @@ export class OwnerDriverController {
 
   @Post()
   async createOwnerDriver(
-    @Body(new BodySchemaPipe(CreateOwnerDriverValidation))
+    @Body(new BodySchemaPipe(CreateOwnerDriverValidationSchema))
     createOwnerDriverBodyDto: CreateOwnerDriverDto,
   ): Promise<OwnerDriverResultDto> {
     return this.ownerDriverService.createOwnerDriver(createOwnerDriverBodyDto);
@@ -62,7 +62,7 @@ export class OwnerDriverController {
   @Patch(':ownerDriverId')
   async updateOwnerDriver(
     @Param('ownerDriverId', MongoObjectIdPipe) ownerDriverId: Types.ObjectId,
-    @Body(new BodySchemaPipe(UpdateOwnerDriverValidation))
+    @Body(new BodySchemaPipe(UpdateOwnerDriverValidationSchema))
     updateOwnerDriverBodyDto: UpdateOwnerDriverDto,
   ): Promise<OwnerDriverResultDto> {
     return this.ownerDriverService.updateOwnerDriver(

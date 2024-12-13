@@ -18,8 +18,8 @@ import {
 } from './driver.dto';
 import { DriverService } from './driver.service';
 import {
-  CreateDriverValidation,
-  UpdateDriverValidation,
+  CreateDriverValidationSchema,
+  UpdateDriverValidationSchema,
   DriverQueryParamsSchema,
 } from './driver.validation';
 import { LoggerService } from '../logger';
@@ -53,7 +53,7 @@ export class DriverController {
 
   @Post()
   async createDriver(
-    @Body(new BodySchemaPipe(CreateDriverValidation))
+    @Body(new BodySchemaPipe(CreateDriverValidationSchema))
     createDriverBodyDto: CreateDriverDto,
   ): Promise<DriverResultDto> {
     return this.driverService.createDriver(createDriverBodyDto);
@@ -62,7 +62,7 @@ export class DriverController {
   @Patch(':driverId')
   async updateDriver(
     @Param('driverId', MongoObjectIdPipe) driverId: Types.ObjectId,
-    @Body(new BodySchemaPipe(UpdateDriverValidation))
+    @Body(new BodySchemaPipe(UpdateDriverValidationSchema))
     updateDriverBodyDto: UpdateDriverDto,
   ): Promise<DriverResultDto> {
     return this.driverService.updateDriver(driverId, updateDriverBodyDto);

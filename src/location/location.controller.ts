@@ -25,8 +25,8 @@ import { BodySchemaPipe } from '../utils/bodyValidate.pipe';
 import { LocationService } from './location.service';
 import { LoggerService } from '../logger';
 import {
-  CreateLocationValidation,
-  UpdateLocationValidation,
+  CreateLocationValidationSchema,
+  UpdateLocationValidationSchema,
   LocationQueryParamsSchema,
 } from './location.validation';
 import { MongoObjectIdPipe } from '../utils/idValidate.pipe';
@@ -60,7 +60,7 @@ export class LocationController {
 
   @Post()
   async createLocation(
-    @Body(new BodySchemaPipe(CreateLocationValidation))
+    @Body(new BodySchemaPipe(CreateLocationValidationSchema))
     createLocationBodyDto: CreateLocationDto,
   ): Promise<LocationResultDto> {
     return this.locationService.createLocation(createLocationBodyDto);
@@ -186,7 +186,7 @@ export class LocationController {
   @Patch(':locationId')
   async updateLocation(
     @Param('locationId', MongoObjectIdPipe) locationId: Types.ObjectId,
-    @Body(new BodySchemaPipe(UpdateLocationValidation))
+    @Body(new BodySchemaPipe(UpdateLocationValidationSchema))
     updateLocationBodyDto: UpdateLocationDto,
   ): Promise<LocationResultDto> {
     return this.locationService.updateLocation(

@@ -1,14 +1,14 @@
 import * as Joi from 'joi';
 import { Expo } from 'expo-server-sdk';
 import {
-  GeoPointBodyValidation,
-  LatitudeValidation,
-  LongitudeValidation,
+  GeoPointBodyValidationSchema,
+  LatitudeValidationSchema,
+  LongitudeValidationSchema,
 } from '../location/location.validation';
 import {
-  CreateLoadValidation,
-  StopDeliveryDriversInfoValidation,
-  StopPickUpDriversInfoValidation,
+  CreateLoadValidationSchema,
+  StopDeliveryDriversInfoValidationSchema,
+  StopPickUpDriversInfoValidationSchema,
 } from '../load/load.validation';
 import {
   ORDER_VALUES,
@@ -17,12 +17,12 @@ import {
   TRUCK_STATUSES,
 } from '../utils/constants';
 
-export const MobileAuthValidation = Joi.object({
+export const MobileAuthValidationSchema = Joi.object({
   force: Joi.boolean().optional(),
   deviceId: Joi.string().required(),
 });
 
-export const MobileAuthDataValidation = Joi.object({
+export const MobileAuthDataValidationSchema = Joi.object({
   deviceStatus: Joi.object().optional(),
   appPermissions: Joi.object().optional(),
   token: Joi.string()
@@ -39,49 +39,49 @@ export const MobileAuthDataValidation = Joi.object({
     .optional(),
 });
 
-export const MobileUpdateLoadValidation = CreateLoadValidation.fork(
-  Object.keys(CreateLoadValidation.describe().keys).filter(
+export const MobileUpdateLoadValidationSchema = CreateLoadValidationSchema.fork(
+  Object.keys(CreateLoadValidationSchema.describe().keys).filter(
     (key) => key !== 'stops',
   ),
   (schema) => schema.forbidden(),
 );
 
-export const MobileUpdateLoadStopPickUpStatusValidation = Joi.object({
+export const MobileUpdateLoadStopPickUpStatusValidationSchema = Joi.object({
   status: Joi.string()
     .valid(...STOP_PICKUP_STATUSES)
     .required(),
 });
 
-export const MobileUpdateLoadStopDeliveryStatusValidation = Joi.object({
+export const MobileUpdateLoadStopDeliveryStatusValidationSchema = Joi.object({
   status: Joi.string()
     .valid(...STOP_DELIVERY_STATUSES)
     .required(),
 });
 
-export const MobileSetStopPickUpDriversInfoValidation = Joi.array()
-  .items(StopPickUpDriversInfoValidation)
+export const MobileSetStopPickUpDriversInfoValidationSchema = Joi.array()
+  .items(StopPickUpDriversInfoValidationSchema)
   .required();
 
-export const MobileSetStopDeliveryDriversInfoValidation = Joi.array()
-  .items(StopDeliveryDriversInfoValidation)
+export const MobileSetStopDeliveryDriversInfoValidationSchema = Joi.array()
+  .items(StopDeliveryDriversInfoValidationSchema)
   .required();
 
-export const MobileUpdateTruckValidation = Joi.object({
-  lastLocation: GeoPointBodyValidation.optional(),
+export const MobileUpdateTruckValidationSchema = Joi.object({
+  lastLocation: GeoPointBodyValidationSchema.optional(),
   status: Joi.string()
     .valid(...TRUCK_STATUSES)
     .optional(),
-  availabilityLocation: GeoPointBodyValidation.optional(),
+  availabilityLocation: GeoPointBodyValidationSchema.optional(),
   availabilityAtLocal: Joi.date().iso().optional(),
 });
 
 export const MobileDeviceIdValidationSchema = Joi.string().required();
 
-export const MobileUpdateTruckLocationValidation = Joi.object({
+export const MobileUpdateTruckLocationValidationSchema = Joi.object({
   location: Joi.object({
     coords: Joi.object({
-      latitude: LatitudeValidation,
-      longitude: LongitudeValidation,
+      latitude: LatitudeValidationSchema,
+      longitude: LongitudeValidationSchema,
     })
       // .unknown(true)
       .options({ stripUnknown: { arrays: true, objects: true }})

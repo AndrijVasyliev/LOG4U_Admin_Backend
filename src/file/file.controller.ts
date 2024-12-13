@@ -23,7 +23,7 @@ import {
 import { BodySchemaPipe } from '../utils/bodyValidate.pipe';
 import { FileService } from './file.service';
 import { LoggerService } from '../logger';
-import { CreateFileValidation, FileQueryParamsSchema } from './file.validation';
+import { CreateFileValidationSchema, FileQueryParamsSchema } from './file.validation';
 import { MongoObjectIdPipe } from '../utils/idValidate.pipe';
 import { QueryParamsSchemaPipe } from '../utils/queryParamsValidate.pipe';
 import { Roles } from '../auth/auth.decorator';
@@ -76,7 +76,7 @@ export class FileController {
   @Post()
   @UseInterceptors(FileInterceptor('file'))
   async createFile(
-    @Body(new BodySchemaPipe(CreateFileValidation))
+    @Body(new BodySchemaPipe(CreateFileValidationSchema))
     createFileBodyDto: CreateFileDto,
     @UploadedFile() file: Express.Multer.File,
   ): Promise<FileResultDto> {

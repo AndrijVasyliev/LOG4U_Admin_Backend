@@ -1,7 +1,7 @@
 import * as Joi from 'joi';
 import { EARTH_RADIUS_MILES, ORDER_VALUES } from '../utils/constants';
 
-export const GeoPointQueryParamValidation = Joi.string()
+export const GeoPointQueryParamValidationSchema = Joi.string()
   .regex(/^-?\d+\.?\d*,-?\d+\.?\d*$/)
   .messages({
     'custom.long': 'Longitude must be between -180 and 180',
@@ -19,18 +19,19 @@ export const GeoPointQueryParamValidation = Joi.string()
     }
     return [lat, long];
   });
-export const DistanceQueryParamValidation = Joi.number()
+
+export const DistanceQueryParamValidationSchema = Joi.number()
   .min(0)
   .max(EARTH_RADIUS_MILES);
 
-export const LatitudeValidation = Joi.number().min(-90).max(90).required();
-export const LongitudeValidation = Joi.number().min(-180).max(180).required();
-export const GeoPointBodyValidation = Joi.array()
+export const LatitudeValidationSchema = Joi.number().min(-90).max(90).required();
+export const LongitudeValidationSchema = Joi.number().min(-180).max(180).required();
+export const GeoPointBodyValidationSchema = Joi.array()
   .min(2)
   .max(2)
-  .items(LatitudeValidation, LongitudeValidation);
+  .items(LatitudeValidationSchema, LongitudeValidationSchema);
 
-export const GeoLocation = Joi.object({
+export const GeoLocationValidationSchema = Joi.object({
   types: Joi.array().items(Joi.string()),
   formatted_address: Joi.string().required(),
   address_components: Joi.array().items(
@@ -49,23 +50,23 @@ export const GeoLocation = Joi.object({
   }),
   postcode_localities: Joi.array().items(Joi.string()),
   geometry: Joi.object({
-    location: GeoPointBodyValidation.required(),
+    location: GeoPointBodyValidationSchema.required(),
     location_type: Joi.string(),
     viewport: Joi.object(),
     bounds: Joi.object(),
   }).required(),
 });
 
-export const CreateLocationValidation = Joi.object({
+export const CreateLocationValidationSchema = Joi.object({
   zipCode: Joi.string().required(),
   name: Joi.string().required(),
   stateCode: Joi.string().required(),
   stateName: Joi.string().required(),
-  location: GeoPointBodyValidation.required(),
+  location: GeoPointBodyValidationSchema.required(),
 });
 
-export const UpdateLocationValidation = CreateLocationValidation.fork(
-  Object.keys(CreateLocationValidation.describe().keys),
+export const UpdateLocationValidationSchema = CreateLocationValidationSchema.fork(
+  Object.keys(CreateLocationValidationSchema.describe().keys),
   (schema) => schema.optional(),
 );
 
@@ -85,7 +86,7 @@ export const LocationQueryParamsSchema = Joi.object({
   })
   .and('orderby', 'direction')
   .keys({
-    location: GeoPointQueryParamValidation,
-    distance: DistanceQueryParamValidation,
+    location: GeoPointQueryParamValidationSchema,
+    distance: DistanceQueryParamValidationSchema,
   })
   .and('location', 'distance');

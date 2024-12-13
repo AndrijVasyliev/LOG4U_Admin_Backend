@@ -20,8 +20,8 @@ import { BodySchemaPipe } from '../utils/bodyValidate.pipe';
 import { CoordinatorDriverService } from './coordinatorDriver.service';
 import { LoggerService } from '../logger';
 import {
-  CreateCoordinatorDriverValidation,
-  UpdateCoordinatorDriverValidation,
+  CreateCoordinatorDriverValidationSchema,
+  UpdateCoordinatorDriverValidationSchema,
   CoordinatorDriverQueryParamsSchema,
 } from './coordinatorDriver.validation';
 import { MongoObjectIdPipe } from '../utils/idValidate.pipe';
@@ -58,7 +58,7 @@ export class CoordinatorDriverController {
 
   @Post()
   async createCoordinatorDriver(
-    @Body(new BodySchemaPipe(CreateCoordinatorDriverValidation))
+    @Body(new BodySchemaPipe(CreateCoordinatorDriverValidationSchema))
     createCoordinatorDriverBodyDto: CreateCoordinatorDriverDto,
   ): Promise<CoordinatorDriverResultDto> {
     return this.coordinatorDriverService.createCoordinatorDriver(
@@ -70,7 +70,7 @@ export class CoordinatorDriverController {
   async updateCoordinatorDriver(
     @Param('coordinatorDriverId', MongoObjectIdPipe)
     coordinatorDriverId: Types.ObjectId,
-    @Body(new BodySchemaPipe(UpdateCoordinatorDriverValidation))
+    @Body(new BodySchemaPipe(UpdateCoordinatorDriverValidationSchema))
     updateCoordinatorDriverBodyDto: UpdateCoordinatorDriverDto,
   ): Promise<CoordinatorDriverResultDto> {
     return this.coordinatorDriverService.updateCoordinatorDriver(

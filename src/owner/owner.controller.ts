@@ -20,8 +20,8 @@ import { BodySchemaPipe } from '../utils/bodyValidate.pipe';
 import { OwnerService } from './owner.service';
 import { LoggerService } from '../logger';
 import {
-  CreateOwnerValidation,
-  UpdateOwnerValidation,
+  CreateOwnerValidationSchema,
+  UpdateOwnerValidationSchema,
   OwnerQueryParamsSchema,
 } from './owner.validation';
 import { MongoObjectIdPipe } from '../utils/idValidate.pipe';
@@ -53,7 +53,7 @@ export class OwnerController {
 
   @Post()
   async createOwner(
-    @Body(new BodySchemaPipe(CreateOwnerValidation))
+    @Body(new BodySchemaPipe(CreateOwnerValidationSchema))
     createOwnerBodyDto: CreateOwnerDto,
   ): Promise<OwnerResultDto> {
     return this.ownerService.createOwner(createOwnerBodyDto);
@@ -62,7 +62,7 @@ export class OwnerController {
   @Patch(':ownerId')
   async updateOwner(
     @Param('ownerId', MongoObjectIdPipe) ownerId: Types.ObjectId,
-    @Body(new BodySchemaPipe(UpdateOwnerValidation))
+    @Body(new BodySchemaPipe(UpdateOwnerValidationSchema))
     updateOwnerBodyDto: UpdateOwnerDto,
   ): Promise<OwnerResultDto> {
     return this.ownerService.updateOwner(ownerId, updateOwnerBodyDto);

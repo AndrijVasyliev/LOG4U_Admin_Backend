@@ -20,8 +20,8 @@ import { BodySchemaPipe } from '../utils/bodyValidate.pipe';
 import { LoadService } from './load.service';
 import { LoggerService } from '../logger';
 import {
-  CreateLoadValidation,
-  UpdateLoadValidation,
+  CreateLoadValidationSchema,
+  UpdateLoadValidationSchema,
   LoadQueryParamsSchema,
 } from './load.validation';
 import { MongoObjectIdPipe } from '../utils/idValidate.pipe';
@@ -53,7 +53,7 @@ export class LoadController {
 
   @Post()
   async createLoad(
-    @Body(new BodySchemaPipe(CreateLoadValidation))
+    @Body(new BodySchemaPipe(CreateLoadValidationSchema))
     createLoadBodyDto: CreateLoadDto,
   ): Promise<LoadResultDto> {
     return this.loadService.createLoad(createLoadBodyDto);
@@ -62,7 +62,7 @@ export class LoadController {
   @Patch(':loadId')
   async updateLoad(
     @Param('loadId', MongoObjectIdPipe) loadId: Types.ObjectId,
-    @Body(new BodySchemaPipe(UpdateLoadValidation))
+    @Body(new BodySchemaPipe(UpdateLoadValidationSchema))
     updateLoadBodyDto: UpdateLoadDto,
   ): Promise<LoadResultDto> {
     return this.loadService.updateLoad(loadId, updateLoadBodyDto);

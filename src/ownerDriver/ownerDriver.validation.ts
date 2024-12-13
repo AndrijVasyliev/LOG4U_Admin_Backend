@@ -1,7 +1,7 @@
 import * as Joi from 'joi';
 import { LANG_PRIORITIES, ORDER_VALUES } from '../utils/constants';
 
-export const CreateOwnerDriverValidation = Joi.object({
+export const CreateOwnerDriverValidationSchema = Joi.object({
   fullName: Joi.string().required(),
   birthDate: Joi.date().iso().required(),
   citizenship: Joi.string().required(),
@@ -32,8 +32,8 @@ export const CreateOwnerDriverValidation = Joi.object({
   appPass: Joi.string().allow('').optional(),
 });
 
-export const UpdateOwnerDriverValidation = CreateOwnerDriverValidation.fork(
-  Object.keys(CreateOwnerDriverValidation.describe().keys),
+export const UpdateOwnerDriverValidationSchema = CreateOwnerDriverValidationSchema.fork(
+  Object.keys(CreateOwnerDriverValidationSchema.describe().keys),
   (schema) => schema.optional(),
 );
 

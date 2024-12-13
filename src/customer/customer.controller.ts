@@ -20,8 +20,8 @@ import { BodySchemaPipe } from '../utils/bodyValidate.pipe';
 import { CustomerService } from './customer.service';
 import { LoggerService } from '../logger';
 import {
-  CreateCustomerValidation,
-  UpdateCustomerValidation,
+  CreateCustomerValidationSchema,
+  UpdateCustomerValidationSchema,
   CustomerQueryParamsSchema,
 } from './customer.validation';
 import { MongoObjectIdPipe } from '../utils/idValidate.pipe';
@@ -54,7 +54,7 @@ export class CustomerController {
   @Post()
   // @Roles('Super Admin')
   async createCustomer(
-    @Body(new BodySchemaPipe(CreateCustomerValidation))
+    @Body(new BodySchemaPipe(CreateCustomerValidationSchema))
     createCustomerBodyDto: CreateCustomerDto,
   ): Promise<CustomerResultDto> {
     return this.customerService.createCustomer(createCustomerBodyDto);
@@ -64,7 +64,7 @@ export class CustomerController {
   // @Roles('Super Admin')
   async updateCustomer(
     @Param('customerId', MongoObjectIdPipe) customerId: Types.ObjectId,
-    @Body(new BodySchemaPipe(UpdateCustomerValidation))
+    @Body(new BodySchemaPipe(UpdateCustomerValidationSchema))
     updateCustomerBodyDto: UpdateCustomerDto,
   ): Promise<CustomerResultDto> {
     return this.customerService.updateCustomer(

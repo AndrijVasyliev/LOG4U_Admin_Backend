@@ -22,8 +22,8 @@ import { BodySchemaPipe } from '../utils/bodyValidate.pipe';
 import { UserService } from './user.service';
 import { LoggerService } from '../logger';
 import {
-  CreateUserValidation,
-  UpdateUserValidation,
+  CreateUserValidationSchema,
+  UpdateUserValidationSchema,
   UserQueryParamsSchema,
 } from './user.validation';
 import { MongoObjectIdPipe } from '../utils/idValidate.pipe';
@@ -64,7 +64,7 @@ export class UserController {
   @Post()
   @Roles('Super Admin')
   async createUser(
-    @Body(new BodySchemaPipe(CreateUserValidation))
+    @Body(new BodySchemaPipe(CreateUserValidationSchema))
     createUserBodyDto: CreateUserDto,
   ): Promise<UserResultDto> {
     return this.userService.createUser(createUserBodyDto);
@@ -74,7 +74,7 @@ export class UserController {
   @Roles('Super Admin')
   async updateUser(
     @Param('userId', MongoObjectIdPipe) userId: Types.ObjectId,
-    @Body(new BodySchemaPipe(UpdateUserValidation))
+    @Body(new BodySchemaPipe(UpdateUserValidationSchema))
     updateUserBodyDto: UpdateUserDto,
   ): Promise<UserResultDto> {
     return this.userService.updateUser(userId, updateUserBodyDto);

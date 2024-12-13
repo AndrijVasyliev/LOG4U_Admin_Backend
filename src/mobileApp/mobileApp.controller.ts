@@ -34,15 +34,15 @@ import { CoordinatorService } from '../coordinator/coordinator.service';
 import { LoadService } from '../load/load.service';
 import { TruckService } from '../truck/truck.service';
 import {
-  MobileAuthValidation,
-  MobileAuthDataValidation,
+  MobileAuthValidationSchema,
+  MobileAuthDataValidationSchema,
   MobileLoadQueryParamsSchema,
-  MobileUpdateTruckValidation,
-  MobileUpdateTruckLocationValidation,
-  MobileUpdateLoadStopPickUpStatusValidation,
-  MobileUpdateLoadStopDeliveryStatusValidation,
-  MobileSetStopPickUpDriversInfoValidation,
-  MobileSetStopDeliveryDriversInfoValidation,
+  MobileUpdateTruckValidationSchema,
+  MobileUpdateTruckLocationValidationSchema,
+  MobileUpdateLoadStopPickUpStatusValidationSchema,
+  MobileUpdateLoadStopDeliveryStatusValidationSchema,
+  MobileSetStopPickUpDriversInfoValidationSchema,
+  MobileSetStopDeliveryDriversInfoValidationSchema,
   MobileDeviceIdValidationSchema,
 } from './mobileApp.validation';
 import { QueryParamsSchemaPipe } from '../utils/queryParamsValidate.pipe';
@@ -73,7 +73,7 @@ export class MobileAppController {
   @Roles('Driver', 'Owner', 'OwnerDriver', 'Coordinator', 'CoordinatorDriver')
   async setAuth(
     @Req() request: Request,
-    @Body(new BodySchemaPipe(MobileAuthValidation))
+    @Body(new BodySchemaPipe(MobileAuthValidationSchema))
     authDto: AuthDto,
   ): Promise<PersonAuthResultDto> {
     const { user: person } = request as unknown as {
@@ -98,7 +98,7 @@ export class MobileAppController {
   @Roles('Driver', 'Owner', 'OwnerDriver', 'Coordinator', 'CoordinatorDriver')
   async setAppData(
     @Req() request: Request,
-    @Body(new BodySchemaPipe(MobileAuthDataValidation))
+    @Body(new BodySchemaPipe(MobileAuthDataValidationSchema))
     authDataDto: AuthDataDto,
   ): Promise<void> {
     const { user: person } = request as unknown as {
@@ -220,7 +220,7 @@ export class MobileAppController {
     @Req() request: Request,
     @Param('loadId', MongoObjectIdPipe) loadId: Types.ObjectId,
     @Param('stopId', MongoObjectIdPipe) stopId: Types.ObjectId,
-    @Body(new BodySchemaPipe(MobileUpdateLoadStopPickUpStatusValidation))
+    @Body(new BodySchemaPipe(MobileUpdateLoadStopPickUpStatusValidationSchema))
     updateLoadStopPickUpStatusBodyDto: UpdateLoadStopPickUpStatusDto,
   ): Promise<LoadResultDto> {
     const { user: person } = request as unknown as {
@@ -245,7 +245,7 @@ export class MobileAppController {
     @Req() request: Request,
     @Param('loadId', MongoObjectIdPipe) loadId: Types.ObjectId,
     @Param('stopId', MongoObjectIdPipe) stopId: Types.ObjectId,
-    @Body(new BodySchemaPipe(MobileUpdateLoadStopDeliveryStatusValidation))
+    @Body(new BodySchemaPipe(MobileUpdateLoadStopDeliveryStatusValidationSchema))
     updateLoadStopDeliveryStatusBodyDto: UpdateLoadStopDeliveryStatusDto,
   ): Promise<LoadResultDto> {
     const { user: person } = request as unknown as {
@@ -270,7 +270,7 @@ export class MobileAppController {
     @Req() request: Request,
     @Param('loadId', MongoObjectIdPipe) loadId: Types.ObjectId,
     @Param('stopId', MongoObjectIdPipe) stopId: Types.ObjectId,
-    @Body(new BodySchemaPipe(MobileSetStopPickUpDriversInfoValidation))
+    @Body(new BodySchemaPipe(MobileSetStopPickUpDriversInfoValidationSchema))
     setStopPickUpDriversInfoDto: CreateStopPickUpDriversInfoDto[],
   ): Promise<LoadResultDto> {
     const { user: person } = request as unknown as {
@@ -295,7 +295,7 @@ export class MobileAppController {
     @Req() request: Request,
     @Param('loadId', MongoObjectIdPipe) loadId: Types.ObjectId,
     @Param('stopId', MongoObjectIdPipe) stopId: Types.ObjectId,
-    @Body(new BodySchemaPipe(MobileSetStopDeliveryDriversInfoValidation))
+    @Body(new BodySchemaPipe(MobileSetStopDeliveryDriversInfoValidationSchema))
     setStopDeliveryDriversInfoDto: CreateStopDeliveryDriversInfoDto[],
   ): Promise<LoadResultDto> {
     const { user: person } = request as unknown as {
@@ -320,7 +320,7 @@ export class MobileAppController {
     @Req() request: Request,
     @Param('truckId', MongoObjectIdPipe) truckId: Types.ObjectId,
     @Body(
-      new BodySchemaPipe(MobileUpdateTruckValidation),
+      new BodySchemaPipe(MobileUpdateTruckValidationSchema),
       new BodyTransformPipe(SetUpdatedByToApp),
     )
     updateTruckBodyDto: UpdateTruckDto,
@@ -352,7 +352,7 @@ export class MobileAppController {
     )
     truckId: Types.ObjectId,
     @Body(
-      new BodySchemaPipe(MobileUpdateTruckLocationValidation),
+      new BodySchemaPipe(MobileUpdateTruckLocationValidationSchema),
       new BodyTransformPipe(TransformToUpdateDto),
       new BodyTransformPipe(SetUpdatedByToAdmin),
     )

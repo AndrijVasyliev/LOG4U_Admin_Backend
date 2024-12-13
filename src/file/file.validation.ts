@@ -1,5 +1,5 @@
 import * as Joi from 'joi';
-import { MongoObjectIdValidation } from '../utils/idValidate.pipe';
+import { MongoObjectIdValidationSchema } from '../utils/idValidate.pipe';
 import {
   FILE_OF_TYPES,
   MAX_FILE_COMMENT_LENGTH,
@@ -7,8 +7,8 @@ import {
   ORDER_VALUES,
 } from '../utils/constants';
 
-export const CreateFileValidation = Joi.object({
-  linkedTo: MongoObjectIdValidation.required(),
+export const CreateFileValidationSchema = Joi.object({
+  linkedTo: MongoObjectIdValidationSchema.required(),
   fileOf: Joi.string()
     .valid(...FILE_OF_TYPES)
     .required(),
@@ -41,7 +41,7 @@ export const FileQueryParamsSchema = Joi.object({
   })
   .and('orderby', 'direction')
   .keys({
-    linkedTo: MongoObjectIdValidation.required(),
+    linkedTo: MongoObjectIdValidationSchema.required(),
     fileOf: Joi.string()
       .valid(...FILE_OF_TYPES)
       .optional(),

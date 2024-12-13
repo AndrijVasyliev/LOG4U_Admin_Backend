@@ -1,8 +1,8 @@
 import * as Joi from 'joi';
-import { MongoObjectIdValidation } from '../utils/idValidate.pipe';
+import { MongoObjectIdValidationSchema } from '../utils/idValidate.pipe';
 import { EMAIL_STATES, EMAIL_TO_TYPES, ORDER_VALUES } from '../utils/constants';
 
-export const SendEmailValidation = Joi.object({
+export const SendEmailValidationSchema = Joi.object({
   from: Joi.string().required(),
   to: Joi.string().required(),
   subject: Joi.string().required(),
@@ -10,12 +10,12 @@ export const SendEmailValidation = Joi.object({
   html: Joi.string().optional(),
 });
 
-export const CreateEmailValidation = Joi.object({
+export const CreateEmailValidationSchema = Joi.object({
   from: Joi.string().required(),
   to: Joi.array()
     .items(
       Joi.object({
-        to: MongoObjectIdValidation.required(),
+        to: MongoObjectIdValidationSchema.required(),
         toType: Joi.string()
           .valid(...EMAIL_TO_TYPES)
           .required(),
@@ -28,7 +28,7 @@ export const CreateEmailValidation = Joi.object({
   html: Joi.string().optional(),
 });
 
-export const UpdateEmailValidation = Joi.object({
+export const UpdateEmailValidationSchema = Joi.object({
   state: Joi.string()
     .valid(...EMAIL_STATES)
     .optional(),

@@ -1,12 +1,12 @@
 import * as Joi from 'joi';
 
-export const UpdatePersonSettingsValidation = Joi.object({
+export const UpdatePersonSettingsValidationSchema = Joi.object({
   isAppInDebugMode: Joi.boolean().optional(),
   useGoogleMaps: Joi.boolean().optional(),
   locationOptions: Joi.object().optional(),
 });
 /*
-export const PersonQueryParamsSchema = Joi.object({
+export const PersonQueryParamsSchemaSchema = Joi.object({
   offset: Joi.number().integer().min(0).optional(),
   limit: Joi.number().integer().min(1).optional(),
   search: Joi.string().optional(),

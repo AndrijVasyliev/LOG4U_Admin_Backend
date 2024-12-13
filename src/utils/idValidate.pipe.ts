@@ -3,7 +3,7 @@ import { Types } from 'mongoose';
 import { PipeTransform, Injectable, BadRequestException } from '@nestjs/common';
 import { VALIDATION_ERROR } from './constants';
 
-export const MongoObjectIdValidation = Joi.string()
+export const MongoObjectIdValidationSchema = Joi.string()
   .messages({
     'custom.notValidObjectId': 'Value is not valid ObjectId',
   })
@@ -19,7 +19,7 @@ export const MongoObjectIdValidation = Joi.string()
 @Injectable()
 export class MongoObjectIdPipe implements PipeTransform<any, Types.ObjectId> {
   transform(value: any): Types.ObjectId {
-    const { error } = MongoObjectIdValidation.validate(value);
+    const { error } = MongoObjectIdValidationSchema.validate(value);
 
     if (error) {
       throw new BadRequestException({

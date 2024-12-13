@@ -7,11 +7,11 @@ import {
   TRUCK_STATUSES,
   TRUCK_TYPES,
 } from '../utils/constants';
-import { MongoObjectIdValidation } from '../utils/idValidate.pipe';
+import { MongoObjectIdValidationSchema } from '../utils/idValidate.pipe';
 import {
-  GeoPointQueryParamValidation,
-  DistanceQueryParamValidation,
-  GeoPointBodyValidation,
+  GeoPointQueryParamValidationSchema,
+  DistanceQueryParamValidationSchema,
+  GeoPointBodyValidationSchema,
 } from '../location/location.validation';
 
 export const CreateTruckValidationSchema = Joi.object({
@@ -19,8 +19,8 @@ export const CreateTruckValidationSchema = Joi.object({
   status: Joi.string()
     .valid(...TRUCK_STATUSES)
     .required(),
-  lastLocation: GeoPointBodyValidation.optional(),
-  availabilityLocation: GeoPointBodyValidation.optional(),
+  lastLocation: GeoPointBodyValidationSchema.optional(),
+  availabilityLocation: GeoPointBodyValidationSchema.optional(),
   availabilityAtLocal: Joi.date().iso().optional(),
   crossborder: Joi.string()
     .valid(...TRUCK_CROSSBORDERS)
@@ -48,13 +48,13 @@ export const CreateTruckValidationSchema = Joi.object({
   licencePlate: Joi.string().required(),
   insideDims: Joi.string().required(),
   doorDims: Joi.string().required(),
-  owner: MongoObjectIdValidation.required(),
-  coordinator: Joi.alternatives(null, MongoObjectIdValidation).optional(),
-  driver: Joi.alternatives(null, MongoObjectIdValidation).optional(),
+  owner: MongoObjectIdValidationSchema.required(),
+  coordinator: Joi.alternatives(null, MongoObjectIdValidationSchema).optional(),
+  driver: Joi.alternatives(null, MongoObjectIdValidationSchema).optional(),
   reservedAt: Joi.alternatives(null, Joi.date().iso().required()).optional(),
 });
 
-export const UpdateTruckValidation = CreateTruckValidationSchema.fork(
+export const UpdateTruckValidationSchema = CreateTruckValidationSchema.fork(
   Object.keys(CreateTruckValidationSchema.describe().keys),
   (schema) => schema.optional(),
 );
@@ -132,7 +132,7 @@ export const TruckQueryParamsSchema = Joi.object({
   })
   .and('orderby', 'direction')
   .keys({
-    lastLocation: GeoPointQueryParamValidation,
-    distance: DistanceQueryParamValidation,
+    lastLocation: GeoPointQueryParamValidationSchema,
+    distance: DistanceQueryParamValidationSchema,
   })
   .and('lastLocation', 'distance');

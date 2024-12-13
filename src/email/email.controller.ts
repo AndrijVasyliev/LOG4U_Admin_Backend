@@ -19,10 +19,10 @@ import {
 } from './email.dto';
 import { EmailService } from './email.service';
 import {
-  CreateEmailValidation,
+  CreateEmailValidationSchema,
   EmailQueryParamsSchema,
-  SendEmailValidation,
-  UpdateEmailValidation,
+  SendEmailValidationSchema,
+  UpdateEmailValidationSchema,
 } from './email.validation';
 import { Roles } from '../auth/auth.decorator';
 import { LoggerService } from '../logger';
@@ -40,7 +40,7 @@ export class EmailController {
 
   @Post('send')
   async sendMail(
-    @Body(new BodySchemaPipe(SendEmailValidation))
+    @Body(new BodySchemaPipe(SendEmailValidationSchema))
     sendEmailBodyDto: SendEmailDto,
   ): Promise<Record<string, any>> {
     return this.emailService.sendMail(sendEmailBodyDto);
@@ -63,7 +63,7 @@ export class EmailController {
 
   @Post()
   async createEmail(
-    @Body(new BodySchemaPipe(CreateEmailValidation))
+    @Body(new BodySchemaPipe(CreateEmailValidationSchema))
     createEmailBodyDto: CreateEmailDto,
   ): Promise<EmailResultDto> {
     return this.emailService.createEmail(createEmailBodyDto);
@@ -72,7 +72,7 @@ export class EmailController {
   @Patch(':emailId')
   async updateEmail(
     @Param('emailId', MongoObjectIdPipe) emailId: Types.ObjectId,
-    @Body(new BodySchemaPipe(UpdateEmailValidation))
+    @Body(new BodySchemaPipe(UpdateEmailValidationSchema))
     updateEmailBodyDto: UpdateEmailDto,
   ): Promise<EmailResultDto> {
     return this.emailService.updateEmail(emailId, updateEmailBodyDto);

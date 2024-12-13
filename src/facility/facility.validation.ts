@@ -1,20 +1,20 @@
 import * as Joi from 'joi';
 import {
-  DistanceQueryParamValidation,
-  GeoPointBodyValidation,
-  GeoPointQueryParamValidation,
+  DistanceQueryParamValidationSchema,
+  GeoPointBodyValidationSchema,
+  GeoPointQueryParamValidationSchema,
 } from '../location/location.validation';
 import { ORDER_VALUES } from '../utils/constants';
 
-export const CreateFacilityValidation = Joi.object({
+export const CreateFacilityValidationSchema = Joi.object({
   name: Joi.string().required(),
   address: Joi.string().required(),
   address2: Joi.string().allow('').optional(),
-  facilityLocation: GeoPointBodyValidation.required(),
+  facilityLocation: GeoPointBodyValidationSchema.required(),
 });
 
-export const UpdateFacilityValidation = CreateFacilityValidation.fork(
-  Object.keys(CreateFacilityValidation.describe().keys),
+export const UpdateFacilityValidationSchema = CreateFacilityValidationSchema.fork(
+  Object.keys(CreateFacilityValidationSchema.describe().keys),
   (schema) => schema.optional(),
 );
 
@@ -32,7 +32,7 @@ export const FacilityQueryParamsSchema = Joi.object({
   })
   .and('orderby', 'direction')
   .keys({
-    facilityLocation: GeoPointQueryParamValidation,
-    distance: DistanceQueryParamValidation,
+    facilityLocation: GeoPointQueryParamValidationSchema,
+    distance: DistanceQueryParamValidationSchema,
   })
   .and('facilityLocation', 'distance');
