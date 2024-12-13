@@ -103,13 +103,23 @@ export const CreateLoadValidationSchema = Joi.object({
     .valid(...LOAD_STATUSES)
     .required(),
   stops: Joi.array()
-    .ordered(StopPickUpValidationSchema.required())
+    //.ordered(StopPickUpValidationSchema.required())
+    .min(2)
     .items(StopPickUpValidationSchema, StopDeliveryValidationSchema.required())
-    .custom((value: Stops) => {
+    .messages({
+      'custom.stopFirstPickUp':
+        'First stop must be PickUp',
+      'custom.stopLastDelivery':
+        'Last stop must be Delivery',
+    })
+    .custom((value: Stops, helper) => {
+      const firstItem = value[0];
       const lastItem = value[value.length - 1];
-      const validationResult = StopDeliveryValidationSchema.validate(lastItem);
-      if (validationResult.error) {
-        throw validationResult.error;
+      if (firstItem.type !== 'PickUp') {
+        return helper.error('custom.stopFirstPickUp');
+      }
+      if (lastItem.type !== 'Delivery') {
+        return helper.error('custom.stopLastDelivery');
       }
       return value;
     })
@@ -120,7 +130,7 @@ export const CreateLoadValidationSchema = Joi.object({
       'custom.stopStatusOnlyNew':
         'If first stop status is New, all stops statuses must be New',
       'custom.stopStatusConsistent':
-        'If first stop have  status is New, all stops statuses must be New',
+        'If first stop have status is New, all stops statuses must be New',
     })
     .custom((value: Stops, helper) => {
       if (value[0]) {
