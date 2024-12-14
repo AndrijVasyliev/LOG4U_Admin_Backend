@@ -51,8 +51,8 @@ import { BodyTransformPipe } from '../utils/bodyTransform.pipe';
 import { MongoObjectIdPipe } from '../utils/idValidate.pipe';
 import { MOBILE_PATH_PREFIX } from '../utils/constants';
 import {
-  SetUpdatedByToAdmin,
   SetUpdatedByToApp,
+  SetUpdatedByToTracking,
 } from '../truck/truck.transformation';
 import { GetTruckId, TransformToUpdateDto } from './mobileApp.transformation';
 
@@ -354,7 +354,7 @@ export class MobileAppController {
     @Body(
       new BodySchemaPipe(MobileUpdateTruckLocationValidationSchema),
       new BodyTransformPipe(TransformToUpdateDto),
-      new BodyTransformPipe(SetUpdatedByToAdmin),
+      new BodyTransformPipe(SetUpdatedByToTracking),
     )
     updateTruckBodyDto: UpdateTruckDto,
   ): Promise<void> {
