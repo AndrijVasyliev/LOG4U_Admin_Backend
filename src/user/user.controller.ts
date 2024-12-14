@@ -1,7 +1,6 @@
 import {
   Controller,
   Get,
-  Req,
   Param,
   Query,
   Body,
@@ -9,7 +8,6 @@ import {
   Patch,
   Delete,
 } from '@nestjs/common';
-import { Request } from 'express';
 import { Types } from 'mongoose';
 import {
   CreateUserDto,
@@ -18,16 +16,17 @@ import {
   PaginatedUserResultDto,
   UpdateUserDto,
 } from './user.dto';
-import { BodySchemaPipe } from '../utils/bodyValidate.pipe';
 import { UserService } from './user.service';
-import { LoggerService } from '../logger';
 import {
   CreateUserValidationSchema,
   UpdateUserValidationSchema,
   UserQueryParamsSchema,
 } from './user.validation';
+import { LoggerService } from '../logger';
 import { MongoObjectIdPipe } from '../utils/idValidate.pipe';
+import { BodySchemaPipe } from '../utils/bodyValidate.pipe';
 import { QueryParamsSchemaPipe } from '../utils/queryParamsValidate.pipe';
+import { User } from '../utils/user.decorator';
 import { Roles } from '../auth/auth.decorator';
 
 @Controller('user')
@@ -39,10 +38,7 @@ export class UserController {
   ) {}
 
   @Get('auth')
-  async auth(@Req() request: Request): Promise<UserResultDto> {
-    const { user } = request as unknown as {
-      user: UserResultDto;
-    };
+  async auth(@User() user: UserResultDto): Promise<UserResultDto> {
     return user;
   }
 

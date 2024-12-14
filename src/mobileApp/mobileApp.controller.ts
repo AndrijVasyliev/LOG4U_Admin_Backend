@@ -1,19 +1,30 @@
 import {
   Controller,
   Get,
-  Req,
-  PreconditionFailedException,
   Query,
   Patch,
   Post,
   Body,
   Param,
+  PreconditionFailedException,
 } from '@nestjs/common';
-import { Request } from 'express';
 import { Types } from 'mongoose';
+import { AuthDataDto, AuthDto, MobileLoadQuery } from './mobileApp.dto';
+import {
+  MobileAuthValidationSchema,
+  MobileAuthDataValidationSchema,
+  MobileLoadQueryParamsSchema,
+  MobileUpdateTruckValidationSchema,
+  MobileUpdateTruckLocationValidationSchema,
+  MobileUpdateLoadStopPickUpStatusValidationSchema,
+  MobileUpdateLoadStopDeliveryStatusValidationSchema,
+  MobileSetStopPickUpDriversInfoValidationSchema,
+  MobileSetStopDeliveryDriversInfoValidationSchema,
+  MobileDeviceIdValidationSchema,
+} from './mobileApp.validation';
+import { GetTruckId, TransformToUpdateDto } from './mobileApp.transformation';
 import { LoggerService } from '../logger';
 import { Public, Roles } from '../auth/auth.decorator';
-import { AuthDataDto, AuthDto, MobileLoadQuery } from './mobileApp.dto';
 import { PersonAuthResultDto } from '../person/person.dto';
 import { DriverResultDto } from '../driver/driver.dto';
 import { OwnerResultDto } from '../owner/owner.dto';
@@ -34,27 +45,15 @@ import { CoordinatorService } from '../coordinator/coordinator.service';
 import { LoadService } from '../load/load.service';
 import { TruckService } from '../truck/truck.service';
 import {
-  MobileAuthValidationSchema,
-  MobileAuthDataValidationSchema,
-  MobileLoadQueryParamsSchema,
-  MobileUpdateTruckValidationSchema,
-  MobileUpdateTruckLocationValidationSchema,
-  MobileUpdateLoadStopPickUpStatusValidationSchema,
-  MobileUpdateLoadStopDeliveryStatusValidationSchema,
-  MobileSetStopPickUpDriversInfoValidationSchema,
-  MobileSetStopDeliveryDriversInfoValidationSchema,
-  MobileDeviceIdValidationSchema,
-} from './mobileApp.validation';
+  SetUpdatedByToApp,
+  SetUpdatedByToTracking,
+} from '../truck/truck.transformation';
 import { QueryParamsSchemaPipe } from '../utils/queryParamsValidate.pipe';
 import { BodySchemaPipe } from '../utils/bodyValidate.pipe';
 import { BodyTransformPipe } from '../utils/bodyTransform.pipe';
 import { MongoObjectIdPipe } from '../utils/idValidate.pipe';
 import { MOBILE_PATH_PREFIX } from '../utils/constants';
-import {
-  SetUpdatedByToApp,
-  SetUpdatedByToTracking,
-} from '../truck/truck.transformation';
-import { GetTruckId, TransformToUpdateDto } from './mobileApp.transformation';
+import { User } from '../utils/user.decorator';
 
 // ToDo stripe responses of redundant data
 @Controller(`${MOBILE_PATH_PREFIX}`)
@@ -72,13 +71,10 @@ export class MobileAppController {
   @Patch('setAuth')
   @Roles('Driver', 'Owner', 'OwnerDriver', 'Coordinator', 'CoordinatorDriver')
   async setAuth(
-    @Req() request: Request,
+    @User() person: PersonAuthResultDto,
     @Body(new BodySchemaPipe(MobileAuthValidationSchema))
     authDto: AuthDto,
   ): Promise<PersonAuthResultDto> {
-    const { user: person } = request as unknown as {
-      user: PersonAuthResultDto;
-    };
     const { force, deviceId } = authDto;
     if (person.deviceId) {
       if (force && person.deviceId === deviceId) {
@@ -97,54 +93,39 @@ export class MobileAppController {
   @Patch('setAppData')
   @Roles('Driver', 'Owner', 'OwnerDriver', 'Coordinator', 'CoordinatorDriver')
   async setAppData(
-    @Req() request: Request,
+    @User() person: PersonAuthResultDto,
     @Body(new BodySchemaPipe(MobileAuthDataValidationSchema))
     authDataDto: AuthDataDto,
   ): Promise<void> {
-    const { user: person } = request as unknown as {
-      user: PersonAuthResultDto;
-    };
     await this.personService.setAppData(person.id, authDataDto);
     return;
   }
 
   @Get('driver')
   @Roles('Driver', 'OwnerDriver', 'CoordinatorDriver')
-  async driver(@Req() request: Request): Promise<DriverResultDto> {
-    const { user: person } = request as unknown as {
-      user: PersonAuthResultDto;
-    };
+  async driver(@User() person: PersonAuthResultDto): Promise<DriverResultDto> {
     return this.driverService.findDriverById(person.id);
   }
 
   @Get('owner')
   @Roles('Owner', 'OwnerDriver')
-  async owner(@Req() request: Request): Promise<OwnerResultDto> {
-    const { user: person } = request as unknown as {
-      user: PersonAuthResultDto;
-    };
+  async owner(@User() person: PersonAuthResultDto): Promise<OwnerResultDto> {
     return this.ownerService.findOwnerById(person.id);
   }
 
   @Get('coordinator')
   @Roles('Coordinator', 'CoordinatorDriver')
-  async coordinator(@Req() request: Request): Promise<CoordinatorResultDto> {
-    const { user: person } = request as unknown as {
-      user: PersonAuthResultDto;
-    };
+  async coordinator(@User() person: PersonAuthResultDto): Promise<CoordinatorResultDto> {
     return this.coordinatorService.findCoordinatorById(person.id);
   }
 
   @Get('loadsByOwner')
   @Roles('Owner', 'OwnerDriver')
   async getOwnersLoads(
-    @Req() request: Request,
+    @User() person: PersonAuthResultDto,
     @Query(new QueryParamsSchemaPipe(MobileLoadQueryParamsSchema))
     loadQuery: MobileLoadQuery,
   ): Promise<PaginatedLoadResultDto> {
-    const { user: person } = request as unknown as {
-      user: PersonAuthResultDto;
-    };
     const owner = await this.ownerService.findOwnerById(person.id);
     if (!owner.ownTrucks || owner.ownTrucks.length < 1) {
       throw new PreconditionFailedException(
@@ -162,13 +143,10 @@ export class MobileAppController {
   @Get('loadsByCoordinator')
   @Roles('Coordinator', 'CoordinatorDriver')
   async getCoordinatorsLoads(
-    @Req() request: Request,
+    @User() person: PersonAuthResultDto,
     @Query(new QueryParamsSchemaPipe(MobileLoadQueryParamsSchema))
     loadQuery: MobileLoadQuery,
   ): Promise<PaginatedLoadResultDto> {
-    const { user: person } = request as unknown as {
-      user: PersonAuthResultDto;
-    };
     const coordinator = await this.coordinatorService.findCoordinatorById(
       person.id,
     );
@@ -193,13 +171,10 @@ export class MobileAppController {
   @Get(['getLoad', 'load'])
   @Roles('Driver', 'OwnerDriver', 'CoordinatorDriver')
   async getLoad(
-    @Req() request: Request,
+    @User() person: PersonAuthResultDto,
     @Query(new QueryParamsSchemaPipe(MobileLoadQueryParamsSchema))
     loadQuery: MobileLoadQuery,
   ): Promise<PaginatedLoadResultDto> {
-    const { user: person } = request as unknown as {
-      user: PersonAuthResultDto;
-    };
     const driver = await this.driverService.findDriverById(person.id);
     if (!driver.driveTrucks || driver.driveTrucks.length !== 1) {
       throw new PreconditionFailedException(
@@ -217,15 +192,12 @@ export class MobileAppController {
   @Patch('load/:loadId/stopPickUp/:stopId')
   @Roles('Driver', 'OwnerDriver', 'CoordinatorDriver')
   async updateLoadStopPickUpStatus(
-    @Req() request: Request,
+    @User() person: PersonAuthResultDto,
     @Param('loadId', MongoObjectIdPipe) loadId: Types.ObjectId,
     @Param('stopId', MongoObjectIdPipe) stopId: Types.ObjectId,
     @Body(new BodySchemaPipe(MobileUpdateLoadStopPickUpStatusValidationSchema))
     updateLoadStopPickUpStatusBodyDto: UpdateLoadStopPickUpStatusDto,
   ): Promise<LoadResultDto> {
-    const { user: person } = request as unknown as {
-      user: PersonAuthResultDto;
-    };
     const driver = await this.driverService.findDriverById(person.id);
     if (!driver.driveTrucks || driver.driveTrucks.length !== 1) {
       throw new PreconditionFailedException(
@@ -242,15 +214,12 @@ export class MobileAppController {
   @Patch('load/:loadId/stopDelivery/:stopId')
   @Roles('Driver', 'OwnerDriver', 'CoordinatorDriver')
   async updateLoadStopDeliveryStatus(
-    @Req() request: Request,
+    @User() person: PersonAuthResultDto,
     @Param('loadId', MongoObjectIdPipe) loadId: Types.ObjectId,
     @Param('stopId', MongoObjectIdPipe) stopId: Types.ObjectId,
     @Body(new BodySchemaPipe(MobileUpdateLoadStopDeliveryStatusValidationSchema))
     updateLoadStopDeliveryStatusBodyDto: UpdateLoadStopDeliveryStatusDto,
   ): Promise<LoadResultDto> {
-    const { user: person } = request as unknown as {
-      user: PersonAuthResultDto;
-    };
     const driver = await this.driverService.findDriverById(person.id);
     if (!driver.driveTrucks || driver.driveTrucks.length !== 1) {
       throw new PreconditionFailedException(
@@ -267,15 +236,12 @@ export class MobileAppController {
   @Patch('load/:loadId/stopPickUp/:stopId/driversInfo')
   @Roles('Driver', 'OwnerDriver', 'CoordinatorDriver')
   async updateLoadStopPickUpDriversInfo(
-    @Req() request: Request,
+    @User() person: PersonAuthResultDto,
     @Param('loadId', MongoObjectIdPipe) loadId: Types.ObjectId,
     @Param('stopId', MongoObjectIdPipe) stopId: Types.ObjectId,
     @Body(new BodySchemaPipe(MobileSetStopPickUpDriversInfoValidationSchema))
     setStopPickUpDriversInfoDto: CreateStopPickUpDriversInfoDto[],
   ): Promise<LoadResultDto> {
-    const { user: person } = request as unknown as {
-      user: PersonAuthResultDto;
-    };
     const driver = await this.driverService.findDriverById(person.id);
     if (!driver.driveTrucks || driver.driveTrucks.length !== 1) {
       throw new PreconditionFailedException(
@@ -292,15 +258,12 @@ export class MobileAppController {
   @Patch('load/:loadId/stopDelivery/:stopId/driversInfo')
   @Roles('Driver', 'OwnerDriver', 'CoordinatorDriver')
   async updateLoadStopDeliveryDriversInfo(
-    @Req() request: Request,
+    @User() person: PersonAuthResultDto,
     @Param('loadId', MongoObjectIdPipe) loadId: Types.ObjectId,
     @Param('stopId', MongoObjectIdPipe) stopId: Types.ObjectId,
     @Body(new BodySchemaPipe(MobileSetStopDeliveryDriversInfoValidationSchema))
     setStopDeliveryDriversInfoDto: CreateStopDeliveryDriversInfoDto[],
   ): Promise<LoadResultDto> {
-    const { user: person } = request as unknown as {
-      user: PersonAuthResultDto;
-    };
     const driver = await this.driverService.findDriverById(person.id);
     if (!driver.driveTrucks || driver.driveTrucks.length !== 1) {
       throw new PreconditionFailedException(
@@ -317,7 +280,7 @@ export class MobileAppController {
   @Patch(['updateTruck/:truckId', 'truck/:truckId'])
   @Roles('Driver', 'Owner', 'OwnerDriver', 'CoordinatorDriver')
   async updateTrucks(
-    @Req() request: Request,
+    @User() person: PersonAuthResultDto,
     @Param('truckId', MongoObjectIdPipe) truckId: Types.ObjectId,
     @Body(
       new BodySchemaPipe(MobileUpdateTruckValidationSchema),
@@ -325,9 +288,6 @@ export class MobileAppController {
     )
     updateTruckBodyDto: UpdateTruckDto,
   ): Promise<void> {
-    const { user: person } = request as unknown as {
-      user: PersonAuthResultDto;
-    };
     // ToDo move to auth guard
     const truck = await this.truckService.findTruckById(truckId);
     if (truck?.driver?.id !== person.id && truck?.owner?.id !== person.id) {

@@ -7,9 +7,7 @@ import {
   Post,
   Patch,
   Delete,
-  Req,
 } from '@nestjs/common';
-import { Request } from 'express';
 import { Types } from 'mongoose';
 import {
   CreateTruckDto,
@@ -21,16 +19,17 @@ import {
 } from './truck.dto';
 import { TruckService } from './truck.service';
 import { SetUpdatedByToAdmin } from './truck.transformation';
-import { LoggerService } from '../logger';
 import {
   CreateTruckValidationSchema,
   UpdateTruckValidationSchema,
   TruckQueryParamsSchema,
 } from './truck.validation';
+import { LoggerService } from '../logger';
 import { MongoObjectIdPipe } from '../utils/idValidate.pipe';
 import { QueryParamsSchemaPipe } from '../utils/queryParamsValidate.pipe';
 import { BodySchemaPipe } from '../utils/bodyValidate.pipe';
 import { BodyTransformPipe } from '../utils/bodyTransform.pipe';
+import { User } from '../utils/user.decorator';
 import { Roles } from '../auth/auth.decorator';
 import { UserResultDto } from '../user/user.dto';
 
@@ -64,16 +63,13 @@ export class TruckController {
 
   @Post()
   async createTruck(
-    @Req() request: Request,
+    @User() user: UserResultDto,
     @Body(
       new BodySchemaPipe(CreateTruckValidationSchema),
       new BodyTransformPipe(SetUpdatedByToAdmin),
     )
     createTruckBodyDto: CreateTruckDto,
   ): Promise<TruckResultDto> {
-    const { user } = request as unknown as {
-      user: UserResultDto;
-    };
     let newValues: CreateTruckDto = createTruckBodyDto;
     if (createTruckBodyDto.reservedAt && user.id) {
       newValues = { ...createTruckBodyDto, reservedBy: user.id };
@@ -89,7 +85,7 @@ export class TruckController {
 
   @Patch(':truckId')
   async updateTruck(
-    @Req() request: Request,
+    @User() user: UserResultDto,
     @Param('truckId', MongoObjectIdPipe) truckId: Types.ObjectId,
     @Body(
       new BodySchemaPipe(UpdateTruckValidationSchema),
@@ -97,9 +93,6 @@ export class TruckController {
     )
     updateTruckBodyDto: UpdateTruckDto,
   ): Promise<TruckResultDto> {
-    const { user } = request as unknown as {
-      user: UserResultDto;
-    };
     let newValues: UpdateTruckDto = updateTruckBodyDto;
     if (updateTruckBodyDto.reservedAt && user.id) {
       newValues = { ...updateTruckBodyDto, reservedBy: user.id };
