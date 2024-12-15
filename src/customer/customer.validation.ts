@@ -17,10 +17,11 @@ export const CreateCustomerValidationSchema = Joi.object({
   website: Joi.string().allow('').optional(),
 });
 
-export const UpdateCustomerValidationSchema = CreateCustomerValidationSchema.fork(
-  Object.keys(CreateCustomerValidationSchema.describe().keys),
-  (schema) => schema.optional(),
-);
+export const UpdateCustomerValidationSchema =
+  CreateCustomerValidationSchema.fork(
+    Object.keys(CreateCustomerValidationSchema.describe().keys),
+    (schema) => schema.optional(),
+  );
 
 export const CustomerQueryParamsSchema = Joi.object({
   offset: Joi.number().integer().min(0).optional(),

@@ -69,7 +69,9 @@ export class DriverController {
   }
 
   @Delete(':driverId')
-  async deleteDriver(@Param('driverId', MongoObjectIdPipe) driverId: Types.ObjectId) {
+  async deleteDriver(
+    @Param('driverId', MongoObjectIdPipe) driverId: Types.ObjectId,
+  ) {
     return this.driverService.deleteDriver(driverId);
   }
 }

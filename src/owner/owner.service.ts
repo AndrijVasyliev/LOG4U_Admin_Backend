@@ -23,7 +23,9 @@ export class OwnerService {
     private readonly log: LoggerService,
   ) {}
 
-  private async findOwnerDocumentById(id: Types.ObjectId): Promise<OwnerDocument> {
+  private async findOwnerDocumentById(
+    id: Types.ObjectId,
+  ): Promise<OwnerDocument> {
     this.log.debug(`Searching for Owner ${id}`);
     const owner = await this.ownerModel
       .findOne({

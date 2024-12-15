@@ -79,7 +79,9 @@ export class EmailController {
   }
 
   @Delete(':emailId')
-  async deleteEmail(@Param('emailId', MongoObjectIdPipe) emailId: Types.ObjectId) {
+  async deleteEmail(
+    @Param('emailId', MongoObjectIdPipe) emailId: Types.ObjectId,
+  ) {
     return this.emailService.deleteEmail(emailId);
   }
 }

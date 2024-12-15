@@ -35,7 +35,9 @@ export class LoadService {
     private readonly log: LoggerService,
   ) {}
 
-  private async findLoadDocumentById(id: Types.ObjectId): Promise<LoadDocument> {
+  private async findLoadDocumentById(
+    id: Types.ObjectId,
+  ): Promise<LoadDocument> {
     this.log.debug(`Searching for Load ${id}`);
     const load = await this.loadModel.findOne({ _id: id });
     if (!load) {

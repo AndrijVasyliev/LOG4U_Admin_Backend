@@ -23,7 +23,10 @@ import {
 import { BodySchemaPipe } from '../utils/bodyValidate.pipe';
 import { FileService } from './file.service';
 import { LoggerService } from '../logger';
-import { CreateFileValidationSchema, FileQueryParamsSchema } from './file.validation';
+import {
+  CreateFileValidationSchema,
+  FileQueryParamsSchema,
+} from './file.validation';
 import { MongoObjectIdPipe } from '../utils/idValidate.pipe';
 import { QueryParamsSchemaPipe } from '../utils/queryParamsValidate.pipe';
 import { Roles } from '../auth/auth.decorator';

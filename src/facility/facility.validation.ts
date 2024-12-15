@@ -13,10 +13,11 @@ export const CreateFacilityValidationSchema = Joi.object({
   facilityLocation: GeoPointBodyValidationSchema.required(),
 });
 
-export const UpdateFacilityValidationSchema = CreateFacilityValidationSchema.fork(
-  Object.keys(CreateFacilityValidationSchema.describe().keys),
-  (schema) => schema.optional(),
-);
+export const UpdateFacilityValidationSchema =
+  CreateFacilityValidationSchema.fork(
+    Object.keys(CreateFacilityValidationSchema.describe().keys),
+    (schema) => schema.optional(),
+  );
 
 export const FacilityQueryParamsSchema = Joi.object({
   offset: Joi.number().integer().min(0).optional(),

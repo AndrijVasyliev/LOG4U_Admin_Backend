@@ -64,9 +64,7 @@ export class TruckService {
     return truck;
   }
 
-  async findTruckById(
-    id: Types.ObjectId,
-  ): Promise<TruckResultDto> {
+  async findTruckById(id: Types.ObjectId): Promise<TruckResultDto> {
     const truck = await this.findTruckDocumentById(id);
     return TruckResultDto.fromTruckModel(truck);
   }

@@ -100,7 +100,9 @@ export class EmailService {
     return { [key]: { status: 'down' } };
   }
 
-  private async findEmailDocumentById(id: Types.ObjectId): Promise<EmailDocument> {
+  private async findEmailDocumentById(
+    id: Types.ObjectId,
+  ): Promise<EmailDocument> {
     this.log.debug(`Searching for Email ${id}`);
     const email = await this.emailModel.findOne({ _id: id }).populate('to.to');
     if (!email) {

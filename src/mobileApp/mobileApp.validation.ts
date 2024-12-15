@@ -84,14 +84,14 @@ export const MobileUpdateTruckLocationValidationSchema = Joi.object({
       longitude: LongitudeValidationSchema,
     })
       // .unknown(true)
-      .options({ stripUnknown: { arrays: true, objects: true }})
+      .options({ stripUnknown: { arrays: true, objects: true } })
       .required(),
   })
     // .unknown(true)
     .required(),
 })
   // .unknown(true)
-  .options({ stripUnknown: { arrays: true, objects: true }})
+  .options({ stripUnknown: { arrays: true, objects: true } })
   .required();
 
 export const MobileLoadQueryParamsSchema = Joi.object({

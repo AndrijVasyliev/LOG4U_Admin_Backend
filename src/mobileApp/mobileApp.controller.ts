@@ -115,7 +115,9 @@ export class MobileAppController {
 
   @Get('coordinator')
   @Roles('Coordinator', 'CoordinatorDriver')
-  async coordinator(@User() person: PersonAuthResultDto): Promise<CoordinatorResultDto> {
+  async coordinator(
+    @User() person: PersonAuthResultDto,
+  ): Promise<CoordinatorResultDto> {
     return this.coordinatorService.findCoordinatorById(person.id);
   }
 
@@ -217,7 +219,9 @@ export class MobileAppController {
     @User() person: PersonAuthResultDto,
     @Param('loadId', MongoObjectIdPipe) loadId: Types.ObjectId,
     @Param('stopId', MongoObjectIdPipe) stopId: Types.ObjectId,
-    @Body(new BodySchemaPipe(MobileUpdateLoadStopDeliveryStatusValidationSchema))
+    @Body(
+      new BodySchemaPipe(MobileUpdateLoadStopDeliveryStatusValidationSchema),
+    )
     updateLoadStopDeliveryStatusBodyDto: UpdateLoadStopDeliveryStatusDto,
   ): Promise<LoadResultDto> {
     const driver = await this.driverService.findDriverById(person.id);

@@ -19,7 +19,8 @@ export const MongoObjectIdValidationSchema = Joi.string<Types.ObjectId>()
 @Injectable()
 export class MongoObjectIdPipe implements PipeTransform<any, Types.ObjectId> {
   transform(value: any): Types.ObjectId {
-    const { error, value: transformedValue } = MongoObjectIdValidationSchema.validate(value);
+    const { error, value: transformedValue } =
+      MongoObjectIdValidationSchema.validate(value);
 
     if (error) {
       throw new BadRequestException({

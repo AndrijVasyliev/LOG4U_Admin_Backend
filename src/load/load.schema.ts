@@ -10,19 +10,20 @@ import {
   UNITS_OF_WEIGHT,
 } from '../utils/constants';
 import {
+  GeoPointType,
   LoadStatus,
+  MongoGeoPointType,
   StopDeliveryStatus,
   StopPickupStatus,
   TruckType,
   UnitOfLength,
   UnitOfWeight,
 } from '../utils/general.dto';
-// import { GeoLocationSchema, Location } from '../location/location.schema';
+import { GeoPointSchema } from '../location/location.schema';
 import { User, UserDocument } from '../user/user.schema';
 import { TruckDocument } from '../truck/truck.schema';
 import { CustomerDocument } from '../customer/customer.schema';
 import { FacilityDocument } from '../facility/facility.schema';
-// import { GeoLocationDto } from '../location/location.dto';
 
 export enum TimeFrameType {
   FCFS = 'FCFS',
@@ -541,6 +542,33 @@ export class Load {
     autopopulate: true,
   })
   truck?: TruckDocument;
+
+  @Prop({
+    required: false,
+    type: GeoPointSchema,
+    set: (point?: GeoPointType): MongoGeoPointType | void => {
+      if (!point) {
+        return;
+      }
+      return {
+        type: 'Point',
+        coordinates: [point[1], point[0]],
+      };
+    },
+    get: (point?: MongoGeoPointType): GeoPointType | void => {
+      if (!point) {
+        return;
+      }
+      return [point.coordinates[1], point.coordinates[0]];
+    },
+  })
+  startTruckLocation?: GeoPointType;
+
+  @Prop({
+    required: false,
+    type: Number,
+  })
+  truckDeliveryMiles?: number;
 
   @Prop({
     required: true,

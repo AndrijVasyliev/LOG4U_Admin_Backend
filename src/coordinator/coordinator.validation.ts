@@ -28,10 +28,11 @@ export const CreateCoordinatorValidationSchema = Joi.object({
   owner: MongoObjectIdValidationSchema.required(),
 });
 
-export const UpdateCoordinatorValidationSchema = CreateCoordinatorValidationSchema.fork(
-  Object.keys(CreateCoordinatorValidationSchema.describe().keys),
-  (schema) => schema.optional(),
-);
+export const UpdateCoordinatorValidationSchema =
+  CreateCoordinatorValidationSchema.fork(
+    Object.keys(CreateCoordinatorValidationSchema.describe().keys),
+    (schema) => schema.optional(),
+  );
 
 export const CoordinatorQueryParamsSchema = Joi.object({
   offset: Joi.number().integer().min(0).optional(),

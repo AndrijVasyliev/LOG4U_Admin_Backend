@@ -32,10 +32,11 @@ export const CreateOwnerDriverValidationSchema = Joi.object({
   appPass: Joi.string().allow('').optional(),
 });
 
-export const UpdateOwnerDriverValidationSchema = CreateOwnerDriverValidationSchema.fork(
-  Object.keys(CreateOwnerDriverValidationSchema.describe().keys),
-  (schema) => schema.optional(),
-);
+export const UpdateOwnerDriverValidationSchema =
+  CreateOwnerDriverValidationSchema.fork(
+    Object.keys(CreateOwnerDriverValidationSchema.describe().keys),
+    (schema) => schema.optional(),
+  );
 
 export const OwnerDriverQueryParamsSchema = Joi.object({
   offset: Joi.number().integer().min(0).optional(),

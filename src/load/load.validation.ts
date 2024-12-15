@@ -69,7 +69,9 @@ const StopValidationSchema = Joi.object({
 
 const StopPickUpValidationSchema = StopValidationSchema.append({
   type: Joi.string().valid(StopType.PickUp).required(),
-  driversInfo: Joi.array().items(StopPickUpDriversInfoValidationSchema).optional(),
+  driversInfo: Joi.array()
+    .items(StopPickUpDriversInfoValidationSchema)
+    .optional(),
   status: Joi.string()
     .valid(...STOP_PICKUP_STATUSES)
     .optional(),
@@ -82,7 +84,9 @@ const StopPickUpValidationSchema = StopValidationSchema.append({
 });
 const StopDeliveryValidationSchema = StopValidationSchema.append({
   type: Joi.string().valid(StopType.Delivery).required(),
-  driversInfo: Joi.array().items(StopDeliveryDriversInfoValidationSchema).optional(),
+  driversInfo: Joi.array()
+    .items(StopDeliveryDriversInfoValidationSchema)
+    .optional(),
   status: Joi.string()
     .valid(...STOP_DELIVERY_STATUSES)
     .optional(),
@@ -107,10 +111,8 @@ export const CreateLoadValidationSchema = Joi.object({
     .min(2)
     .items(StopPickUpValidationSchema, StopDeliveryValidationSchema.required())
     .messages({
-      'custom.stopFirstPickUp':
-        'First stop must be PickUp',
-      'custom.stopLastDelivery':
-        'Last stop must be Delivery',
+      'custom.stopFirstPickUp': 'First stop must be PickUp',
+      'custom.stopLastDelivery': 'Last stop must be Delivery',
     })
     .custom((value: Stops, helper) => {
       const firstItem = value[0];
@@ -194,16 +196,27 @@ export const CreateLoadValidationSchema = Joi.object({
         );
       value.forEach((stop) => {
         if (stop.type === StopType.PickUp) {
-          stop.driversInfo = stop?.driversInfo?.filter((driversInfoItem) =>
-            !!freightIdList?.find((freightId) => freightId.toString() === driversInfoItem.bol.toString()),
+          stop.driversInfo = stop?.driversInfo?.filter(
+            (driversInfoItem) =>
+              !!freightIdList?.find(
+                (freightId) =>
+                  freightId.toString() === driversInfoItem.bol.toString(),
+              ),
           );
         }
         if (stop.type === StopType.Delivery) {
-          stop.driversInfo = stop?.driversInfo?.filter((driversInfoItem) =>
-            !!freightIdList?.find((freightId) => freightId.toString() === driversInfoItem.bol.toString()),
+          stop.driversInfo = stop?.driversInfo?.filter(
+            (driversInfoItem) =>
+              !!freightIdList?.find(
+                (freightId) =>
+                  freightId.toString() === driversInfoItem.bol.toString(),
+              ),
           );
-          stop.bolList = stop?.bolList?.filter((bolItemId) =>
-            !!freightIdList?.find((freightId) => freightId.toString() === bolItemId.toString()),
+          stop.bolList = stop?.bolList?.filter(
+            (bolItemId) =>
+              !!freightIdList?.find(
+                (freightId) => freightId.toString() === bolItemId.toString(),
+              ),
           );
         }
       });

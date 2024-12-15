@@ -78,7 +78,9 @@ export class PushService {
     return { [key]: { status: 'down' } };
   }*/
 
-  private async findPushDocumentById(id: Types.ObjectId): Promise<PushDocument> {
+  private async findPushDocumentById(
+    id: Types.ObjectId,
+  ): Promise<PushDocument> {
     this.log.debug(`Searching for Push ${id}`);
     const push = await this.pushModel.findOne({ _id: id });
     if (!push) {

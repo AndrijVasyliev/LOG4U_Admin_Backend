@@ -69,7 +69,9 @@ export class OwnerController {
   }
 
   @Delete(':ownerId')
-  async deleteOwner(@Param('ownerId', MongoObjectIdPipe) ownerId: Types.ObjectId) {
+  async deleteOwner(
+    @Param('ownerId', MongoObjectIdPipe) ownerId: Types.ObjectId,
+  ) {
     return this.ownerService.deleteOwner(ownerId);
   }
 }

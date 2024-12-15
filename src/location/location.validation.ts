@@ -24,8 +24,14 @@ export const DistanceQueryParamValidationSchema = Joi.number()
   .min(0)
   .max(EARTH_RADIUS_MILES);
 
-export const LatitudeValidationSchema = Joi.number().min(-90).max(90).required();
-export const LongitudeValidationSchema = Joi.number().min(-180).max(180).required();
+export const LatitudeValidationSchema = Joi.number()
+  .min(-90)
+  .max(90)
+  .required();
+export const LongitudeValidationSchema = Joi.number()
+  .min(-180)
+  .max(180)
+  .required();
 export const GeoPointBodyValidationSchema = Joi.array()
   .min(2)
   .max(2)
@@ -65,10 +71,11 @@ export const CreateLocationValidationSchema = Joi.object({
   location: GeoPointBodyValidationSchema.required(),
 });
 
-export const UpdateLocationValidationSchema = CreateLocationValidationSchema.fork(
-  Object.keys(CreateLocationValidationSchema.describe().keys),
-  (schema) => schema.optional(),
-);
+export const UpdateLocationValidationSchema =
+  CreateLocationValidationSchema.fork(
+    Object.keys(CreateLocationValidationSchema.describe().keys),
+    (schema) => schema.optional(),
+  );
 
 export const LocationQueryParamsSchema = Joi.object({
   offset: Joi.number().integer().min(0).optional(),

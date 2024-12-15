@@ -25,6 +25,7 @@ import {
   TruckType,
   UnitOfLength,
   UnitOfWeight,
+  GeoPointType,
 } from '../utils/general.dto';
 import { calcDistance } from '../utils/haversine.distance';
 import { UserResultDto } from '../user/user.dto';
@@ -145,6 +146,8 @@ export interface StopChangeUpdateDocument {
   readonly fullDocumentBeforeChange: {
     readonly stops?: UpdateStops;
     readonly miles?: number[];
+    readonly startTruckLocation?: GeoPointType;
+    readonly truckDeliveryMiles?: number;
     readonly __v?: number;
   };
 }
@@ -474,6 +477,7 @@ export class LoadResultDto {
         },
         0 as number | undefined,
       ),
+      truckDeliveryMiles: load.truckDeliveryMiles,
       weight: load.weight,
       truckType: load.truckType,
       rate: load.rate,
@@ -504,6 +508,7 @@ export class LoadResultDto {
   readonly stops: (StopPickUpResultDto | StopDeliveryResultDto)[];
   readonly milesByRoads?: number;
   readonly milesHaversine?: number;
+  readonly truckDeliveryMiles?: number;
   readonly weight: string;
   readonly truckType: TruckType[];
   readonly rate?: number;

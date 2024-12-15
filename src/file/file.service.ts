@@ -82,7 +82,9 @@ export class FileService {
     }
   }
 
-  private async findFileDocumentById(id: Types.ObjectId): Promise<FileDocument> {
+  private async findFileDocumentById(
+    id: Types.ObjectId,
+  ): Promise<FileDocument> {
     this.log.debug(`Searching for File ${id}`);
     const file = await this.fileModel.findOne({ _id: id });
     if (!file) {
@@ -158,7 +160,9 @@ export class FileService {
     return PaginatedFileResultDto.from(res);
   }
 
-  async getFileStreamById(fileId: Types.ObjectId): Promise<DownloadFileResultDto> {
+  async getFileStreamById(
+    fileId: Types.ObjectId,
+  ): Promise<DownloadFileResultDto> {
     this.log.debug(`Getting file stream by id: ${fileId}`);
     const fileDocument = await this.findFileDocumentById(fileId);
     const fileStream: InstanceType<typeof GridFSBucketReadStream> =
@@ -175,7 +179,9 @@ export class FileService {
   ): Promise<FileResultDto> {
     this.log.debug(`Creating new File: ${JSON.stringify(createFileDto)}`);
 
-    const fileDocument = await this.findFileDocumentById(new Types.ObjectId(file.filename));
+    const fileDocument = await this.findFileDocumentById(
+      new Types.ObjectId(file.filename),
+    );
     Object.assign(fileDocument.metadata, createFileDto);
     const savedFile = await fileDocument.save();
 

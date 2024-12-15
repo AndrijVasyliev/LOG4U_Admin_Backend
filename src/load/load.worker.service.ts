@@ -49,6 +49,10 @@ export class LoadWorkerService
                 'fullDocument.stops': { $exists: true },
               },
               {
+                operationType: 'insert',
+                'fullDocument.startTruckLocation': { $exists: true },
+              },
+              {
                 operationType: 'update',
                 $expr: {
                   $anyElementTrue: {
@@ -67,6 +71,12 @@ export class LoadWorkerService
                   },
                 },
               },
+              {
+                operationType: 'update',
+                'updateDescription.updatedFields.startTruckLocation': {
+                  $exists: true,
+                },
+              },
             ],
           },
         },
@@ -77,10 +87,14 @@ export class LoadWorkerService
             'fullDocument.__v': 1,
             'fullDocument.stops': 1,
             'fullDocument.miles': 1,
+            'fullDocument.startTruckLocation': 1,
+            // 'fullDocument.truckDeliveryMiles': 1,
             'fullDocument.truck': 1,
             'fullDocumentBeforeChange.__v': 1,
             'fullDocumentBeforeChange.stops': 1,
             'fullDocumentBeforeChange.miles': 1,
+            'fullDocumentBeforeChange.startTruckLocation': 1,
+            // 'fullDocumentBeforeChange.truckDeliveryMiles': 1,
             'updateDescription.updatedFields.__v': 1,
           },
         },
@@ -203,7 +217,7 @@ export class LoadWorkerService
             },
           },
           {
-            $unset: ['miles'], // ToDo probably null this on update stops field
+            $unset: ['miles', 'truckDeliveryMiles'],
           },
         ],
       )
@@ -226,12 +240,22 @@ export class LoadWorkerService
       change.operationType === 'update'
         ? change.fullDocumentBeforeChange.stops
         : undefined;
+    const firstStopBeforeChange = stopsBeforeChange?.at(0);
     const milesBeforeChange =
       change.operationType === 'update'
         ? change.fullDocumentBeforeChange.miles
         : undefined;
+    const startTruckLocationBeforeChange =
+      change.operationType === 'update'
+        ? change.fullDocumentBeforeChange.startTruckLocation
+        : undefined;
+    const truckDeliveryMilesBeforeChange =
+      change.operationType === 'update'
+        ? change.fullDocumentBeforeChange.truckDeliveryMiles
+        : undefined;
     const stopsAfterChange = change.fullDocument.stops;
     const stops = load.stops;
+    const startTruckLocation = load.startTruckLocation;
     const firstStop = stops?.at(0);
     const lastStop = stops?.at(-1);
 
@@ -355,6 +379,34 @@ export class LoadWorkerService
     }
     Object.assign(setData, { miles });
     this.log.debug(`Calculated distance: ${miles}`);
+
+    // Calculate truck delivery distances
+    this.log.debug(
+      `Stops updated. Calculating distance for Load ${load._id.toString()}.`,
+    );
+    let truckDeliveryMiles: number | void = truckDeliveryMilesBeforeChange;
+    this.log.debug('Calculating truck delivery distance by roads');
+
+    if (
+      !(
+        startTruckLocationBeforeChange &&
+        startTruckLocation &&
+        startTruckLocationBeforeChange[0] === startTruckLocation[0] &&
+        startTruckLocationBeforeChange[1] === startTruckLocation[1] &&
+        firstStop &&
+        firstStopBeforeChange &&
+        firstStop.facility.id.toString() ===
+          firstStopBeforeChange.facility.toString()
+      )
+    ) {
+      truckDeliveryMiles = await this.geoApiService.getDistance(
+        startTruckLocation,
+        firstStop?.facility.facilityLocation,
+      );
+    }
+
+    Object.assign(setData, { truckDeliveryMiles });
+    this.log.debug(`Calculated truck delivery distance: ${truckDeliveryMiles}`);
 
     const updated = await this.loadModel.findOneAndUpdate(
       filter,
@@ -574,9 +626,7 @@ export class LoadWorkerService
           }
         }
       } else {
-        truckIdsToAvailable.add(
-          change.fullDocumentBeforeChange.truck,
-        );
+        truckIdsToAvailable.add(change.fullDocumentBeforeChange.truck);
       }
     }
 

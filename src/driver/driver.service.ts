@@ -23,7 +23,9 @@ export class DriverService {
     private readonly log: LoggerService,
   ) {}
 
-  private async findDriverDocumentById(id: Types.ObjectId): Promise<DriverDocument> {
+  private async findDriverDocumentById(
+    id: Types.ObjectId,
+  ): Promise<DriverDocument> {
     this.log.debug(`Searching for Driver ${id}`);
     const driver = await this.driverModel
       .findOne({

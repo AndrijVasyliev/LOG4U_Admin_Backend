@@ -24,7 +24,9 @@ export class PersonService {
     private readonly log: LoggerService,
   ) {}
 
-  private async findPersonDocumentById(id: Types.ObjectId): Promise<PersonDocument> {
+  private async findPersonDocumentById(
+    id: Types.ObjectId,
+  ): Promise<PersonDocument> {
     this.log.debug(`Searching for Person ${id}`);
     const person = await this.personModel.findOne({
       _id: id,
