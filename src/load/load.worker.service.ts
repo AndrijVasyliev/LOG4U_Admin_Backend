@@ -86,15 +86,15 @@ export class LoadWorkerService
             'documentKey._id': 1,
             'fullDocument.__v': 1,
             'fullDocument.stops': 1,
-            'fullDocument.miles': 1,
-            'fullDocument.startTruckLocation': 1,
+            // 'fullDocument.miles': 1,
+            // 'fullDocument.startTruckLocation': 1,
             // 'fullDocument.truckDeliveryMiles': 1,
             'fullDocument.truck': 1,
             'fullDocumentBeforeChange.__v': 1,
             'fullDocumentBeforeChange.stops': 1,
             'fullDocumentBeforeChange.miles': 1,
             'fullDocumentBeforeChange.startTruckLocation': 1,
-            // 'fullDocumentBeforeChange.truckDeliveryMiles': 1,
+            'fullDocumentBeforeChange.truckDeliveryMiles': 1,
             'updateDescription.updatedFields.__v': 1,
           },
         },
@@ -391,8 +391,8 @@ export class LoadWorkerService
       !(
         startTruckLocationBeforeChange &&
         startTruckLocation &&
-        startTruckLocationBeforeChange[0] === startTruckLocation[0] &&
-        startTruckLocationBeforeChange[1] === startTruckLocation[1] &&
+        startTruckLocationBeforeChange.coordinates[1] === startTruckLocation[0] &&
+        startTruckLocationBeforeChange.coordinates[0] === startTruckLocation[1] &&
         firstStop &&
         firstStopBeforeChange &&
         firstStop.facility.id.toString() ===

@@ -25,7 +25,7 @@ import {
   TruckType,
   UnitOfLength,
   UnitOfWeight,
-  GeoPointType,
+  MongoGeoPointType,
 } from '../utils/general.dto';
 import { calcDistance } from '../utils/haversine.distance';
 import { UserResultDto } from '../user/user.dto';
@@ -146,7 +146,7 @@ export interface StopChangeUpdateDocument {
   readonly fullDocumentBeforeChange: {
     readonly stops?: UpdateStops;
     readonly miles?: number[];
-    readonly startTruckLocation?: GeoPointType;
+    readonly startTruckLocation?: MongoGeoPointType;
     readonly truckDeliveryMiles?: number;
     readonly __v?: number;
   };
