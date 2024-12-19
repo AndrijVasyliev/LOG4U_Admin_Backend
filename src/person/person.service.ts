@@ -189,11 +189,14 @@ export class PersonService {
       person.set('appPermissionsLastChange', new Date());
     }
 
-    if (person.pushToken) {
+    if (token) {
       this.log.debug('Removing  push token from other persons');
       const removedResult = await this.personModel.updateMany(
-        { pushToken: { $eq: person.pushToken } },
-        { $unset: { pushToken: 1 } },
+        { _id: { $ne: person._id }, pushToken: { $eq: person.pushToken } },
+        [
+          { $set: { pushTokenLastChange: new Date() } },
+          { $unset: ['pushToken'] },
+        ],
       );
       this.log.debug(
         `Push token removed from ${removedResult.modifiedCount} person(s)`,

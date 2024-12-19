@@ -158,6 +158,7 @@ export class PushWorkerService
             push.set('state', 'Error from receipt');
             const person = push.to;
             person.set('pushToken', undefined);
+            person.set('pushTokenLastChange', new Date());
             await person.save();
           }
         } else {
