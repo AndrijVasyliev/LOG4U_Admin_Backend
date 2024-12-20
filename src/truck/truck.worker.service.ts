@@ -138,7 +138,7 @@ export class TruckWorkerService
       return;
     }
     this.log.debug(
-      `Availability data updated. Calculating "availabilityAt" for Truck ${truck._id.toString()}.`,
+      `Availability data updated. Calculating "availabilityAt" for Truck ${truck._id}.`,
     );
     const location = truck.availabilityLocation;
     if (!location) {
