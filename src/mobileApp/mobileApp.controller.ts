@@ -294,7 +294,10 @@ export class MobileAppController {
   ): Promise<void> {
     // ToDo move to auth guard
     const truck = await this.truckService.findTruckById(truckId);
-    if (truck?.driver?.id !== person.id && truck?.owner?.id !== person.id) {
+    if (
+      truck?.driver?.id.toString() !== person.id.toString() &&
+      truck?.owner?.id.toString() !== person.id.toString()
+    ) {
       throw new PreconditionFailedException(
         `Person ${person.fullName} not a driver and not an owner of truck ${
           truck?.truckNumber ? truck.truckNumber : truckId
