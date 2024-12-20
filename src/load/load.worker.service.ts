@@ -391,8 +391,10 @@ export class LoadWorkerService
       !(
         startTruckLocationBeforeChange &&
         startTruckLocation &&
-        startTruckLocationBeforeChange.coordinates[1] === startTruckLocation[0] &&
-        startTruckLocationBeforeChange.coordinates[0] === startTruckLocation[1] &&
+        startTruckLocationBeforeChange.coordinates[1] ===
+          startTruckLocation[0] &&
+        startTruckLocationBeforeChange.coordinates[0] ===
+          startTruckLocation[1] &&
         firstStop &&
         firstStopBeforeChange &&
         firstStop.facility.id.toString() ===
