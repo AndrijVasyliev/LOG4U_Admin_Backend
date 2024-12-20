@@ -154,7 +154,7 @@ export class LoadService {
     );
 
     const stopIndex = load.stops.findIndex(
-      (stopItem) => stopItem.stopId === stopId,
+      (stopItem) => stopItem.stopId.toString() === stopId.toString(),
     );
     if (!~stopIndex) {
       throw new PreconditionFailedException(`No Stop ${stopId} in Load ${id}`);
@@ -214,7 +214,7 @@ export class LoadService {
     );
 
     const stopIndex = load.stops.findIndex(
-      (stopItem) => stopItem.stopId === stopId,
+      (stopItem) => stopItem.stopId.toString() === stopId.toString(),
     );
     if (!~stopIndex) {
       throw new PreconditionFailedException(`No Stop ${stopId} in Load ${id}`);
@@ -279,7 +279,7 @@ export class LoadService {
     );
 
     const stopIndex = load.stops.findIndex(
-      (stopItem) => stopItem.stopId === stopId,
+      (stopItem) => stopItem.stopId.toString() === stopId.toString(),
     );
     if (!~stopIndex) {
       throw new PreconditionFailedException(`No Stop ${stopId} in Load ${id}`);
@@ -310,7 +310,7 @@ export class LoadService {
     );
 
     const stopIndex = load.stops.findIndex(
-      (stopItem) => stopItem.stopId === stopId,
+      (stopItem) => stopItem.stopId.toString() === stopId.toString(),
     );
     if (!~stopIndex) {
       throw new PreconditionFailedException(`No Stop ${stopId} in Load ${id}`);
