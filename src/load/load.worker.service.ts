@@ -1,4 +1,4 @@
-import { mongo, PaginateModel, ObjectId, Types } from 'mongoose';
+import { mongo, PaginateModel, ObjectId, Types, UpdateQuery } from 'mongoose';
 import {
   Injectable,
   OnApplicationBootstrap,
@@ -17,7 +17,7 @@ import {
 import { TruckService } from '../truck/truck.service';
 import { GoogleGeoApiService } from '../googleGeoApi/googleGeoApi.service';
 import { ChangeDocument, Queue } from '../utils/queue';
-import { LoadStatus } from '../utils/general.dto';
+import { GeoPointType, LoadStatus } from '../utils/general.dto';
 import { PushService } from '../push/push.service';
 
 const { ChangeStream } = mongo;
@@ -551,8 +551,8 @@ export class LoadWorkerService
     let newTruckActivatedLoadId: ObjectId | null = null;
     let currentTruckLoadUpdateInvoked = false;
 
-    const truckIdsToOnRoute = new Set<Types.ObjectId>();
-    const truckIdsToAvailable = new Set<Types.ObjectId>();
+    const truckIdsToOnRoute = new Set<string>();
+    const truckIdsToAvailable = new Set<string>();
 
     if (
       change.operationType === 'update' &&
@@ -590,7 +590,7 @@ export class LoadWorkerService
           }
         }
       } else {
-        truckIdsToAvailable.add(change.fullDocument.truck);
+        truckIdsToAvailable.add(change.fullDocument.truck.toString());
       }
     }
 
@@ -628,10 +628,14 @@ export class LoadWorkerService
           }
         }
       } else {
-        truckIdsToAvailable.add(change.fullDocumentBeforeChange.truck);
+        truckIdsToAvailable.add(
+          change.fullDocumentBeforeChange.truck.toString(),
+        );
       }
     }
 
+    let newLoadStatus: LoadStatus | undefined;
+    let startTruckLocation: GeoPointType | undefined;
     if (
       ((change.operationType === 'update' &&
         (change.fullDocument.truck?.toString() !==
@@ -648,7 +652,7 @@ export class LoadWorkerService
       this.log.debug(
         `Will recalculate status for load ${change.documentKey._id}`,
       );
-      let newLoadStatus: LoadStatus;
+
       if (!change.fullDocument.truck) {
         newLoadStatus = 'Available';
       } else if (
@@ -665,36 +669,89 @@ export class LoadWorkerService
         });
         newLoadStatus = loadInProgress ? 'Planned' : 'In Progress';
       }
-      if (load.status !== newLoadStatus) {
-        this.log.debug(
-          `Changing load status from ${load.status} to ${newLoadStatus}`,
-        );
-        if (change.fullDocument.truck && newLoadStatus === 'In Progress') {
-          newTruckActivatedLoadId = change.documentKey._id;
-          truckIdsToOnRoute.add(change.fullDocument.truck);
-          truckIdsToAvailable.delete(change.fullDocument.truck);
-        }
+      if (load.status === newLoadStatus) {
+        newLoadStatus = undefined;
+      } else if (change.fullDocument.truck && newLoadStatus === 'In Progress') {
+        newTruckActivatedLoadId = change.documentKey._id;
+        truckIdsToOnRoute.add(change.fullDocument.truck.toString());
+        truckIdsToAvailable.delete(change.fullDocument.truck.toString());
+      }
 
-        const updated = await this.loadModel.findOneAndUpdate(
-          {
-            _id: change.documentKey._id,
-            statusVer: { $lte: load.__v },
-          },
-          [
-            {
-              $set: {
-                statusVer: load.__v,
-                status: newLoadStatus,
-              },
-            },
-          ],
-        );
-        if (updated) {
-          this.log.debug(`Load ${change.documentKey._id} updated`);
+      if (newLoadStatus === 'Available') {
+        startTruckLocation = undefined;
+      } else if (newLoadStatus === 'Planned') {
+        const prevLoad =
+          load.stopsStart &&
+          (await this.loadModel.findOne({
+            _id: { $ne: change.documentKey._id },
+            status: { $in: ['Planned', 'In Progress'] },
+            stopsEnd: { $lte: load.stopsStart },
+          }));
+        const startLocation = prevLoad?.stops.at(-1)?.facility.facilityLocation;
+        if (startLocation) {
+          startTruckLocation = startLocation;
         } else {
-          this.log.warn(`Load ${change.documentKey._id} NOT updated`);
+          startTruckLocation = undefined;
+        }
+      } else if (newLoadStatus === 'In Progress' && !load.startTruckLocation) {
+        const truck =
+          change.fullDocument.truck &&
+          (await this.truckService.findTruckById(change.fullDocument.truck));
+        const startLocation = truck?.lastLocation;
+        if (startLocation) {
+          startTruckLocation = startLocation;
+        } else {
+          startTruckLocation = undefined;
         }
       }
+    }
+
+    const update: UpdateQuery<any> = [
+      {
+        $set: {
+          statusVer: load.__v + 1,
+          __v: load.__v + 1,
+        },
+      },
+    ];
+    if (newLoadStatus) {
+      this.log.debug(
+        `Changing load status from ${load.status} to ${newLoadStatus}`,
+      );
+      update.push({
+        $set: {
+          status: newLoadStatus,
+        },
+      });
+    }
+    if (startTruckLocation) {
+      this.log.debug(`Setting startTruckLocation ${startTruckLocation}`);
+      update.push({
+        $set: {
+          startTruckLocation: {
+            type: 'Point',
+            coordinates: [startTruckLocation[1], startTruckLocation[0]],
+          },
+        },
+      });
+    } else {
+      this.log.debug('Unsetting startTruckLocation');
+      update.push({
+        $unset: ['startTruckLocation'],
+      });
+    }
+
+    const updated = await this.loadModel.findOneAndUpdate(
+      {
+        _id: change.documentKey._id,
+        statusVer: { $lte: load.__v },
+      },
+      update,
+    );
+    if (updated) {
+      this.log.debug(`Load ${change.documentKey._id} updated`);
+    } else {
+      this.log.warn(`Load ${change.documentKey._id} NOT updated`);
     }
 
     if (
@@ -707,14 +764,14 @@ export class LoadWorkerService
       change.fullDocument.status === 'In Progress' &&
       change.fullDocument.truck
     ) {
-      truckIdsToOnRoute.add(change.fullDocument.truck);
+      truckIdsToOnRoute.add(change.fullDocument.truck.toString());
     }
 
     if (truckIdsToAvailable.size > 0) {
       for (const truckId of truckIdsToAvailable) {
         this.log.debug(`Setting Available state to truck ${truckId}`);
         try {
-          await this.truckService.updateTruck(truckId, {
+          await this.truckService.updateTruck(new Types.ObjectId(truckId), {
             status: 'Available',
           });
           this.log.debug(`Truck ${truckId} updated`);
@@ -733,7 +790,7 @@ export class LoadWorkerService
       for (const truckId of truckIdsToOnRoute) {
         this.log.debug(`Setting On route state to truck ${truckId}`);
         try {
-          await this.truckService.updateTruck(truckId, {
+          await this.truckService.updateTruck(new Types.ObjectId(truckId), {
             status: 'On route',
           });
           this.log.debug(`Truck ${truckId} updated`);
