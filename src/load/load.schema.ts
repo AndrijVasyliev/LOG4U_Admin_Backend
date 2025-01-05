@@ -510,6 +510,12 @@ export class Load {
   @Prop({ required: true })
   totalCharges: number;
 
+  @Prop({ required: false })
+  profit: number;
+
+  @Prop({ required: false })
+  rpm: number;
+
   @Prop({ required: true })
   currency: string;
 

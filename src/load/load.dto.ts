@@ -117,6 +117,8 @@ export interface CreateLoadDto {
   readonly truckType: TruckType[];
   readonly rate?: number;
   readonly totalCharges: number;
+  readonly profit?: number;
+  readonly rpm?: number;
   readonly currency: string;
   readonly bookedByUser: string;
   readonly bookedByCompany?: string;
@@ -204,22 +206,7 @@ export interface UpdateLoadStopDeliveryStatusDto {
   readonly status: StopDeliveryStatus;
 }
 
-export interface UpdateLoadDto {
-  readonly ref?: string[];
-  readonly status?: LoadStatus;
-  readonly stops?: Stops;
-  readonly weight?: string;
-  readonly truckType?: TruckType[];
-  readonly rate?: number;
-  readonly totalCharges?: number;
-  readonly currency: string;
-  readonly bookedByUser?: string;
-  readonly bookedByCompany?: string;
-  readonly assignTo?: string[];
-  readonly checkInAs?: string;
-  readonly truck?: string;
-  readonly bookedWith?: string;
-}
+export type UpdateLoadDto = Partial<CreateLoadDto>;
 
 export interface LoadQuerySearch {
   readonly search?: string;
@@ -481,8 +468,10 @@ export class LoadResultDto {
       weight: load.weight,
       truckType: load.truckType,
       rate: load.rate,
-      currency: load.currency,
       totalCharges: load.totalCharges,
+      profit: load.profit,
+      rpm: load.rpm,
+      currency: load.currency,
       bookedByCompany: load.bookedByCompany,
       checkInAs: load.checkInAs,
     };
@@ -512,8 +501,10 @@ export class LoadResultDto {
   readonly weight: string;
   readonly truckType: TruckType[];
   readonly rate?: number;
-  readonly currency: string;
   readonly totalCharges: number;
+  readonly profit: number;
+  readonly rpm: number;
+  readonly currency: string;
   readonly bookedByUser?: UserResultDto;
   readonly bookedByCompany?: string;
   readonly assignTo?: UserResultDto[];

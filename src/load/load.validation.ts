@@ -234,6 +234,8 @@ export const CreateLoadValidationSchema = Joi.object({
     .required(),
   rate: Joi.number().min(0).optional(),
   totalCharges: Joi.number().min(0).required(),
+  profit: Joi.number().min(0).optional(),
+  rpm: Joi.number().min(0).optional(),
   currency: Joi.string().required(),
   bookedByUser: MongoObjectIdValidationSchema.required(),
   bookedByCompany: Joi.string().allow('').optional(),
