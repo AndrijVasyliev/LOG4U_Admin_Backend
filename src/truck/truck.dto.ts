@@ -145,6 +145,7 @@ export class TruckResultDto {
       licencePlate: truck.licencePlate,
       insideDims: truck.insideDims,
       doorDims: truck.doorDims,
+      rpmAvg: truck.rpmAvg,
       reservedAt: truck.reservedAt,
     };
     if (owner) {
@@ -194,6 +195,7 @@ export class TruckResultDto {
   readonly licencePlate: string;
   readonly insideDims: string;
   readonly doorDims: string;
+  readonly rpmAvg?: number;
   readonly owner?: OwnerResultDto;
   readonly coordinator?: CoordinatorResultDto;
   readonly driver?: DriverResultDto;

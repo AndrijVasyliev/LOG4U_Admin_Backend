@@ -33,7 +33,7 @@ export class TruckService {
     private readonly log: LoggerService,
   ) {
     this.nearByRedundancyFactor =
-      this.configService.get<number>('trucks.nearByRedundancyFactor') || 0;
+      this.configService.get<number>('truck.nearByRedundancyFactor') || 0;
   }
 
   private async findTruckDocumentById(

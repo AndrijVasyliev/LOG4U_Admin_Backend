@@ -182,6 +182,9 @@ export class Truck {
   @Prop({ required: true })
   doorDims: string;
 
+  @Prop({ required: false })
+  rpmAvg: number;
+
   @Prop({
     required: true,
     type: MongooseSchema.Types.ObjectId,

@@ -7,7 +7,7 @@ import { MongooseModuleFactoryOptions } from '@nestjs/mongoose';
 export default (): {
   app: any;
   log: any;
-  trucks: {
+  truck: {
     nearByRedundancyFactor: number;
     resetToAvailableWillBeOlderThen: number;
     taskSetAvailableInterval: number;
@@ -35,6 +35,9 @@ export default (): {
     startReceiptForTasksOlder: number;
     taskRestartInterval: number;
     restartTasksOlder: number;
+  };
+  load: {
+    taskCalculateTruckRpmAvgInterval: number;
   };
   loadQueue: {
     maxParallelTasks: number;
@@ -66,7 +69,7 @@ export default (): {
       ? process.env.REQUEST_ID_FIELD_NAME
       : 'requestId',
   },
-  trucks: {
+  truck: {
     nearByRedundancyFactor: +(process.env.NEARBY_REDUNDANCY_FACTOR || 20),
     resetToAvailableWillBeOlderThen: +(
       process.env.TRUCK_TO_AVAILABLE_OLDER_THEN || 1000 * 60 * 60 * 1
@@ -142,6 +145,11 @@ export default (): {
     ),
     restartTasksOlder: +(
       process.env.PUSH_QUEUE_RESTART_TASKS_OLDER || 1000 * 60 * 6
+    ),
+  },
+  load: {
+    taskCalculateTruckRpmAvgInterval: +(
+      process.env.LOAD_CALC_TRUCK_RPM_AVG_RESTART_INTERVAL || 1000 * 60 * 60 * 3
     ),
   },
   loadQueue: {

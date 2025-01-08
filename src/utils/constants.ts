@@ -38,6 +38,8 @@ export const DEFAULT_CHECK_IN_AS = '4ULogistics';
 export const EMAIL_QUEUE_ORPHANED_JOB = 'email_queue_orphaned_job';
 export const PUSH_QUEUE_ORPHANED_JOB = 'push_queue_orphaned_job';
 export const PUSH_QUEUE_START_RECEIPT_JOB = 'push_queue_start_receipt_job';
+export const LOAD_CALCULATE_TRUCK_RPM_AVG_JOB =
+  'load_calculate_truck_rpm_avg_job';
 export const TRUCK_SET_AVAIL_STATUS_JOB = 'truck_set_avail_status_job';
 export const TRUCK_SEND_RENEW_LOCATION_PUSH_JOB =
   'truck_set_renew_location_push_job';

@@ -599,11 +599,16 @@ stopsArray.discriminator(StopType.PickUp, StopPickUpSchema);
 stopsArray.discriminator(StopType.Delivery, StopDeliverySchema);
 
 LoadSchema.index({ loadNumber: 1 }, { unique: true });
+LoadSchema.index({ truck: 1 }, { sparse: true });
+LoadSchema.index({ status: 1 });
 LoadSchema.index(
-  { truck: 1, state: 1 },
+  { truck: 1, status: 1 },
   {
     unique: true,
     hidden: true,
-    partialFilterExpression: { status: { $eq: 'In Progress' } },
+    partialFilterExpression: {
+      status: { $eq: 'In Progress' },
+      truck: { $exists: true },
+    },
   },
 );

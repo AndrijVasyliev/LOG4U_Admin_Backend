@@ -31,17 +31,17 @@ export class TruckJobService
     private schedulerRegistry: SchedulerRegistry,
   ) {
     this.resetToAvailableOlderThen = configService.get<number>(
-      'trucks.resetToAvailableWillBeOlderThen',
+      'truck.resetToAvailableWillBeOlderThen',
     ) as number;
     this.locationUpdatedLaterThen = configService.get<number>(
-      'trucks.sendRenewLocationPushOlderThen',
+      'truck.sendRenewLocationPushOlderThen',
     ) as number;
   }
 
   onApplicationBootstrap(): void {
     this.log.debug('Starting set "Available" job');
     const restartSetAvailableIntervalValue = this.configService.get<number>(
-      'trucks.taskSetAvailableInterval',
+      'truck.taskSetAvailableInterval',
     ) as number;
     const setAvailInterval = setInterval(() => {
       this.resetToAvailableStatus.bind(this)();
@@ -53,7 +53,7 @@ export class TruckJobService
 
     this.log.debug('Starting send renew location push job');
     const restartSendPushIntervalValue = this.configService.get<number>(
-      'trucks.taskSendRenewLocationPushInterval',
+      'truck.taskSendRenewLocationPushInterval',
     ) as number;
     const setSendPushInterval = setInterval(() => {
       this.sendRenewLocationPush.bind(this)();
