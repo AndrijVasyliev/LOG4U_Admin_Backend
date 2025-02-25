@@ -1,7 +1,7 @@
 import { PaginateModel } from 'mongoose';
 import {
   OnApplicationBootstrap,
-  OnModuleDestroy,
+  OnApplicationShutdown,
   Injectable,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
@@ -16,7 +16,7 @@ import {
 } from '../utils/constants';
 
 @Injectable()
-export class PushJobService implements OnApplicationBootstrap, OnModuleDestroy {
+export class PushJobService implements OnApplicationBootstrap, OnApplicationShutdown {
   private readonly restartTasksOlder: number;
   private readonly getReceiptForTasksOlder: number;
   constructor(
@@ -58,7 +58,7 @@ export class PushJobService implements OnApplicationBootstrap, OnModuleDestroy {
     );
   }
 
-  async onModuleDestroy(): Promise<void> {
+  async onApplicationShutdown(): Promise<void> {
     this.log.debug('Stopping start receipt job');
     clearInterval(
       this.schedulerRegistry.getInterval(PUSH_QUEUE_START_RECEIPT_JOB),

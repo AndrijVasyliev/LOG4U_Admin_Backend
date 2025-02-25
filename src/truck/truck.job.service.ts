@@ -2,7 +2,7 @@ import { PaginateModel } from 'mongoose';
 import {
   Injectable,
   OnApplicationBootstrap,
-  OnModuleDestroy,
+  OnApplicationShutdown,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { ConfigService } from '@nestjs/config';
@@ -18,7 +18,7 @@ import {
 
 @Injectable()
 export class TruckJobService
-  implements OnApplicationBootstrap, OnModuleDestroy
+  implements OnApplicationBootstrap, OnApplicationShutdown
 {
   private readonly resetToAvailableOlderThen: number;
   private readonly locationUpdatedLaterThen: number;
@@ -64,7 +64,7 @@ export class TruckJobService
     );
   }
 
-  async onModuleDestroy(): Promise<void> {
+  async onApplicationShutdown(): Promise<void> {
     this.log.debug('Stopping set "Available" status job');
     clearInterval(
       this.schedulerRegistry.getInterval(TRUCK_SET_AVAIL_STATUS_JOB),

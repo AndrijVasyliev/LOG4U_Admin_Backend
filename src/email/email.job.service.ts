@@ -1,7 +1,7 @@
 import { PaginateModel } from 'mongoose';
 import {
   OnApplicationBootstrap,
-  OnModuleDestroy,
+  OnApplicationShutdown,
   Injectable,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
@@ -16,7 +16,7 @@ import {
 
 @Injectable()
 export class EmailJobService
-  implements OnApplicationBootstrap, OnModuleDestroy
+  implements OnApplicationBootstrap, OnApplicationShutdown
 {
   private readonly restartTasksOlder: number;
   constructor(
@@ -45,7 +45,7 @@ export class EmailJobService
     );
   }
 
-  async onModuleDestroy(): Promise<void> {
+  async onApplicationShutdown(): Promise<void> {
     this.log.debug('Stopping restart job');
     clearInterval(this.schedulerRegistry.getInterval(EMAIL_QUEUE_ORPHANED_JOB));
   }

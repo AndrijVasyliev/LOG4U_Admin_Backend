@@ -2,7 +2,7 @@ import { mongo, PaginateModel, ObjectId, Types, UpdateQuery } from 'mongoose';
 import {
   Injectable,
   OnApplicationBootstrap,
-  OnModuleDestroy,
+  OnApplicationShutdown,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { ConfigService } from '@nestjs/config';
@@ -24,7 +24,7 @@ const { ChangeStream } = mongo;
 
 @Injectable()
 export class LoadWorkerService
-  implements OnApplicationBootstrap, OnModuleDestroy
+  implements OnApplicationBootstrap, OnApplicationShutdown
 {
   private readonly stopsChangeStream?: InstanceType<typeof ChangeStream>;
   private readonly loadChangeStream?: InstanceType<typeof ChangeStream>;
@@ -182,7 +182,7 @@ export class LoadWorkerService
       );
     }
   }
-  async onModuleDestroy(): Promise<void> {
+  async onApplicationShutdown(): Promise<void> {
     this.log.debug('Stopping queue');
     await this?.stopsQueue?.stop();
     await this?.loadQueue?.stop();

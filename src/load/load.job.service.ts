@@ -2,7 +2,7 @@ import { PaginateModel } from 'mongoose';
 import {
   Injectable,
   OnApplicationBootstrap,
-  OnModuleDestroy,
+  OnApplicationShutdown,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { ConfigService } from '@nestjs/config';
@@ -15,7 +15,7 @@ import {
 } from '../utils/constants';
 
 @Injectable()
-export class LoadJobService implements OnApplicationBootstrap, OnModuleDestroy {
+export class LoadJobService implements OnApplicationBootstrap, OnApplicationShutdown {
   constructor(
     @InjectModel(Load.name, MONGO_CONNECTION_NAME)
     private readonly loadModel: PaginateModel<LoadDocument>,
@@ -39,7 +39,7 @@ export class LoadJobService implements OnApplicationBootstrap, OnModuleDestroy {
     );
   }
 
-  async onModuleDestroy(): Promise<void> {
+  async onApplicationShutdown(): Promise<void> {
     this.log.debug('Stopping calculate truck RPM avg job');
     clearInterval(
       this.schedulerRegistry.getInterval(LOAD_CALCULATE_TRUCK_RPM_AVG_JOB),

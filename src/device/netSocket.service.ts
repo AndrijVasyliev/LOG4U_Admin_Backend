@@ -1,13 +1,13 @@
 import { createServer, Server, Socket } from 'node:net';
 import { promisify } from 'node:util';
-import { Injectable, OnApplicationBootstrap, OnModuleDestroy } from '@nestjs/common';
+import { Injectable, OnApplicationBootstrap, OnApplicationShutdown } from '@nestjs/common';
 // import {} from './device.dto';
 import { LoggerService } from '../logger';
 import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class NetSocketService
-  implements OnApplicationBootstrap, OnModuleDestroy
+  implements OnApplicationBootstrap, OnApplicationShutdown
 {
   private readonly server: Server;
   constructor(
@@ -31,7 +31,7 @@ export class NetSocketService
     await this.server.listen(port, this.OnListen);
   }
 
-  async onModuleDestroy(): Promise<void> {
+  async onApplicationShutdown(): Promise<void> {
     await this.server.close(this.OnClose);
   }
 

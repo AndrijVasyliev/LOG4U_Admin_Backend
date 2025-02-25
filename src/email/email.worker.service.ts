@@ -1,7 +1,7 @@
 import { mongo, PaginateModel } from 'mongoose';
 import {
   OnApplicationBootstrap,
-  OnModuleDestroy,
+  OnApplicationShutdown,
   Injectable,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
@@ -17,7 +17,7 @@ const { ChangeStream } = mongo;
 
 @Injectable()
 export class EmailWorkerService
-  implements OnApplicationBootstrap, OnModuleDestroy
+  implements OnApplicationBootstrap, OnApplicationShutdown
 {
   private readonly changeStream?: InstanceType<typeof ChangeStream>;
   private queue?: Queue<ChangeDocument & EmailChangeDocument>;
@@ -58,7 +58,7 @@ export class EmailWorkerService
     }
   }
 
-  async onModuleDestroy(): Promise<void> {
+  async onApplicationShutdown(): Promise<void> {
     this.log.debug('Stopping queue');
     await this?.queue?.stop();
     this.log.debug('Closing change stream');
