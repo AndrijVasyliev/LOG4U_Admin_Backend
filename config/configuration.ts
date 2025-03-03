@@ -44,7 +44,6 @@ export default (): {
     taskTimeout: number;
   };
   file: { maxFileSize: number };
-  netServer: { port: number };
 } => ({
   app: {
     port: +(process.env.PORT || 8181),
@@ -158,5 +157,4 @@ export default (): {
     taskTimeout: +(process.env.LOAD_QUEUE_TASK_TIMEOUT || 1000 * 60 * 5),
   },
   file: { maxFileSize: +(process.env.FILE_MAX_SIZE || Infinity) },
-  netServer: { port: +(process.env.NET_SERVER_PORT || 3128) },
 });

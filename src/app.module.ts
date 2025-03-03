@@ -52,7 +52,6 @@ import { PersonController } from './person/person.controller';
 import { PushController } from './push/push.controller';
 import { TruckController } from './truck/truck.controller';
 import { UserController } from './user/user.controller';
-import { DeviceModule } from './device/device.module';
 
 @Module({
   imports: [
@@ -122,7 +121,6 @@ import { DeviceModule } from './device/device.module';
     PushModule,
     FileModule,
     ChatModule,
-    DeviceModule,
   ],
 })
 export class AppModule implements NestModule {
