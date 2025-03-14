@@ -5,7 +5,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
 
-import configuration from '../config/configuration';
+import configuration from '../config';
 
 import { LoggerModule, LogLevel, LogFormat } from './logger';
 import { ResponseTimeMiddleware } from './utils/responseTime.middleware';
@@ -92,7 +92,7 @@ import { UserController } from './user/user.controller';
     ConfigModule.forRoot({
       isGlobal: true,
       cache: true,
-      load: [configuration],
+      load: configuration,
     }),
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, '..', '..', 'static'),

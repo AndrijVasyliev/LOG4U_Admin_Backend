@@ -9,6 +9,7 @@ import helmet from 'helmet';
 import * as compression from 'compression';
 import { AppModule } from './app.module';
 import { NestLoggerService } from './logger';
+import helmetOptions from './helmetOptions';
 import { API_PATH_PREFIX, MOBILE_PATH_PREFIX } from './utils/constants';
 
 dayjs.extend(utc);
@@ -27,30 +28,7 @@ async function bootstrap() {
 
   const port = configService.get<number>('app.port') as number;
 
-  app.use(
-    helmet({
-      crossOriginEmbedderPolicy: false,
-      contentSecurityPolicy: {
-        directives: {
-          defaultSrc: ["'self'", 'maps.googleapis.com'],
-          connectSrc: ["'self'", 'data:', '*.gstatic.com', '*.googleapis.com'],
-          fontSrc: ["'self'", 'fonts.googleapis.com', 'fonts.gstatic.com'],
-          scriptSrc: ["'self'", "'unsafe-eval'", 'maps.googleapis.com'],
-          workerSrc: ["'self'", 'blob:'],
-          frameSrc: ["'self'", 'blob:'],
-          objectSrc: ["'self'", 'blob:'],
-          imgSrc: [
-            "'self'",
-            'data:',
-            '*.gstatic.com',
-            '*.googleapis.com',
-            '*.google.com',
-            '*.ggpht.com',
-          ],
-        },
-      },
-    }),
-  );
+  app.use(helmet(helmetOptions));
   app.use(compression());
   app.enableShutdownHooks();
   app.setGlobalPrefix(API_PATH_PREFIX, {
