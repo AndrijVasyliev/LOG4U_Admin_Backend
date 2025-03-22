@@ -1,0 +1,13 @@
+export const application = 'app';
+export const logger = 'log';
+export const database = 'db';
+export const email = 'email';
+export const emailQueue = 'emailQueue';
+export const google = 'google';
+export const file = 'file';
+export const push = 'push';
+export const pushQueue = 'pushQueue';
+export const truck = 'truck';
+export const truckQueue = 'truckQueue';
+export const load = 'load';
+export const loadQueue = 'loadQueue';

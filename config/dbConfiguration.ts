@@ -1,7 +1,8 @@
 import { registerAs } from '@nestjs/config';
+import { database } from './configurationSections';
 import { DbConfiguration } from './dbConfiguration.interface';
 
-export default registerAs('db',  (): DbConfiguration => ({
+export default registerAs(database,  (): DbConfiguration => ({
   uri: process.env.MONGO_DSN || 'mongodb://localhost:27017/log4u',
   appName: process.env.SERVICE_NAME || 'Admin_BE',
   // useNewUrlParser: true,

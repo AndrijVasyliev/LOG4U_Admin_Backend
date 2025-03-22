@@ -7,7 +7,7 @@ import { join } from 'path';
 
 import configuration from '../config';
 
-import { LoggerModule, LogLevel, LogFormat } from './logger';
+import { LoggerModule, LogLevel, LogFormat, LoggerModuleOptions } from './logger';
 import { ResponseTimeMiddleware } from './utils/responseTime.middleware';
 
 import { MongooseConnectionModule } from './mongoose/mongooseConnection.module';
@@ -56,7 +56,7 @@ import { UserController } from './user/user.controller';
 @Module({
   imports: [
     LoggerModule.registerAsync({
-      useFactory: async (config: ConfigService) => {
+      useFactory: async (config: ConfigService): Promise<LoggerModuleOptions> => {
         return {
           level: config.get<LogLevel>('log.level') || 'verbose',
           format: config.get<LogFormat>('log.format') || 'string',
@@ -91,7 +91,9 @@ import { UserController } from './user/user.controller';
     }),
     ConfigModule.forRoot({
       isGlobal: true,
-      cache: true,
+      cache: false,
+      expandVariables: true,
+      skipProcessEnv: true,
       load: configuration,
     }),
     ServeStaticModule.forRoot({

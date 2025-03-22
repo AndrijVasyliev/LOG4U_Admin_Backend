@@ -24,22 +24,53 @@ import { TruckQueueConfiguration } from './truckQueueConfiguration.interface';
 import { LoadConfiguration } from './loadConfiguration.interface';
 import { LoadQueueConfiguration } from './loadQueueConfiguration.interface';
 import { EmailQueueConfiguration } from './emailQueueConfiguration.interface';
+import {
+  application,
+  logger,
+  database,
+  email,
+  emailQueue,
+  google,
+  file,
+  push,
+  pushQueue,
+  truck,
+  truckQueue,
+  load,
+  loadQueue,
+} from './configurationSections';
 
 export interface Configuration {
-  app: AppConfiguration;
-  log: LogConfiguration;
-  db: DbConfiguration;
-  email: EmailConfiguration;
-  emailQueue: EmailQueueConfiguration;
-  google: GoogleConfiguration;
-  file: FileConfiguration;
-  push: PushConfiguration;
-  pushQueue: PushQueueConfiguration;
-  truck: TruckConfiguration;
-  truckQueue: TruckQueueConfiguration;
-  load: LoadConfiguration;
-  loadQueue: LoadQueueConfiguration;
+  [application]: AppConfiguration;
+  [logger]: LogConfiguration;
+  [database]: DbConfiguration;
+  [email]: EmailConfiguration;
+  [emailQueue]: EmailQueueConfiguration;
+  [google]: GoogleConfiguration;
+  [file]: FileConfiguration;
+  [push]: PushConfiguration;
+  [pushQueue]: PushQueueConfiguration;
+  [truck]: TruckConfiguration;
+  [truckQueue]: TruckQueueConfiguration;
+  [load]: LoadConfiguration;
+  [loadQueue]: LoadQueueConfiguration;
 }
+
+export {
+  AppConfiguration,
+  LogConfiguration,
+  DbConfiguration,
+  EmailConfiguration,
+  EmailQueueConfiguration,
+  GoogleConfiguration,
+  FileConfiguration,
+  PushConfiguration,
+  PushQueueConfiguration,
+  TruckConfiguration,
+  TruckQueueConfiguration,
+  LoadConfiguration,
+  LoadQueueConfiguration,
+};
 
 export default [
   appConfig,

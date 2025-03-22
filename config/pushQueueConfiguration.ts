@@ -1,7 +1,8 @@
 import { registerAs } from '@nestjs/config';
+import { pushQueue } from './configurationSections';
 import { PushQueueConfiguration } from './pushQueueConfiguration.interface';
 
-export default registerAs('pushQueue',  (): PushQueueConfiguration => ({
+export default registerAs(pushQueue,  (): PushQueueConfiguration => ({
   maxParallelTasks: +(process.env.PUSH_QUEUE_MAX_PARALEL_TSAKS || 10),
   taskTimeout: +(process.env.PUSH_QUEUE_TASK_TIMEOUT || 1000 * 60 * 5),
   taskStartReceiptInterval: +(

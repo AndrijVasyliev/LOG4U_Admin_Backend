@@ -1,7 +1,8 @@
 import { registerAs } from '@nestjs/config';
+import { emailQueue } from './configurationSections';
 import { EmailQueueConfiguration } from './emailQueueConfiguration.interface';
 
-export default registerAs('emailQueue',  (): EmailQueueConfiguration => ({
+export default registerAs(emailQueue,  (): EmailQueueConfiguration => ({
   maxParallelTasks: +(process.env.EMAIL_QUEUE_MAX_PARALEL_TSAKS || 10),
   taskTimeout: +(process.env.EMAIL_QUEUE_TASK_TIMEOUT || 1000 * 60 * 5),
   taskRestartInterval: +(
