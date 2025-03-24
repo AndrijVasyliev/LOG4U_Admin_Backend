@@ -12,12 +12,13 @@ import * as mongoosePaginate from 'mongoose-paginate-v2';
 import * as mongooseAutopopulate from 'mongoose-autopopulate';
 import { Gauge } from 'prom-client';
 import { DeleteField } from '../utils/mongooseDeleteField';
+import { MONGO_CONNECTIONS_METRIC_TOKEN } from '../utils/constants';
 
 @Injectable({ scope: Scope.TRANSIENT })
 export class MongooseConfigService implements MongooseOptionsFactory {
   constructor(
     private readonly configService: ConfigService,
-    @InjectMetric('mongo_connections') private readonly gauge: Gauge<string>,
+    @InjectMetric(MONGO_CONNECTIONS_METRIC_TOKEN) private readonly gauge: Gauge<string>,
   ) {}
 
   createMongooseOptions():

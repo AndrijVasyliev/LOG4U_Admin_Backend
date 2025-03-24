@@ -1,6 +1,8 @@
+import { LogFormat, LogLevel } from '../src/logger';
+
 export interface LogConfiguration {
-  level: string;
-  format: string;
+  level: LogLevel;
+  format: LogFormat;
   requestIdHeader: string;
   requestIdFieldName: string;
 }

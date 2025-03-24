@@ -1,14 +1,11 @@
 import { registerAs } from '@nestjs/config';
 import { logger } from './configurationSections';
 import { LogConfiguration } from './logConfiguration.interface';
+import { LogLevel } from '../src/logger';
 
 export default registerAs(logger,  (): LogConfiguration => ({
-  level: process.env.LOG_LEVEL || 'silly',
+  level: process.env.LOG_LEVEL as LogLevel,
   format: process.env.NODE_ENV === 'development' ? 'string' : 'json',
-  requestIdHeader: process.env.REQUEST_ID_HEADER
-    ? process.env.REQUEST_ID_HEADER
-    : 'X-Request-Id',
-  requestIdFieldName: process.env.REQUEST_ID_FIELD_NAME
-    ? process.env.REQUEST_ID_FIELD_NAME
-    : 'requestId',
+  requestIdHeader: process.env.REQUEST_ID_HEADER!,
+  requestIdFieldName: process.env.REQUEST_ID_FIELD_NAME!,
 }));

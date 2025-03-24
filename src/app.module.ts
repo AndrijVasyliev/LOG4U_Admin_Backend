@@ -6,6 +6,7 @@ import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
 
 import configuration from '../config';
+import { EnvValidationSchema } from '../config/env.validation';
 
 import { LoggerModule, LogLevel, LogFormat, LoggerModuleOptions } from './logger';
 import { ResponseTimeMiddleware } from './utils/responseTime.middleware';
@@ -94,6 +95,7 @@ import { UserController } from './user/user.controller';
       cache: false,
       expandVariables: true,
       skipProcessEnv: true,
+      validationSchema: EnvValidationSchema,
       load: configuration,
     }),
     ServeStaticModule.forRoot({

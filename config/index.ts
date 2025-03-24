@@ -70,6 +70,19 @@ export {
   TruckQueueConfiguration,
   LoadConfiguration,
   LoadQueueConfiguration,
+  appConfig,
+  logConfig,
+  dbConfig,
+  emailConfig,
+  emailQueueConfig,
+  googleConfig,
+  fileConfig,
+  pushConfig,
+  pushQueueConfig,
+  truckConfig,
+  truckQueueConfig,
+  loadConfig,
+  loadQueueConfig,
 };
 
 export default [

@@ -14,7 +14,7 @@ import {
 const { MongoError } = mongo;
 
 @Catch(MongoError)
-export class LoggerExceptionFilter extends BaseExceptionFilter {
+export class MongoExceptionFilter extends BaseExceptionFilter {
   constructor() {
     super();
   }

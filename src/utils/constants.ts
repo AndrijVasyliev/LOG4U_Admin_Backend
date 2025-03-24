@@ -9,6 +9,7 @@ export const HEALTH_MEMORY_RSS_LIMIT = 250 * 1024 * 1024;
 export const DO_NOT_COLLECT_METRICS_KEY = 'doNotCollectMetrics';
 // Mongo
 export const MONGO_CONNECTION_NAME = 'Mongo_';
+export const MONGO_CONNECTIONS_METRIC_TOKEN = 'mongo_connections';
 export const DB_CHECK_TIMEOUT = 500;
 export const MONGO_UNIQUE_INDEX_CONFLICT = 11000;
 export const UNIQUE_CONSTRAIN_ERROR = 'Unique constrain error';
